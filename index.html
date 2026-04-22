@@ -1,0 +1,636 @@
+<style>
+.mm-wrap * { box-sizing: border-box; margin: 0; padding: 0; }
+.mm-wrap {
+  font-family: 'Poppins', sans-serif;
+  max-width: 780px;
+  margin: 0 auto;
+}
+.mm-hero {
+  background: #4a1942;
+  border-radius: 16px 16px 0 0;
+  padding: 36px 36px 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.mm-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 15% 60%, rgba(232,131,74,0.15) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 60% at 85% 20%, rgba(255,255,255,0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+.mm-badge {
+  display: inline-block;
+  background: rgba(232,131,74,0.2);
+  border: 1px solid rgba(232,131,74,0.4);
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e8834a;
+  margin-bottom: 14px;
+  position: relative;
+}
+.mm-title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+  position: relative;
+  letter-spacing: -0.01em;
+}
+.mm-sub {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.75;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+.mm-chat {
+  background: #ffffff;
+  border: 1px solid #e2d9e0;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+}
+.mm-progress-bar {
+  display: flex;
+  gap: 5px;
+  padding: 14px 24px 0;
+}
+.mm-step {
+  height: 4px;
+  flex: 1;
+  border-radius: 2px;
+  background: #e2d9e0;
+  transition: background 0.35s;
+}
+.mm-step.done { background: #4a1942; }
+.mm-step.active { background: #e8834a; }
+.mm-messages {
+  padding: 22px 24px 14px;
+  min-height: 300px;
+  max-height: 460px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: smooth;
+}
+.mm-messages::-webkit-scrollbar { width: 3px; }
+.mm-messages::-webkit-scrollbar-thumb { background: #e2d9e0; border-radius: 3px; }
+.mm-msg {
+  display: flex;
+  gap: 10px;
+  animation: mmIn 0.3s ease both;
+}
+@keyframes mmIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mm-msg.user { flex-direction: row-reverse; }
+.mm-av {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-weight: 700;
+}
+.mm-av.bot { background: #4a1942; color: #fff; }
+.mm-av.user { background: #e8834a; color: #fff; }
+.mm-bubble {
+  max-width: 80%;
+  padding: 11px 15px;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  font-family: 'Poppins', sans-serif;
+}
+.mm-msg.bot .mm-bubble {
+  background: #f5f0e8;
+  color: #1e1520;
+  border-radius: 4px 14px 14px 14px;
+}
+.mm-msg.user .mm-bubble {
+  background: #4a1942;
+  color: #fff;
+  border-radius: 14px 4px 14px 14px;
+}
+.mm-typing-dots {
+  display: flex;
+  gap: 4px;
+  padding: 11px 15px;
+  background: #f5f0e8;
+  border-radius: 4px 14px 14px 14px;
+  width: fit-content;
+}
+.mm-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #9d8fa0;
+  animation: mmDot 1.2s ease-in-out infinite;
+}
+.mm-dot:nth-child(2) { animation-delay: 0.2s; }
+.mm-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes mmDot {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%            { transform: translateY(-6px); }
+}
+.mm-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 4px 24px 14px;
+}
+.mm-chip {
+  background: #f5f0e8;
+  border: 1px solid #e2d9e0;
+  border-radius: 22px;
+  padding: 7px 15px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4a1942;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Poppins', sans-serif;
+}
+.mm-chip:hover { background: #4a1942; color: #fff; border-color: #4a1942; }
+.mm-chip.selected { background: #4a1942; color: #fff; border-color: #4a1942; }
+.mm-chip.done-btn {
+  background: #e8834a;
+  color: #fff;
+  border-color: #e8834a;
+}
+.mm-chip.done-btn:hover { background: #c8622a; border-color: #c8622a; }
+.mm-input-row {
+  display: flex;
+  gap: 10px;
+  padding: 14px 24px;
+  border-top: 1px solid #f0ebef;
+  background: #faf7f2;
+}
+.mm-input {
+  flex: 1;
+  padding: 11px 15px;
+  border: 1px solid #e2d9e0;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.84rem;
+  color: #1e1520;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.mm-input:focus { border-color: #4a1942; }
+.mm-send {
+  background: #4a1942;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.mm-send:hover { background: #3a1233; }
+.mm-send:disabled { background: #9d8fa0; cursor: not-allowed; }
+.mm-result {
+  padding: 24px;
+  border-top: 1px solid #f0ebef;
+  background: #faf7f2;
+  border-radius: 0 0 16px 16px;
+  display: none;
+}
+.mm-result-header {
+  margin-bottom: 16px;
+}
+.mm-result-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e8834a;
+  margin-bottom: 4px;
+}
+.mm-result-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #4a1942;
+  margin-bottom: 4px;
+}
+.mm-result-sub {
+  font-size: 0.82rem;
+  color: #6b6570;
+  font-weight: 300;
+  line-height: 1.6;
+}
+.mm-cats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 9px;
+  margin-bottom: 18px;
+}
+.mm-cat {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-left: 3px solid #4a1942;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.mm-cat:hover {
+  background: #f5f0e8;
+  border-left-color: #e8834a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(74,25,66,0.08);
+}
+.mm-cat-icon { font-size: 1.3rem; flex-shrink: 0; }
+.mm-cat-name { font-size: 0.82rem; font-weight: 700; color: #4a1942; line-height: 1.3; }
+.mm-cat-desc { font-size: 0.72rem; color: #6b6570; font-weight: 300; line-height: 1.4; }
+.mm-cta-btn {
+  background: #e8834a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s;
+  margin-bottom: 9px;
+}
+.mm-cta-btn:hover { background: #c8622a; }
+.mm-restart-btn {
+  background: transparent;
+  border: 1px solid #e2d9e0;
+  color: #6b6570;
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s;
+}
+.mm-restart-btn:hover { border-color: #4a1942; color: #4a1942; }
+@media (max-width: 600px) {
+  .mm-hero { padding: 28px 20px 22px; }
+  .mm-messages { padding: 18px 16px 12px; }
+  .mm-quick { padding: 4px 16px 12px; }
+  .mm-input-row { padding: 12px 16px; }
+  .mm-result { padding: 18px 16px; }
+  .mm-cats { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="mm-wrap">
+
+  <div class="mm-hero">
+    <div class="mm-badge">✦ Uitvaart Matchmaker</div>
+    <h2 class="mm-title">Vind de juiste specialist voor jou</h2>
+    <p class="mm-sub">Vertel ons jouw situatie — wij koppelen je aan de juiste specialisten uit onze bedrijvengids</p>
+  </div>
+
+  <div class="mm-chat">
+
+    <div class="mm-progress-bar">
+      <div class="mm-step active" id="mm-s1"></div>
+      <div class="mm-step" id="mm-s2"></div>
+      <div class="mm-step" id="mm-s3"></div>
+      <div class="mm-step" id="mm-s4"></div>
+    </div>
+
+    <div class="mm-messages" id="mm-messages"></div>
+    <div class="mm-quick" id="mm-quick"></div>
+
+    <div class="mm-input-row">
+      <input class="mm-input" id="mm-input" placeholder="Of typ hier je eigen bericht..." />
+      <button class="mm-send" id="mm-send">Verstuur</button>
+    </div>
+
+    <div class="mm-result" id="mm-result">
+      <div class="mm-result-header">
+        <div class="mm-result-label">Jouw persoonlijk advies</div>
+        <div class="mm-result-title">Wij raden deze specialisten aan</div>
+        <div class="mm-result-sub" id="mm-result-sub"></div>
+      </div>
+      <div class="mm-cats" id="mm-cats"></div>
+      <button class="mm-cta-btn" onclick="window.open('https://uitvaart-platform.nl/bedrijven','_blank')">
+        🗂️ Bekijk alle specialisten in de bedrijvengids
+      </button>
+      <button class="mm-restart-btn" onclick="mmRestart()">↩ Opnieuw beginnen</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+
+var MM_CATS = {
+  "Uitvaartondernemingen":      { icon:"🕯️", url:"uitvaartondernemingen",         desc:"Begeleiding van A tot Z" },
+  "Rouwbegeleiding & Nazorg":  { icon:"💔", url:"rouwbegeleiding-en-nazorg",      desc:"Emotionele steun & verwerking" },
+  "Rouwcentra":                 { icon:"🏛️", url:"rouwcentra",                     desc:"Locaties voor het afscheid" },
+  "Bloemen":                    { icon:"💐", url:"bloemen",                         desc:"Rouwbloemisten" },
+  "Muziek":                     { icon:"🎵", url:"muziek",                          desc:"Muzikanten voor de plechtigheid" },
+  "Fotograaf":                  { icon:"📸", url:"fotograaf",                       desc:"Afscheidsfotografie" },
+  "Videograaf":                 { icon:"🎬", url:"videograaf",                      desc:"Videografie" },
+  "Livestreaming":              { icon:"📡", url:"livestreaming",                   desc:"Live uitzenden van de dienst" },
+  "Kisten & Manden":            { icon:"📦", url:"kisten-en-manden",                desc:"Kisten, manden & meer" },
+  "Urnen":                      { icon:"🏺", url:"urnen",                           desc:"Urnen voor de as" },
+  "Herinneringssieraden":       { icon:"💍", url:"herinneringssieraden",            desc:"As verwerkt in sieraden" },
+  "Herinneringsproducten":      { icon:"🎁", url:"herinneringsproducten",           desc:"Tastbare herinneringen" },
+  "Graf & Gedenktekens":        { icon:"🪨", url:"graf-en-gedenktekens",            desc:"Grafstenen & monumenten" },
+  "Grafzorg":                   { icon:"🌿", url:"grafzorg",                        desc:"Onderhoud van het graf" },
+  "Asverstrooiing":             { icon:"💨", url:"asverstrooiing",                  desc:"As verstrooien op zee of land" },
+  "Rouwvervoer":                { icon:"🚗", url:"rouwvervoer",                     desc:"Lijkwagens & volgauto's" },
+  "Dragers":                    { icon:"🤝", url:"dragers",                         desc:"Professionele dragers" },
+  "Catering":                   { icon:"🍽️", url:"catering",                        desc:"Catering na de dienst" },
+  "Locatie":                    { icon:"📍", url:"locatie",                          desc:"Unieke uitvaartlocaties" },
+  "Uitvaartverzekeringen":      { icon:"📄", url:"uitvaartverzekeringen",           desc:"Verzekeringen & vergoedingen" },
+  "Erfrecht":                   { icon:"⚖️", url:"erfrecht",                        desc:"Juridisch advies erfenis" },
+  "Nalatenschap":               { icon:"📜", url:"nalatenschap",                    desc:"Regelen van de nalatenschap" },
+  "Rouwdrukwerk":               { icon:"🖨️", url:"rouwdrukwerk",                    desc:"Rouwkaarten & drukwerk" },
+  "Stervensbegeleiding":        { icon:"🤲", url:"stervensbegeleiding",             desc:"Begeleiding in de laatste fase" },
+  "Opbaren & Verzorging":       { icon:"🛏️", url:"opbaren-en-verzorging",           desc:"Verzorging van de overledene" },
+  "Begraafplaats & Crematorium":{ icon:"⚰️", url:"begraafplaats-en-crematorium",   desc:"Begraven of cremeren" },
+  "Afscheidskunst":             { icon:"🎨", url:"afscheidskunst",                  desc:"Kunstzinnig afscheid" },
+  "Styling & Decoratie":        { icon:"✨", url:"styling-en-decoratie",            desc:"Decoratie van de ruimte" },
+  "Kleding":                    { icon:"👗", url:"kleding",                         desc:"Rouwkleding" },
+  "Sprekers & Schrijvers":      { icon:"🎤", url:"sprekers-en-schrijvers",          desc:"Sprekers & gedichten" },
+  "Dierenuitvaarten":           { icon:"🐾", url:"dierenuitvaarten",                desc:"Uitvaart voor uw huisdier" },
+  "Kinderuitvaarten":           { icon:"👶", url:"kinderuitvaarten",                desc:"Specialisten bij kinderafscheid" },
+  "Repatriëring":               { icon:"✈️", url:"repatriering",                    desc:"Overledene uit buitenland terugbrengen" },
+  "Boedelruiming & Ontruiming": { icon:"🏠", url:"boedelruiming-en-ontruiming",     desc:"Opruimen van de woning" },
+  "Familiemediation":           { icon:"🧩", url:"familiemediation",                desc:"Bemiddeling bij familieconflicten" },
+  "Makelaar":                   { icon:"🏡", url:"makelaar",                        desc:"Verkoop woning na overlijden" },
+  "Uitvaartbenodigdheden":      { icon:"🧾", url:"uitvaartbenodigdheden",           desc:"Alle benodigdheden" },
+  "Geurbeleving":               { icon:"🌸", url:"geurbeleving",                    desc:"Geur bij het afscheid" },
+  "Rituelen & Tradities":       { icon:"🕊️", url:"rituelen-en-tradities",           desc:"Culturele & religieuze rituelen" }
+};
+
+var MM_FLOW = [
+  {
+    q: "Goedemiddag 👋 Ik ben de Uitvaart Matchmaker van Uitvaart-Platform.nl.\n\nVertel me jouw situatie, dan vind ik de juiste specialisten voor je. Is er iemand recent overleden, of wil je vooruit plannen?",
+    quick: ["Er is iemand net overleden", "Ik wil vooruit plannen", "Ik zoek informatie voor later"],
+    key: "timing"
+  },
+  {
+    q: function(a) {
+      if (a.toLowerCase().indexOf("net") > -1 || a.toLowerCase().indexOf("overleden") > -1)
+        return "Mijn oprechte deelneming. 🕊️\n\nIs de uitvaart al (deels) geregeld, of sta je nog aan het begin?";
+      if (a.toLowerCase().indexOf("plannen") > -1 || a.toLowerCase().indexOf("later") > -1)
+        return "Goed dat je dit vooruit wilt regelen — dat is een daad van liefde voor je naasten.\n\nWat wil je als eerste regelen?";
+      return "Begrijp ik goed. Wat is je eerste vraag of wens?";
+    },
+    quick: function(a) {
+      if (a.toLowerCase().indexOf("net") > -1 || a.toLowerCase().indexOf("overleden") > -1)
+        return ["Uitvaart moet nog volledig geregeld worden", "Uitvaart is al deels geregeld", "Ik zoek specifieke specialisten"];
+      return ["Uitvaartwensen vastleggen", "Een uitvaartverzekering afsluiten", "Informatie over de mogelijkheden"];
+    },
+    key: "fase"
+  },
+  {
+    q: function(a) { return "Wat voor uitvaart staat jullie voor ogen?"; },
+    quick: ["Begrafenis", "Crematie", "Natuurbegrafenis", "Nog niet beslist"],
+    key: "type"
+  },
+  {
+    q: function(a) { return "Zijn er aanvullende wensen? Je kunt meerdere opties selecteren en daarna op 'Klaar' klikken."; },
+    quick: ["Persoonlijke muziek", "Livestreaming voor mensen op afstand", "Afscheidsfotografie", "Bijzondere locatie", "Bloemendecoratie", "Catering na de dienst", "Juridische hulp bij nalatenschap", "Rouwbegeleiding achteraf", "Sprekers of gedichten", "Dragers voor de kist"],
+    key: "extras",
+    multi: true
+  }
+];
+
+var mmStep = 0;
+var mmAnswers = {};
+var mmMulti = [];
+var mmBusy = false;
+
+function mmInit() {
+  mmAddBot(MM_FLOW[0].q);
+  setTimeout(function() { mmShowQuick(MM_FLOW[0].quick, false); }, 700);
+  document.getElementById('mm-send').addEventListener('click', mmSend);
+  document.getElementById('mm-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') mmSend();
+  });
+}
+
+function mmAddBot(text) {
+  var msgs = document.getElementById('mm-messages');
+  var el = document.createElement('div');
+  el.className = 'mm-msg bot';
+  el.innerHTML = '<div class="mm-av bot">✦</div><div class="mm-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function mmAddUser(text) {
+  var msgs = document.getElementById('mm-messages');
+  var el = document.createElement('div');
+  el.className = 'mm-msg user';
+  el.innerHTML = '<div class="mm-av user">🤍</div><div class="mm-bubble">' + text + '</div>';
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function mmShowTyping() {
+  var msgs = document.getElementById('mm-messages');
+  var el = document.createElement('div');
+  el.className = 'mm-msg bot';
+  el.id = 'mm-typing';
+  el.innerHTML = '<div class="mm-av bot">✦</div><div class="mm-typing-dots"><div class="mm-dot"></div><div class="mm-dot"></div><div class="mm-dot"></div></div>';
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function mmHideTyping() {
+  var t = document.getElementById('mm-typing');
+  if (t) t.remove();
+}
+
+function mmShowQuick(opts, multi) {
+  var qr = document.getElementById('mm-quick');
+  qr.innerHTML = '';
+  if (typeof opts === 'function') opts = opts(mmAnswers[MM_FLOW[mmStep-1] ? MM_FLOW[mmStep-1].key : ''] || '');
+  opts.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'mm-chip';
+    btn.textContent = opt;
+    if (multi) {
+      btn.addEventListener('click', function() { mmToggle(btn, opt); });
+    } else {
+      btn.addEventListener('click', function() { mmHandle(opt); });
+    }
+    qr.appendChild(btn);
+  });
+  if (multi) {
+    var done = document.createElement('button');
+    done.className = 'mm-chip done-btn';
+    done.textContent = '✓ Klaar — bekijk mijn advies';
+    done.addEventListener('click', mmFinishMulti);
+    qr.appendChild(done);
+  }
+}
+
+function mmToggle(btn, opt) {
+  var idx = mmMulti.indexOf(opt);
+  if (idx === -1) {
+    mmMulti.push(opt);
+    btn.classList.add('selected');
+  } else {
+    mmMulti.splice(idx, 1);
+    btn.classList.remove('selected');
+  }
+}
+
+function mmFinishMulti() {
+  var text = mmMulti.length > 0 ? mmMulti.join(', ') : 'Geen specifieke aanvullende wensen';
+  mmHandle(text);
+}
+
+function mmHandle(text) {
+  document.getElementById('mm-quick').innerHTML = '';
+  mmAddUser(text);
+  mmAnswers[MM_FLOW[mmStep].key] = text;
+  mmStep++;
+  mmUpdateProgress();
+
+  if (mmStep >= MM_FLOW.length) {
+    mmShowTyping();
+    setTimeout(function() { mmHideTyping(); mmShowResult(); }, 1300);
+    return;
+  }
+
+  mmBusy = true;
+  document.getElementById('mm-send').disabled = true;
+  mmShowTyping();
+
+  setTimeout(function() {
+    mmHideTyping();
+    mmBusy = false;
+    document.getElementById('mm-send').disabled = false;
+    var cur = MM_FLOW[mmStep];
+    var q = typeof cur.q === 'function' ? cur.q(text) : cur.q;
+    mmAddBot(q);
+    setTimeout(function() {
+      var opts = typeof cur.quick === 'function' ? cur.quick(text) : cur.quick;
+      mmShowQuick(opts, cur.multi || false);
+    }, 350);
+  }, 950);
+}
+
+function mmSend() {
+  var input = document.getElementById('mm-input');
+  var text = input.value.trim();
+  if (!text || mmBusy) return;
+  input.value = '';
+  mmHandle(text);
+}
+
+function mmUpdateProgress() {
+  ['mm-s1','mm-s2','mm-s3','mm-s4'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.className = 'mm-step ' + (i < mmStep ? 'done' : i === mmStep ? 'active' : '');
+  });
+}
+
+function mmGetRecs() {
+  var recs = [];
+  var a = JSON.stringify(mmAnswers).toLowerCase();
+
+  function add(name) { if (recs.indexOf(name) === -1) recs.push(name); }
+
+  add("Uitvaartondernemingen");
+  add("Rouwbegeleiding & Nazorg");
+
+  if (a.indexOf("begraf") > -1) { add("Begraafplaats & Crematorium"); add("Dragers"); add("Graf & Gedenktekens"); add("Kisten & Manden"); }
+  if (a.indexOf("cremat") > -1) { add("Begraafplaats & Crematorium"); add("Urnen"); add("Asverstrooiing"); }
+  if (a.indexOf("natuur") > -1) { add("Asverstrooiing"); add("Locatie"); }
+  if (a.indexOf("muziek") > -1) add("Muziek");
+  if (a.indexOf("livestream") > -1) add("Livestreaming");
+  if (a.indexOf("foto") > -1) add("Fotograaf");
+  if (a.indexOf("locatie") > -1 || a.indexOf("bijzondere") > -1) add("Locatie");
+  if (a.indexOf("bloem") > -1) add("Bloemen");
+  if (a.indexOf("catering") > -1) add("Catering");
+  if (a.indexOf("juridisch") > -1 || a.indexOf("nalaten") > -1) { add("Erfrecht"); add("Nalatenschap"); }
+  if (a.indexOf("sprekers") > -1 || a.indexOf("gedichten") > -1) add("Sprekers & Schrijvers");
+  if (a.indexOf("dragers") > -1) add("Dragers");
+  if (a.indexOf("verzekering") > -1 || a.indexOf("plannen") > -1 || a.indexOf("later") > -1) add("Uitvaartverzekeringen");
+  if (a.indexOf("dier") > -1 || a.indexOf("huisdier") > -1) add("Dierenuitvaarten");
+  if (a.indexOf("kind") > -1) add("Kinderuitvaarten");
+  if (a.indexOf("buitenland") > -1) add("Repatriëring");
+
+  add("Rouwdrukwerk");
+  add("Bloemen");
+  add("Opbaren & Verzorging");
+
+  return recs.slice(0, 10);
+}
+
+function mmShowResult() {
+  var result = document.getElementById('mm-result');
+  result.style.display = 'block';
+  document.getElementById('mm-quick').innerHTML = '';
+  document.getElementById('mm-input').disabled = true;
+  document.getElementById('mm-send').disabled = true;
+
+  var recs = mmGetRecs();
+  document.getElementById('mm-result-sub').textContent =
+    'Op basis van jouw situatie raden wij ' + recs.length + ' categorieën aan. Klik direct door naar de specialisten:';
+
+  var cats = document.getElementById('mm-cats');
+  cats.innerHTML = '';
+  recs.forEach(function(name) {
+    var c = MM_CATS[name];
+    if (!c) return;
+    var a = document.createElement('a');
+    a.className = 'mm-cat';
+    a.href = 'https://uitvaart-platform.nl/bedrijven/c/' + c.url;
+    a.target = '_blank';
+    a.innerHTML = '<div class="mm-cat-icon">' + c.icon + '</div><div><div class="mm-cat-name">' + name + '</div><div class="mm-cat-desc">' + c.desc + '</div></div>';
+    cats.appendChild(a);
+  });
+
+  mmAddBot('Ik heb ' + recs.length + ' categorieën voor je gevonden die het beste aansluiten bij jouw situatie. Klik hieronder direct door naar de specialisten. Succes, en sterkte! 🕊️');
+  document.getElementById('mm-messages').scrollTop = document.getElementById('mm-messages').scrollHeight;
+}
+
+function mmRestart() {
+  mmStep = 0;
+  mmAnswers = {};
+  mmMulti = [];
+  mmBusy = false;
+  document.getElementById('mm-messages').innerHTML = '';
+  document.getElementById('mm-quick').innerHTML = '';
+  document.getElementById('mm-result').style.display = 'none';
+  document.getElementById('mm-input').disabled = false;
+  document.getElementById('mm-send').disabled = false;
+  mmUpdateProgress();
+  setTimeout(mmInit, 200);
+}
+
+window.mmRestart = mmRestart;
+mmInit();
+
+})();
+</script>
