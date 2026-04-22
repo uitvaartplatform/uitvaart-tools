@@ -207,6 +207,59 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 .lp-res-reg-knop { background: #e8834a; color: #fff; border-radius: 8px; padding: 10px 18px; text-decoration: none; font-size: 0.76rem; font-weight: 700; white-space: nowrap; flex-shrink: 0; transition: background 0.2s; }
 .lp-res-reg-knop:hover { background: #c8622a; }
 
+/* ── CATEGORIE BLOKKEN ── */
+.lp-cat-blok { border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+.lp-cat-blok:last-child { margin-bottom: 0; }
+.lp-cat-blok-header { padding: 18px 22px 16px; }
+.lp-cat-blok-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; display: block; margin-bottom: 5px; opacity: 0.7; }
+.lp-cat-blok-titel { font-size: 1rem; font-weight: 900; margin-bottom: 4px; line-height: 1.2; }
+.lp-cat-blok-sub { font-size: 0.74rem; font-weight: 300; line-height: 1.5; opacity: 0.75; }
+.lp-cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 16px 18px; }
+
+/* Paars blok */
+.lp-cat-blok-paars { background: #4a1942; }
+.lp-cat-blok-paars .lp-cat-blok-label { color: #e8834a; }
+.lp-cat-blok-paars .lp-cat-blok-titel { color: #fff; }
+.lp-cat-blok-paars .lp-cat-blok-sub { color: rgba(255,255,255,0.7); }
+.lp-cat-blok-paars .lp-multi-item { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #fff; }
+.lp-cat-blok-paars .lp-multi-item:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); }
+.lp-cat-blok-paars .lp-multi-item.geselecteerd { background: rgba(232,131,74,0.25); border-color: #e8834a; color: #fff; }
+
+/* Donker paars blok */
+.lp-cat-blok-donker { background: #3a1233; }
+.lp-cat-blok-donker .lp-cat-blok-label { color: #e8834a; }
+.lp-cat-blok-donker .lp-cat-blok-titel { color: #fff; }
+.lp-cat-blok-donker .lp-cat-blok-sub { color: rgba(255,255,255,0.65); }
+.lp-cat-blok-donker .lp-multi-item { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12); color: #fff; }
+.lp-cat-blok-donker .lp-multi-item:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.3); }
+.lp-cat-blok-donker .lp-multi-item.geselecteerd { background: rgba(232,131,74,0.25); border-color: #e8834a; color: #fff; }
+
+/* Oranje blok */
+.lp-cat-blok-oranje { background: #c8622a; }
+.lp-cat-blok-oranje .lp-cat-blok-label { color: rgba(255,255,255,0.8); }
+.lp-cat-blok-oranje .lp-cat-blok-titel { color: #fff; }
+.lp-cat-blok-oranje .lp-cat-blok-sub { color: rgba(255,255,255,0.7); }
+.lp-cat-blok-oranje .lp-multi-item { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.25); color: #fff; }
+.lp-cat-blok-oranje .lp-multi-item:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.5); }
+.lp-cat-blok-oranje .lp-multi-item.geselecteerd { background: rgba(255,255,255,0.35); border-color: #fff; color: #fff; }
+
+/* Midden paars blok */
+.lp-cat-blok-midden { background: #6b3060; }
+.lp-cat-blok-midden .lp-cat-blok-label { color: #e8834a; }
+.lp-cat-blok-midden .lp-cat-blok-titel { color: #fff; }
+.lp-cat-blok-midden .lp-cat-blok-sub { color: rgba(255,255,255,0.65); }
+.lp-cat-blok-midden .lp-multi-item { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.14); color: #fff; }
+.lp-cat-blok-midden .lp-multi-item:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.3); }
+.lp-cat-blok-midden .lp-multi-item.geselecteerd { background: rgba(232,131,74,0.3); border-color: #e8834a; color: #fff; }
+
+/* Multi items in blokken */
+.lp-cat-blok .lp-multi-item { font-size: 0.76rem; }
+.lp-cat-blok .lp-multi-item.geselecteerd::after { color: #e8834a; }
+.lp-cat-blok-oranje .lp-multi-item.geselecteerd::after { color: #fff; }
+
+@media (max-width: 900px) { .lp-cat-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .lp-cat-grid { grid-template-columns: 1fr; } }
+
 /* ── TERUG KNOP ── */
 .lp-terug { background: none; border: 1.5px solid #e2d9e0; border-radius: 9px; padding: 10px 20px; font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 600; color: #6b6570; cursor: pointer; transition: all 0.2s; margin-top: 20px; }
 .lp-terug:hover { border-color: #4a1942; color: #4a1942; }
@@ -389,25 +442,146 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
         <button class="lp-terug" onclick="lpTerug()">← Terug</button>
       </div>
 
-      <!-- STAP C4: EXTRA SPECIALISTEN -->
+      <!-- STAP C4: ALLE 57 CATEGORIEËN GEGROEPEERD -->
       <div class="lp-stap" id="stapC4">
-        <div class="lp-multi" id="lpCategorieGrid">
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/bloemen" data-label="Bloemen" data-icoon="💐"><span class="lp-multi-icoon">💐</span> Bloemen</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/fotograaf" data-label="Fotograaf" data-icoon="📸"><span class="lp-multi-icoon">📸</span> Fotograaf</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/muziek" data-label="Muzikant of zanger" data-icoon="🎵"><span class="lp-multi-icoon">🎵</span> Muzikant of zanger</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/livestreaming" data-label="Livestreaming" data-icoon="📡"><span class="lp-multi-icoon">📡</span> Livestreaming</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/sprekers-schrijvers" data-label="Spreker of ceremoniemeester" data-icoon="🎤"><span class="lp-multi-icoon">🎤</span> Spreker</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/catering" data-label="Catering" data-icoon="🍽️"><span class="lp-multi-icoon">🍽️</span> Catering</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/urnen" data-label="Urnen en asbestemming" data-icoon="🏺"><span class="lp-multi-icoon">🏺</span> Urnen</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/herinneringssieraden" data-label="Herinneringssieraden" data-icoon="💍"><span class="lp-multi-icoon">💍</span> Herinneringssieraden</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/rouwvervoer" data-label="Rouwvervoer" data-icoon="🚗"><span class="lp-multi-icoon">🚗</span> Rouwvervoer</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/erfrecht" data-label="Erfrecht en notaris" data-icoon="⚖️"><span class="lp-multi-icoon">⚖️</span> Erfrecht</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/uitvaartverzekeringen" data-label="Uitvaartverzekering" data-icoon="📄"><span class="lp-multi-icoon">📄</span> Verzekering</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-nazorg" data-label="Rouwbegeleiding en nazorg" data-icoon="💔"><span class="lp-multi-icoon">💔</span> Rouwbegeleiding</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/asverstrooiing" data-label="Asverstrooiing" data-icoon="💨"><span class="lp-multi-icoon">💨</span> Asverstrooiing</div>
-          <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/kinderuitvaarten" data-label="Kinderuitvaarten" data-icoon="👶"><span class="lp-multi-icoon">👶</span> Kinderuitvaarten</div>
-        </div>
-        <div class="lp-tip"><strong>Tip:</strong> Niet gevonden wat je zoekt? In onze bedrijvengids vind je alle 57 categorieën.</div>
+        <div id="lpCategorieGrid">
+
+          <!-- BLOK 1: DE UITVAART REGELEN -->
+          <div class="lp-cat-blok lp-cat-blok-paars">
+            <div class="lp-cat-blok-header">
+              <span class="lp-cat-blok-label">De eerste stappen</span>
+              <div class="lp-cat-blok-titel">De uitvaart regelen</div>
+              <div class="lp-cat-blok-sub">Van begeleiding tot vervoer — de kern van de uitvaart</div>
+            </div>
+            <div class="lp-cat-grid">
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/uitvaartondernemingen" data-label="Uitvaartondernemingen" data-icoon="🕯️"><span class="lp-multi-icoon">🕯️</span> Uitvaartondernemingen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/uitvaartbegeleiding" data-label="Uitvaartbegeleiding" data-icoon="🤝"><span class="lp-multi-icoon">🤝</span> Uitvaartbegeleiding</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/opbaren-verzorging" data-label="Opbaren & Verzorging" data-icoon="🏥"><span class="lp-multi-icoon">🏥</span> Opbaren & Verzorging</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/stervensbegeleiding" data-label="Stervensbegeleiding" data-icoon="💛"><span class="lp-multi-icoon">💛</span> Stervensbegeleiding</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/bereikbaarheidsdiensten" data-label="Bereikbaarheidsdiensten" data-icoon="📞"><span class="lp-multi-icoon">📞</span> Bereikbaarheidsdiensten</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-nazorg" data-label="Rouwbegeleiding & Nazorg" data-icoon="💔"><span class="lp-multi-icoon">💔</span> Rouwbegeleiding & Nazorg</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/rouwvervoer" data-label="Rouwvervoer" data-icoon="🚗"><span class="lp-multi-icoon">🚗</span> Rouwvervoer</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/dragers" data-label="Dragers" data-icoon="🎗️"><span class="lp-multi-icoon">🎗️</span> Dragers</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/begraafplaats-crematorium" data-label="Begraafplaats & Crematorium" data-icoon="⚰️"><span class="lp-multi-icoon">⚰️</span> Begraafplaats & Crematorium</div>
+            </div>
+          </div>
+
+          <!-- BLOK 2: DE PLECHTIGHEID -->
+          <div class="lp-cat-blok lp-cat-blok-donker">
+            <div class="lp-cat-blok-header">
+              <span class="lp-cat-blok-label">De uitvaart regelen</span>
+              <div class="lp-cat-blok-titel">Alles voor de plechtigheid</div>
+              <div class="lp-cat-blok-sub">Van de muziek tot de bloemen — vind de specialisten voor een persoonlijk afscheid</div>
+            </div>
+            <div class="lp-cat-grid">
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/bloemen" data-label="Bloemen" data-icoon="💐"><span class="lp-multi-icoon">💐</span> Bloemen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/muziek" data-label="Muziek" data-icoon="🎵"><span class="lp-multi-icoon">🎵</span> Muziek</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/sprekers-schrijvers" data-label="Sprekers & Schrijvers" data-icoon="🎤"><span class="lp-multi-icoon">🎤</span> Sprekers & Schrijvers</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/locatie" data-label="Locatie" data-icoon="📍"><span class="lp-multi-icoon">📍</span> Locatie</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/unieke-uitvaartlocaties" data-label="Unieke uitvaartlocaties" data-icoon="🏛️"><span class="lp-multi-icoon">🏛️</span> Unieke uitvaartlocaties</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/rouwcentra" data-label="Rouwcentra" data-icoon="🏠"><span class="lp-multi-icoon">🏠</span> Rouwcentra</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/catering" data-label="Catering" data-icoon="🍽️"><span class="lp-multi-icoon">🍽️</span> Catering</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/kleding" data-label="Kleding" data-icoon="👔"><span class="lp-multi-icoon">👔</span> Kleding</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/styling-decoratie" data-label="Styling & Decoratie" data-icoon="🌸"><span class="lp-multi-icoon">🌸</span> Styling & Decoratie</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/geurbeleving" data-label="Geurbeleving" data-icoon="🌿"><span class="lp-multi-icoon">🌿</span> Geurbeleving</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/rituelen-tradities" data-label="Rituelen & Tradities" data-icoon="🕯️"><span class="lp-multi-icoon">✨</span> Rituelen & Tradities</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/rouwdrukwerk" data-label="Rouwdrukwerk" data-icoon="📄"><span class="lp-multi-icoon">📄</span> Rouwdrukwerk</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/uitvaartbenodigdheden" data-label="Uitvaartbenodigdheden" data-icoon="🛍️"><span class="lp-multi-icoon">🛍️</span> Uitvaartbenodigdheden</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/theatervoorstelling" data-label="Theatervoorstelling" data-icoon="🎭"><span class="lp-multi-icoon">🎭</span> Theatervoorstelling</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/afscheidskunst" data-label="Afscheidskunst" data-icoon="🎨"><span class="lp-multi-icoon">🎨</span> Afscheidskunst</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/beveiliging" data-label="Beveiliging" data-icoon="🔒"><span class="lp-multi-icoon">🔒</span> Beveiliging</div>
+            </div>
+          </div>
+
+          <!-- BLOK 3: DE HERINNERING VASTLEGGEN -->
+          <div class="lp-cat-blok lp-cat-blok-oranje">
+            <div class="lp-cat-blok-header">
+              <span class="lp-cat-blok-label">De herinnering vastleggen</span>
+              <div class="lp-cat-blok-titel">Bewaar het afscheid voor altijd</div>
+              <div class="lp-cat-blok-sub">Foto, video en bijzondere herinneringen — zodat je het afscheid altijd bij je hebt</div>
+            </div>
+            <div class="lp-cat-grid">
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/fotograaf" data-label="Fotograaf" data-icoon="📸"><span class="lp-multi-icoon">📸</span> Fotograaf</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/videograaf" data-label="Videograaf" data-icoon="🎬"><span class="lp-multi-icoon">🎬</span> Videograaf</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/livestreaming" data-label="Livestreaming" data-icoon="📡"><span class="lp-multi-icoon">📡</span> Livestreaming</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/herinneringssieraden" data-label="Herinneringssieraden" data-icoon="💍"><span class="lp-multi-icoon">💍</span> Herinneringssieraden</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/herinneringsproducten" data-label="Herinneringsproducten" data-icoon="🎁"><span class="lp-multi-icoon">🎁</span> Herinneringsproducten</div>
+            </div>
+          </div>
+
+          <!-- BLOK 4: NA DE UITVAART -->
+          <div class="lp-cat-blok lp-cat-blok-midden">
+            <div class="lp-cat-blok-header">
+              <span class="lp-cat-blok-label">Na de uitvaart</span>
+              <div class="lp-cat-blok-titel">Het graf & de as</div>
+              <div class="lp-cat-blok-sub">Voor een waardige en blijvende herinnering aan de overledene</div>
+            </div>
+            <div class="lp-cat-grid">
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/urnen" data-label="Urnen" data-icoon="🏺"><span class="lp-multi-icoon">🏺</span> Urnen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/asverstrooiing" data-label="Asverstrooiing" data-icoon="💨"><span class="lp-multi-icoon">💨</span> Asverstrooiing</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/graf-gedenkstenen" data-label="Graf & Gedenkstenen" data-icoon="🪨"><span class="lp-multi-icoon">🪨</span> Graf & Gedenkstenen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/grafzorg" data-label="Grafzorg" data-icoon="🌱"><span class="lp-multi-icoon">🌱</span> Grafzorg</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-nazorg" data-label="Rouwbegeleiding & Nazorg" data-icoon="💔"><span class="lp-multi-icoon">💔</span> Rouwbegeleiding & Nazorg</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/resomeren" data-label="Resomeren" data-icoon="💧"><span class="lp-multi-icoon">💧</span> Resomeren</div>
+            </div>
+          </div>
+
+          <!-- BLOK 5: PRAKTISCH & JURIDISCH -->
+          <div class="lp-cat-blok lp-cat-blok-midden">
+            <div class="lp-cat-blok-header">
+              <span class="lp-cat-blok-label">Praktisch & Juridisch</span>
+              <div class="lp-cat-blok-titel">Administratie & nalatenschap regelen</div>
+              <div class="lp-cat-blok-sub">Na het overlijden moet er ook praktisch veel geregeld worden — vind hier de juiste experts</div>
+            </div>
+            <div class="lp-cat-grid">
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/erfrecht" data-label="Erfrecht" data-icoon="⚖️"><span class="lp-multi-icoon">⚖️</span> Erfrecht</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/juridisch-advies" data-label="Juridisch advies" data-icoon="📋"><span class="lp-multi-icoon">📋</span> Juridisch advies</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/nalatenschap" data-label="Nalatenschap" data-icoon="🏠"><span class="lp-multi-icoon">🏠</span> Nalatenschap</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/uitvaartverzekeringen" data-label="Uitvaartverzekeringen" data-icoon="📄"><span class="lp-multi-icoon">📄</span> Uitvaartverzekeringen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/boedelinrichting-ontruiming" data-label="Boedelinrichting & Ontruiming" data-icoon="🏡"><span class="lp-multi-icoon">🏡</span> Boedelinrichting & Ontruiming</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/reiniging" data-label="Reiniging" data-icoon="🧹"><span class="lp-multi-icoon">🧹</span> Reiniging</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/familiemediatie" data-label="Familiemediatie" data-icoon="🤝"><span class="lp-multi-icoon">🤝</span> Familiemediatie</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/makelaar" data-label="Makelaar" data-icoon="🔑"><span class="lp-multi-icoon">🔑</span> Makelaar</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/repatriering" data-label="Repatriëring" data-icoon="✈️"><span class="lp-multi-icoon">✈️</span> Repatriëring</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/software-administratie" data-label="Software & Administratie" data-icoon="💻"><span class="lp-multi-icoon">💻</span> Software & Administratie</div>
+            </div>
+          </div>
+
+          <!-- BLOK 6: BIJZONDERE SITUATIES -->
+          <div class="lp-cat-blok lp-cat-blok-donker">
+            <div class="lp-cat-blok-header">
+              <span class="lp-cat-blok-label">Bijzondere situaties</span>
+              <div class="lp-cat-blok-titel">Specialisten voor elke situatie</div>
+              <div class="lp-cat-blok-sub">Soms vraagt een uitvaart om extra specifieke expertise</div>
+            </div>
+            <div class="lp-cat-grid">
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/kinderuitvaarten" data-label="Kinderuitvaarten" data-icoon="👶"><span class="lp-multi-icoon">👶</span> Kinderuitvaarten</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/dierenuitvaarten" data-label="Dierenuitvaarten" data-icoon="🐾"><span class="lp-multi-icoon">🐾</span> Dierenuitvaarten</div>
+            </div>
+          </div>
+
+          <!-- BLOK 7: KENNIS & INFORMATIE -->
+          <div class="lp-cat-blok lp-cat-blok-paars">
+            <div class="lp-cat-blok-header">
+              <span class="lp-cat-blok-label">Kennis & Informatie</span>
+              <div class="lp-cat-blok-titel">Leren & informeren</div>
+              <div class="lp-cat-blok-sub">Organisaties, media en opleidingen in de uitvaartbranche</div>
+            </div>
+            <div class="lp-cat-grid">
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/uitvaartips" data-label="Uitvaartips" data-icoon="💡"><span class="lp-multi-icoon">💡</span> Uitvaartips</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/opleidingen" data-label="Opleidingen" data-icoon="🎓"><span class="lp-multi-icoon">🎓</span> Opleidingen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/media" data-label="Media" data-icoon="📰"><span class="lp-multi-icoon">📰</span> Media</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/brancheverenigingen" data-label="Brancheverenigingen" data-icoon="🏛️"><span class="lp-multi-icoon">🏛️</span> Brancheverenigingen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/keurmerken" data-label="Keurmerken" data-icoon="✅"><span class="lp-multi-icoon">✅</span> Keurmerken</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/goede-doelen" data-label="Goede doelen" data-icoon="❤️"><span class="lp-multi-icoon">❤️</span> Goede doelen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/stichtingen" data-label="Stichtingen" data-icoon="🌟"><span class="lp-multi-icoon">🌟</span> Stichtingen</div>
+              <div class="lp-multi-item" onclick="this.classList.toggle('geselecteerd')" data-url="https://uitvaart-platform.nl/bedrijven/c/zorginstellingen" data-label="Zorginstellingen" data-icoon="🏥"><span class="lp-multi-icoon">🏥</span> Zorginstellingen</div>
+            </div>
+          </div>
+
+        </div><!-- /lpCategorieGrid -->
+
+        <div class="lp-tip"><strong>Tip:</strong> Selecteer alle categorieën die voor jou relevant zijn. Heb je niets geselecteerd? Dan tonen wij je de meest populaire specialisten.</div>
         <div style="display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;">
           <button class="lp-verder-btn oranje" onclick="lpBouwResultaat()">Bekijk mijn persoonlijk overzicht →</button>
           <button class="lp-terug" onclick="lpTerug()" style="margin-top:0;">← Terug</button>
