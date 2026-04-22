@@ -1,636 +1,946 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uitvaart Matchmaker</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,700&display=swap" rel="stylesheet">
 <style>
-.mm-wrap * { box-sizing: border-box; margin: 0; padding: 0; }
-.mm-wrap {
-  font-family: 'Poppins', sans-serif;
-  max-width: 780px;
-  margin: 0 auto;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Poppins', sans-serif; background: #f0ebe8; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+
+/* ── TRIGGER KNOP ── */
+.mm-trigger {
+  background: #4a1942; color: #fff; border: none; border-radius: 50px;
+  padding: 16px 32px; font-family: 'Poppins', sans-serif; font-size: 1rem;
+  font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 32px rgba(74,25,66,0.35); transition: all 0.2s;
 }
-.mm-hero {
-  background: #4a1942;
-  border-radius: 16px 16px 0 0;
-  padding: 36px 36px 28px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.mm-trigger:hover { background: #5c2154; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(74,25,66,0.45); }
+.mm-trigger-dot { width: 10px; height: 10px; background: #e8834a; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.3); } }
+
+/* ── OVERLAY ── */
+.mm-overlay {
+  position: fixed; inset: 0; background: rgba(20,8,18,0.75);
+  backdrop-filter: blur(6px); z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; opacity: 0; pointer-events: none; transition: opacity 0.3s;
 }
-.mm-hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 80% at 15% 60%, rgba(232,131,74,0.15) 0%, transparent 55%),
-              radial-gradient(ellipse 50% 60% at 85% 20%, rgba(255,255,255,0.03) 0%, transparent 50%);
+.mm-overlay.actief { opacity: 1; pointer-events: all; }
+
+/* ── POPUP ── */
+.mm-popup {
+  background: #fff; border-radius: 20px; width: 100%; max-width: 680px;
+  max-height: 90vh; overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 32px 80px rgba(20,8,18,0.4);
+  transform: translateY(24px) scale(0.97); transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.mm-overlay.actief .mm-popup { transform: translateY(0) scale(1); }
+
+/* ── HEADER ── */
+.mm-header {
+  background: #4a1942; padding: 22px 28px; display: flex;
+  align-items: center; justify-content: space-between; flex-shrink: 0;
+  position: relative; overflow: hidden;
+}
+.mm-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 100% at 100% 0%, rgba(232,131,74,0.2) 0%, transparent 60%);
   pointer-events: none;
 }
-.mm-badge {
-  display: inline-block;
-  background: rgba(232,131,74,0.2);
-  border: 1px solid rgba(232,131,74,0.4);
-  border-radius: 20px;
-  padding: 5px 16px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #e8834a;
-  margin-bottom: 14px;
-  position: relative;
+.mm-header-links { display: flex; flex-direction: column; gap: 2px; position: relative; }
+.mm-header-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(232,131,74,0.2); border: 1px solid rgba(232,131,74,0.4);
+  border-radius: 20px; padding: 3px 10px; width: fit-content; margin-bottom: 6px;
 }
-.mm-title {
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 800;
-  color: #fff;
-  margin-bottom: 8px;
-  position: relative;
-  letter-spacing: -0.01em;
+.mm-header-badge span { font-size: 0.6rem; font-weight: 700; color: #e8834a; letter-spacing: 0.12em; text-transform: uppercase; }
+.mm-header h2 { font-size: 1.2rem; font-weight: 900; color: #fff; letter-spacing: -0.02em; line-height: 1.2; }
+.mm-header-sub { font-size: 0.72rem; color: rgba(255,255,255,0.55); font-weight: 300; }
+.mm-sluiten {
+  width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1.1rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s; position: relative; flex-shrink: 0;
 }
-.mm-sub {
-  font-size: 0.88rem;
-  color: rgba(255,255,255,0.6);
-  line-height: 1.75;
-  max-width: 480px;
-  margin: 0 auto;
-  position: relative;
+.mm-sluiten:hover { background: rgba(255,255,255,0.22); }
+
+/* ── VOORTGANG ── */
+.mm-voortgang { background: #faf7f2; padding: 12px 28px; border-bottom: 1px solid #e2d9e0; flex-shrink: 0; }
+.mm-voortgang-balk { height: 4px; background: #e2d9e0; border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
+.mm-voortgang-fill { height: 100%; background: linear-gradient(90deg, #4a1942, #e8834a); border-radius: 4px; transition: width 0.4s ease; }
+.mm-voortgang-tekst { font-size: 0.68rem; color: #6b6570; font-weight: 600; display: flex; justify-content: space-between; }
+
+/* ── BODY ── */
+.mm-body { padding: 28px; overflow-y: auto; flex: 1; }
+
+/* ── STAP ── */
+.mm-stap { display: none; animation: fadeIn 0.25s ease; }
+.mm-stap.actief { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.mm-vraag { font-size: 1rem; font-weight: 800; color: #4a1942; margin-bottom: 6px; letter-spacing: -0.01em; line-height: 1.3; }
+.mm-vraag-sub { font-size: 0.78rem; color: #6b6570; font-weight: 300; margin-bottom: 20px; line-height: 1.6; }
+
+/* ── KEUZE KNOPPEN ── */
+.mm-opties { display: flex; flex-direction: column; gap: 10px; }
+.mm-opties.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mm-opties.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.mm-optie {
+  background: #faf7f2; border: 2px solid #e2d9e0; border-radius: 12px;
+  padding: 14px 18px; cursor: pointer; transition: all 0.18s;
+  display: flex; align-items: center; gap: 12px; text-align: left;
 }
-.mm-chat {
-  background: #ffffff;
-  border: 1px solid #e2d9e0;
-  border-top: none;
-  border-radius: 0 0 16px 16px;
-  overflow: hidden;
+.mm-optie:hover { border-color: #4a1942; background: #f0ebef; transform: translateX(3px); }
+.mm-optie.gekozen { border-color: #4a1942; background: #f0ebef; }
+.mm-optie.groot { padding: 20px 22px; flex-direction: column; align-items: flex-start; gap: 8px; }
+.mm-optie.groot:hover { transform: translateY(-3px); }
+.mm-optie-icoon { font-size: 1.4rem; flex-shrink: 0; }
+.mm-optie.groot .mm-optie-icoon { font-size: 2rem; }
+.mm-optie-tekst { font-size: 0.86rem; font-weight: 700; color: #4a1942; line-height: 1.3; }
+.mm-optie-sub { font-size: 0.72rem; color: #6b6570; font-weight: 300; line-height: 1.45; }
+.mm-optie-pijl { margin-left: auto; color: #4a1942; font-size: 0.9rem; opacity: 0; transition: opacity 0.15s, transform 0.15s; flex-shrink: 0; }
+.mm-optie:hover .mm-optie-pijl { opacity: 1; transform: translateX(3px); }
+
+/* ── MULTI-SELECT ── */
+.mm-multi { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.mm-multi-item {
+  background: #faf7f2; border: 2px solid #e2d9e0; border-radius: 10px;
+  padding: 11px 14px; cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 9px; font-size: 0.8rem;
+  font-weight: 600; color: #4a1942;
 }
-.mm-progress-bar {
-  display: flex;
-  gap: 5px;
-  padding: 14px 24px 0;
+.mm-multi-item:hover { border-color: #4a1942; }
+.mm-multi-item.geselecteerd { border-color: #e8834a; background: rgba(232,131,74,0.08); }
+.mm-multi-item.geselecteerd::after { content: '✓'; margin-left: auto; color: #e8834a; font-weight: 900; }
+.mm-multi-icoon { font-size: 1.1rem; }
+
+/* ── RESULTAAT KAARTEN ── */
+.mm-resultaten { display: flex; flex-direction: column; gap: 10px; }
+.mm-resultaat-kaart {
+  background: #fff; border: 1.5px solid #e2d9e0; border-radius: 14px;
+  padding: 18px 20px; display: flex; align-items: center; gap: 16px;
+  text-decoration: none; transition: all 0.2s; position: relative; overflow: hidden;
 }
-.mm-step {
-  height: 4px;
-  flex: 1;
-  border-radius: 2px;
-  background: #e2d9e0;
-  transition: background 0.35s;
+.mm-resultaat-kaart::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; background: #4a1942; transform: scaleY(0);
+  transform-origin: bottom; transition: transform 0.25s;
 }
-.mm-step.done { background: #4a1942; }
-.mm-step.active { background: #e8834a; }
-.mm-messages {
-  padding: 22px 24px 14px;
-  min-height: 300px;
-  max-height: 460px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  scroll-behavior: smooth;
+.mm-resultaat-kaart:hover { border-color: #4a1942; transform: translateX(4px); box-shadow: 0 4px 20px rgba(74,25,66,0.1); }
+.mm-resultaat-kaart:hover::before { transform: scaleY(1); }
+.mm-resultaat-kaart.uitgelicht { border-color: #e8834a; }
+.mm-resultaat-kaart.uitgelicht::before { background: #e8834a; }
+.mm-resultaat-icoon { width: 48px; height: 48px; border-radius: 12px; background: #faf7f2; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+.mm-resultaat-kaart.uitgelicht .mm-resultaat-icoon { background: rgba(232,131,74,0.12); }
+.mm-resultaat-info { flex: 1; }
+.mm-resultaat-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e8834a; margin-bottom: 3px; }
+.mm-resultaat-titel { font-size: 0.9rem; font-weight: 800; color: #4a1942; margin-bottom: 3px; line-height: 1.3; }
+.mm-resultaat-desc { font-size: 0.74rem; color: #6b6570; font-weight: 300; line-height: 1.5; }
+.mm-resultaat-pijl { font-size: 1.1rem; color: #4a1942; flex-shrink: 0; }
+
+/* ── REGISTRATIE BANNER ── */
+.mm-reg-banner {
+  background: linear-gradient(135deg, #4a1942 0%, #3a1233 100%);
+  border-radius: 12px; padding: 16px 18px; margin-top: 14px;
+  display: flex; align-items: center; gap: 14px;
 }
-.mm-messages::-webkit-scrollbar { width: 3px; }
-.mm-messages::-webkit-scrollbar-thumb { background: #e2d9e0; border-radius: 3px; }
-.mm-msg {
-  display: flex;
-  gap: 10px;
-  animation: mmIn 0.3s ease both;
+.mm-reg-icoon { font-size: 1.8rem; flex-shrink: 0; }
+.mm-reg-tekst { flex: 1; }
+.mm-reg-titel { font-size: 0.84rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
+.mm-reg-sub { font-size: 0.7rem; color: rgba(255,255,255,0.6); font-weight: 300; line-height: 1.5; }
+.mm-reg-knop {
+  display: inline-block; background: #e8834a; color: #fff; border-radius: 8px;
+  padding: 9px 16px; font-size: 0.74rem; font-weight: 700; text-decoration: none;
+  white-space: nowrap; flex-shrink: 0; transition: background 0.2s;
 }
-@keyframes mmIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+.mm-reg-knop:hover { background: #c8622a; }
+
+/* ── FOOTER ── */
+.mm-footer {
+  padding: 16px 28px; border-top: 1px solid #e2d9e0;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-shrink: 0; background: #faf7f2;
 }
-.mm-msg.user { flex-direction: row-reverse; }
-.mm-av {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-  margin-top: 2px;
-  font-weight: 700;
+.mm-terug {
+  background: none; border: 1.5px solid #e2d9e0; border-radius: 8px;
+  padding: 9px 18px; font-family: 'Poppins', sans-serif; font-size: 0.8rem;
+  font-weight: 600; color: #6b6570; cursor: pointer; transition: all 0.2s;
 }
-.mm-av.bot { background: #4a1942; color: #fff; }
-.mm-av.user { background: #e8834a; color: #fff; }
-.mm-bubble {
-  max-width: 80%;
-  padding: 11px 15px;
-  border-radius: 14px;
-  font-size: 0.85rem;
-  line-height: 1.7;
-  font-family: 'Poppins', sans-serif;
+.mm-terug:hover { border-color: #4a1942; color: #4a1942; }
+.mm-verder {
+  background: #4a1942; color: #fff; border: none; border-radius: 8px;
+  padding: 10px 22px; font-family: 'Poppins', sans-serif; font-size: 0.84rem;
+  font-weight: 700; cursor: pointer; transition: all 0.2s; display: none;
 }
-.mm-msg.bot .mm-bubble {
-  background: #f5f0e8;
-  color: #1e1520;
-  border-radius: 4px 14px 14px 14px;
+.mm-verder:hover { background: #3a1233; transform: translateY(-1px); }
+.mm-verder.zichtbaar { display: block; }
+.mm-stap-indicator { font-size: 0.7rem; color: #6b6570; font-weight: 600; }
+
+/* ── SPECIALE STAP STIJLEN ── */
+.mm-welkom { text-align: center; padding: 8px 0 16px; }
+.mm-welkom-logo { font-size: 3rem; margin-bottom: 12px; display: block; }
+.mm-welkom h2 { font-size: 1.4rem; font-weight: 900; color: #4a1942; margin-bottom: 8px; letter-spacing: -0.02em; }
+.mm-welkom p { font-size: 0.84rem; color: #6b6570; font-weight: 300; line-height: 1.75; max-width: 440px; margin: 0 auto 24px; }
+.mm-welkom-knoppen { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mm-welkom-knop {
+  border: 2px solid #e2d9e0; border-radius: 14px; padding: 22px 18px;
+  cursor: pointer; transition: all 0.2s; background: #faf7f2;
+  display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
 }
-.mm-msg.user .mm-bubble {
-  background: #4a1942;
-  color: #fff;
-  border-radius: 14px 4px 14px 14px;
-}
-.mm-typing-dots {
-  display: flex;
-  gap: 4px;
-  padding: 11px 15px;
-  background: #f5f0e8;
-  border-radius: 4px 14px 14px 14px;
-  width: fit-content;
-}
-.mm-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #9d8fa0;
-  animation: mmDot 1.2s ease-in-out infinite;
-}
-.mm-dot:nth-child(2) { animation-delay: 0.2s; }
-.mm-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes mmDot {
-  0%, 60%, 100% { transform: translateY(0); }
-  30%            { transform: translateY(-6px); }
-}
-.mm-quick {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 4px 24px 14px;
-}
-.mm-chip {
-  background: #f5f0e8;
-  border: 1px solid #e2d9e0;
-  border-radius: 22px;
-  padding: 7px 15px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #4a1942;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: 'Poppins', sans-serif;
-}
-.mm-chip:hover { background: #4a1942; color: #fff; border-color: #4a1942; }
-.mm-chip.selected { background: #4a1942; color: #fff; border-color: #4a1942; }
-.mm-chip.done-btn {
-  background: #e8834a;
-  color: #fff;
-  border-color: #e8834a;
-}
-.mm-chip.done-btn:hover { background: #c8622a; border-color: #c8622a; }
-.mm-input-row {
-  display: flex;
-  gap: 10px;
-  padding: 14px 24px;
-  border-top: 1px solid #f0ebef;
-  background: #faf7f2;
-}
-.mm-input {
-  flex: 1;
-  padding: 11px 15px;
-  border: 1px solid #e2d9e0;
-  border-radius: 10px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.84rem;
-  color: #1e1520;
-  background: #fff;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.mm-input:focus { border-color: #4a1942; }
-.mm-send {
-  background: #4a1942;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 11px 20px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.84rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s;
-  white-space: nowrap;
-}
-.mm-send:hover { background: #3a1233; }
-.mm-send:disabled { background: #9d8fa0; cursor: not-allowed; }
-.mm-result {
-  padding: 24px;
-  border-top: 1px solid #f0ebef;
-  background: #faf7f2;
-  border-radius: 0 0 16px 16px;
-  display: none;
-}
-.mm-result-header {
-  margin-bottom: 16px;
-}
-.mm-result-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #e8834a;
-  margin-bottom: 4px;
-}
-.mm-result-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #4a1942;
-  margin-bottom: 4px;
-}
-.mm-result-sub {
-  font-size: 0.82rem;
-  color: #6b6570;
-  font-weight: 300;
-  line-height: 1.6;
-}
-.mm-cats {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 9px;
-  margin-bottom: 18px;
-}
-.mm-cat {
-  background: #fff;
-  border: 1px solid #e2d9e0;
-  border-left: 3px solid #4a1942;
-  border-radius: 10px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  text-decoration: none;
-  transition: all 0.15s;
-}
-.mm-cat:hover {
-  background: #f5f0e8;
-  border-left-color: #e8834a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(74,25,66,0.08);
-}
-.mm-cat-icon { font-size: 1.3rem; flex-shrink: 0; }
-.mm-cat-name { font-size: 0.82rem; font-weight: 700; color: #4a1942; line-height: 1.3; }
-.mm-cat-desc { font-size: 0.72rem; color: #6b6570; font-weight: 300; line-height: 1.4; }
-.mm-cta-btn {
-  background: #e8834a;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 14px 28px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-  width: 100%;
-  transition: background 0.15s;
-  margin-bottom: 9px;
-}
-.mm-cta-btn:hover { background: #c8622a; }
-.mm-restart-btn {
-  background: transparent;
-  border: 1px solid #e2d9e0;
-  color: #6b6570;
-  border-radius: 10px;
-  padding: 9px 18px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.8rem;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.15s;
-}
-.mm-restart-btn:hover { border-color: #4a1942; color: #4a1942; }
-@media (max-width: 600px) {
-  .mm-hero { padding: 28px 20px 22px; }
-  .mm-messages { padding: 18px 16px 12px; }
-  .mm-quick { padding: 4px 16px 12px; }
-  .mm-input-row { padding: 12px 16px; }
-  .mm-result { padding: 18px 16px; }
-  .mm-cats { grid-template-columns: 1fr; }
+.mm-welkom-knop:hover { border-color: #4a1942; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(74,25,66,0.12); }
+.mm-welkom-knop.paars:hover { border-color: #4a1942; background: #f0ebef; }
+.mm-welkom-knop.oranje:hover { border-color: #e8834a; background: rgba(232,131,74,0.06); }
+.mm-welkom-knop-icoon { font-size: 2.4rem; }
+.mm-welkom-knop-titel { font-size: 0.92rem; font-weight: 800; color: #4a1942; line-height: 1.2; }
+.mm-welkom-knop-sub { font-size: 0.72rem; color: #6b6570; font-weight: 300; line-height: 1.4; }
+
+.mm-tip { background: rgba(232,131,74,0.08); border: 1px solid rgba(232,131,74,0.25); border-radius: 10px; padding: 12px 14px; margin-top: 14px; font-size: 0.74rem; color: #6b6570; font-weight: 300; line-height: 1.6; }
+.mm-tip strong { color: #c8622a; font-weight: 700; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 500px) {
+  .mm-popup { border-radius: 16px; }
+  .mm-header { padding: 18px 20px; }
+  .mm-body { padding: 20px; }
+  .mm-footer { padding: 14px 20px; }
+  .mm-voortgang { padding: 10px 20px; }
+  .mm-opties.grid2, .mm-opties.grid3 { grid-template-columns: 1fr; }
+  .mm-multi { grid-template-columns: 1fr; }
+  .mm-welkom-knoppen { grid-template-columns: 1fr; }
+  .mm-reg-banner { flex-direction: column; text-align: center; }
+  .mm-optie.groot { flex-direction: row; align-items: center; }
+  .mm-optie.groot .mm-optie-icoon { font-size: 1.5rem; }
 }
 </style>
+</head>
+<body>
 
-<div class="mm-wrap">
+<button class="mm-trigger" onclick="openMatchmaker()">
+  <div class="mm-trigger-dot"></div>
+  Start de Uitvaart Matchmaker
+</button>
 
-  <div class="mm-hero">
-    <div class="mm-badge">✦ Uitvaart Matchmaker</div>
-    <h2 class="mm-title">Vind de juiste specialist voor jou</h2>
-    <p class="mm-sub">Vertel ons jouw situatie — wij koppelen je aan de juiste specialisten uit onze bedrijvengids</p>
-  </div>
+<!-- OVERLAY -->
+<div class="mm-overlay" id="mmOverlay">
+  <div class="mm-popup">
 
-  <div class="mm-chat">
-
-    <div class="mm-progress-bar">
-      <div class="mm-step active" id="mm-s1"></div>
-      <div class="mm-step" id="mm-s2"></div>
-      <div class="mm-step" id="mm-s3"></div>
-      <div class="mm-step" id="mm-s4"></div>
-    </div>
-
-    <div class="mm-messages" id="mm-messages"></div>
-    <div class="mm-quick" id="mm-quick"></div>
-
-    <div class="mm-input-row">
-      <input class="mm-input" id="mm-input" placeholder="Of typ hier je eigen bericht..." />
-      <button class="mm-send" id="mm-send">Verstuur</button>
-    </div>
-
-    <div class="mm-result" id="mm-result">
-      <div class="mm-result-header">
-        <div class="mm-result-label">Jouw persoonlijk advies</div>
-        <div class="mm-result-title">Wij raden deze specialisten aan</div>
-        <div class="mm-result-sub" id="mm-result-sub"></div>
+    <!-- HEADER -->
+    <div class="mm-header">
+      <div class="mm-header-links">
+        <div class="mm-header-badge">
+          <div style="width:6px;height:6px;background:#e8834a;border-radius:50%;"></div>
+          <span>Uitvaart Matchmaker</span>
+        </div>
+        <h2>Jouw persoonlijke gids</h2>
+        <div class="mm-header-sub">Gratis en altijd beschikbaar</div>
       </div>
-      <div class="mm-cats" id="mm-cats"></div>
-      <button class="mm-cta-btn" onclick="window.open('https://uitvaart-platform.nl/bedrijven','_blank')">
-        🗂️ Bekijk alle specialisten in de bedrijvengids
-      </button>
-      <button class="mm-restart-btn" onclick="mmRestart()">↩ Opnieuw beginnen</button>
+      <button class="mm-sluiten" onclick="sluitMatchmaker()">✕</button>
+    </div>
+
+    <!-- VOORTGANG -->
+    <div class="mm-voortgang">
+      <div class="mm-voortgang-balk">
+        <div class="mm-voortgang-fill" id="voortgangFill" style="width:5%"></div>
+      </div>
+      <div class="mm-voortgang-tekst">
+        <span id="voortgangTekst">Welkom</span>
+        <span id="stapTekst">Stap 1</span>
+      </div>
+    </div>
+
+    <!-- STAPPEN BODY -->
+    <div class="mm-body" id="mmBody">
+
+      <!-- STAP 0: WELKOM -->
+      <div class="mm-stap actief" id="stap0">
+        <div class="mm-welkom">
+          <span class="mm-welkom-logo">🦋</span>
+          <h2>Welkom op Uitvaart-Platform.nl</h2>
+          <p>Wij helpen je snel en persoonlijk naar de informatie, specialisten of diensten die je nodig hebt. Vertel ons wie je bent, dan wijzen wij jou de juiste weg.</p>
+          <div class="mm-welkom-knoppen">
+            <div class="mm-welkom-knop paars" onclick="kiesDoelgroep('consument')">
+              <div class="mm-welkom-knop-icoon">🕯️</div>
+              <div class="mm-welkom-knop-titel">Ik ben een nabestaande of particulier</div>
+              <div class="mm-welkom-knop-sub">Ik zoek informatie, hulp of specialisten voor een uitvaart</div>
+            </div>
+            <div class="mm-welkom-knop oranje" onclick="kiesDoelgroep('zakelijk')">
+              <div class="mm-welkom-knop-icoon">💼</div>
+              <div class="mm-welkom-knop-titel">Ik ben een professional in de uitvaartbranche</div>
+              <div class="mm-welkom-knop-sub">Ik zoek samenwerking, zichtbaarheid of zakelijke diensten</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== CONSUMENT STAPPEN ========== -->
+
+      <!-- STAP C1: SITUATIE -->
+      <div class="mm-stap" id="stapC1">
+        <div class="mm-vraag">Wat is jouw situatie op dit moment?</div>
+        <div class="mm-vraag-sub">Wij passen onze begeleiding volledig aan op wat jij nu nodig hebt.</div>
+        <div class="mm-opties">
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'situatie', 'recent', 'stapC2')">
+            <div class="mm-optie-icoon">🕯️</div>
+            <div>
+              <div class="mm-optie-tekst">Er is iemand recent overleden</div>
+              <div class="mm-optie-sub">Ik moet nu snel handelen en de uitvaart regelen</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'situatie', 'terminaal', 'stapC2')">
+            <div class="mm-optie-icoon">💛</div>
+            <div>
+              <div class="mm-optie-tekst">Een dierbare is terminaal ziek</div>
+              <div class="mm-optie-sub">Ik wil voorbereid zijn en vast nadenken over de uitvaart</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'situatie', 'vooruit', 'stapC2')">
+            <div class="mm-optie-icoon">📋</div>
+            <div>
+              <div class="mm-optie-tekst">Ik wil mijn eigen uitvaart alvast plannen</div>
+              <div class="mm-optie-sub">Ik wil mijn wensen vastleggen voor mijn naasten</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'situatie', 'info', 'stapC_info')">
+            <div class="mm-optie-icoon">📖</div>
+            <div>
+              <div class="mm-optie-tekst">Ik zoek informatie over uitvaart en rouw</div>
+              <div class="mm-optie-sub">Ik wil artikelen lezen, tips krijgen of meer weten</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'situatie', 'rouw', 'stapC_rouw')">
+            <div class="mm-optie-icoon">💔</div>
+            <div>
+              <div class="mm-optie-tekst">Ik rouw en zoek begeleiding of steun</div>
+              <div class="mm-optie-sub">Ik verwerk een verlies en wil hulp of lotgenoten vinden</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'situatie', 'dier', 'stapC_dier')">
+            <div class="mm-optie-icoon">🐾</div>
+            <div>
+              <div class="mm-optie-tekst">Ik zoek een dierenuitvaart</div>
+              <div class="mm-optie-sub">Mijn huisdier is overleden of ik wil dit vooraf regelen</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAP C2: SOORT UITVAART -->
+      <div class="mm-stap" id="stapC2">
+        <div class="mm-vraag">Welk type uitvaart past het beste?</div>
+        <div class="mm-vraag-sub">Je kunt altijd later nog van gedachten veranderen. Dit helpt ons je sneller naar de juiste specialisten te leiden.</div>
+        <div class="mm-opties grid2">
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'uitvaart', 'begraving', 'stapC3')">
+            <div class="mm-optie-icoon">⚰️</div>
+            <div class="mm-optie-tekst">Begraving</div>
+            <div class="mm-optie-sub">Traditionele begrafenis op een begraafplaats</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'uitvaart', 'crematie', 'stapC3')">
+            <div class="mm-optie-icoon">🔥</div>
+            <div class="mm-optie-tekst">Crematie</div>
+            <div class="mm-optie-sub">Verbranding gevolgd door asbestemming naar keuze</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'uitvaart', 'natuur', 'stapC3')">
+            <div class="mm-optie-icoon">🌳</div>
+            <div class="mm-optie-tekst">Natuurbegraving</div>
+            <div class="mm-optie-sub">Begraving in een natuurgebied of bos</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'uitvaart', 'zee', 'stapC3')">
+            <div class="mm-optie-icoon">🌊</div>
+            <div class="mm-optie-tekst">Asverstrooiing</div>
+            <div class="mm-optie-sub">Op zee, in de natuur of op een speciale plek</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'uitvaart', 'weet niet', 'stapC3')">
+            <div class="mm-optie-icoon">🤔</div>
+            <div class="mm-optie-tekst">Ik weet het nog niet</div>
+            <div class="mm-optie-sub">Help mij de opties vergelijken en een keuze maken</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'uitvaart', 'anders', 'stapC3')">
+            <div class="mm-optie-icoon">💡</div>
+            <div class="mm-optie-tekst">Iets anders of bijzonders</div>
+            <div class="mm-optie-sub">Een uniek of persoonlijk afscheid dat niet in een hokje past</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAP C3: REGIO -->
+      <div class="mm-stap" id="stapC3">
+        <div class="mm-vraag">In welke regio zoek je een specialist?</div>
+        <div class="mm-vraag-sub">Onze bedrijvengids heeft specialisten door heel Nederland. Kies jouw regio voor de beste matches.</div>
+        <div class="mm-opties grid3">
+          <div class="mm-optie" onclick="kiesOptie(this, 'regio', 'noord', 'stapC4')"><span class="mm-optie-icoon">🗺️</span><span class="mm-optie-tekst">Noord-Nederland</span></div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'regio', 'oost', 'stapC4')"><span class="mm-optie-icoon">🗺️</span><span class="mm-optie-tekst">Oost-Nederland</span></div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'regio', 'west', 'stapC4')"><span class="mm-optie-icoon">🗺️</span><span class="mm-optie-tekst">West-Nederland</span></div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'regio', 'randstad', 'stapC4')"><span class="mm-optie-icoon">🏙️</span><span class="mm-optie-tekst">Randstad</span></div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'regio', 'midden', 'stapC4')"><span class="mm-optie-icoon">🗺️</span><span class="mm-optie-tekst">Midden-Nederland</span></div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'regio', 'zuid', 'stapC4')"><span class="mm-optie-icoon">🗺️</span><span class="mm-optie-tekst">Zuid-Nederland</span></div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'regio', 'landelijk', 'stapC4')"><span class="mm-optie-icoon">🇳🇱</span><span class="mm-optie-tekst">Heel Nederland</span></div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'regio', 'weet niet', 'stapC4')"><span class="mm-optie-icoon">❓</span><span class="mm-optie-tekst">Weet ik nog niet</span></div>
+        </div>
+      </div>
+
+      <!-- STAP C4: EXTRA SPECIALISTEN -->
+      <div class="mm-stap" id="stapC4">
+        <div class="mm-vraag">Welke extra specialisten of diensten heb je nodig?</div>
+        <div class="mm-vraag-sub">Selecteer alles wat van toepassing is. Je kunt meerdere opties kiezen.</div>
+        <div class="mm-multi" id="extraSpecialisten">
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">💐</span> Bloemen en bloemwerk</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">📸</span> Fotograaf uitvaart</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">🎵</span> Muzikant of zanger</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">📡</span> Livestreaming</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">🎤</span> Spreker of ceremoniemeester</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">🍽️</span> Catering en condoleancebezoek</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">🏺</span> Urnen en asbestemming</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">💍</span> Herinneringssieraden</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">🚗</span> Rouwvervoer</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">⚖️</span> Erfrecht en notaris</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">📄</span> Uitvaartverzekering</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">💔</span> Rouwbegeleiding daarna</div>
+        </div>
+        <div class="mm-tip"><strong>Tip:</strong> Je kunt ook na dit gesprek altijd meer specialisten vinden via onze bedrijvengids met alle 57 categorieën.</div>
+        <div style="margin-top:16px;">
+          <div class="mm-verder zichtbaar" style="width:100%; text-align:center; border-radius:10px; padding:13px;" onclick="gaNaarStap('stapC_resultaat')">Bekijk mijn persoonlijke overzicht →</div>
+        </div>
+      </div>
+
+      <!-- STAP C_RESULTAAT: CONSUMENT RESULTAAT -->
+      <div class="mm-stap" id="stapC_resultaat">
+        <div class="mm-vraag">Jouw persoonlijke overzicht</div>
+        <div class="mm-vraag-sub">Op basis van jouw antwoorden hebben wij de beste startpunten voor jou geselecteerd.</div>
+        <div class="mm-resultaten">
+          <a href="https://uitvaart-platform.nl/bedrijven/c/uitvaartondernemingen" class="mm-resultaat-kaart uitgelicht">
+            <div class="mm-resultaat-icoon">🕯️</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Meest relevant voor jou</div>
+              <div class="mm-resultaat-titel">Vind een uitvaartondernemer in jouw buurt</div>
+              <div class="mm-resultaat-desc">Honderden gecertificeerde uitvaartondernemers door heel Nederland, gefilterd op jouw regio</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-platform.nl/stappenplan-overlijden" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">📋</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Stappenplan</div>
+              <div class="mm-resultaat-titel">Wat moet je doen direct na een overlijden?</div>
+              <div class="mm-resultaat-desc">Een helder overzicht van alle stappen, van aangifte tot de uitvaart</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-platform.nl/bedrijven" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">🗂️</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Bedrijvengids</div>
+              <div class="mm-resultaat-titel">Bekijk alle specialisten en 57 categorieën</div>
+              <div class="mm-resultaat-desc">Van bloemen en muziek tot erfrecht en herinneringssieraden</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-platform.nl/uitvaartplanning" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">🕊️</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Uitvaartplanning</div>
+              <div class="mm-resultaat-titel">Leg jouw wensen vast voor jouw naasten</div>
+              <div class="mm-resultaat-desc">Gratis gids voor het plannen van een persoonlijk en waardig afscheid</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-platform.nl/artikelen" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">📰</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Kenniscentrum</div>
+              <div class="mm-resultaat-titel">Lees meer dan 3000 artikelen over rouw en uitvaart</div>
+              <div class="mm-resultaat-desc">Van praktische tips tot inspirerende verhalen, geschreven door experts</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://theperfectgoodbye.nl" class="mm-resultaat-kaart" target="_blank">
+            <div class="mm-resultaat-icoon">📚</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">The Perfect Goodbye</div>
+              <div class="mm-resultaat-titel">Nabestaandendossier voor een waardig afscheid</div>
+              <div class="mm-resultaat-desc">Het dossier waarmee jij jouw wensen voor eens en altijd vastlegt</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-inside.nl" class="mm-resultaat-kaart" target="_blank">
+            <div class="mm-resultaat-icoon">📖</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Uitvaart-Inside Magazine</div>
+              <div class="mm-resultaat-titel">Het glossy magazine over uitvaart en rouw</div>
+              <div class="mm-resultaat-desc">Achtergrondverhalen, trends en interviews uit de uitvaartwereld</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+        </div>
+        <div class="mm-reg-banner">
+          <div class="mm-reg-icoon">❤️</div>
+          <div class="mm-reg-tekst">
+            <div class="mm-reg-titel">Sla jouw favoriete specialisten en artikelen op</div>
+            <div class="mm-reg-sub">Registreer gratis en bewaar alles in jouw persoonlijk dashboard via het hartje</div>
+          </div>
+          <a href="https://uitvaart-platform.nl/auth/login" class="mm-reg-knop" target="_blank">Gratis registreren</a>
+        </div>
+      </div>
+
+      <!-- STAP C_INFO: INFORMATIE ROUTE -->
+      <div class="mm-stap" id="stapC_info">
+        <div class="mm-vraag">Welk onderwerp interesseert jou het meest?</div>
+        <div class="mm-vraag-sub">Wij leiden jou direct naar de meest relevante artikelen en gidsen.</div>
+        <div class="mm-opties">
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/artikelen/cat/rouw-verwerking')">
+            <div class="mm-optie-icoon">💔</div>
+            <div>
+              <div class="mm-optie-tekst">Rouw en verwerking</div>
+              <div class="mm-optie-sub">Omgaan met verlies, rouwfases, tips voor naasten en lotgenoten</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/artikelen/cat/uitvaart-regelen')">
+            <div class="mm-optie-icoon">📋</div>
+            <div>
+              <div class="mm-optie-tekst">Uitvaart regelen</div>
+              <div class="mm-optie-sub">Praktische gidsen, stappenplannen en wat te regelen na een overlijden</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/artikelen/cat/soorten-uitvaart')">
+            <div class="mm-optie-icoon">🌳</div>
+            <div>
+              <div class="mm-optie-tekst">Soorten uitvaart vergelijken</div>
+              <div class="mm-optie-sub">Begraving, crematie, natuurbegraving en alle alternatieven op een rij</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/artikelen/cat/kosten')">
+            <div class="mm-optie-icoon">💰</div>
+            <div>
+              <div class="mm-optie-tekst">Kosten en verzekeringen</div>
+              <div class="mm-optie-sub">Wat kost een uitvaart, uitvaartverzekering en financieel regelen</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/artikelen/cat/persoonlijk-afscheid')">
+            <div class="mm-optie-icoon">🎵</div>
+            <div>
+              <div class="mm-optie-tekst">Persoonlijk afscheid organiseren</div>
+              <div class="mm-optie-sub">Muziek, spreker, bloemen, de plechtigheid helemaal naar eigen wens</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-inside.nl')">
+            <div class="mm-optie-icoon">📖</div>
+            <div>
+              <div class="mm-optie-tekst">Lees ons uitvaartmagazine Uitvaart-Inside</div>
+              <div class="mm-optie-sub">Achtergrondverhalen, interviews en trends uit de uitvaartwereld</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAP C_ROUW: ROUW ROUTE -->
+      <div class="mm-stap" id="stapC_rouw">
+        <div class="mm-vraag">Wat heb je op dit moment het meest nodig?</div>
+        <div class="mm-vraag-sub">Er is geen juiste of verkeerde manier van rouwen. Wij helpen je vinden wat bij jou past.</div>
+        <div class="mm-opties">
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-nazorg')">
+            <div class="mm-optie-icoon">🌸</div>
+            <div>
+              <div class="mm-optie-tekst">Een rouwbegeleider of therapeut vinden</div>
+              <div class="mm-optie-sub">Persoonlijke professionele begeleiding bij rouwverwerking</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/rouw')">
+            <div class="mm-optie-icoon">💔</div>
+            <div>
+              <div class="mm-optie-tekst">Informatie lezen over rouw en verwerking</div>
+              <div class="mm-optie-sub">Artikelen, tips en inzichten over hoe rouw werkt</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/artikelen/cat/rouw-verwerking')">
+            <div class="mm-optie-icoon">🤝</div>
+            <div>
+              <div class="mm-optie-tekst">Lotgenoten en steun vinden</div>
+              <div class="mm-optie-sub">Contact met anderen die hetzelfde meemaken</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/artikelen/cat/kinderen-en-rouw')">
+            <div class="mm-optie-icoon">👶</div>
+            <div>
+              <div class="mm-optie-tekst">Help voor kinderen bij rouw</div>
+              <div class="mm-optie-sub">Hoe leg je verlies uit aan kinderen en hoe begeleid je ze?</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAP C_DIER: DIERENUITVAART ROUTE -->
+      <div class="mm-stap" id="stapC_dier">
+        <div class="mm-vraag">Wat zoek je voor de uitvaart van jouw huisdier?</div>
+        <div class="mm-vraag-sub">Ook het afscheid van een trouwe viervoeter verdient alle zorg en aandacht.</div>
+        <div class="mm-opties">
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/bedrijven/c/dierenuitvaarten')">
+            <div class="mm-optie-icoon">🐾</div>
+            <div>
+              <div class="mm-optie-tekst">Een dierenuitvaartondernemer vinden</div>
+              <div class="mm-optie-sub">Gespecialiseerde ondernemers voor begraving of crematie van huisdieren</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/artikelen/cat/dierenuitvaart')">
+            <div class="mm-optie-icoon">📖</div>
+            <div>
+              <div class="mm-optie-tekst">Informatie over dierenuitvaarten</div>
+              <div class="mm-optie-sub">Wat zijn de opties, kosten en hoe regel je dit goed?</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="gaNaarUrl('https://uitvaart-platform.nl/bedrijven/c/herinneringssieraden')">
+            <div class="mm-optie-icoon">💎</div>
+            <div>
+              <div class="mm-optie-tekst">Een blijvende herinnering aan jouw huisdier</div>
+              <div class="mm-optie-sub">Herinneringssieraden, assieraden en andere aandenken</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== ZAKELIJK STAPPEN ========== -->
+
+      <!-- STAP Z1: ROL -->
+      <div class="mm-stap" id="stapZ1">
+        <div class="mm-vraag">Wat beschrijft jouw rol het beste?</div>
+        <div class="mm-vraag-sub">Zo kunnen wij jou direct de meest relevante zakelijke mogelijkheden tonen.</div>
+        <div class="mm-opties">
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'rol', 'ondernemer', 'stapZ2')">
+            <div class="mm-optie-icoon">🕯️</div>
+            <div>
+              <div class="mm-optie-tekst">Uitvaartondernemer of uitvaartbedrijf</div>
+              <div class="mm-optie-sub">Ik begeleid families bij uitvaarten</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'rol', 'toeleverancier', 'stapZ2')">
+            <div class="mm-optie-icoon">🌸</div>
+            <div>
+              <div class="mm-optie-tekst">Toeleverancier of specialist</div>
+              <div class="mm-optie-sub">Bloemist, fotograaf, muzikant, cateraar of andere specialist</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'rol', 'verzekeraar', 'stapZ2')">
+            <div class="mm-optie-icoon">📄</div>
+            <div>
+              <div class="mm-optie-tekst">Verzekeraar of financiële dienstverlener</div>
+              <div class="mm-optie-sub">Uitvaartverzekeringen, notariaat of erfrecht</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'rol', 'media', 'stapZ2')">
+            <div class="mm-optie-icoon">📰</div>
+            <div>
+              <div class="mm-optie-tekst">Media, journalist of contentmaker</div>
+              <div class="mm-optie-sub">Ik maak content over uitvaart en rouw</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie groot" onclick="kiesOptie(this, 'rol', 'anders', 'stapZ2')">
+            <div class="mm-optie-icoon">💼</div>
+            <div>
+              <div class="mm-optie-tekst">Anders of nog niet zeker</div>
+              <div class="mm-optie-sub">Ik oriënteer mij op de mogelijkheden</div>
+            </div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAP Z2: DOEL -->
+      <div class="mm-stap" id="stapZ2">
+        <div class="mm-vraag">Wat is jouw belangrijkste doel?</div>
+        <div class="mm-vraag-sub">Selecteer wat het beste past bij wat jij zoekt. Je kunt meerdere opties kiezen.</div>
+        <div class="mm-multi" id="zakelijkDoel">
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">🔍</span> Meer zichtbaarheid en vindbaar zijn</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">🤝</span> Samenwerkingen aangaan</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">📈</span> Meer klanten en nabestaanden bereiken</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">📸</span> Professionele foto of filmproductie</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">💻</span> Nieuwe website laten bouwen</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">📱</span> Social media uitlichtingen</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">📰</span> Adverteren in Uitvaart-Inside magazine</div>
+          <div class="mm-multi-item" onclick="toggleMulti(this)"><span class="mm-multi-icoon">🗺️</span> Vermelding in de bedrijvengids</div>
+        </div>
+        <div style="margin-top:16px;">
+          <div class="mm-verder zichtbaar" style="width:100%; text-align:center; border-radius:10px; padding:13px;" onclick="gaNaarStap('stapZ3')">Volgende stap →</div>
+        </div>
+      </div>
+
+      <!-- STAP Z3: GROOTTE -->
+      <div class="mm-stap" id="stapZ3">
+        <div class="mm-vraag">Hoe groot is jouw organisatie?</div>
+        <div class="mm-vraag-sub">Dit helpt ons de juiste diensten en tarieven voor jou te selecteren.</div>
+        <div class="mm-opties">
+          <div class="mm-optie" onclick="kiesOptie(this, 'grootte', 'zzp', 'stapZ_resultaat')">
+            <span class="mm-optie-icoon">👤</span>
+            <div><div class="mm-optie-tekst">ZZP of eenmansbedrijf</div><div class="mm-optie-sub">Ik werk zelfstandig</div></div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'grootte', 'klein', 'stapZ_resultaat')">
+            <span class="mm-optie-icoon">👥</span>
+            <div><div class="mm-optie-tekst">Klein bedrijf (2 tot 10 medewerkers)</div><div class="mm-optie-sub">Familiebedrijf of kleine onderneming</div></div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'grootte', 'middel', 'stapZ_resultaat')">
+            <span class="mm-optie-icoon">🏢</span>
+            <div><div class="mm-optie-tekst">Middelgroot bedrijf (10 tot 50 medewerkers)</div><div class="mm-optie-sub">Regionale of provinciale onderneming</div></div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+          <div class="mm-optie" onclick="kiesOptie(this, 'grootte', 'groot', 'stapZ_resultaat')">
+            <span class="mm-optie-icoon">🏛️</span>
+            <div><div class="mm-optie-tekst">Grote organisatie (meer dan 50 medewerkers)</div><div class="mm-optie-sub">Landelijk opererende organisatie of keten</div></div>
+            <div class="mm-optie-pijl">→</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAP Z_RESULTAAT: ZAKELIJK RESULTAAT -->
+      <div class="mm-stap" id="stapZ_resultaat">
+        <div class="mm-vraag">Jouw zakelijk overzicht</div>
+        <div class="mm-vraag-sub">De beste startpunten voor jouw uitvaartbedrijf op ons platform.</div>
+        <div class="mm-resultaten">
+          <a href="https://uitvaart-platform.nl/b2b/adverteren" class="mm-resultaat-kaart uitgelicht">
+            <div class="mm-resultaat-icoon">🗺️</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Meest gekozen door professionals</div>
+              <div class="mm-resultaat-titel">Adverteer in onze bedrijvengids</div>
+              <div class="mm-resultaat-desc">Zichtbaar voor nabestaanden die actief zoeken naar jouw dienst, in jouw regio</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-platform.nl/bedrijven" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">🤝</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Samenwerken</div>
+              <div class="mm-resultaat-titel">Bekijk de bedrijvengids als partner</div>
+              <div class="mm-resultaat-desc">Vind collega-specialisten voor samenwerking en doorverwijzing</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-platform.nl/b2b/social-media" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">📱</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Social media</div>
+              <div class="mm-resultaat-titel">Word uitgelicht bij onze 14.000 volgers</div>
+              <div class="mm-resultaat-desc">Gerichte posts op Facebook, Instagram en LinkedIn voor maximaal bereik</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-inside.nl" class="mm-resultaat-kaart" target="_blank">
+            <div class="mm-resultaat-icoon">📰</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Uitvaart-Inside magazine</div>
+              <div class="mm-resultaat-titel">Adverteer in het glossy uitvaartmagazine</div>
+              <div class="mm-resultaat-desc">Bereik een exclusieve doelgroep van nabestaanden en professionals</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-platform.nl/b2b/corporate-fotografie" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">📸</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Corporate fotografie en film</div>
+              <div class="mm-resultaat-titel">Laat jouw bedrijf professioneel portretteren</div>
+              <div class="mm-resultaat-desc">Authentieke beelden die vertrouwen uitstralen naar nabestaanden</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="https://uitvaart-platform.nl/b2b/webdesign" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">💻</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Webdesign</div>
+              <div class="mm-resultaat-titel">Een professionele website voor jouw uitvaartbedrijf</div>
+              <div class="mm-resultaat-desc">Speciaal ontworpen voor de uitvaartbranche en geoptimaliseerd voor zoekmachines</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+          <a href="mailto:info@uitvaart-platform.nl" class="mm-resultaat-kaart">
+            <div class="mm-resultaat-icoon">📩</div>
+            <div class="mm-resultaat-info">
+              <div class="mm-resultaat-label">Persoonlijk advies</div>
+              <div class="mm-resultaat-titel">Vraag een gratis kennismakingsgesprek aan</div>
+              <div class="mm-resultaat-desc">Wij denken gratis mee over de beste aanpak voor jouw situatie en budget</div>
+            </div>
+            <div class="mm-resultaat-pijl">→</div>
+          </a>
+        </div>
+        <div class="mm-reg-banner">
+          <div class="mm-reg-icoon">💼</div>
+          <div class="mm-reg-tekst">
+            <div class="mm-reg-titel">Maak een zakelijk account aan</div>
+            <div class="mm-reg-sub">Beheer jouw bedrijfsprofiel, bekijk statistieken en sla favoriete samenwerkingspartners op</div>
+          </div>
+          <a href="https://uitvaart-platform.nl/auth/login" class="mm-reg-knop" target="_blank">Registreren</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="mm-footer">
+      <button class="mm-terug" id="mmTerugKnop" onclick="gaTerugStap()" style="display:none;">← Terug</button>
+      <span class="mm-stap-indicator" id="mmStapIndicator">Gratis te gebruiken</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <a href="https://uitvaart-platform.nl/auth/login" style="font-size:0.72rem;color:#4a1942;font-weight:600;text-decoration:none;opacity:0.7;" target="_blank">❤️ Registreren</a>
+      </div>
     </div>
 
   </div>
 </div>
 
 <script>
-(function() {
+// ── STATE ──
+let doelgroep = '';
+let stappenGeschiedenis = ['stap0'];
+let huidigeStap = 'stap0';
+let gekozenWaarden = {};
+let totaalStappen = 5;
 
-var MM_CATS = {
-  "Uitvaartondernemingen":      { icon:"🕯️", url:"uitvaartondernemingen",         desc:"Begeleiding van A tot Z" },
-  "Rouwbegeleiding & Nazorg":  { icon:"💔", url:"rouwbegeleiding-en-nazorg",      desc:"Emotionele steun & verwerking" },
-  "Rouwcentra":                 { icon:"🏛️", url:"rouwcentra",                     desc:"Locaties voor het afscheid" },
-  "Bloemen":                    { icon:"💐", url:"bloemen",                         desc:"Rouwbloemisten" },
-  "Muziek":                     { icon:"🎵", url:"muziek",                          desc:"Muzikanten voor de plechtigheid" },
-  "Fotograaf":                  { icon:"📸", url:"fotograaf",                       desc:"Afscheidsfotografie" },
-  "Videograaf":                 { icon:"🎬", url:"videograaf",                      desc:"Videografie" },
-  "Livestreaming":              { icon:"📡", url:"livestreaming",                   desc:"Live uitzenden van de dienst" },
-  "Kisten & Manden":            { icon:"📦", url:"kisten-en-manden",                desc:"Kisten, manden & meer" },
-  "Urnen":                      { icon:"🏺", url:"urnen",                           desc:"Urnen voor de as" },
-  "Herinneringssieraden":       { icon:"💍", url:"herinneringssieraden",            desc:"As verwerkt in sieraden" },
-  "Herinneringsproducten":      { icon:"🎁", url:"herinneringsproducten",           desc:"Tastbare herinneringen" },
-  "Graf & Gedenktekens":        { icon:"🪨", url:"graf-en-gedenktekens",            desc:"Grafstenen & monumenten" },
-  "Grafzorg":                   { icon:"🌿", url:"grafzorg",                        desc:"Onderhoud van het graf" },
-  "Asverstrooiing":             { icon:"💨", url:"asverstrooiing",                  desc:"As verstrooien op zee of land" },
-  "Rouwvervoer":                { icon:"🚗", url:"rouwvervoer",                     desc:"Lijkwagens & volgauto's" },
-  "Dragers":                    { icon:"🤝", url:"dragers",                         desc:"Professionele dragers" },
-  "Catering":                   { icon:"🍽️", url:"catering",                        desc:"Catering na de dienst" },
-  "Locatie":                    { icon:"📍", url:"locatie",                          desc:"Unieke uitvaartlocaties" },
-  "Uitvaartverzekeringen":      { icon:"📄", url:"uitvaartverzekeringen",           desc:"Verzekeringen & vergoedingen" },
-  "Erfrecht":                   { icon:"⚖️", url:"erfrecht",                        desc:"Juridisch advies erfenis" },
-  "Nalatenschap":               { icon:"📜", url:"nalatenschap",                    desc:"Regelen van de nalatenschap" },
-  "Rouwdrukwerk":               { icon:"🖨️", url:"rouwdrukwerk",                    desc:"Rouwkaarten & drukwerk" },
-  "Stervensbegeleiding":        { icon:"🤲", url:"stervensbegeleiding",             desc:"Begeleiding in de laatste fase" },
-  "Opbaren & Verzorging":       { icon:"🛏️", url:"opbaren-en-verzorging",           desc:"Verzorging van de overledene" },
-  "Begraafplaats & Crematorium":{ icon:"⚰️", url:"begraafplaats-en-crematorium",   desc:"Begraven of cremeren" },
-  "Afscheidskunst":             { icon:"🎨", url:"afscheidskunst",                  desc:"Kunstzinnig afscheid" },
-  "Styling & Decoratie":        { icon:"✨", url:"styling-en-decoratie",            desc:"Decoratie van de ruimte" },
-  "Kleding":                    { icon:"👗", url:"kleding",                         desc:"Rouwkleding" },
-  "Sprekers & Schrijvers":      { icon:"🎤", url:"sprekers-en-schrijvers",          desc:"Sprekers & gedichten" },
-  "Dierenuitvaarten":           { icon:"🐾", url:"dierenuitvaarten",                desc:"Uitvaart voor uw huisdier" },
-  "Kinderuitvaarten":           { icon:"👶", url:"kinderuitvaarten",                desc:"Specialisten bij kinderafscheid" },
-  "Repatriëring":               { icon:"✈️", url:"repatriering",                    desc:"Overledene uit buitenland terugbrengen" },
-  "Boedelruiming & Ontruiming": { icon:"🏠", url:"boedelruiming-en-ontruiming",     desc:"Opruimen van de woning" },
-  "Familiemediation":           { icon:"🧩", url:"familiemediation",                desc:"Bemiddeling bij familieconflicten" },
-  "Makelaar":                   { icon:"🏡", url:"makelaar",                        desc:"Verkoop woning na overlijden" },
-  "Uitvaartbenodigdheden":      { icon:"🧾", url:"uitvaartbenodigdheden",           desc:"Alle benodigdheden" },
-  "Geurbeleving":               { icon:"🌸", url:"geurbeleving",                    desc:"Geur bij het afscheid" },
-  "Rituelen & Tradities":       { icon:"🕊️", url:"rituelen-en-tradities",           desc:"Culturele & religieuze rituelen" }
-};
-
-var MM_FLOW = [
-  {
-    q: "Goedemiddag 👋 Ik ben de Uitvaart Matchmaker van Uitvaart-Platform.nl.\n\nVertel me jouw situatie, dan vind ik de juiste specialisten voor je. Is er iemand recent overleden, of wil je vooruit plannen?",
-    quick: ["Er is iemand net overleden", "Ik wil vooruit plannen", "Ik zoek informatie voor later"],
-    key: "timing"
-  },
-  {
-    q: function(a) {
-      if (a.toLowerCase().indexOf("net") > -1 || a.toLowerCase().indexOf("overleden") > -1)
-        return "Mijn oprechte deelneming. 🕊️\n\nIs de uitvaart al (deels) geregeld, of sta je nog aan het begin?";
-      if (a.toLowerCase().indexOf("plannen") > -1 || a.toLowerCase().indexOf("later") > -1)
-        return "Goed dat je dit vooruit wilt regelen — dat is een daad van liefde voor je naasten.\n\nWat wil je als eerste regelen?";
-      return "Begrijp ik goed. Wat is je eerste vraag of wens?";
-    },
-    quick: function(a) {
-      if (a.toLowerCase().indexOf("net") > -1 || a.toLowerCase().indexOf("overleden") > -1)
-        return ["Uitvaart moet nog volledig geregeld worden", "Uitvaart is al deels geregeld", "Ik zoek specifieke specialisten"];
-      return ["Uitvaartwensen vastleggen", "Een uitvaartverzekering afsluiten", "Informatie over de mogelijkheden"];
-    },
-    key: "fase"
-  },
-  {
-    q: function(a) { return "Wat voor uitvaart staat jullie voor ogen?"; },
-    quick: ["Begrafenis", "Crematie", "Natuurbegrafenis", "Nog niet beslist"],
-    key: "type"
-  },
-  {
-    q: function(a) { return "Zijn er aanvullende wensen? Je kunt meerdere opties selecteren en daarna op 'Klaar' klikken."; },
-    quick: ["Persoonlijke muziek", "Livestreaming voor mensen op afstand", "Afscheidsfotografie", "Bijzondere locatie", "Bloemendecoratie", "Catering na de dienst", "Juridische hulp bij nalatenschap", "Rouwbegeleiding achteraf", "Sprekers of gedichten", "Dragers voor de kist"],
-    key: "extras",
-    multi: true
-  }
-];
-
-var mmStep = 0;
-var mmAnswers = {};
-var mmMulti = [];
-var mmBusy = false;
-
-function mmInit() {
-  mmAddBot(MM_FLOW[0].q);
-  setTimeout(function() { mmShowQuick(MM_FLOW[0].quick, false); }, 700);
-  document.getElementById('mm-send').addEventListener('click', mmSend);
-  document.getElementById('mm-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') mmSend();
-  });
+// ── OPEN / SLUIT ──
+function openMatchmaker() {
+  document.getElementById('mmOverlay').classList.add('actief');
+  document.body.style.overflow = 'hidden';
 }
-
-function mmAddBot(text) {
-  var msgs = document.getElementById('mm-messages');
-  var el = document.createElement('div');
-  el.className = 'mm-msg bot';
-  el.innerHTML = '<div class="mm-av bot">✦</div><div class="mm-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
-  msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
+function sluitMatchmaker() {
+  document.getElementById('mmOverlay').classList.remove('actief');
+  document.body.style.overflow = '';
 }
+document.getElementById('mmOverlay').addEventListener('click', function(e) {
+  if (e.target === this) sluitMatchmaker();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') sluitMatchmaker();
+});
 
-function mmAddUser(text) {
-  var msgs = document.getElementById('mm-messages');
-  var el = document.createElement('div');
-  el.className = 'mm-msg user';
-  el.innerHTML = '<div class="mm-av user">🤍</div><div class="mm-bubble">' + text + '</div>';
-  msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
-}
+// Auto-open na 3 seconden (uitgeschakeld voor demo, zet op true voor productie)
+// setTimeout(openMatchmaker, 3000);
 
-function mmShowTyping() {
-  var msgs = document.getElementById('mm-messages');
-  var el = document.createElement('div');
-  el.className = 'mm-msg bot';
-  el.id = 'mm-typing';
-  el.innerHTML = '<div class="mm-av bot">✦</div><div class="mm-typing-dots"><div class="mm-dot"></div><div class="mm-dot"></div><div class="mm-dot"></div></div>';
-  msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function mmHideTyping() {
-  var t = document.getElementById('mm-typing');
-  if (t) t.remove();
-}
-
-function mmShowQuick(opts, multi) {
-  var qr = document.getElementById('mm-quick');
-  qr.innerHTML = '';
-  if (typeof opts === 'function') opts = opts(mmAnswers[MM_FLOW[mmStep-1] ? MM_FLOW[mmStep-1].key : ''] || '');
-  opts.forEach(function(opt) {
-    var btn = document.createElement('button');
-    btn.className = 'mm-chip';
-    btn.textContent = opt;
-    if (multi) {
-      btn.addEventListener('click', function() { mmToggle(btn, opt); });
-    } else {
-      btn.addEventListener('click', function() { mmHandle(opt); });
-    }
-    qr.appendChild(btn);
-  });
-  if (multi) {
-    var done = document.createElement('button');
-    done.className = 'mm-chip done-btn';
-    done.textContent = '✓ Klaar — bekijk mijn advies';
-    done.addEventListener('click', mmFinishMulti);
-    qr.appendChild(done);
-  }
-}
-
-function mmToggle(btn, opt) {
-  var idx = mmMulti.indexOf(opt);
-  if (idx === -1) {
-    mmMulti.push(opt);
-    btn.classList.add('selected');
+// ── DOELGROEP KIEZEN ──
+function kiesDoelgroep(keuze) {
+  doelgroep = keuze;
+  gekozenWaarden = {};
+  if (keuze === 'consument') {
+    totaalStappen = 5;
+    gaNaarStap('stapC1');
   } else {
-    mmMulti.splice(idx, 1);
-    btn.classList.remove('selected');
+    totaalStappen = 4;
+    gaNaarStap('stapZ1');
   }
 }
 
-function mmFinishMulti() {
-  var text = mmMulti.length > 0 ? mmMulti.join(', ') : 'Geen specifieke aanvullende wensen';
-  mmHandle(text);
+// ── OPTIE KIEZEN EN DIRECT NAVIGEREN ──
+function kiesOptie(el, sleutel, waarde, volgendeStap) {
+  const container = el.parentElement;
+  container.querySelectorAll('.mm-optie').forEach(o => o.classList.remove('gekozen'));
+  el.classList.add('gekozen');
+  gekozenWaarden[sleutel] = waarde;
+  setTimeout(() => gaNaarStap(volgendeStap), 220);
 }
 
-function mmHandle(text) {
-  document.getElementById('mm-quick').innerHTML = '';
-  mmAddUser(text);
-  mmAnswers[MM_FLOW[mmStep].key] = text;
-  mmStep++;
-  mmUpdateProgress();
+// ── MULTI SELECT ──
+function toggleMulti(el) {
+  el.classList.toggle('geselecteerd');
+}
 
-  if (mmStep >= MM_FLOW.length) {
-    mmShowTyping();
-    setTimeout(function() { mmHideTyping(); mmShowResult(); }, 1300);
-    return;
+// ── NAVIGATIE ──
+function gaNaarStap(stapId) {
+  const huidig = document.getElementById(huidigeStap);
+  const volgend = document.getElementById(stapId);
+  if (!volgend) return;
+
+  huidig.classList.remove('actief');
+  volgend.classList.add('actief');
+
+  if (stappenGeschiedenis[stappenGeschiedenis.length - 1] !== huidigeStap) {
+    stappenGeschiedenis.push(huidigeStap);
   }
+  stappenGeschiedenis.push(stapId);
+  huidigeStap = stapId;
 
-  mmBusy = true;
-  document.getElementById('mm-send').disabled = true;
-  mmShowTyping();
+  updateVoortgang(stapId);
+  updateFooter(stapId);
 
-  setTimeout(function() {
-    mmHideTyping();
-    mmBusy = false;
-    document.getElementById('mm-send').disabled = false;
-    var cur = MM_FLOW[mmStep];
-    var q = typeof cur.q === 'function' ? cur.q(text) : cur.q;
-    mmAddBot(q);
-    setTimeout(function() {
-      var opts = typeof cur.quick === 'function' ? cur.quick(text) : cur.quick;
-      mmShowQuick(opts, cur.multi || false);
-    }, 350);
-  }, 950);
+  document.getElementById('mmBody').scrollTop = 0;
 }
 
-function mmSend() {
-  var input = document.getElementById('mm-input');
-  var text = input.value.trim();
-  if (!text || mmBusy) return;
-  input.value = '';
-  mmHandle(text);
+function gaTerugStap() {
+  stappenGeschiedenis.pop();
+  const vorige = stappenGeschiedenis[stappenGeschiedenis.length - 1];
+  if (!vorige) return;
+
+  document.getElementById(huidigeStap).classList.remove('actief');
+  document.getElementById(vorige).classList.add('actief');
+  huidigeStap = vorige;
+
+  updateVoortgang(vorige);
+  updateFooter(vorige);
+  document.getElementById('mmBody').scrollTop = 0;
 }
 
-function mmUpdateProgress() {
-  ['mm-s1','mm-s2','mm-s3','mm-s4'].forEach(function(id, i) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.className = 'mm-step ' + (i < mmStep ? 'done' : i === mmStep ? 'active' : '');
-  });
+function gaNaarUrl(url) {
+  window.open(url, '_blank');
 }
 
-function mmGetRecs() {
-  var recs = [];
-  var a = JSON.stringify(mmAnswers).toLowerCase();
-
-  function add(name) { if (recs.indexOf(name) === -1) recs.push(name); }
-
-  add("Uitvaartondernemingen");
-  add("Rouwbegeleiding & Nazorg");
-
-  if (a.indexOf("begraf") > -1) { add("Begraafplaats & Crematorium"); add("Dragers"); add("Graf & Gedenktekens"); add("Kisten & Manden"); }
-  if (a.indexOf("cremat") > -1) { add("Begraafplaats & Crematorium"); add("Urnen"); add("Asverstrooiing"); }
-  if (a.indexOf("natuur") > -1) { add("Asverstrooiing"); add("Locatie"); }
-  if (a.indexOf("muziek") > -1) add("Muziek");
-  if (a.indexOf("livestream") > -1) add("Livestreaming");
-  if (a.indexOf("foto") > -1) add("Fotograaf");
-  if (a.indexOf("locatie") > -1 || a.indexOf("bijzondere") > -1) add("Locatie");
-  if (a.indexOf("bloem") > -1) add("Bloemen");
-  if (a.indexOf("catering") > -1) add("Catering");
-  if (a.indexOf("juridisch") > -1 || a.indexOf("nalaten") > -1) { add("Erfrecht"); add("Nalatenschap"); }
-  if (a.indexOf("sprekers") > -1 || a.indexOf("gedichten") > -1) add("Sprekers & Schrijvers");
-  if (a.indexOf("dragers") > -1) add("Dragers");
-  if (a.indexOf("verzekering") > -1 || a.indexOf("plannen") > -1 || a.indexOf("later") > -1) add("Uitvaartverzekeringen");
-  if (a.indexOf("dier") > -1 || a.indexOf("huisdier") > -1) add("Dierenuitvaarten");
-  if (a.indexOf("kind") > -1) add("Kinderuitvaarten");
-  if (a.indexOf("buitenland") > -1) add("Repatriëring");
-
-  add("Rouwdrukwerk");
-  add("Bloemen");
-  add("Opbaren & Verzorging");
-
-  return recs.slice(0, 10);
+// ── VOORTGANG ──
+function updateVoortgang(stapId) {
+  const kaarten = {
+    'stap0': { pct: 5, tekst: 'Welkom', stap: 'Start' },
+    'stapC1': { pct: 20, tekst: 'Jouw situatie', stap: 'Stap 1 van 4' },
+    'stapC2': { pct: 40, tekst: 'Type uitvaart', stap: 'Stap 2 van 4' },
+    'stapC3': { pct: 60, tekst: 'Jouw regio', stap: 'Stap 3 van 4' },
+    'stapC4': { pct: 80, tekst: 'Extra diensten', stap: 'Stap 4 van 4' },
+    'stapC_resultaat': { pct: 100, tekst: 'Jouw overzicht', stap: 'Klaar!' },
+    'stapC_info': { pct: 100, tekst: 'Informatie', stap: 'Klaar!' },
+    'stapC_rouw': { pct: 100, tekst: 'Rouwbegeleiding', stap: 'Klaar!' },
+    'stapC_dier': { pct: 100, tekst: 'Dierenuitvaart', stap: 'Klaar!' },
+    'stapZ1': { pct: 25, tekst: 'Jouw rol', stap: 'Stap 1 van 3' },
+    'stapZ2': { pct: 50, tekst: 'Jouw doel', stap: 'Stap 2 van 3' },
+    'stapZ3': { pct: 75, tekst: 'Jouw organisatie', stap: 'Stap 3 van 3' },
+    'stapZ_resultaat': { pct: 100, tekst: 'Zakelijk overzicht', stap: 'Klaar!' },
+  };
+  const info = kaarten[stapId] || { pct: 50, tekst: '...', stap: '...' };
+  document.getElementById('voortgangFill').style.width = info.pct + '%';
+  document.getElementById('voortgangTekst').textContent = info.tekst;
+  document.getElementById('stapTekst').textContent = info.stap;
 }
 
-function mmShowResult() {
-  var result = document.getElementById('mm-result');
-  result.style.display = 'block';
-  document.getElementById('mm-quick').innerHTML = '';
-  document.getElementById('mm-input').disabled = true;
-  document.getElementById('mm-send').disabled = true;
+// ── FOOTER ──
+function updateFooter(stapId) {
+  const terugKnop = document.getElementById('mmTerugKnop');
+  const indicator = document.getElementById('mmStapIndicator');
 
-  var recs = mmGetRecs();
-  document.getElementById('mm-result-sub').textContent =
-    'Op basis van jouw situatie raden wij ' + recs.length + ' categorieën aan. Klik direct door naar de specialisten:';
+  terugKnop.style.display = (stapId === 'stap0') ? 'none' : 'block';
 
-  var cats = document.getElementById('mm-cats');
-  cats.innerHTML = '';
-  recs.forEach(function(name) {
-    var c = MM_CATS[name];
-    if (!c) return;
-    var a = document.createElement('a');
-    a.className = 'mm-cat';
-    a.href = 'https://uitvaart-platform.nl/bedrijven/c/' + c.url;
-    a.target = '_blank';
-    a.innerHTML = '<div class="mm-cat-icon">' + c.icon + '</div><div><div class="mm-cat-name">' + name + '</div><div class="mm-cat-desc">' + c.desc + '</div></div>';
-    cats.appendChild(a);
-  });
-
-  mmAddBot('Ik heb ' + recs.length + ' categorieën voor je gevonden die het beste aansluiten bij jouw situatie. Klik hieronder direct door naar de specialisten. Succes, en sterkte! 🕊️');
-  document.getElementById('mm-messages').scrollTop = document.getElementById('mm-messages').scrollHeight;
+  const resultaatStappen = ['stapC_resultaat', 'stapC_info', 'stapC_rouw', 'stapC_dier', 'stapZ_resultaat'];
+  if (resultaatStappen.includes(stapId)) {
+    indicator.textContent = 'Klik een kaart om verder te gaan';
+  } else if (stapId === 'stap0') {
+    indicator.textContent = 'Gratis te gebruiken';
+  } else {
+    indicator.textContent = 'Altijd gratis voor consumenten';
+  }
 }
-
-function mmRestart() {
-  mmStep = 0;
-  mmAnswers = {};
-  mmMulti = [];
-  mmBusy = false;
-  document.getElementById('mm-messages').innerHTML = '';
-  document.getElementById('mm-quick').innerHTML = '';
-  document.getElementById('mm-result').style.display = 'none';
-  document.getElementById('mm-input').disabled = false;
-  document.getElementById('mm-send').disabled = false;
-  mmUpdateProgress();
-  setTimeout(mmInit, 200);
-}
-
-window.mmRestart = mmRestart;
-mmInit();
-
-})();
 </script>
+
+</body>
+</html>
