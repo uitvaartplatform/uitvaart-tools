@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uitvaartplanner — Uitvaart-Platform.nl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; }
+
+/* ── PRINT STYLES ── */
+@media print {
+  .up-no-print { display: none !important; }
+  body { background: #fff; }
+  .up-wrap { padding: 0; }
+  .up-hero { border-radius: 0; }
+  .up-overzicht { box-shadow: none; }
+  .up-print-header { display: block !important; }
+}
+.up-print-header { display: none; padding: 20px 0; border-bottom: 2px solid #4a1942; margin-bottom: 20px; }
+.up-print-header h1 { font-size: 1.5rem; color: #4a1942; font-weight: 900; }
+.up-print-header p { font-size: 0.8rem; color: #6b6570; }
+
+/* ── LAYOUT ── */
+.up-wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+/* ── HERO ── */
+.up-hero {
+  background: #4a1942; border-radius: 16px; padding: 56px 48px;
+  position: relative; overflow: hidden; margin-bottom: 14px;
+}
+.up-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 100% 0%, rgba(232,131,74,0.2) 0%, transparent 50%),
+              radial-gradient(ellipse 50% 70% at 0% 100%, rgba(58,18,51,0.6) 0%, transparent 55%);
+  pointer-events: none;
+}
+.up-hero-inner { max-width: 700px; position: relative; z-index: 2; }
+.up-hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,131,74,0.15); border: 1px solid rgba(232,131,74,0.35); border-radius: 30px; padding: 6px 16px; margin-bottom: 20px; }
+.up-hero-badge-dot { width: 8px; height: 8px; background: #e8834a; border-radius: 50%; }
+.up-hero-badge span { font-size: 0.65rem; font-weight: 700; color: #e8834a; letter-spacing: 0.16em; text-transform: uppercase; }
+.up-hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 14px; }
+.up-hero h1 em { font-style: italic; font-weight: 300; color: rgba(255,255,255,0.5); }
+.up-hero-sub { font-size: 0.95rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.85; max-width: 580px; margin-bottom: 28px; }
+.up-hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.up-hero-stat { }
+.up-hero-stat-nr { font-size: 1.6rem; font-weight: 900; color: #e8834a; line-height: 1; }
+.up-hero-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.55); font-weight: 300; }
+
+/* ── TABS ── */
+.up-tabs { display: flex; gap: 6px; background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; padding: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.up-tab { flex: 1; min-width: 140px; padding: 12px 16px; border: none; background: none; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 0.8rem; font-weight: 600; color: #6b6570; cursor: pointer; transition: all 0.2s; text-align: center; display: flex; align-items: center; justify-content: center; gap: 7px; }
+.up-tab:hover { background: #faf7f2; color: #4a1942; }
+.up-tab.actief { background: #4a1942; color: #fff; }
+.up-tab-icoon { font-size: 1rem; }
+
+/* ── HOOFDLAYOUT ── */
+.up-layout { display: grid; grid-template-columns: 1fr 360px; gap: 14px; align-items: start; }
+
+/* ── SECTIE KAARTEN ── */
+.up-sectie { background: #fff; border: 1px solid #e2d9e0; border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
+.up-sectie:last-child { margin-bottom: 0; }
+.up-sectie-header { background: #faf7f2; border-bottom: 1px solid #e2d9e0; padding: 18px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: background 0.2s; }
+.up-sectie-header:hover { background: #f0ebef; }
+.up-sectie-nr { width: 34px; height: 34px; border-radius: 50%; background: #4a1942; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; flex-shrink: 0; }
+.up-sectie-info { flex: 1; }
+.up-sectie-titel { font-size: 0.96rem; font-weight: 800; color: #4a1942; }
+.up-sectie-sub { font-size: 0.74rem; color: #6b6570; font-weight: 300; }
+.up-sectie-totaal { font-size: 1rem; font-weight: 800; color: #4a1942; text-align: right; }
+.up-sectie-totaal-label { font-size: 0.65rem; color: #6b6570; font-weight: 400; display: block; }
+.up-sectie-pijl { font-size: 1rem; color: #6b6570; transition: transform 0.3s; flex-shrink: 0; }
+.up-sectie-header.open .up-sectie-pijl { transform: rotate(180deg); }
+.up-sectie-body { padding: 20px 24px; display: none; }
+.up-sectie-body.open { display: block; }
+
+/* ── KOSTENRIJEN ── */
+.up-rij { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0ebef; }
+.up-rij:last-child { border-bottom: none; padding-bottom: 0; }
+.up-rij-naam { font-size: 0.84rem; font-weight: 600; color: #4a1942; }
+.up-rij-sub { font-size: 0.72rem; color: #6b6570; font-weight: 300; margin-top: 2px; line-height: 1.4; }
+.up-rij-check { display: flex; align-items: center; gap: 8px; }
+.up-rij-check input[type="checkbox"] { width: 18px; height: 18px; accent-color: #4a1942; cursor: pointer; }
+.up-rij-prijs { font-size: 0.88rem; font-weight: 700; color: #4a1942; white-space: nowrap; text-align: right; min-width: 80px; }
+.up-rij-prijs.actief { color: #e8834a; }
+.up-rij-slider-wrap { grid-column: 1 / -1; padding-top: 8px; display: none; }
+.up-rij-slider-wrap.zichtbaar { display: block; }
+.up-rij-slider { width: 100%; accent-color: #4a1942; cursor: pointer; }
+.up-rij-slider-labels { display: flex; justify-content: space-between; font-size: 0.66rem; color: #6b6570; margin-top: 4px; }
+.up-rij-badge { display: inline-block; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 10px; margin-left: 6px; }
+.up-badge-verplicht { background: rgba(232,131,74,0.12); color: #c8622a; }
+.up-badge-populair { background: rgba(74,25,66,0.1); color: #4a1942; }
+.up-badge-optioneel { background: rgba(107,101,112,0.1); color: #6b6570; }
+
+/* ── REGIO SELECTOR ── */
+.up-regio-wrap { background: #faf7f2; border: 1px solid #e2d9e0; border-radius: 12px; padding: 16px 20px; margin-bottom: 14px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.up-regio-label { font-size: 0.82rem; font-weight: 700; color: #4a1942; flex-shrink: 0; }
+.up-regio-select { border: 1.5px solid #e2d9e0; border-radius: 8px; padding: 8px 14px; font-family: 'Poppins', sans-serif; font-size: 0.82rem; color: #4a1942; background: #fff; cursor: pointer; font-weight: 600; }
+.up-regio-info { font-size: 0.74rem; color: #6b6570; font-weight: 300; flex: 1; }
+.up-type-knoppen { display: flex; gap: 8px; flex-wrap: wrap; }
+.up-type-knop { border: 2px solid #e2d9e0; border-radius: 10px; padding: 10px 18px; font-family: 'Poppins', sans-serif; font-size: 0.8rem; font-weight: 700; color: #6b6570; background: #fff; cursor: pointer; transition: all 0.2s; }
+.up-type-knop:hover { border-color: #4a1942; color: #4a1942; }
+.up-type-knop.actief { border-color: #4a1942; background: #4a1942; color: #fff; }
+
+/* ── OVERZICHT PANEEL ── */
+.up-overzicht { background: #fff; border: 1px solid #e2d9e0; border-radius: 16px; overflow: hidden; position: sticky; top: 20px; }
+.up-overzicht-header { background: #4a1942; padding: 20px 22px; position: relative; overflow: hidden; }
+.up-overzicht-header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 80% at 100% 0%, rgba(232,131,74,0.2) 0%, transparent 55%); pointer-events: none; }
+.up-overzicht-titel { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 6px; position: relative; }
+.up-overzicht-totaal { font-size: 2rem; font-weight: 900; color: #fff; letter-spacing: -0.02em; position: relative; }
+.up-overzicht-totaal span { font-size: 1rem; font-weight: 400; opacity: 0.6; }
+.up-overzicht-sub { font-size: 0.72rem; color: rgba(255,255,255,0.5); font-weight: 300; margin-top: 4px; position: relative; }
+.up-overzicht-body { padding: 16px 20px; }
+.up-overzicht-rij { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0ebef; }
+.up-overzicht-rij:last-child { border-bottom: none; }
+.up-overzicht-rij-naam { font-size: 0.78rem; color: #6b6570; font-weight: 400; }
+.up-overzicht-rij-prijs { font-size: 0.84rem; font-weight: 700; color: #4a1942; }
+.up-overzicht-rij-prijs.nul { color: #b0a8b0; font-weight: 400; }
+.up-overzicht-divider { height: 1px; background: #e2d9e0; margin: 8px 0; }
+.up-overzicht-totaalrij { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 4px; }
+.up-overzicht-totaalrij-naam { font-size: 0.86rem; font-weight: 800; color: #4a1942; }
+.up-overzicht-totaalrij-prijs { font-size: 1.1rem; font-weight: 900; color: #e8834a; }
+
+/* ── ACTIES ── */
+.up-acties { padding: 16px 20px; border-top: 1px solid #e2d9e0; display: flex; flex-direction: column; gap: 8px; }
+.up-btn { width: 100%; padding: 12px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 0.84rem; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.up-btn-paars { background: #4a1942; color: #fff; }
+.up-btn-paars:hover { background: #3a1233; }
+.up-btn-oranje { background: #e8834a; color: #fff; }
+.up-btn-oranje:hover { background: #c8622a; }
+.up-btn-wit { background: #faf7f2; border: 1.5px solid #e2d9e0; color: #4a1942; }
+.up-btn-wit:hover { border-color: #4a1942; background: #f0ebef; }
+
+/* ── VERZEKERING CHECK ── */
+.up-verzekering { background: linear-gradient(135deg, #faf7f2 0%, #f0ebef 100%); border: 1px solid #e2d9e0; border-radius: 12px; padding: 16px 18px; margin-top: 12px; }
+.up-verzekering-titel { font-size: 0.8rem; font-weight: 800; color: #4a1942; margin-bottom: 8px; }
+.up-verzekering-rij { display: flex; justify-content: space-between; font-size: 0.76rem; margin-bottom: 4px; }
+.up-verzekering-label { color: #6b6570; font-weight: 300; }
+.up-verzekering-waarde { font-weight: 700; }
+.up-verzekering-waarde.groen { color: #2d7a4f; }
+.up-verzekering-waarde.rood { color: #c8622a; }
+.up-verzekering-input { width: 100%; border: 1.5px solid #e2d9e0; border-radius: 8px; padding: 8px 12px; font-family: 'Poppins', sans-serif; font-size: 0.82rem; color: #4a1942; background: #fff; margin-top: 8px; font-weight: 600; }
+
+/* ── TIPS BLOK ── */
+.up-tip { background: rgba(232,131,74,0.08); border: 1px solid rgba(232,131,74,0.2); border-radius: 10px; padding: 12px 14px; margin-top: 12px; font-size: 0.76rem; color: #6b6570; font-weight: 300; line-height: 1.65; }
+.up-tip strong { color: #c8622a; font-weight: 700; }
+
+/* ── VERGELIJKINGSTABEL ── */
+.up-vergelijk { background: #fff; border: 1px solid #e2d9e0; border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
+.up-vergelijk-header { background: #faf7f2; border-bottom: 1px solid #e2d9e0; padding: 18px 24px; }
+.up-vergelijk-titel { font-size: 1rem; font-weight: 800; color: #4a1942; }
+.up-vergelijk-sub { font-size: 0.76rem; color: #6b6570; font-weight: 300; }
+.up-tabel { width: 100%; border-collapse: collapse; }
+.up-tabel th { background: #4a1942; color: #fff; font-size: 0.76rem; font-weight: 700; padding: 12px 16px; text-align: left; }
+.up-tabel th:first-child { border-radius: 0; }
+.up-tabel td { padding: 11px 16px; font-size: 0.8rem; border-bottom: 1px solid #f0ebef; }
+.up-tabel tr:last-child td { border-bottom: none; }
+.up-tabel tr:nth-child(even) td { background: #faf7f2; }
+.up-tabel td:first-child { font-weight: 600; color: #4a1942; }
+.up-tabel td.prijs { font-weight: 700; color: #4a1942; }
+.up-tabel td.laag { color: #2d7a4f; font-weight: 700; }
+.up-tabel td.hoog { color: #c8622a; font-weight: 700; }
+
+/* ── GRAFIEK ── */
+.up-grafiek { padding: 20px 24px; }
+.up-grafiek-balk-wrap { margin-bottom: 10px; }
+.up-grafiek-label { font-size: 0.76rem; font-weight: 600; color: #4a1942; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.up-grafiek-label span { font-weight: 400; color: #6b6570; }
+.up-grafiek-balk-bg { height: 10px; background: #f0ebef; border-radius: 5px; overflow: hidden; }
+.up-grafiek-balk { height: 100%; border-radius: 5px; transition: width 0.5s ease; }
+
+/* ── CHECKLIST ── */
+.up-checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 1px solid #f0ebef; }
+.up-checklist-item:last-child { border-bottom: none; }
+.up-checklist-check { width: 20px; height: 20px; border-radius: 4px; border: 2px solid #e2d9e0; background: #fff; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; transition: all 0.2s; margin-top: 1px; }
+.up-checklist-check.gedaan { background: #4a1942; border-color: #4a1942; color: #fff; }
+.up-checklist-tekst { flex: 1; }
+.up-checklist-naam { font-size: 0.84rem; font-weight: 600; color: #4a1942; }
+.up-checklist-sub { font-size: 0.72rem; color: #6b6570; font-weight: 300; line-height: 1.5; }
+.up-checklist-timing { font-size: 0.65rem; font-weight: 700; color: #e8834a; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+
+/* ── TIJDLIJN ── */
+.up-tijdlijn { padding: 20px 24px; }
+.up-tijdlijn-item { display: flex; gap: 16px; margin-bottom: 20px; position: relative; }
+.up-tijdlijn-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 34px; bottom: -20px; width: 2px; background: #e2d9e0; }
+.up-tijdlijn-dot { width: 32px; height: 32px; border-radius: 50%; background: #4a1942; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; position: relative; z-index: 1; }
+.up-tijdlijn-dot.oranje { background: #e8834a; }
+.up-tijdlijn-dot.grijs { background: #b0a8b0; }
+.up-tijdlijn-content { flex: 1; padding-top: 4px; }
+.up-tijdlijn-periode { font-size: 0.65rem; font-weight: 700; color: #e8834a; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+.up-tijdlijn-titel { font-size: 0.88rem; font-weight: 800; color: #4a1942; margin-bottom: 4px; }
+.up-tijdlijn-tekst { font-size: 0.76rem; color: #6b6570; font-weight: 300; line-height: 1.6; }
+
+/* ── SUBTABS ── */
+.up-subtabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.up-subtab { padding: 7px 14px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 600; color: #6b6570; background: #faf7f2; border: 1.5px solid #e2d9e0; cursor: pointer; transition: all 0.18s; }
+.up-subtab.actief { background: #4a1942; color: #fff; border-color: #4a1942; }
+
+/* ── TABBLADEN INHOUD ── */
+.up-tabinhoud { display: none; }
+.up-tabinhoud.actief { display: block; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .up-layout { grid-template-columns: 1fr; }
+  .up-overzicht { position: static; }
+  .up-wrap { padding: 16px; }
+  .up-hero { padding: 40px 28px; }
+  .up-tabs { gap: 4px; }
+  .up-tab { min-width: 120px; font-size: 0.74rem; padding: 10px 12px; }
+}
+@media (max-width: 600px) {
+  .up-hero { padding: 32px 18px; }
+  .up-hero-stats { gap: 20px; }
+  .up-rij { grid-template-columns: 1fr auto; }
+  .up-rij-prijs { grid-column: 2; }
+  .up-tabel { font-size: 0.72rem; }
+  .up-tabel th, .up-tabel td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="up-wrap">
+
+<!-- PRINT HEADER -->
+<div class="up-print-header">
+  <h1>Uitvaartplanner — Uitvaart-Platform.nl</h1>
+  <p>Gegenereerd op <span id="printDatum"></span> | uitvaart-platform.nl</p>
+</div>
+
+<!-- OPSLAAN MELDING (zweeft bovenin) -->
+<div id="opslaanMelding" style="position:fixed;top:20px;right:20px;z-index:9999;background:#4a1942;color:#fff;border-radius:10px;padding:12px 20px;font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(20,8,18,0.25);opacity:0;transform:translateY(-10px);transition:opacity 0.3s,transform 0.3s;pointer-events:none;">
+  💾 Jouw planning is automatisch opgeslagen
+</div>
+
+<!-- HERSTEL BANNER (alleen zichtbaar als er opgeslagen data is) -->
+<div id="herstellenBanner" style="display:none;background:#fff;border:1.5px solid #e8834a;border-radius:14px;padding:16px 22px;margin-bottom:14px;display:none;align-items:center;gap:16px;flex-wrap:wrap;">
+  <div style="font-size:1.4rem;">🔄</div>
+  <div style="flex:1;">
+    <div style="font-size:0.88rem;font-weight:800;color:#4a1942;">Welkom terug! Wij hebben jouw opgeslagen planning gevonden.</div>
+    <div style="font-size:0.74rem;color:#6b6570;font-weight:300;" id="herstellenDatum">Opgeslagen op ...</div>
+  </div>
+  <button onclick="herstellenBevestigd()" style="background:#4a1942;color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Poppins',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;">Doorgaan waar ik gebleven was →</button>
+  <button onclick="document.getElementById('herstellenBanner').style.display='none'" style="background:none;border:1.5px solid #e2d9e0;border-radius:9px;padding:9px 16px;font-family:'Poppins',sans-serif;font-size:0.8rem;font-weight:600;color:#6b6570;cursor:pointer;">Opnieuw beginnen</button>
+</div>
+
+<!-- HERO -->
+<div class="up-hero up-no-print">
+  <div class="up-hero-inner">
+    <div class="up-hero-badge">
+      <div class="up-hero-badge-dot"></div>
+      <span>Uitvaartplanner & Kostencalculator</span>
+    </div>
+    <h1>Wat kost een uitvaart —<br><em>bereken het zelf</em></h1>
+    <p class="up-hero-sub">De meest uitgebreide uitvaartplanner van Nederland. Bereken de kosten van een begraving of crematie, vergelijk regio's, bekijk een complete checklist en download jouw persoonlijk overzicht.</p>
+    <div class="up-hero-stats">
+      <div class="up-hero-stat">
+        <div class="up-hero-stat-nr">€7.500</div>
+        <div class="up-hero-stat-label">Gemiddelde uitvaartkosten</div>
+      </div>
+      <div class="up-hero-stat">
+        <div class="up-hero-stat-nr">57</div>
+        <div class="up-hero-stat-label">Categorieën specialisten</div>
+      </div>
+      <div class="up-hero-stat">
+        <div class="up-hero-stat-nr">€3.000</div>
+        <div class="up-hero-stat-label">Verschil goedkoopst/duurste regio</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="up-tabs up-no-print">
+  <button class="up-tab actief" onclick="toonTab('calculator')">
+    <span class="up-tab-icoon">🧮</span> Kostencalculator
+  </button>
+  <button class="up-tab" onclick="toonTab('vergelijk')">
+    <span class="up-tab-icoon">📊</span> Vergelijken
+  </button>
+  <button class="up-tab" onclick="toonTab('checklist')">
+    <span class="up-tab-icoon">✅</span> Checklist
+  </button>
+  <button class="up-tab" onclick="toonTab('tijdlijn')">
+    <span class="up-tab-icoon">📅</span> Tijdlijn
+  </button>
+  <button class="up-tab" onclick="toonTab('tips')">
+    <span class="up-tab-icoon">💡</span> Bespaar tips
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 1: KOSTENCALCULATOR
+══════════════════════════════════════════════════ -->
+<div class="up-tabinhoud actief" id="tab-calculator">
+  <div class="up-layout">
+
+    <!-- LINKER KOLOM -->
+    <div>
+
+      <!-- TYPE & REGIO -->
+      <div class="up-sectie">
+        <div class="up-sectie-body open" style="display:block;">
+          <div style="margin-bottom:16px;">
+            <div style="font-size:0.84rem;font-weight:800;color:#4a1942;margin-bottom:10px;">Type uitvaart</div>
+            <div class="up-type-knoppen">
+              <button class="up-type-knop actief" onclick="kiesType('begraving',this)">⚰️ Begraving</button>
+              <button class="up-type-knop" onclick="kiesType('crematie',this)">🔥 Crematie</button>
+              <button class="up-type-knop" onclick="kiesType('natuur',this)">🌳 Natuurbegraving</button>
+              <button class="up-type-knop" onclick="kiesType('thuis',this)">🏠 Thuisuitvaart</button>
+            </div>
+          </div>
+          <div class="up-regio-wrap" style="margin-bottom:0;">
+            <div class="up-regio-label">🗺️ Regio:</div>
+            <select class="up-regio-select" onchange="updateRegio(this.value)" id="regioSelect">
+              <option value="1.0">Landelijk gemiddelde</option>
+              <option value="1.25">Amsterdam / Randstad (+25%)</option>
+              <option value="1.18">Utrecht (+18%)</option>
+              <option value="1.12">Den Haag (+12%)</option>
+              <option value="1.08">Rotterdam (+8%)</option>
+              <option value="0.95">Noord-Brabant (-5%)</option>
+              <option value="0.90">Friesland / Groningen (-10%)</option>
+              <option value="0.88">Zeeland / Limburg (-12%)</option>
+              <option value="0.92">Overijssel / Gelderland (-8%)</option>
+            </select>
+            <div class="up-regio-info" id="regioInfoTekst">Prijzen zijn gebaseerd op het landelijk gemiddelde.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTIE 1: BASISKOSTEN -->
+      <div class="up-sectie">
+        <div class="up-sectie-header open" onclick="toggleSectie(this)">
+          <div class="up-sectie-nr">1</div>
+          <div class="up-sectie-info">
+            <div class="up-sectie-titel">Basiskosten uitvaart</div>
+            <div class="up-sectie-sub">De verplichte kosten die bij elke uitvaart horen</div>
+          </div>
+          <div class="up-sectie-totaal">
+            <span class="up-sectie-totaal-label">Subtotaal</span>
+            <span id="totaal-basis">€ 0</span>
+          </div>
+          <div class="up-sectie-pijl">▼</div>
+        </div>
+        <div class="up-sectie-body open" id="body-basis">
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Uitvaartondernemer <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+              <div class="up-rij-sub">Begeleiding, coördinatie en verzorging van de gehele uitvaart</div>
+              <div class="up-rij-slider-wrap zichtbaar">
+                <input type="range" class="up-rij-slider" min="1500" max="6000" step="100" value="2500" oninput="updateSlider(this,'prijs-ondernemer')" id="slider-ondernemer">
+                <div class="up-rij-slider-labels"><span>€ 1.500 (basis)</span><span>€ 6.000 (uitgebreid)</span></div>
+              </div>
+            </div>
+            <div></div>
+            <div class="up-rij-prijs actief" id="prijs-ondernemer">€ 2.500</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Overlijdensakte & aangifte <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+              <div class="up-rij-sub">Officiële documenten via gemeente</div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" checked onchange="toggleKosten(this,'prijs-akte',190)"></div>
+            <div class="up-rij-prijs actief" id="prijs-akte">€ 190</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Opbaren & lichaamsverzorging <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+              <div class="up-rij-sub">Verzorging van de overledene, maximaal 4 dagen wettelijk</div>
+              <div class="up-rij-slider-wrap zichtbaar">
+                <input type="range" class="up-rij-slider" min="300" max="1200" step="50" value="600" oninput="updateSlider(this,'prijs-opbaren')" id="slider-opbaren">
+                <div class="up-rij-slider-labels"><span>€ 300 (basis)</span><span>€ 1.200 (uitgebreid)</span></div>
+              </div>
+            </div>
+            <div></div>
+            <div class="up-rij-prijs actief" id="prijs-opbaren">€ 600</div>
+          </div>
+          <div class="up-rij" id="rij-kist">
+            <div>
+              <div class="up-rij-naam">Kist <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+              <div class="up-rij-sub">Van sober grenenhout tot luxe eikenhout of bijzondere materialen</div>
+              <div class="up-rij-slider-wrap zichtbaar">
+                <input type="range" class="up-rij-slider" min="300" max="4000" step="100" value="900" oninput="updateSlider(this,'prijs-kist')" id="slider-kist">
+                <div class="up-rij-slider-labels"><span>€ 300 (grenenhout)</span><span>€ 4.000 (luxe)</span></div>
+              </div>
+            </div>
+            <div></div>
+            <div class="up-rij-prijs actief" id="prijs-kist">€ 900</div>
+          </div>
+          <div class="up-rij" id="rij-urn" style="display:none;">
+            <div>
+              <div class="up-rij-naam">Urn <span class="up-rij-badge up-badge-verplicht">Verplicht bij crematie</span></div>
+              <div class="up-rij-sub">Tijdelijke of permanente urn voor de as</div>
+              <div class="up-rij-slider-wrap zichtbaar">
+                <input type="range" class="up-rij-slider" min="50" max="1500" step="50" value="250" oninput="updateSlider(this,'prijs-urn')" id="slider-urn">
+                <div class="up-rij-slider-labels"><span>€ 50 (tijdelijk)</span><span>€ 1.500 (luxe)</span></div>
+              </div>
+            </div>
+            <div></div>
+            <div class="up-rij-prijs actief" id="prijs-urn">€ 250</div>
+          </div>
+          <div class="up-rij" id="rij-rouwvervoer">
+            <div>
+              <div class="up-rij-naam">Rouwvervoer <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+              <div class="up-rij-sub">Lijkwagen en volgauto's voor familie</div>
+              <div class="up-rij-slider-wrap zichtbaar">
+                <input type="range" class="up-rij-slider" min="300" max="1200" step="50" value="550" oninput="updateSlider(this,'prijs-rouwvervoer')" id="slider-rouwvervoer">
+                <div class="up-rij-slider-labels"><span>€ 300 (basis)</span><span>€ 1.200 (meerdere wagens)</span></div>
+              </div>
+            </div>
+            <div></div>
+            <div class="up-rij-prijs actief" id="prijs-rouwvervoer">€ 550</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTIE 2: BEGRAAFPLAATS / CREMATORIUM -->
+      <div class="up-sectie">
+        <div class="up-sectie-header" onclick="toggleSectie(this)">
+          <div class="up-sectie-nr">2</div>
+          <div class="up-sectie-info">
+            <div class="up-sectie-titel" id="sectie2-titel">Begraafplaats & graf</div>
+            <div class="up-sectie-sub">Grafrecht, onderhoud en begravingskosten</div>
+          </div>
+          <div class="up-sectie-totaal">
+            <span class="up-sectie-totaal-label">Subtotaal</span>
+            <span id="totaal-graf">€ 0</span>
+          </div>
+          <div class="up-sectie-pijl">▼</div>
+        </div>
+        <div class="up-sectie-body" id="body-graf">
+          <div id="graf-begraving">
+            <div class="up-rij">
+              <div>
+                <div class="up-rij-naam">Grafrecht (20 jaar) <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+                <div class="up-rij-sub">Het recht op het gebruik van een graf voor 20 jaar</div>
+                <div class="up-rij-slider-wrap zichtbaar">
+                  <input type="range" class="up-rij-slider" min="800" max="6000" step="100" value="2000" oninput="updateSlider(this,'prijs-grafrecht')" id="slider-grafrecht">
+                  <div class="up-rij-slider-labels"><span>€ 800 (gemeente)</span><span>€ 6.000 (particulier/Randstad)</span></div>
+                </div>
+              </div>
+              <div></div>
+              <div class="up-rij-prijs actief" id="prijs-grafrecht">€ 2.000</div>
+            </div>
+            <div class="up-rij">
+              <div>
+                <div class="up-rij-naam">Begravingskosten</div>
+                <div class="up-rij-sub">Kosten voor het daadwerkelijk begraven</div>
+              </div>
+              <div class="up-rij-check"><input type="checkbox" checked onchange="toggleKosten(this,'prijs-begraving',450)"></div>
+              <div class="up-rij-prijs actief" id="prijs-begraving">€ 450</div>
+            </div>
+            <div class="up-rij">
+              <div>
+                <div class="up-rij-naam">Grafsteen of gedenkplaat <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+                <div class="up-rij-sub">Grafmonument, zerksteen of liggende plaat</div>
+                <div class="up-rij-slider-wrap" id="slider-grafsteen-wrap">
+                  <input type="range" class="up-rij-slider" min="400" max="5000" step="100" value="1200" oninput="updateSlider(this,'prijs-grafsteen')" id="slider-grafsteen">
+                  <div class="up-rij-slider-labels"><span>€ 400 (eenvoudig)</span><span>€ 5.000 (monument)</span></div>
+                </div>
+              </div>
+              <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-grafsteen',1200,'slider-grafsteen-wrap')"></div>
+              <div class="up-rij-prijs" id="prijs-grafsteen">€ 0</div>
+            </div>
+            <div class="up-rij">
+              <div>
+                <div class="up-rij-naam">Grafonderhoud (per jaar) <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+                <div class="up-rij-sub">Professioneel onderhoud van het graf door grafzorgspecialist</div>
+              </div>
+              <div class="up-rij-check"><input type="checkbox" onchange="toggleKosten(this,'prijs-grafonderhoud',180)"></div>
+              <div class="up-rij-prijs" id="prijs-grafonderhoud">€ 0</div>
+            </div>
+          </div>
+          <div id="graf-crematie" style="display:none;">
+            <div class="up-rij">
+              <div>
+                <div class="up-rij-naam">Crematoriumkosten <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+                <div class="up-rij-sub">Gebruik van het crematorium inclusief afscheidsruimte</div>
+                <div class="up-rij-slider-wrap zichtbaar">
+                  <input type="range" class="up-rij-slider" min="700" max="2500" step="100" value="1200" oninput="updateSlider(this,'prijs-crematorium')" id="slider-crematorium">
+                  <div class="up-rij-slider-labels"><span>€ 700 (basis)</span><span>€ 2.500 (uitgebreid)</span></div>
+                </div>
+              </div>
+              <div></div>
+              <div class="up-rij-prijs actief" id="prijs-crematorium">€ 1.200</div>
+            </div>
+            <div class="up-rij">
+              <div>
+                <div class="up-rij-naam">Asbestemming <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+                <div class="up-rij-sub">Asverstrooiing, bijzetting in urnenmuur of -tuin, of mee naar huis</div>
+                <div class="up-rij-slider-wrap zichtbaar">
+                  <input type="range" class="up-rij-slider" min="0" max="800" step="50" value="200" oninput="updateSlider(this,'prijs-as')" id="slider-as">
+                  <div class="up-rij-slider-labels"><span>€ 0 (mee naar huis)</span><span>€ 800 (bijzetting)</span></div>
+                </div>
+              </div>
+              <div></div>
+              <div class="up-rij-prijs actief" id="prijs-as">€ 200</div>
+            </div>
+          </div>
+          <div id="graf-natuur" style="display:none;">
+            <div class="up-rij">
+              <div>
+                <div class="up-rij-naam">Natuurbegraafplaats <span class="up-rij-badge up-badge-verplicht">Verplicht</span></div>
+                <div class="up-rij-sub">Grafrecht op een erkende natuurbegraafplaats</div>
+                <div class="up-rij-slider-wrap zichtbaar">
+                  <input type="range" class="up-rij-slider" min="1500" max="5000" step="100" value="2500" oninput="updateSlider(this,'prijs-natuur')" id="slider-natuur">
+                  <div class="up-rij-slider-labels"><span>€ 1.500</span><span>€ 5.000</span></div>
+                </div>
+              </div>
+              <div></div>
+              <div class="up-rij-prijs actief" id="prijs-natuur">€ 2.500</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTIE 3: PLECHTIGHEID -->
+      <div class="up-sectie">
+        <div class="up-sectie-header" onclick="toggleSectie(this)">
+          <div class="up-sectie-nr">3</div>
+          <div class="up-sectie-info">
+            <div class="up-sectie-titel">De plechtigheid</div>
+            <div class="up-sectie-sub">Locatie, muziek, bloemen en ceremonie</div>
+          </div>
+          <div class="up-sectie-totaal">
+            <span class="up-sectie-totaal-label">Subtotaal</span>
+            <span id="totaal-plechtigheid">€ 0</span>
+          </div>
+          <div class="up-sectie-pijl">▼</div>
+        </div>
+        <div class="up-sectie-body" id="body-plechtigheid">
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Bloemen & bloemstukken <span class="up-rij-badge up-badge-populair">Populair</span></div>
+              <div class="up-rij-sub">Kistbloemen, rouwkransen en bloemstukken</div>
+              <div class="up-rij-slider-wrap" id="slider-bloemen-wrap">
+                <input type="range" class="up-rij-slider" min="100" max="2000" step="50" value="400" oninput="updateSlider(this,'prijs-bloemen')" id="slider-bloemen">
+                <div class="up-rij-slider-labels"><span>€ 100 (eenvoudig)</span><span>€ 2.000 (uitgebreid)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-bloemen',400,'slider-bloemen-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-bloemen">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Muziek — live <span class="up-rij-badge up-badge-populair">Populair</span></div>
+              <div class="up-rij-sub">Organist, pianist, zanger of muzikant</div>
+              <div class="up-rij-slider-wrap" id="slider-muziek-wrap">
+                <input type="range" class="up-rij-slider" min="150" max="1200" step="50" value="350" oninput="updateSlider(this,'prijs-muziek')" id="slider-muziek">
+                <div class="up-rij-slider-labels"><span>€ 150 (organist)</span><span>€ 1.200 (band)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-muziek',350,'slider-muziek-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-muziek">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Spreker of ceremoniemeester <span class="up-rij-badge up-badge-populair">Populair</span></div>
+              <div class="up-rij-sub">Professionele spreker of ceremonieleider</div>
+              <div class="up-rij-slider-wrap" id="slider-spreker-wrap">
+                <input type="range" class="up-rij-slider" min="300" max="1500" step="50" value="500" oninput="updateSlider(this,'prijs-spreker')" id="slider-spreker">
+                <div class="up-rij-slider-labels"><span>€ 300</span><span>€ 1.500</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-spreker',500,'slider-spreker-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-spreker">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Locatiehuur aula/kerk <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Externe locatie voor de plechtigheid</div>
+              <div class="up-rij-slider-wrap" id="slider-locatie-wrap">
+                <input type="range" class="up-rij-slider" min="200" max="2500" step="100" value="600" oninput="updateSlider(this,'prijs-locatie')" id="slider-locatie">
+                <div class="up-rij-slider-labels"><span>€ 200 (kerk)</span><span>€ 2.500 (kasteel/bijzonder)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-locatie',600,'slider-locatie-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-locatie">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Rouwdrukwerk <span class="up-rij-badge up-badge-populair">Populair</span></div>
+              <div class="up-rij-sub">Rouwkaarten, bidprentjes, programmaboekjes en gedenkboek</div>
+              <div class="up-rij-slider-wrap" id="slider-drukwerk-wrap">
+                <input type="range" class="up-rij-slider" min="100" max="800" step="25" value="250" oninput="updateSlider(this,'prijs-drukwerk')" id="slider-drukwerk">
+                <div class="up-rij-slider-labels"><span>€ 100 (digitaal)</span><span>€ 800 (uitgebreid)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-drukwerk',250,'slider-drukwerk-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-drukwerk">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Catering na afloop <span class="up-rij-badge up-badge-populair">Populair</span></div>
+              <div class="up-rij-sub">Koffietafel of uitgebreide ontvangst na de plechtigheid</div>
+              <div class="up-rij-slider-wrap" id="slider-catering-wrap">
+                <input type="range" class="up-rij-slider" min="200" max="3000" step="100" value="600" oninput="updateSlider(this,'prijs-catering')" id="slider-catering">
+                <div class="up-rij-slider-labels"><span>€ 200 (koffie/thee)</span><span>€ 3.000 (uitgebreide maaltijd)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-catering',600,'slider-catering-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-catering">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Fotograaf <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Professionele fotografie van de plechtigheid</div>
+              <div class="up-rij-slider-wrap" id="slider-fotograaf-wrap">
+                <input type="range" class="up-rij-slider" min="250" max="1200" step="50" value="450" oninput="updateSlider(this,'prijs-fotograaf')" id="slider-fotograaf">
+                <div class="up-rij-slider-labels"><span>€ 250</span><span>€ 1.200</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-fotograaf',450,'slider-fotograaf-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-fotograaf">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Livestreaming <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Voor mensen die niet aanwezig kunnen zijn</div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKosten(this,'prijs-livestream',350)"></div>
+            <div class="up-rij-prijs" id="prijs-livestream">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Styling & decoratie <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Thematische decoratie en persoonlijke elementen</div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKosten(this,'prijs-styling',400)"></div>
+            <div class="up-rij-prijs" id="prijs-styling">€ 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTIE 4: HERINNERING & AS -->
+      <div class="up-sectie">
+        <div class="up-sectie-header" onclick="toggleSectie(this)">
+          <div class="up-sectie-nr">4</div>
+          <div class="up-sectie-info">
+            <div class="up-sectie-titel">Herinnering & aandenken</div>
+            <div class="up-sectie-sub">Bijzondere herinneringen aan de overledene</div>
+          </div>
+          <div class="up-sectie-totaal">
+            <span class="up-sectie-totaal-label">Subtotaal</span>
+            <span id="totaal-herinnering">€ 0</span>
+          </div>
+          <div class="up-sectie-pijl">▼</div>
+        </div>
+        <div class="up-sectie-body" id="body-herinnering">
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Herinneringssieraden <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Ring, hanger of armband met as of haar van de overledene</div>
+              <div class="up-rij-slider-wrap" id="slider-sieraden-wrap">
+                <input type="range" class="up-rij-slider" min="100" max="2500" step="50" value="400" oninput="updateSlider(this,'prijs-sieraden')" id="slider-sieraden">
+                <div class="up-rij-slider-labels"><span>€ 100</span><span>€ 2.500 (diamant van as)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-sieraden',400,'slider-sieraden-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-sieraden">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Gedenkboek of fotoboek <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Professioneel gedenkboek met foto's en herinneringen</div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKosten(this,'prijs-gedenkboek',350)"></div>
+            <div class="up-rij-prijs" id="prijs-gedenkboek">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Herinneringsproducten <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Kalender, portret, glaskunst of andere aandenken</div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKosten(this,'prijs-herinneringsproducten',200)"></div>
+            <div class="up-rij-prijs" id="prijs-herinneringsproducten">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Digitaal gedenkpagina <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Online herdenkingspagina waar mensen condoleances kunnen achterlaten</div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKosten(this,'prijs-digitaal',75)"></div>
+            <div class="up-rij-prijs" id="prijs-digitaal">€ 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTIE 5: ADMINISTRATIE & OVERIG -->
+      <div class="up-sectie">
+        <div class="up-sectie-header" onclick="toggleSectie(this)">
+          <div class="up-sectie-nr">5</div>
+          <div class="up-sectie-info">
+            <div class="up-sectie-titel">Administratie & overig</div>
+            <div class="up-sectie-sub">Nalatenschap, notaris en praktische zaken</div>
+          </div>
+          <div class="up-sectie-totaal">
+            <span class="up-sectie-totaal-label">Subtotaal</span>
+            <span id="totaal-admin">€ 0</span>
+          </div>
+          <div class="up-sectie-pijl">▼</div>
+        </div>
+        <div class="up-sectie-body" id="body-admin">
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Notariskosten nalatenschap <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Testament, verklaring van erfrecht, boedelafwikkeling</div>
+              <div class="up-rij-slider-wrap" id="slider-notaris-wrap">
+                <input type="range" class="up-rij-slider" min="300" max="3000" step="100" value="800" oninput="updateSlider(this,'prijs-notaris')" id="slider-notaris">
+                <div class="up-rij-slider-labels"><span>€ 300 (eenvoudig)</span><span>€ 3.000 (complex)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-notaris',800,'slider-notaris-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-notaris">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Boedelruiming <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Professionele ontruiming van de woning van de overledene</div>
+              <div class="up-rij-slider-wrap" id="slider-boedel-wrap">
+                <input type="range" class="up-rij-slider" min="300" max="3000" step="100" value="800" oninput="updateSlider(this,'prijs-boedel')" id="slider-boedel">
+                <div class="up-rij-slider-labels"><span>€ 300 (klein)</span><span>€ 3.000 (groot huis)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-boedel',800,'slider-boedel-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-boedel">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Rouwbegeleiding <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Professionele begeleiding bij rouwverwerking (per sessie)</div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKosten(this,'prijs-rouwbegeleiding',80)"></div>
+            <div class="up-rij-prijs" id="prijs-rouwbegeleiding">€ 0</div>
+          </div>
+          <div class="up-rij">
+            <div>
+              <div class="up-rij-naam">Repatriëring <span class="up-rij-badge up-badge-optioneel">Optioneel</span></div>
+              <div class="up-rij-sub">Terugbrengen van overledene vanuit buitenland</div>
+              <div class="up-rij-slider-wrap" id="slider-repatriering-wrap">
+                <input type="range" class="up-rij-slider" min="1000" max="8000" step="200" value="2500" oninput="updateSlider(this,'prijs-repatriering')" id="slider-repatriering">
+                <div class="up-rij-slider-labels"><span>€ 1.000 (Europa)</span><span>€ 8.000 (intercontinentaal)</span></div>
+              </div>
+            </div>
+            <div class="up-rij-check"><input type="checkbox" onchange="toggleKostenSlider(this,'prijs-repatriering',2500,'slider-repatriering-wrap')"></div>
+            <div class="up-rij-prijs" id="prijs-repatriering">€ 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VERZEKERING CHECK -->
+      <div class="up-sectie">
+        <div class="up-sectie-header" onclick="toggleSectie(this)">
+          <div class="up-sectie-nr">6</div>
+          <div class="up-sectie-info">
+            <div class="up-sectie-titel">Uitvaartverzekering controleren</div>
+            <div class="up-sectie-sub">Hoeveel dekt jouw verzekering?</div>
+          </div>
+          <div class="up-sectie-totaal"><span class="up-sectie-totaal-label">Eigen bijdrage</span><span id="totaal-verzekering-check">€ 0</span></div>
+          <div class="up-sectie-pijl">▼</div>
+        </div>
+        <div class="up-sectie-body" id="body-verzekering">
+          <div class="up-verzekering">
+            <div class="up-verzekering-titel">Bereken jouw eigen bijdrage</div>
+            <div style="margin-bottom:12px;">
+              <label style="font-size:0.78rem;font-weight:600;color:#4a1942;display:block;margin-bottom:5px;">Verzekerd bedrag (€)</label>
+              <input type="number" class="up-verzekering-input" id="verzekeringBedrag" placeholder="Bijv. 7500" oninput="updateVerzekering()" min="0" max="50000">
+            </div>
+            <div class="up-verzekering-rij">
+              <span class="up-verzekering-label">Totale uitvaartkosten:</span>
+              <span class="up-verzekering-waarde" id="verz-totaal">€ 0</span>
+            </div>
+            <div class="up-verzekering-rij">
+              <span class="up-verzekering-label">Verzekerd bedrag:</span>
+              <span class="up-verzekering-waarde" id="verz-bedrag">€ 0</span>
+            </div>
+            <div class="up-verzekering-rij">
+              <span class="up-verzekering-label">Eigen bijdrage:</span>
+              <span class="up-verzekering-waarde" id="verz-eigen">€ 0</span>
+            </div>
+          </div>
+          <div class="up-tip" style="margin-top:12px;"><strong>Let op:</strong> Uitvaartverzekeringen kunnen worden uitgekeerd in geld (natura) of in natura (diensten). Controleer uw polis goed. De gemiddelde uitvaartverzekering in Nederland keert €7.500 uit.</div>
+        </div>
+      </div>
+
+    </div><!-- /linker kolom -->
+
+    <!-- RECHTER KOLOM: OVERZICHT -->
+    <div>
+      <div class="up-overzicht">
+        <div class="up-overzicht-header">
+          <div class="up-overzicht-titel">Totale kosten</div>
+          <div class="up-overzicht-totaal">€ <span id="grandTotaal">0</span></div>
+          <div class="up-overzicht-sub" id="overzichtType">Begraving — Landelijk gemiddelde</div>
+        </div>
+        <div class="up-overzicht-body">
+          <div class="up-overzicht-rij">
+            <span class="up-overzicht-rij-naam">Basiskosten uitvaart</span>
+            <span class="up-overzicht-rij-prijs nul" id="ov-basis">€ 0</span>
+          </div>
+          <div class="up-overzicht-rij">
+            <span class="up-overzicht-rij-naam">Graf / crematorium</span>
+            <span class="up-overzicht-rij-prijs nul" id="ov-graf">€ 0</span>
+          </div>
+          <div class="up-overzicht-rij">
+            <span class="up-overzicht-rij-naam">De plechtigheid</span>
+            <span class="up-overzicht-rij-prijs nul" id="ov-plechtigheid">€ 0</span>
+          </div>
+          <div class="up-overzicht-rij">
+            <span class="up-overzicht-rij-naam">Herinnering & aandenken</span>
+            <span class="up-overzicht-rij-prijs nul" id="ov-herinnering">€ 0</span>
+          </div>
+          <div class="up-overzicht-rij">
+            <span class="up-overzicht-rij-naam">Administratie & overig</span>
+            <span class="up-overzicht-rij-prijs nul" id="ov-admin">€ 0</span>
+          </div>
+          <div class="up-overzicht-divider"></div>
+          <div class="up-overzicht-totaalrij">
+            <span class="up-overzicht-totaalrij-naam">Totaal</span>
+            <span class="up-overzicht-totaalrij-prijs">€ <span id="grandTotaal2">0</span></span>
+          </div>
+
+          <!-- GRAFIEK -->
+          <div style="margin-top:16px;">
+            <div style="font-size:0.72rem;font-weight:700;color:#4a1942;margin-bottom:10px;letter-spacing:0.05em;text-transform:uppercase;">Kostenverdeling</div>
+            <div class="up-grafiek-balk-wrap">
+              <div class="up-grafiek-label">Basiskosten <span id="pct-basis">0%</span></div>
+              <div class="up-grafiek-balk-bg"><div class="up-grafiek-balk" id="balk-basis" style="width:0%;background:#4a1942;"></div></div>
+            </div>
+            <div class="up-grafiek-balk-wrap">
+              <div class="up-grafiek-label">Graf / crematorium <span id="pct-graf">0%</span></div>
+              <div class="up-grafiek-balk-bg"><div class="up-grafiek-balk" id="balk-graf" style="width:0%;background:#6b3060;"></div></div>
+            </div>
+            <div class="up-grafiek-balk-wrap">
+              <div class="up-grafiek-label">Plechtigheid <span id="pct-plechtigheid">0%</span></div>
+              <div class="up-grafiek-balk-bg"><div class="up-grafiek-balk" id="balk-plechtigheid" style="width:0%;background:#e8834a;"></div></div>
+            </div>
+            <div class="up-grafiek-balk-wrap">
+              <div class="up-grafiek-label">Herinnering <span id="pct-herinnering">0%</span></div>
+              <div class="up-grafiek-balk-bg"><div class="up-grafiek-balk" id="balk-herinnering" style="width:0%;background:#c8622a;"></div></div>
+            </div>
+            <div class="up-grafiek-balk-wrap">
+              <div class="up-grafiek-label">Administratie <span id="pct-admin">0%</span></div>
+              <div class="up-grafiek-balk-bg"><div class="up-grafiek-balk" id="balk-admin" style="width:0%;background:#3a1233;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="up-acties">
+          <button class="up-btn up-btn-oranje" onclick="downloadPDF()">⬇️ Download PDF overzicht</button>
+          <button class="up-btn up-btn-paars" onclick="window.print()">🖨️ Afdrukken</button>
+          <a href="https://uitvaart-platform.nl/bedrijvengids" class="up-btn up-btn-wit" target="_blank">🗂️ Vind een specialist</a>
+          <button class="up-btn up-btn-wit" onclick="wisData()" style="font-size:0.76rem;opacity:0.7;">🗑️ Opgeslagen planning wissen</button>
+        </div>
+      </div>
+
+      <!-- TIP -->
+      <div class="up-tip" style="margin-top:14px;">
+        <strong>💡 Bespaartip:</strong> Vergelijk altijd minimaal 3 uitvaartondernemers. Prijsverschillen van €1.000 tot €3.000 voor vergelijkbare diensten zijn niet ongewoon. Vraag altijd een gespecificeerde offerte.
+      </div>
+    </div>
+
+  </div><!-- /layout -->
+</div><!-- /tab-calculator -->
+
+
+<!-- ══════════════════════════════════════════════════
+     TAB 2: VERGELIJKEN
+══════════════════════════════════════════════════ -->
+<div class="up-tabinhoud" id="tab-vergelijk">
+  <div class="up-vergelijk">
+    <div class="up-vergelijk-header">
+      <div class="up-vergelijk-titel">Begraving vs Crematie vs Natuurbegraving</div>
+      <div class="up-vergelijk-sub">Gemiddelde kosten per type uitvaart in Nederland (2024)</div>
+    </div>
+    <table class="up-tabel">
+      <thead>
+        <tr>
+          <th>Kostenpost</th>
+          <th>Begraving</th>
+          <th>Crematie</th>
+          <th>Natuurbegraving</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Uitvaartondernemer</td><td class="prijs">€ 2.000–4.500</td><td class="prijs">€ 1.500–3.500</td><td class="prijs">€ 2.000–4.000</td></tr>
+        <tr><td>Graf / crematorium</td><td class="prijs">€ 1.500–5.000</td><td class="prijs">€ 800–2.000</td><td class="prijs">€ 1.500–4.500</td></tr>
+        <tr><td>Kist / urn</td><td class="prijs">€ 400–3.000</td><td class="prijs">€ 100–1.200</td><td class="prijs">€ 400–2.000</td></tr>
+        <tr><td>Bloemen</td><td class="prijs">€ 200–1.500</td><td class="prijs">€ 150–800</td><td class="prijs">€ 200–1.200</td></tr>
+        <tr><td>Rouwdrukwerk</td><td class="prijs">€ 150–600</td><td class="prijs">€ 100–400</td><td class="prijs">€ 150–500</td></tr>
+        <tr><td>Catering</td><td class="prijs">€ 300–2.000</td><td class="prijs">€ 200–1.500</td><td class="prijs">€ 300–2.000</td></tr>
+        <tr><td><strong>Totaal gemiddeld</strong></td><td class="prijs hoog"><strong>€ 7.500–12.000</strong></td><td class="prijs laag"><strong>€ 4.500–8.000</strong></td><td class="prijs"><strong>€ 6.500–10.000</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="up-vergelijk" style="margin-top:14px;">
+    <div class="up-vergelijk-header">
+      <div class="up-vergelijk-titel">Prijsverschillen per regio</div>
+      <div class="up-vergelijk-sub">Gemiddelde uitvaartkosten per regio t.o.v. het nationale gemiddelde</div>
+    </div>
+    <table class="up-tabel">
+      <thead>
+        <tr><th>Regio</th><th>Verschil</th><th>Gemiddeld totaal</th><th>Grafrecht</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Amsterdam</td><td class="hoog">+25%</td><td class="prijs hoog">€ 9.400</td><td class="prijs">€ 4.500–6.000</td></tr>
+        <tr><td>Utrecht</td><td class="hoog">+18%</td><td class="prijs hoog">€ 8.850</td><td class="prijs">€ 3.500–5.000</td></tr>
+        <tr><td>Den Haag</td><td class="hoog">+12%</td><td class="prijs">€ 8.400</td><td class="prijs">€ 3.000–4.500</td></tr>
+        <tr><td>Rotterdam</td><td class="hoog">+8%</td><td class="prijs">€ 8.100</td><td class="prijs">€ 2.500–4.000</td></tr>
+        <tr><td>Landelijk gemiddelde</td><td>±0%</td><td class="prijs">€ 7.500</td><td class="prijs">€ 1.500–3.500</td></tr>
+        <tr><td>Noord-Brabant</td><td class="laag">-5%</td><td class="prijs laag">€ 7.125</td><td class="prijs">€ 1.200–2.500</td></tr>
+        <tr><td>Overijssel / Gelderland</td><td class="laag">-8%</td><td class="prijs laag">€ 6.900</td><td class="prijs">€ 1.000–2.200</td></tr>
+        <tr><td>Friesland / Groningen</td><td class="laag">-10%</td><td class="prijs laag">€ 6.750</td><td class="prijs">€ 900–2.000</td></tr>
+        <tr><td>Zeeland / Limburg</td><td class="laag">-12%</td><td class="prijs laag">€ 6.600</td><td class="prijs">€ 800–1.800</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="up-vergelijk" style="margin-top:14px;">
+    <div class="up-vergelijk-header">
+      <div class="up-vergelijk-titel">Kist prijzen vergelijken</div>
+      <div class="up-vergelijk-sub">Van sober tot luxe — wat kost een kist?</div>
+    </div>
+    <table class="up-tabel">
+      <thead>
+        <tr><th>Type kist</th><th>Materiaal</th><th>Prijs range</th><th>Geschikt voor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sober/eenvoudig</td><td>Grenenhout</td><td class="prijs laag">€ 300–600</td><td>Elke uitvaart</td></tr>
+        <tr><td>Standaard</td><td>Multiplex/MDF</td><td class="prijs">€ 600–1.200</td><td>Elke uitvaart</td></tr>
+        <tr><td>Middenklasse</td><td>Eikenhout</td><td class="prijs">€ 1.200–2.000</td><td>Elke uitvaart</td></tr>
+        <tr><td>Luxe</td><td>Mahonie/walnoot</td><td class="prijs hoog">€ 2.000–4.000</td><td>Begraving</td></tr>
+        <tr><td>Bijzonder</td><td>Riet/karton/bamboe</td><td class="prijs">€ 400–1.500</td><td>Natuurbegraving</td></tr>
+        <tr><td>Ecologisch</td><td>Mycellium/wol</td><td class="prijs">€ 800–2.500</td><td>Groene uitvaart</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 3: CHECKLIST
+══════════════════════════════════════════════════ -->
+<div class="up-tabinhoud" id="tab-checklist">
+  <div class="up-sectie">
+    <div class="up-sectie-header open" onclick="toggleSectie(this)">
+      <div class="up-sectie-nr" style="background:#c8622a;">!</div>
+      <div class="up-sectie-info">
+        <div class="up-sectie-titel">Direct na het overlijden (dag 1)</div>
+        <div class="up-sectie-sub">Zaken die meteen geregeld moeten worden</div>
+      </div>
+      <div class="up-sectie-pijl">▼</div>
+    </div>
+    <div class="up-sectie-body open" id="body-cl1">
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Huisarts of behandelend arts inschakelen</div>
+          <div class="up-checklist-sub">De arts stelt de overlijdensverklaring op — dit is wettelijk verplicht</div>
+          <div class="up-checklist-timing">Binnen 12 uur</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Uitvaartondernemer bellen</div>
+          <div class="up-checklist-sub">Vervoer van de overledene regelen — dit moet binnen 36 uur na overlijden</div>
+          <div class="up-checklist-timing">Binnen 24 uur</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Directe familie informeren</div>
+          <div class="up-checklist-sub">Partner, kinderen, ouders en broers/zussen op de hoogte stellen</div>
+          <div class="up-checklist-timing">Direct</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Uitvaartverzekering en testament opzoeken</div>
+          <div class="up-checklist-sub">Controleer of er een uitvaartverzekering is en wat de wensen van de overledene waren</div>
+          <div class="up-checklist-timing">Dag 1</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Werkgever of school informeren</div>
+          <div class="up-checklist-sub">Bij overlijden van nabestaande heb je recht op rouwverlof</div>
+          <div class="up-checklist-timing">Dag 1-2</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="up-sectie">
+    <div class="up-sectie-header" onclick="toggleSectie(this)">
+      <div class="up-sectie-nr" style="background:#e8834a;">2</div>
+      <div class="up-sectie-info">
+        <div class="up-sectie-titel">Binnen 3 dagen regelen</div>
+        <div class="up-sectie-sub">De uitvaart plannen en organiseren</div>
+      </div>
+      <div class="up-sectie-pijl">▼</div>
+    </div>
+    <div class="up-sectie-body" id="body-cl2">
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Aangifte van overlijden bij gemeente</div>
+          <div class="up-checklist-sub">Wettelijk verplicht binnen 5 werkdagen — uitvaartondernemer helpt hier vaak mee</div>
+          <div class="up-checklist-timing">Binnen 5 werkdagen (wettelijk)</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Datum en locatie uitvaart bepalen</div>
+          <div class="up-checklist-sub">In overleg met uitvaartondernemer en begraafplaats of crematorium</div>
+          <div class="up-checklist-timing">Dag 1-3</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Rouwkaarten versturen of publiceren</div>
+          <div class="up-checklist-sub">Digitaal via e-mail of traditioneel per post, eventueel advertentie in krant</div>
+          <div class="up-checklist-timing">Dag 2-4</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Wensen overledene uitvoeren</div>
+          <div class="up-checklist-sub">Muziek, teksten, bloemen, kledingkeuze voor de overledene</div>
+          <div class="up-checklist-timing">Dag 1-5</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Sprekers/ceremoniemeester regelen</div>
+          <div class="up-checklist-sub">Familie, vriend of professionele spreker voor de plechtigheid</div>
+          <div class="up-checklist-timing">Dag 2-4</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Catering regelen</div>
+          <div class="up-checklist-sub">Koffietafel na de uitvaart — locatie en aantal personen doorgeven</div>
+          <div class="up-checklist-timing">Dag 2-4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="up-sectie">
+    <div class="up-sectie-header" onclick="toggleSectie(this)">
+      <div class="up-sectie-nr">3</div>
+      <div class="up-sectie-info">
+        <div class="up-sectie-titel">Na de uitvaart — eerste weken</div>
+        <div class="up-sectie-sub">Administratieve en praktische afwikkeling</div>
+      </div>
+      <div class="up-sectie-pijl">▼</div>
+    </div>
+    <div class="up-sectie-body" id="body-cl3">
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Bank en financiële instellingen informeren</div>
+          <div class="up-checklist-sub">Bankrekeningen blokkeren/omzetten, uitvaartverzekering declareren</div>
+          <div class="up-checklist-timing">Week 1-2</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">DigiD en toeslagen stopzetten</div>
+          <div class="up-checklist-sub">Toeslagen, uitkeringen en pensioen stopzetten bij de juiste instanties</div>
+          <div class="up-checklist-timing">Week 1-2</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Abonnementen en contracten opzeggen</div>
+          <div class="up-checklist-sub">Zorgverzekering, telefoon, internet, tijdschriften, lidmaatschappen</div>
+          <div class="up-checklist-timing">Week 1-4</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Notaris inschakelen voor nalatenschap</div>
+          <div class="up-checklist-sub">Verklaring van erfrecht, boedelafwikkeling en testament uitvoeren</div>
+          <div class="up-checklist-timing">Week 2-4</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Belastingaangifte en erfbelasting</div>
+          <div class="up-checklist-sub">Aangifte erfbelasting bij de Belastingdienst indien van toepassing</div>
+          <div class="up-checklist-timing">Binnen 8 maanden</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div class="up-checklist-check" onclick="toggleCheck(this)"></div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Woning en inboedel regelen</div>
+          <div class="up-checklist-sub">Huurcontract opzeggen of woning te koop zetten, inboedel verdelen</div>
+          <div class="up-checklist-timing">Maand 1-3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 4: TIJDLIJN
+══════════════════════════════════════════════════ -->
+<div class="up-tabinhoud" id="tab-tijdlijn">
+  <div class="up-sectie">
+    <div class="up-sectie-body open" style="display:block; padding:0;">
+      <div class="up-tijdlijn">
+        <div class="up-tijdlijn-item">
+          <div class="up-tijdlijn-dot oranje">1</div>
+          <div class="up-tijdlijn-content">
+            <div class="up-tijdlijn-periode">Dag 0 — Direct na overlijden</div>
+            <div class="up-tijdlijn-titel">Arts, uitvaartondernemer en familie</div>
+            <div class="up-tijdlijn-tekst">Schakel direct de huisarts in voor de overlijdensverklaring. Bel de uitvaartondernemer voor vervoer van de overledene. Informeer directe familie. Zoek het testament en de uitvaartverzekering op.</div>
+          </div>
+        </div>
+        <div class="up-tijdlijn-item">
+          <div class="up-tijdlijn-dot">2</div>
+          <div class="up-tijdlijn-content">
+            <div class="up-tijdlijn-periode">Dag 1-2</div>
+            <div class="up-tijdlijn-titel">Eerste gesprek uitvaartondernemer</div>
+            <div class="up-tijdlijn-tekst">Uitgebreid gesprek over de wensen en mogelijkheden. Keuze van type uitvaart, kist of urn, datum en locatie. Bespreek het budget en vraag een gespecificeerde offerte aan.</div>
+          </div>
+        </div>
+        <div class="up-tijdlijn-item">
+          <div class="up-tijdlijn-dot">3</div>
+          <div class="up-tijdlijn-content">
+            <div class="up-tijdlijn-periode">Dag 2-4</div>
+            <div class="up-tijdlijn-titel">Organisatie van de plechtigheid</div>
+            <div class="up-tijdlijn-tekst">Rouwkaarten versturen, aangifte van overlijden bij gemeente, muziek en sprekers regelen, bloemen bestellen, programma samenstellen, catering boeken.</div>
+          </div>
+        </div>
+        <div class="up-tijdlijn-item">
+          <div class="up-tijdlijn-dot oranje">4</div>
+          <div class="up-tijdlijn-content">
+            <div class="up-tijdlijn-periode">Dag 3-7</div>
+            <div class="up-tijdlijn-titel">De uitvaart</div>
+            <div class="up-tijdlijn-tekst">De plechtigheid: afscheid nemen, de begraving of crematie. Ontvangst van gasten, koffietafel of maaltijd. Persoonlijk en waardig afscheid nemen van de overledene.</div>
+          </div>
+        </div>
+        <div class="up-tijdlijn-item">
+          <div class="up-tijdlijn-dot">5</div>
+          <div class="up-tijdlijn-content">
+            <div class="up-tijdlijn-periode">Week 1-2 na uitvaart</div>
+            <div class="up-tijdlijn-titel">Administratieve afwikkeling</div>
+            <div class="up-tijdlijn-tekst">Bank informeren, uitvaartverzekering declareren, toeslagen en uitkeringen stopzetten, abonnementen opzeggen, overlijdensaangifte belastingdienst.</div>
+          </div>
+        </div>
+        <div class="up-tijdlijn-item">
+          <div class="up-tijdlijn-dot">6</div>
+          <div class="up-tijdlijn-content">
+            <div class="up-tijdlijn-periode">Maand 1-3</div>
+            <div class="up-tijdlijn-titel">Nalatenschap en woning</div>
+            <div class="up-tijdlijn-tekst">Notaris inschakelen voor verklaring van erfrecht, boedelafwikkeling starten, woning regelen (huur opzeggen of verkopen), inboedel verdelen.</div>
+          </div>
+        </div>
+        <div class="up-tijdlijn-item">
+          <div class="up-tijdlijn-dot grijs">7</div>
+          <div class="up-tijdlijn-content">
+            <div class="up-tijdlijn-periode">Binnen 8 maanden</div>
+            <div class="up-tijdlijn-titel">Erfbelasting aangifte</div>
+            <div class="up-tijdlijn-tekst">Aangifte erfbelasting bij de Belastingdienst indienen. Let op de vrijstellingen: partner €795.000, kind €22.918, kleinkinderen €22.918. Boven deze bedragen geldt erfbelasting van 10-40%.</div>
+          </div>
+        </div>
+        <div class="up-tijdlijn-item">
+          <div class="up-tijdlijn-dot grijs">8</div>
+          <div class="up-tijdlijn-content">
+            <div class="up-tijdlijn-periode">Doorlopend</div>
+            <div class="up-tijdlijn-titel">Rouw en verwerking</div>
+            <div class="up-tijdlijn-tekst">Rouw heeft geen tijdslimiet. Overweeg rouwbegeleiding als het moeilijk gaat. Herdenk de overledene op speciale momenten. Zorg goed voor jezelf en de mensen om je heen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 5: BESPAARTIPS
+══════════════════════════════════════════════════ -->
+<div class="up-tabinhoud" id="tab-tips">
+
+  <div class="up-sectie">
+    <div class="up-sectie-header open" onclick="toggleSectie(this)">
+      <div class="up-sectie-nr" style="background:#e8834a;">€</div>
+      <div class="up-sectie-info">
+        <div class="up-sectie-titel">Hoe bespaar je op uitvaartkosten?</div>
+        <div class="up-sectie-sub">Praktische tips om te besparen zonder in te leveren op kwaliteit</div>
+      </div>
+      <div class="up-sectie-pijl">▼</div>
+    </div>
+    <div class="up-sectie-body open">
+      <div class="up-checklist-item">
+        <div style="font-size:1.4rem;margin-top:2px;">💰</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Vergelijk meerdere uitvaartondernemers</div>
+          <div class="up-checklist-sub">Vraag minimaal 3 offertes op. Prijsverschillen van €1.000 tot €3.000 voor vergelijkbare diensten zijn normaal. Uitvaartondernemers zijn wettelijk verplicht een transparante prijslijst te verstrekken.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.4rem;margin-top:2px;">📋</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Vooruit plannen met een uitvaartverzekering</div>
+          <div class="up-checklist-sub">Een uitvaartverzekering voor €15-30 per maand dekt gemiddeld €7.500 aan kosten. Neem er een voor de kosten stijgen — premies gaan omhoog naarmate je ouder wordt.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.4rem;margin-top:2px;">🌳</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Overweeg een sobere of groene uitvaart</div>
+          <div class="up-checklist-sub">Een eenvoudige crematie kan al vanaf €2.500. Natuurbegraving is een prachtig alternatief zonder dure grafsteen. Het gaat om het afscheid, niet om de kosten.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.4rem;margin-top:2px;">🎵</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Muziek: familie vs professioneel</div>
+          <div class="up-checklist-sub">Laat een familielid een lied zingen of spelen — dat is vaak emotioneel waardevoller én gratis. Of kies voor opgenomen muziek i.p.v. een live muzikant (besparing: €300-800).</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.4rem;margin-top:2px;">💐</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Bloemstukken: zelf regelen of eenvoudiger</div>
+          <div class="up-checklist-sub">Vraag gasten één bijdrage aan bloemen i.p.v. meerdere kransen. Of kies voor één mooi kistbloemstuk i.p.v. meerdere bloemstukken (besparing: €200-800).</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.4rem;margin-top:2px;">🍽️</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Catering in eigen beheer</div>
+          <div class="up-checklist-sub">Zelf broodjes en koffie regelen i.p.v. professionele catering kan €300-1.000 besparen. Vraag of de locatie dit toestaat.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.4rem;margin-top:2px;">📄</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Drukwerk: digitaal vs print</div>
+          <div class="up-checklist-sub">Digitale rouwkaarten via e-mail of WhatsApp zijn gratis. Een mooie digitale gedenkpagina kost €50-100 vs €300-600 voor uitgebreid drukwerk.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.4rem;margin-top:2px;">🪨</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Grafsteen: wacht een half jaar</div>
+          <div class="up-checklist-sub">Een grafsteen hoeft niet direct. Wacht 6 maanden tot de grond gezakt is. Je hebt meer tijd om na te denken, prijzen te vergelijken en te rouwen.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="up-sectie">
+    <div class="up-sectie-header" onclick="toggleSectie(this)">
+      <div class="up-sectie-nr">❓</div>
+      <div class="up-sectie-info">
+        <div class="up-sectie-titel">Veelgestelde vragen over uitvaartkosten</div>
+        <div class="up-sectie-sub">Antwoorden op de meest gestelde vragen</div>
+      </div>
+      <div class="up-sectie-pijl">▼</div>
+    </div>
+    <div class="up-sectie-body" id="body-faq">
+      <div class="up-checklist-item">
+        <div style="font-size:1.3rem;margin-top:2px;">❓</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Wat is een sobere uitvaart en wat kost die?</div>
+          <div class="up-checklist-sub">Een sobere uitvaart is een eenvoudige, sober ingerichte uitvaart zonder overbodige extra's. Kosten beginnen vanaf €2.500 voor crematie en €4.000 voor begraving. De gemeente betaalt een bijdrage als er geen geld is voor een uitvaart.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.3rem;margin-top:2px;">❓</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Betaalt de gemeente een uitvaart als er geen geld is?</div>
+          <div class="up-checklist-sub">Ja. Als er onvoldoende middelen zijn voor een uitvaart en er geen familie is die dit kan betalen, zorgt de gemeente voor een sobere begrafenis of crematie via de Wet Lijkbezorging.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.3rem;margin-top:2px;">❓</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Is een uitvaartverzekering de moeite waard?</div>
+          <div class="up-checklist-sub">Voor de meeste mensen wel. Een verzekering voor €15-25/maand kan duizenden euro's aan kosten dekken op het moment dat nabestaanden het al moeilijk genoeg hebben. Vergelijk natura- vs kapitaalverzekeringen goed.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.3rem;margin-top:2px;">❓</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Hoe snel moet een uitvaart geregeld zijn?</div>
+          <div class="up-checklist-sub">Wettelijk moet een overledene binnen 6 werkdagen begraven of gecremeerd worden (artikel 17 Wet Lijkbezorging). In de praktijk vindt de uitvaart meestal binnen 3-5 dagen plaats.</div>
+        </div>
+      </div>
+      <div class="up-checklist-item">
+        <div style="font-size:1.3rem;margin-top:2px;">❓</div>
+        <div class="up-checklist-tekst">
+          <div class="up-checklist-naam">Mag ik zelf de as van een crematie bewaren?</div>
+          <div class="up-checklist-sub">Ja, in Nederland mag u de as van een overledene thuis bewaren in een gesloten urn. U mag de as ook verstrooien op eigen terrein of op zee. Voor verstrooiing op openbaar land heeft u toestemming van de grondeigenaar nodig.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /up-wrap -->
+
+<script>
+// ── STAAT ──
+var regioFactor = 1.0;
+var uitvaartType = 'begraving';
+var prijzen = {};
+
+// ── TABS ──
+function toonTab(id) {
+  document.querySelectorAll('.up-tabinhoud').forEach(function(el) { el.classList.remove('actief'); });
+  document.querySelectorAll('.up-tab').forEach(function(el) { el.classList.remove('actief'); });
+  document.getElementById('tab-' + id).classList.add('actief');
+  event.currentTarget.classList.add('actief');
+}
+
+// ── SECTIE TOGGLE ──
+function toggleSectie(header) {
+  header.classList.toggle('open');
+  var body = header.nextElementSibling;
+  body.classList.toggle('open');
+  if (body.classList.contains('open')) { body.style.display = 'block'; } else { body.style.display = 'none'; }
+}
+
+// ── TYPE UITVAART ──
+function kiesType(type, btn) {
+  uitvaartType = type;
+  document.querySelectorAll('.up-type-knop').forEach(function(b) { b.classList.remove('actief'); });
+  btn.classList.add('actief');
+
+  // Kist vs Urn
+  document.getElementById('rij-kist').style.display = (type === 'crematie') ? 'none' : 'grid';
+  document.getElementById('rij-urn').style.display = (type === 'crematie') ? 'grid' : 'none';
+
+  // Graf sectie
+  document.getElementById('graf-begraving').style.display = (type === 'begraving') ? 'block' : 'none';
+  document.getElementById('graf-crematie').style.display = (type === 'crematie') ? 'block' : 'none';
+  document.getElementById('graf-natuur').style.display = (type === 'natuur' || type === 'thuis') ? 'block' : 'none';
+
+  var sectie2Titels = { begraving: 'Begraafplaats & graf', crematie: 'Crematorium & asbestemming', natuur: 'Natuurbegraafplaats', thuis: 'Begraafplaats' };
+  document.getElementById('sectie2-titel').textContent = sectie2Titels[type] || 'Graf & crematorium';
+
+  document.getElementById('overzichtType').textContent = ({ begraving:'Begraving', crematie:'Crematie', natuur:'Natuurbegraving', thuis:'Thuisuitvaart' }[type] || type) + ' — ' + document.getElementById('regioSelect').options[document.getElementById('regioSelect').selectedIndex].text;
+  berekenAlles();
+}
+
+// ── REGIO ──
+function updateRegio(val) {
+  regioFactor = parseFloat(val);
+  var regioTexten = {
+    '1.0': 'Prijzen zijn gebaseerd op het landelijk gemiddelde.',
+    '1.25': 'Amsterdam en de Randstad zijn 25% duurder dan het landelijk gemiddelde.',
+    '1.18': 'Utrecht is circa 18% duurder dan het landelijk gemiddelde.',
+    '1.12': 'Den Haag is circa 12% duurder dan het landelijk gemiddelde.',
+    '1.08': 'Rotterdam is circa 8% duurder dan het landelijk gemiddelde.',
+    '0.95': 'Noord-Brabant is gemiddeld 5% goedkoper dan het landelijk gemiddelde.',
+    '0.90': 'Friesland en Groningen zijn circa 10% goedkoper dan het landelijk gemiddelde.',
+    '0.88': 'Zeeland en Limburg zijn circa 12% goedkoper dan het landelijk gemiddelde.',
+    '0.92': 'Overijssel en Gelderland zijn gemiddeld 8% goedkoper dan het landelijk gemiddelde.'
+  };
+  document.getElementById('regioInfoTekst').textContent = regioTexten[val] || '';
+  document.getElementById('overzichtType').textContent = document.querySelectorAll('.up-type-knop.actief')[0]?.textContent.trim().replace(/^.+ /, '') + ' — ' + document.getElementById('regioSelect').options[document.getElementById('regioSelect').selectedIndex].text;
+  berekenAlles();
+}
+
+// ── SLIDER UPDATE ──
+function updateSlider(slider, prijsId) {
+  var waarde = parseInt(slider.value);
+  var aangepast = Math.round(waarde * regioFactor);
+  prijzen[prijsId] = aangepast;
+  document.getElementById(prijsId).textContent = '€ ' + aangepast.toLocaleString('nl-NL');
+  berekenAlles();
+}
+
+// ── CHECKBOX TOGGLE ──
+function toggleKosten(checkbox, prijsId, basisbedrag) {
+  if (checkbox.checked) {
+    var aangepast = Math.round(basisbedrag * regioFactor);
+    prijzen[prijsId] = aangepast;
+    document.getElementById(prijsId).textContent = '€ ' + aangepast.toLocaleString('nl-NL');
+    document.getElementById(prijsId).classList.add('actief');
+  } else {
+    prijzen[prijsId] = 0;
+    document.getElementById(prijsId).textContent = '€ 0';
+    document.getElementById(prijsId).classList.remove('actief');
+  }
+  berekenAlles();
+}
+
+function toggleKostenSlider(checkbox, prijsId, basisbedrag, sliderWrapId) {
+  var sliderWrap = document.getElementById(sliderWrapId);
+  if (checkbox.checked) {
+    var aangepast = Math.round(basisbedrag * regioFactor);
+    prijzen[prijsId] = aangepast;
+    document.getElementById(prijsId).textContent = '€ ' + aangepast.toLocaleString('nl-NL');
+    document.getElementById(prijsId).classList.add('actief');
+    if (sliderWrap) sliderWrap.classList.add('zichtbaar');
+  } else {
+    prijzen[prijsId] = 0;
+    document.getElementById(prijsId).textContent = '€ 0';
+    document.getElementById(prijsId).classList.remove('actief');
+    if (sliderWrap) sliderWrap.classList.remove('zichtbaar');
+  }
+  berekenAlles();
+}
+
+// ── BEREKEN ALLES ──
+function berekenAlles() {
+  var ids = {
+    basis: ['prijs-ondernemer','prijs-akte','prijs-opbaren','prijs-kist','prijs-urn','prijs-rouwvervoer'],
+    graf: ['prijs-grafrecht','prijs-begraving','prijs-grafsteen','prijs-grafonderhoud','prijs-crematorium','prijs-as','prijs-natuur'],
+    plechtigheid: ['prijs-bloemen','prijs-muziek','prijs-spreker','prijs-locatie','prijs-drukwerk','prijs-catering','prijs-fotograaf','prijs-livestream','prijs-styling'],
+    herinnering: ['prijs-sieraden','prijs-gedenkboek','prijs-herinneringsproducten','prijs-digitaal'],
+    admin: ['prijs-notaris','prijs-boedel','prijs-rouwbegeleiding','prijs-repatriering']
+  };
+
+  var totalen = {};
+  Object.keys(ids).forEach(function(cat) {
+    var som = 0;
+    ids[cat].forEach(function(id) { som += (prijzen[id] || 0); });
+    totalen[cat] = som;
+  });
+
+  var grand = totalen.basis + totalen.graf + totalen.plechtigheid + totalen.herinnering + totalen.admin;
+
+  // Subtotalen updaten
+  ['basis','graf','plechtigheid','herinnering','admin'].forEach(function(cat) {
+    var el = document.getElementById('totaal-' + cat);
+    if (el) el.textContent = '€ ' + totalen[cat].toLocaleString('nl-NL');
+  });
+
+  // Grand totaal
+  document.getElementById('grandTotaal').textContent = grand.toLocaleString('nl-NL');
+  document.getElementById('grandTotaal2').textContent = grand.toLocaleString('nl-NL');
+
+  // Overzicht
+  ['basis','graf','plechtigheid','herinnering','admin'].forEach(function(cat) {
+    var el = document.getElementById('ov-' + cat);
+    if (el) {
+      el.textContent = '€ ' + totalen[cat].toLocaleString('nl-NL');
+      el.className = 'up-overzicht-rij-prijs' + (totalen[cat] > 0 ? '' : ' nul');
+    }
+  });
+
+  // Grafiek
+  if (grand > 0) {
+    ['basis','graf','plechtigheid','herinnering','admin'].forEach(function(cat) {
+      var pct = Math.round((totalen[cat] / grand) * 100);
+      var balkEl = document.getElementById('balk-' + cat);
+      var pctEl = document.getElementById('pct-' + cat);
+      if (balkEl) balkEl.style.width = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+    });
+  }
+
+  // Verzekering
+  updateVerzekering(grand);
+}
+
+// ── VERZEKERING ──
+function updateVerzekering(grand) {
+  var totaal = grand || parseInt(document.getElementById('grandTotaal').textContent.replace(/\D/g, '')) || 0;
+  var verzBedrag = parseInt(document.getElementById('verzekeringBedrag').value) || 0;
+  var eigen = Math.max(0, totaal - verzBedrag);
+
+  document.getElementById('verz-totaal').textContent = '€ ' + totaal.toLocaleString('nl-NL');
+  document.getElementById('verz-bedrag').textContent = '€ ' + verzBedrag.toLocaleString('nl-NL');
+  var eigenEl = document.getElementById('verz-eigen');
+  eigenEl.textContent = '€ ' + eigen.toLocaleString('nl-NL');
+  eigenEl.className = 'up-verzekering-waarde ' + (eigen > 0 ? 'rood' : 'groen');
+  document.getElementById('totaal-verzekering-check').textContent = '€ ' + eigen.toLocaleString('nl-NL');
+}
+
+// ── CHECKLIST ──
+function toggleCheck(el) {
+  el.classList.toggle('gedaan');
+  el.textContent = el.classList.contains('gedaan') ? '✓' : '';
+}
+
+// ── PDF DOWNLOAD ──
+function downloadPDF() {
+  document.getElementById('printDatum').textContent = new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+  window.print();
+}
+
+// ── INITIALISEER SLIDERS ──
+window.addEventListener('load', function() {
+  var sliders = [
+    ['slider-ondernemer','prijs-ondernemer'],['slider-opbaren','prijs-opbaren'],
+    ['slider-kist','prijs-kist'],['slider-rouwvervoer','prijs-rouwvervoer'],
+    ['slider-grafrecht','prijs-grafrecht'],['slider-crematorium','prijs-crematorium'],
+    ['slider-as','prijs-as'],['slider-natuur','prijs-natuur']
+  ];
+  sliders.forEach(function(s) {
+    var el = document.getElementById(s[0]);
+    if (el) updateSlider(el, s[1]);
+  });
+
+  // Verplichte checkboxes
+  ['prijs-akte','prijs-begraving'].forEach(function(id) {
+    var defaultBedragen = {'prijs-akte':190,'prijs-begraving':450};
+    prijzen[id] = Math.round(defaultBedragen[id] * regioFactor);
+  });
+
+  berekenAlles();
+
+  // Controleer of er opgeslagen data is
+  try {
+    var opgeslagen = localStorage.getItem(OPSLAG_SLEUTEL);
+    if (opgeslagen) {
+      var status = JSON.parse(opgeslagen);
+      if (status.opgeslagenOp) {
+        var datum = new Date(status.opgeslagenOp);
+        var datumTekst = datum.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }) + ' om ' + datum.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('herstellenDatum').textContent = 'Opgeslagen op ' + datumTekst;
+        document.getElementById('herstellenBanner').style.display = 'flex';
+      }
+    }
+  } catch(e) {}
+});
+
+function herstellenBevestigd() {
+  document.getElementById('herstellenBanner').style.display = 'none';
+  laadOp();
+}
+
+// ── LOCALSTORAGE: OPSLAAN & LADEN ──
+var OPSLAG_SLEUTEL = 'uitvaartplanner_v1';
+var opslaanTimer = null;
+
+function verzamelStatus() {
+  var status = {
+    type: uitvaartType,
+    regio: document.getElementById('regioSelect').value,
+    verzekering: document.getElementById('verzekeringBedrag').value,
+    sliders: {},
+    checkboxes: {}
+  };
+
+  // Alle sliders opslaan
+  document.querySelectorAll('.up-rij-slider').forEach(function(s) {
+    if (s.id) status.sliders[s.id] = s.value;
+  });
+
+  // Alle checkboxes opslaan
+  document.querySelectorAll('input[type="checkbox"]').forEach(function(c, i) {
+    status.checkboxes['cb_' + i] = c.checked;
+  });
+
+  return status;
+}
+
+function slaOp() {
+  try {
+    var status = verzamelStatus();
+    status.opgeslagenOp = new Date().toISOString();
+    localStorage.setItem(OPSLAG_SLEUTEL, JSON.stringify(status));
+    toonOpslaanMelding();
+  } catch(e) { console.log('Opslaan niet mogelijk:', e); }
+}
+
+function laadOp() {
+  try {
+    var opgeslagen = localStorage.getItem(OPSLAG_SLEUTEL);
+    if (!opgeslagen) return false;
+    var status = JSON.parse(opgeslagen);
+
+    // Type herstellen
+    if (status.type) {
+      var typeKnop = document.querySelector('.up-type-knop[onclick*="' + status.type + '"]');
+      if (typeKnop) kiesType(status.type, typeKnop);
+    }
+
+    // Regio herstellen
+    if (status.regio) {
+      document.getElementById('regioSelect').value = status.regio;
+      updateRegio(status.regio);
+    }
+
+    // Sliders herstellen
+    if (status.sliders) {
+      Object.keys(status.sliders).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.value = status.sliders[id];
+          var prijsId = id.replace('slider-', 'prijs-');
+          updateSlider(el, prijsId);
+        }
+      });
+    }
+
+    // Checkboxes herstellen
+    if (status.checkboxes) {
+      document.querySelectorAll('input[type="checkbox"]').forEach(function(c, i) {
+        var opgeslagenWaarde = status.checkboxes['cb_' + i];
+        if (opgeslagenWaarde !== undefined && c.checked !== opgeslagenWaarde) {
+          c.checked = opgeslagenWaarde;
+          c.dispatchEvent(new Event('change'));
+        }
+      });
+    }
+
+    // Verzekering herstellen
+    if (status.verzekering) {
+      document.getElementById('verzekeringBedrag').value = status.verzekering;
+    }
+
+    berekenAlles();
+    return status.opgeslagenOp;
+  } catch(e) { console.log('Laden niet mogelijk:', e); return false; }
+}
+
+function wisData() {
+  if (confirm('Weet je zeker dat je jouw opgeslagen uitvaartplanning wilt wissen? Dit kan niet ongedaan worden gemaakt.')) {
+    localStorage.removeItem(OPSLAG_SLEUTEL);
+    location.reload();
+  }
+}
+
+function toonOpslaanMelding() {
+  var melding = document.getElementById('opslaanMelding');
+  if (melding) {
+    melding.style.opacity = '1';
+    melding.style.transform = 'translateY(0)';
+    setTimeout(function() {
+      melding.style.opacity = '0';
+      melding.style.transform = 'translateY(-10px)';
+    }, 2500);
+  }
+}
+
+// Auto-opslaan na elke wijziging
+function autoSlaOp() {
+  clearTimeout(opslaanTimer);
+  opslaanTimer = setTimeout(slaOp, 1200);
+}
+
+// Originele berekenAlles wrappen met auto-opslaan
+var _origBerekenAlles = berekenAlles;
+berekenAlles = function() {
+  _origBerekenAlles();
+  autoSlaOp();
+};
+
+// Hoogte doorgeven aan iframe parent (Soffie)
+function stuurHoogte() {
+  var hoogte = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+  window.parent.postMessage({ frameHeight: hoogte }, '*');
+}
+stuurHoogte();
+window.addEventListener('resize', function() { setTimeout(stuurHoogte, 200); });
+</script>
+
+</body>
+</html>
