@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rouw en Verlies — Uitvaart-Platform.nl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: auto; overflow: visible; background: #faf7f2; font-family: 'Poppins', sans-serif; }
+
+@keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(1.3); } }
+
+.rw-app { width: 100%; max-width: 780px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 40px rgba(20,8,18,0.1); overflow: hidden; display: flex; flex-direction: column; }
+
+/* HEADER */
+.rw-header { background: linear-gradient(135deg, #2a0d24, #4a1942); padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; position: relative; overflow: hidden; }
+.rw-header::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 70% 80% at 100% 0%, rgba(232,131,74,0.18) 0%, transparent 55%); pointer-events:none; }
+.rw-header-left { position: relative; z-index: 1; }
+.rw-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(232,131,74,0.18); border: 1px solid rgba(232,131,74,0.4); border-radius: 20px; padding: 3px 12px; margin-bottom: 5px; }
+.rw-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; animation: pulse 2s infinite; }
+.rw-badge span { font-size: 0.6rem; font-weight: 700; color: #e8834a; letter-spacing: 0.14em; text-transform: uppercase; }
+.rw-header h2 { font-size: 1.1rem; font-weight: 900; color: #fff; letter-spacing: -0.02em; }
+.rw-header-sub { font-size: 0.7rem; color: rgba(255,255,255,0.5); font-weight: 300; }
+.rw-nood-knop { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 8px 14px; text-decoration: none; flex-shrink: 0; position: relative; z-index: 1; }
+.rw-nood-knop-tekst { font-size: 0.68rem; font-weight: 700; color: #fff; }
+.rw-nood-knop-nr { font-size: 0.72rem; font-weight: 800; color: #e8834a; }
+
+/* TABS */
+.rw-tabs { display: flex; gap: 4px; padding: 8px 12px; background: #faf7f2; border-bottom: 1px solid #e2d9e0; flex-shrink: 0; overflow-x: auto; flex-wrap: nowrap; }
+.rw-tab { padding: 8px 12px; border: none; background: none; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 600; color: #6b6570; cursor: pointer; transition: all 0.18s; white-space: nowrap; flex-shrink: 0; }
+.rw-tab:hover { background: #e8d5e2; color: #4a1942; }
+.rw-tab.actief { background: #4a1942; color: #fff; }
+
+/* BODY */
+.rw-body { padding: 20px 24px; overflow-y: auto; flex: 1; height: 520px; }
+
+/* TABINHOUD */
+.rw-tabinhoud { display: none; animation: fadeIn 0.25s ease; }
+.rw-tabinhoud.actief { display: block; }
+
+/* EMOTIE */
+.rw-emotie-intro { font-size: 0.84rem; font-weight: 700; color: #4a1942; margin-bottom: 4px; }
+.rw-emotie-sub { font-size: 0.74rem; color: #6b6570; font-weight: 300; margin-bottom: 16px; line-height: 1.6; }
+.rw-emotie-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+.rw-emotie-knop { background: #faf7f2; border: 2px solid #e2d9e0; border-radius: 11px; padding: 14px 8px; cursor: pointer; text-align: center; transition: all 0.18s; font-family: 'Poppins', sans-serif; }
+.rw-emotie-knop:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(74,25,66,0.1); border-color: #4a1942; }
+.rw-emotie-knop.geselecteerd { border-color: #4a1942; background: #f0ebef; }
+.rw-emotie-knop-icoon { font-size: 1.6rem; display: block; margin-bottom: 5px; }
+.rw-emotie-knop-naam { font-size: 0.68rem; font-weight: 700; color: #4a1942; line-height: 1.3; }
+.rw-emotie-resultaat { background: #faf7f2; border: 1px solid #e2d9e0; border-radius: 12px; padding: 16px; display: none; }
+.rw-emotie-resultaat.zichtbaar { display: block; animation: fadeIn 0.3s ease; }
+.rw-emotie-res-titel { font-size: 0.88rem; font-weight: 800; color: #4a1942; margin-bottom: 8px; }
+.rw-emotie-res-tekst { font-size: 0.78rem; color: #6b6570; font-weight: 300; line-height: 1.8; margin-bottom: 12px; }
+.rw-emotie-res-tip { background: rgba(232,131,74,0.08); border-left: 3px solid #e8834a; padding: 10px 12px; border-radius: 0 8px 8px 0; font-size: 0.74rem; color: #4a1942; font-weight: 300; line-height: 1.65; }
+
+/* FASEN */
+.rw-fasen-nav { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 14px; }
+.rw-fase-btn { padding: 7px 13px; border: 2px solid #e2d9e0; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 0.74rem; font-weight: 700; color: #6b6570; background: #faf7f2; cursor: pointer; transition: all 0.18s; }
+.rw-fase-btn.actief { background: #4a1942; border-color: #4a1942; color: #fff; }
+.rw-fase-detail { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; overflow: hidden; }
+.rw-fase-detail-header { padding: 16px 18px; display: flex; align-items: center; gap: 12px; background: #faf7f2; border-bottom: 1px solid #e2d9e0; }
+.rw-fase-nr { width: 36px; height: 36px; border-radius: 50%; background: #4a1942; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.84rem; font-weight: 900; flex-shrink: 0; }
+.rw-fase-naam { font-size: 0.96rem; font-weight: 800; color: #4a1942; }
+.rw-fase-sub { font-size: 0.72rem; color: #6b6570; font-weight: 300; }
+.rw-fase-body { padding: 14px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rw-fase-tekst { font-size: 0.78rem; color: #4a1942; font-weight: 300; line-height: 1.8; }
+.rw-fase-herken-titel { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #e8834a; margin-bottom: 8px; }
+.rw-fase-herken-item { display: flex; align-items: center; gap: 7px; padding: 5px 0; border-bottom: 1px solid #f0ebef; font-size: 0.74rem; color: #4a1942; }
+.rw-fase-herken-item:last-child { border-bottom: none; }
+.rw-fase-dot { width: 5px; height: 5px; border-radius: 50%; background: #e8834a; flex-shrink: 0; }
+.rw-fase-troost { background: #faf7f2; border-top: 1px solid #e2d9e0; padding: 12px 18px; font-size: 0.76rem; color: #6b6570; font-weight: 300; line-height: 1.7; }
+
+/* DAGBOEK */
+.rw-dagboek-datum { font-size: 0.7rem; font-weight: 700; color: #e8834a; margin-bottom: 8px; }
+.rw-dagboek-intro { font-size: 0.82rem; font-weight: 700; color: #4a1942; margin-bottom: 4px; }
+.rw-dagboek-sub { font-size: 0.74rem; color: #6b6570; font-weight: 300; margin-bottom: 12px; line-height: 1.6; }
+.rw-dagboek-textarea { width: 100%; min-height: 120px; border: 1.5px solid #e2d9e0; border-radius: 10px; padding: 12px 14px; font-family: 'Poppins', sans-serif; font-size: 0.82rem; color: #4a1942; background: #faf7f2; resize: vertical; line-height: 1.7; transition: border-color 0.2s; }
+.rw-dagboek-textarea:focus { outline: none; border-color: #4a1942; background: #fff; }
+.rw-dagboek-acties { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+.rw-btn { padding: 9px 18px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.18s; border: none; }
+.rw-btn-p { background: #4a1942; color: #fff; }
+.rw-btn-p:hover { background: #3a1233; }
+.rw-btn-s { background: #faf7f2; border: 1.5px solid #e2d9e0; color: #4a1942; }
+.rw-btn-s:hover { border-color: #4a1942; }
+.rw-dagboek-melding { font-size: 0.72rem; color: #2d7a4f; font-weight: 700; display: none; }
+.rw-dagboek-melding.zichtbaar { display: block; }
+.rw-prompts { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 14px; }
+.rw-prompt { background: #faf7f2; border: 1.5px solid #e2d9e0; border-radius: 9px; padding: 10px 12px; cursor: pointer; font-size: 0.74rem; font-weight: 600; color: #4a1942; transition: all 0.18s; display: flex; align-items: center; gap: 8px; }
+.rw-prompt:hover { border-color: #4a1942; background: #f0ebef; }
+.rw-eerdere { margin-top: 14px; }
+.rw-eerdere-titel { font-size: 0.68rem; font-weight: 700; color: #6b6570; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.rw-entry { background: #faf7f2; border-radius: 9px; padding: 12px 14px; margin-bottom: 7px; position: relative; }
+.rw-entry-datum { font-size: 0.64rem; color: #e8834a; font-weight: 700; margin-bottom: 4px; }
+.rw-entry-tekst { font-size: 0.76rem; color: #4a1942; font-weight: 300; line-height: 1.65; }
+.rw-entry-del { position: absolute; top: 8px; right: 10px; background: none; border: none; color: #b0a8b0; cursor: pointer; font-size: 0.78rem; }
+
+/* CHAT */
+.rw-chat-berichten { height: 280px; overflow-y: auto; background: #faf7f2; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+.rw-chat-bericht { display: flex; gap: 8px; animation: fadeIn 0.25s ease; }
+.rw-chat-bericht.gebruiker { flex-direction: row-reverse; }
+.rw-chat-avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px; }
+.rw-chat-bericht.ai .rw-chat-avatar { background: #4a1942; }
+.rw-chat-bericht.gebruiker .rw-chat-avatar { background: #e8834a; }
+.rw-chat-bubbel { max-width: 78%; padding: 10px 14px; border-radius: 12px; font-size: 0.78rem; line-height: 1.7; font-weight: 300; }
+.rw-chat-bericht.ai .rw-chat-bubbel { background: #fff; color: #4a1942; border-radius: 4px 12px 12px 12px; box-shadow: 0 2px 8px rgba(74,25,66,0.06); }
+.rw-chat-bericht.gebruiker .rw-chat-bubbel { background: #4a1942; color: #fff; border-radius: 12px 4px 12px 12px; }
+.rw-chat-bubbel a { color: #e8834a; font-weight: 600; }
+.rw-chat-invoer { display: flex; gap: 8px; }
+.rw-chat-input { flex: 1; border: 1.5px solid #e2d9e0; border-radius: 9px; padding: 9px 13px; font-family: 'Poppins', sans-serif; font-size: 0.78rem; color: #4a1942; background: #fff; }
+.rw-chat-input:focus { outline: none; border-color: #4a1942; }
+.rw-chat-verzend { background: #4a1942; color: #fff; border: none; border-radius: 9px; padding: 9px 16px; font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.rw-chat-verzend:hover { background: #3a1233; }
+.rw-chat-snel { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.rw-chat-snel-knop { background: #f0ebef; border: none; border-radius: 16px; padding: 4px 10px; font-family: 'Poppins', sans-serif; font-size: 0.68rem; font-weight: 600; color: #4a1942; cursor: pointer; transition: background 0.18s; }
+.rw-chat-snel-knop:hover { background: #e0d5dd; }
+
+/* ZELFZORG */
+.rw-zelfzorg-intro { font-size: 0.84rem; font-weight: 700; color: #4a1942; margin-bottom: 4px; }
+.rw-zelfzorg-sub { font-size: 0.74rem; color: #6b6570; font-weight: 300; margin-bottom: 14px; }
+.rw-zelfzorg-voortgang { display: flex; align-items: center; gap: 12px; background: #faf7f2; border-radius: 9px; padding: 10px 14px; margin-bottom: 14px; }
+.rw-zelfzorg-balk-bg { flex: 1; height: 7px; background: #e2d9e0; border-radius: 4px; overflow: hidden; }
+.rw-zelfzorg-balk { height: 100%; background: linear-gradient(90deg, #4a1942, #2d7a4f); border-radius: 4px; transition: width 0.5s ease; }
+.rw-zelfzorg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.rw-zelfzorg-item { background: #faf7f2; border: 1.5px solid #e2d9e0; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.18s; }
+.rw-zelfzorg-item.gedaan { background: #f0faf4; border-color: #2d7a4f; }
+.rw-zelfzorg-check { width: 20px; height: 20px; border-radius: 5px; border: 2px solid #e2d9e0; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; flex-shrink: 0; transition: all 0.18s; }
+.rw-zelfzorg-item.gedaan .rw-zelfzorg-check { background: #2d7a4f; border-color: #2d7a4f; color: #fff; }
+.rw-zelfzorg-naam { font-size: 0.76rem; font-weight: 700; color: #4a1942; }
+.rw-zelfzorg-sub2 { font-size: 0.66rem; color: #6b6570; font-weight: 300; line-height: 1.4; }
+
+/* COACHES */
+.rw-coaches-intro { font-size: 0.84rem; font-weight: 700; color: #4a1942; margin-bottom: 4px; }
+.rw-coaches-sub { font-size: 0.74rem; color: #6b6570; font-weight: 300; margin-bottom: 14px; line-height: 1.6; }
+.rw-coaches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.rw-coach-kaart { background: #faf7f2; border: 1.5px solid #e2d9e0; border-radius: 12px; padding: 16px; text-decoration: none; display: block; transition: all 0.2s; }
+.rw-coach-kaart:hover { border-color: #4a1942; transform: translateY(-3px); box-shadow: 0 6px 18px rgba(74,25,66,0.1); }
+.rw-coach-icoon { font-size: 1.6rem; margin-bottom: 8px; display: block; }
+.rw-coach-type { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e8834a; margin-bottom: 4px; }
+.rw-coach-naam { font-size: 0.84rem; font-weight: 800; color: #4a1942; margin-bottom: 5px; line-height: 1.3; }
+.rw-coach-tekst { font-size: 0.72rem; color: #6b6570; font-weight: 300; line-height: 1.6; }
+.rw-cta-banner { background: #4a1942; border-radius: 12px; padding: 16px 18px; margin-top: 12px; display: flex; align-items: center; gap: 14px; }
+.rw-cta-banner-tekst h3 { font-size: 0.86rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
+.rw-cta-banner-tekst p { font-size: 0.7rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+.rw-cta-banner-knop { display: inline-block; background: #e8834a; color: #fff; border-radius: 8px; padding: 9px 16px; text-decoration: none; font-size: 0.76rem; font-weight: 700; white-space: nowrap; flex-shrink: 0; transition: background 0.2s; }
+.rw-cta-banner-knop:hover { background: #c8622a; }
+
+/* FAQ */
+.rw-faq-item { border-bottom: 1px solid #e2d9e0; }
+.rw-faq-vraag { width: 100%; padding: 13px 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: none; border: none; font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 700; color: #4a1942; cursor: pointer; text-align: left; }
+.rw-faq-icoon { color: #e8834a; flex-shrink: 0; transition: transform 0.25s; }
+.rw-faq-vraag.open .rw-faq-icoon { transform: rotate(45deg); }
+.rw-faq-antwoord { display: none; padding: 0 0 13px; font-size: 0.78rem; color: #6b6570; font-weight: 300; line-height: 1.8; }
+.rw-faq-antwoord.open { display: block; animation: fadeIn 0.22s ease; }
+.rw-faq-antwoord a { color: #e8834a; font-weight: 600; }
+
+/* FOOTER */
+.rw-footer { padding: 12px 24px; border-top: 1px solid #e2d9e0; background: #faf7f2; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.rw-footer-tekst { font-size: 0.68rem; color: #6b6570; font-weight: 600; }
+.rw-footer-link { font-size: 0.68rem; color: #4a1942; font-weight: 700; text-decoration: none; }
+.rw-footer-link:hover { color: #e8834a; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .rw-emotie-grid { grid-template-columns: repeat(2, 1fr); }
+  .rw-fase-body { grid-template-columns: 1fr; }
+  .rw-coaches-grid { grid-template-columns: 1fr; }
+  .rw-zelfzorg-grid { grid-template-columns: 1fr; }
+  .rw-prompts { grid-template-columns: 1fr; }
+  .rw-body { height: 460px; padding: 16px 16px; }
+  .rw-cta-banner { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="rw-app">
+
+  <!-- HEADER -->
+  <div class="rw-header">
+    <div class="rw-header-left">
+      <div class="rw-badge"><div class="rw-badge-dot"></div><span>Rouw & Verlies</span></div>
+      <h2>Jouw persoonlijke steun</h2>
+      <div class="rw-header-sub">Op jouw manier, in jouw tempo</div>
+    </div>
+    <a href="tel:09000767" class="rw-nood-knop">
+      <div>
+        <div class="rw-nood-knop-tekst">💙 Luisterlijn 24/7</div>
+        <div class="rw-nood-knop-nr">0900-0767 gratis</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- TABS -->
+  <div class="rw-tabs">
+    <button class="rw-tab actief" onclick="toonTab('emotie',this)">💛 Hoe voel ik me?</button>
+    <button class="rw-tab" onclick="toonTab('fasen',this)">🌿 Fasen van rouw</button>
+    <button class="rw-tab" onclick="toonTab('dagboek',this)">📝 Dagboek</button>
+    <button class="rw-tab" onclick="toonTab('chat',this)">💬 Praat erover</button>
+    <button class="rw-tab" onclick="toonTab('zelfzorg',this)">🫀 Zelfzorg</button>
+    <button class="rw-tab" onclick="toonTab('coaches',this)">🌸 Hulp vinden</button>
+    <button class="rw-tab" onclick="toonTab('faq',this)">❓ Vragen</button>
+  </div>
+
+  <!-- BODY -->
+  <div class="rw-body" id="rwBody">
+
+    <!-- TAB EMOTIE -->
+    <div class="rw-tabinhoud actief" id="tab-emotie">
+      <div class="rw-emotie-intro">Hoe voel jij je vandaag?</div>
+      <div class="rw-emotie-sub">Kies het gevoel dat het beste bij je past. Je krijgt persoonlijke uitleg en handvatten.</div>
+      <div class="rw-emotie-grid">
+        <div class="rw-emotie-knop" onclick="kiesEmotie('verdriet',this)"><span class="rw-emotie-knop-icoon">😢</span><div class="rw-emotie-knop-naam">Verdrietig</div></div>
+        <div class="rw-emotie-knop" onclick="kiesEmotie('boos',this)"><span class="rw-emotie-knop-icoon">😠</span><div class="rw-emotie-knop-naam">Boos</div></div>
+        <div class="rw-emotie-knop" onclick="kiesEmotie('leeg',this)"><span class="rw-emotie-knop-icoon">😶</span><div class="rw-emotie-knop-naam">Leeg of verdoofd</div></div>
+        <div class="rw-emotie-knop" onclick="kiesEmotie('schuld',this)"><span class="rw-emotie-knop-icoon">😔</span><div class="rw-emotie-knop-naam">Schuld of spijt</div></div>
+        <div class="rw-emotie-knop" onclick="kiesEmotie('angst',this)"><span class="rw-emotie-knop-icoon">😰</span><div class="rw-emotie-knop-naam">Bang of onzeker</div></div>
+        <div class="rw-emotie-knop" onclick="kiesEmotie('eenzaam',this)"><span class="rw-emotie-knop-icoon">🫂</span><div class="rw-emotie-knop-naam">Eenzaam</div></div>
+        <div class="rw-emotie-knop" onclick="kiesEmotie('opluchting',this)"><span class="rw-emotie-knop-icoon">😮‍💨</span><div class="rw-emotie-knop-naam">Opgelucht</div></div>
+        <div class="rw-emotie-knop" onclick="kiesEmotie('beter',this)"><span class="rw-emotie-knop-icoon">🌱</span><div class="rw-emotie-knop-naam">Iets beter</div></div>
+      </div>
+      <div class="rw-emotie-resultaat" id="emotieResultaat"></div>
+    </div>
+
+    <!-- TAB FASEN -->
+    <div class="rw-tabinhoud" id="tab-fasen">
+      <div class="rw-fasen-nav">
+        <button class="rw-fase-btn actief" onclick="toonFase('ontkenning',this)">1. Ontkenning</button>
+        <button class="rw-fase-btn" onclick="toonFase('boosheid',this)">2. Boosheid</button>
+        <button class="rw-fase-btn" onclick="toonFase('onderhandelen',this)">3. Onderhandelen</button>
+        <button class="rw-fase-btn" onclick="toonFase('depressie',this)">4. Depressie</button>
+        <button class="rw-fase-btn" onclick="toonFase('aanvaarding',this)">5. Aanvaarding</button>
+      </div>
+      <div class="rw-fase-detail" id="faseDetail"></div>
+    </div>
+
+    <!-- TAB DAGBOEK -->
+    <div class="rw-tabinhoud" id="tab-dagboek">
+      <div class="rw-dagboek-intro">📝 Jouw persoonlijk rouwdagboek</div>
+      <div class="rw-dagboek-sub">Alles wordt alleen op jouw apparaat opgeslagen. Niemand anders kan het lezen.</div>
+      <div class="rw-dagboek-datum" id="dagboekDatum"></div>
+      <textarea class="rw-dagboek-textarea" id="dagboekInvoer" placeholder="Schrijf hier wat je voelt. Er is geen goed of fout. Laat de woorden komen."></textarea>
+      <div class="rw-dagboek-acties">
+        <button class="rw-btn rw-btn-p" onclick="slaEntryOp()">💾 Opslaan</button>
+        <button class="rw-btn rw-btn-s" onclick="downloadDagboek()">⬇️ Download</button>
+        <span class="rw-dagboek-melding" id="dagboekMelding">✓ Opgeslagen</span>
+      </div>
+      <div class="rw-prompts">
+        <div class="rw-prompt" onclick="zetPrompt('Vandaag mis ik je het meest omdat...')">💛 Vandaag mis ik je...</div>
+        <div class="rw-prompt" onclick="zetPrompt('Wat ik je nog had willen zeggen is...')">💬 Wat ik je wil zeggen...</div>
+        <div class="rw-prompt" onclick="zetPrompt('Een herinnering die ik nooit wil vergeten is...')">📸 Een herinnering...</div>
+        <div class="rw-prompt" onclick="zetPrompt('Wat ik nu nodig heb is...')">🌿 Wat ik nodig heb...</div>
+      </div>
+      <div class="rw-eerdere" id="rwEerdere" style="display:none;">
+        <div class="rw-eerdere-titel">Eerdere notities</div>
+        <div id="rwEntryLijst"></div>
+      </div>
+    </div>
+
+    <!-- TAB CHAT -->
+    <div class="rw-tabinhoud" id="tab-chat">
+      <div class="rw-chat-snel">
+        <button class="rw-chat-snel-knop" onclick="stuurSnel('Ik voel me zo verdrietig')">Ik ben verdrietig</button>
+        <button class="rw-chat-snel-knop" onclick="stuurSnel('Hoe lang duurt rouw?')">Hoe lang duurt rouw?</button>
+        <button class="rw-chat-snel-knop" onclick="stuurSnel('Ik voel me schuldig')">Ik voel schuld</button>
+        <button class="rw-chat-snel-knop" onclick="stuurSnel('Ik voel me zo alleen')">Ik voel me alleen</button>
+        <button class="rw-chat-snel-knop" onclick="stuurSnel('Wanneer moet ik hulp zoeken?')">Wanneer hulp zoeken?</button>
+      </div>
+      <div class="rw-chat-berichten" id="chatBerichten">
+        <div class="rw-chat-bericht ai">
+          <div class="rw-chat-avatar">💛</div>
+          <div class="rw-chat-bubbel">Hallo. Ik ben hier om naar je te luisteren. Hoe voel je je vandaag? Je kunt alles kwijt.</div>
+        </div>
+      </div>
+      <div class="rw-chat-invoer">
+        <input type="text" class="rw-chat-input" id="chatInput" placeholder="Schrijf wat je voelt of wil weten..." onkeydown="if(event.key==='Enter')verstuurChat()">
+        <button class="rw-chat-verzend" onclick="verstuurChat()">Stuur</button>
+      </div>
+    </div>
+
+    <!-- TAB ZELFZORG -->
+    <div class="rw-tabinhoud" id="tab-zelfzorg">
+      <div class="rw-zelfzorg-intro">Kleine stappen voor zware dagen</div>
+      <div class="rw-zelfzorg-sub">Vink af wat je vandaag hebt gedaan. Elke kleine stap telt.</div>
+      <div class="rw-zelfzorg-voortgang">
+        <div style="font-size:0.76rem;font-weight:700;color:#4a1942;">Vandaag: <span id="zelfzorgNr">0</span>/12</div>
+        <div class="rw-zelfzorg-balk-bg"><div class="rw-zelfzorg-balk" id="zelfzorgBalk" style="width:0%"></div></div>
+      </div>
+      <div class="rw-zelfzorg-grid">
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z1')" data-id="z1"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">🍞</span><div><div class="rw-zelfzorg-naam">Iets gegeten</div><div class="rw-zelfzorg-sub2">Ook als je geen honger had</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z2')" data-id="z2"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">💧</span><div><div class="rw-zelfzorg-naam">Gedronken</div><div class="rw-zelfzorg-sub2">Water of thee</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z3')" data-id="z3"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">🛏️</span><div><div class="rw-zelfzorg-naam">Geslapen of gerust</div><div class="rw-zelfzorg-sub2">Even je ogen dichtgedaan</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z4')" data-id="z4"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">🚶</span><div><div class="rw-zelfzorg-naam">Bewogen</div><div class="rw-zelfzorg-sub2">Even naar buiten gegaan</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z5')" data-id="z5"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">💬</span><div><div class="rw-zelfzorg-naam">Met iemand gepraat</div><div class="rw-zelfzorg-sub2">Contact gehad</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z6')" data-id="z6"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">😢</span><div><div class="rw-zelfzorg-naam">Gehuild</div><div class="rw-zelfzorg-sub2">Tranen laten gaan</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z7')" data-id="z7"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">📸</span><div><div class="rw-zelfzorg-naam">Herinnerd</div><div class="rw-zelfzorg-sub2">Aan diegene gedacht</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z8')" data-id="z8"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">🛁</span><div><div class="rw-zelfzorg-naam">Jezelf verzorgd</div><div class="rw-zelfzorg-sub2">Gedoucht, verschoond</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z9')" data-id="z9"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">😮‍💨</span><div><div class="rw-zelfzorg-naam">Diep ademgehaald</div><div class="rw-zelfzorg-sub2">Even bewust geademd</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z10')" data-id="z10"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">🎵</span><div><div class="rw-zelfzorg-naam">Muziek geluisterd</div><div class="rw-zelfzorg-sub2">Muziek die troost geeft</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z11')" data-id="z11"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">📝</span><div><div class="rw-zelfzorg-naam">Geschreven</div><div class="rw-zelfzorg-sub2">Gevoelens op papier</div></div></div>
+        <div class="rw-zelfzorg-item" onclick="toggleZelfzorg(this,'z12')" data-id="z12"><div class="rw-zelfzorg-check"></div><span style="font-size:1.1rem;">🕯️</span><div><div class="rw-zelfzorg-naam">Ritueel uitgevoerd</div><div class="rw-zelfzorg-sub2">Kaarsje aangestoken</div></div></div>
+      </div>
+    </div>
+
+    <!-- TAB COACHES -->
+    <div class="rw-tabinhoud" id="tab-coaches">
+      <div class="rw-coaches-intro">Wanneer vraag je hulp, en bij wie?</div>
+      <div class="rw-coaches-sub">Rouw en verlies vragen soms meer dan je omgeving kan bieden. Hulp zoeken is een daad van kracht.</div>
+      <div class="rw-coaches-grid">
+        <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" class="rw-coach-kaart" target="_blank">
+          <span class="rw-coach-icoon">🌸</span>
+          <div class="rw-coach-type">Meest gekozen</div>
+          <div class="rw-coach-naam">Rouwbegeleider</div>
+          <div class="rw-coach-tekst">Begeleiding bij verlies op jouw eigen manier en in jouw tempo.</div>
+        </a>
+        <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" class="rw-coach-kaart" target="_blank">
+          <span class="rw-coach-icoon">🧠</span>
+          <div class="rw-coach-type">Bij gecompliceerde rouw</div>
+          <div class="rw-coach-naam">Psycholoog of therapeut</div>
+          <div class="rw-coach-tekst">Bij aanhoudende depressie of traumatisch verlies.</div>
+        </a>
+        <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" class="rw-coach-kaart" target="_blank">
+          <span class="rw-coach-icoon">👥</span>
+          <div class="rw-coach-type">Samen verwerken</div>
+          <div class="rw-coach-naam">Rouwgroep</div>
+          <div class="rw-coach-tekst">Samen rouwen met mensen die begrijpen wat je doormaakt.</div>
+        </a>
+        <a href="tel:09000767" class="rw-coach-kaart">
+          <span class="rw-coach-icoon">📞</span>
+          <div class="rw-coach-type">Gratis, 24/7</div>
+          <div class="rw-coach-naam">Luisterlijn</div>
+          <div class="rw-coach-tekst">Anoniem, gratis, altijd beschikbaar. Bel 0900-0767.</div>
+        </a>
+      </div>
+      <div class="rw-cta-banner">
+        <div class="rw-cta-banner-tekst">
+          <h3>Vind een rouwbegeleider bij jou in de buurt</h3>
+          <p>Gecertificeerde professionals in jouw regio</p>
+        </div>
+        <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" class="rw-cta-banner-knop" target="_blank">Zoek nu →</a>
+      </div>
+    </div>
+
+    <!-- TAB FAQ -->
+    <div class="rw-tabinhoud" id="tab-faq">
+      <div id="faqLijst"></div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="rw-footer">
+    <span class="rw-footer-tekst">Uitvaart-Platform.nl</span>
+    <a href="https://uitvaart-platform.nl/rouwenverlies" class="rw-footer-link">Naar de volledige pagina →</a>
+  </div>
+
+</div>
+
+<script>
+// ── TABS ──
+function toonTab(id, knop) {
+  document.querySelectorAll('.rw-tabinhoud').forEach(function(el) { el.classList.remove('actief'); });
+  document.querySelectorAll('.rw-tab').forEach(function(el) { el.classList.remove('actief'); });
+  document.getElementById('tab-' + id).classList.add('actief');
+  if (knop) knop.classList.add('actief');
+  document.getElementById('rwBody').scrollTop = 0;
+}
+
+// ── EMOTIE ──
+var emotieData = {
+  verdriet: { titel: 'Verdriet is de diepste uitdrukking van liefde', tekst: 'Verdriet is de meest herkenbare kant van rouw. Je mist iemand of iets met heel je wezen. Dit gevoel is pijnlijk, maar het is ook een bewijs van hoe echt de verbinding was.', tip: 'Laat het verdriet toe. Huil als je wilt. Als het overweldigend is, zoek dan een rouwbegeleider op via uitvaart-platform.nl.' },
+  boos: { titel: 'Boosheid is een normale kant van rouw', tekst: 'Boos zijn op het lot, op artsen, op jezelf of zelfs op de overledene is volkomen normaal. Boosheid is energie die je door het verdriet heen duwt.', tip: 'Beweeg als je boos bent. Schrijf het op. Boosheid die geen uitweg vindt kan omslaan in depressie.' },
+  leeg: { titel: 'Verdoofd voelen is ook rouwen', tekst: 'Het gevoel dat de wereld onwerkelijk is, dat je niets voelt. Dit is een beschermingsmechanisme van je geest. Je bent nog niet klaar voor de volle impact van het verlies.', tip: 'Forceer niets. De gevoelens komen vanzelf als je er klaar voor bent. Zorg voor basisbehoeften: eten, slapen, bewegen.' },
+  schuld: { titel: 'Schuld en spijt zijn bijna universeel bij rouw', tekst: '"Had ik maar..." Bijna iedereen die rouwt ervaart schuldgevoelens. Dat je dit voelt, betekent dat je om de ander gaf. Maar schuldgevoel is zelden terecht.', tip: 'Schrijf op wat je je schuldig over voelt. Een rouwbegeleider kan je helpen om dit gevoel te doorbreken.' },
+  angst: { titel: 'Angst en onzekerheid horen bij verlies', tekst: 'Verlies gooit je wereld overhoop. Angst voor de toekomst, voor meer verlies, voor alleen zijn. Dit zijn normale reacties op een diepingrijpende verandering.', tip: 'Probeer je te focussen op vandaag. Kleine routines helpen. Bij overweldigende angst, zoek professionele hulp.' },
+  eenzaam: { titel: 'Eenzaamheid in rouw is bijna universeel', tekst: 'Rouw kan enorm eenzaam voelen, ook als je omgeven bent door mensen. Niemand begrijpt precies wat jij verloren hebt.', tip: 'Zoek contact met mensen die ook rouwen. Een rouwgroep kan heel waardevol zijn.' },
+  opluchting: { titel: 'Opluchting en rouw kunnen naast elkaar bestaan', tekst: 'Als iemand lang ziek was of veel geleden heeft, is opluchting een heel normaal gevoel naast het verdriet. Je hoeft je hier niet voor te schamen.', tip: 'Opluchting en rouw zijn geen tegenstelling. Je mag beide voelen.' },
+  beter: { titel: 'Iets beter voelen is een teken van veerkracht', tekst: 'Soms heb je een dag waarop de zon toch een beetje schijnt. Dat is geen verraad aan de overledene. Rouw beweegt in golven.', tip: 'Geniet van de lichtere momenten zonder schuldgevoel. Vreugde en rouw kunnen naast elkaar bestaan.' }
+};
+
+function kiesEmotie(emotie, el) {
+  document.querySelectorAll('.rw-emotie-knop').forEach(function(k) { k.classList.remove('geselecteerd'); });
+  el.classList.add('geselecteerd');
+  var d = emotieData[emotie];
+  var res = document.getElementById('emotieResultaat');
+  res.innerHTML = '<div class="rw-emotie-res-titel">' + d.titel + '</div><div class="rw-emotie-res-tekst">' + d.tekst + '</div><div class="rw-emotie-res-tip">💡 ' + d.tip + '</div>';
+  res.classList.add('zichtbaar');
+}
+
+// ── FASEN ──
+var fasenData = {
+  ontkenning: { nr:'1', naam:'Ontkenning', sub:'Het beschermingsschild van je geest', tekst:'Het kan niet waar zijn. Een beschermingsmechanisme. De wereld wordt tijdelijk verdoofd zodat je de klap kunt opvangen. Je kunt je verdoofd, afwezig of in shock voelen.', herken:['Verdoofd of afwezig gevoel','Ongeloof en shock','Mechanisch doorfunctioneren','Gevoel dat het niet echt is'], troost:'<strong>Dit is normaal.</strong> Ontkenning is geen zwakte. Je geest beschermt je.' },
+  boosheid: { nr:'2', naam:'Boosheid', sub:'De energie die door het verdriet duwt', tekst:'Waarom? Waarom ik, waarom nu? Boosheid op het lot, op artsen, op jezelf of zelfs op de overledene. Deze emotie is normaal en noodzakelijk.', herken:['Frustratie en woede','Gevoel van onrecht','Boos op anderen of jezelf','Prikkelbaarheid'], troost:'<strong>Laat de boosheid er zijn</strong> zonder jezelf of anderen te beschadigen.' },
+  onderhandelen: { nr:'3', naam:'Onderhandelen', sub:'De zoektocht naar controle', tekst:'Als ik maar... had ik maar... Gedachten over wat er anders had kunnen gaan. Schuld en wat-als vragen. De geest probeert de pijn te begrijpen.', herken:['Schuldgevoelens','Wat-als gedachten','Spijt over het verleden','Zoeken naar oorzaken'], troost:'<strong>Je deed wat je kon</strong> met de kennis die je had.' },
+  depressie: { nr:'4', naam:'Depressie', sub:'Het hart dat rouwt', tekst:'Het verdriet daalt neer. Diepe triestheid, terugtrekking. Dit is het hart dat rouwt. De volle omvang van het verlies dringt tot je door.', herken:['Diepe triestheid','Terugtrekking','Gebrek aan energie','Slaapproblemen'], troost:'<strong>Dit is niet hetzelfde als een depressie.</strong> Maar bij aanhoudende klachten, zoek hulp.' },
+  aanvaarding: { nr:'5', naam:'Aanvaarding', sub:'Leren leven met de nieuwe werkelijkheid', tekst:'Aanvaarding betekent niet dat het goed is. Het betekent dat je leert leven met de nieuwe werkelijkheid. Het gemis blijft, maar je vindt weer grond onder je voeten.', herken:['Nieuwe balans vinden','Kunnen terugkijken met liefde','Openstaan voor de toekomst','Herinneringen koesteren'], troost:'<strong>Aanvaarding is niet de finish.</strong> De liefde voor de overledene blijft altijd.' }
+};
+
+function toonFase(fase, btn) {
+  document.querySelectorAll('.rw-fase-btn').forEach(function(b) { b.classList.remove('actief'); });
+  if (btn) btn.classList.add('actief');
+  var d = fasenData[fase];
+  document.getElementById('faseDetail').innerHTML =
+    '<div class="rw-fase-detail-header"><div class="rw-fase-nr">' + d.nr + '</div><div><div class="rw-fase-naam">' + d.naam + '</div><div class="rw-fase-sub">' + d.sub + '</div></div></div>' +
+    '<div class="rw-fase-body"><div class="rw-fase-tekst">' + d.tekst + '</div><div><div class="rw-fase-herken-titel">Je herkent dit aan</div>' +
+    d.herken.map(function(h) { return '<div class="rw-fase-herken-item"><div class="rw-fase-dot"></div>' + h + '</div>'; }).join('') +
+    '</div></div><div class="rw-fase-troost">' + d.troost + '</div>';
+}
+toonFase('ontkenning', null);
+
+// ── DAGBOEK ──
+var DAGBOEK_KEY = 'rouw_dagboek_v1';
+document.getElementById('dagboekDatum').textContent = new Date().toLocaleDateString('nl-NL', { weekday:'long', day:'numeric', month:'long' });
+
+function slaEntryOp() {
+  var tekst = document.getElementById('dagboekInvoer').value.trim();
+  if (!tekst) return;
+  var entries = JSON.parse(localStorage.getItem(DAGBOEK_KEY) || '[]');
+  entries.unshift({ datum: new Date().toLocaleDateString('nl-NL', { day:'numeric', month:'long', year:'numeric' }), tekst: tekst });
+  localStorage.setItem(DAGBOEK_KEY, JSON.stringify(entries.slice(0, 30)));
+  document.getElementById('dagboekInvoer').value = '';
+  var m = document.getElementById('dagboekMelding'); m.classList.add('zichtbaar');
+  setTimeout(function() { m.classList.remove('zichtbaar'); }, 2000);
+  toonEntries();
+}
+
+function toonEntries() {
+  var entries = JSON.parse(localStorage.getItem(DAGBOEK_KEY) || '[]');
+  var wrapper = document.getElementById('rwEerdere');
+  var lijst = document.getElementById('rwEntryLijst');
+  if (!entries.length) { wrapper.style.display = 'none'; return; }
+  wrapper.style.display = 'block';
+  lijst.innerHTML = entries.map(function(e, i) {
+    return '<div class="rw-entry"><div class="rw-entry-datum">' + e.datum + '</div><div class="rw-entry-tekst">' + e.tekst.replace(/\n/g,'<br>') + '</div><button class="rw-entry-del" onclick="verwijderEntry(' + i + ')">✕</button></div>';
+  }).join('');
+}
+
+function verwijderEntry(i) {
+  var entries = JSON.parse(localStorage.getItem(DAGBOEK_KEY) || '[]');
+  entries.splice(i, 1);
+  localStorage.setItem(DAGBOEK_KEY, JSON.stringify(entries));
+  toonEntries();
+}
+
+function zetPrompt(tekst) {
+  document.getElementById('dagboekInvoer').value = tekst + ' ';
+  document.getElementById('dagboekInvoer').focus();
+  toonTab('dagboek', document.querySelectorAll('.rw-tab')[2]);
+}
+
+function downloadDagboek() {
+  var entries = JSON.parse(localStorage.getItem(DAGBOEK_KEY) || '[]');
+  var inhoud = 'Mijn Rouwdagboek\n' + '='.repeat(30) + '\n\n';
+  entries.forEach(function(e) { inhoud += e.datum + '\n' + e.tekst + '\n\n' + '-'.repeat(20) + '\n\n'; });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([inhoud], {type:'text/plain'}));
+  a.download = 'rouwdagboek.txt'; a.click();
+}
+
+// ── CHAT ──
+var chatAntwoorden = {
+  verdriet: ['Verdriet is de diepste uitdrukking van liefde. Je mist iemand met heel je wezen. Dat mag er zijn. Wil je me vertellen wie je mist?'],
+  boos: ['Boosheid is een normale kant van rouw. Je mag boos zijn, op het lot, op jezelf, op de situatie. Wat maakt je het meest boos?'],
+  schuld: ['Schuldgevoelens horen bij rouw voor bijna iedereen. Maar je deed wat je kon, op het moment dat je het deed. Wat maakt dat je je schuldig voelt?'],
+  alleen: ['Rouw kan enorm eenzaam zijn. Je bent hier niet alleen. Een rouwgroep kan helpen. Zal ik je daarnaar verwijzen?'],
+  hulp: ['Het is een groot teken van kracht om hulp te vragen. Vind een rouwbegeleider op <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" target="_blank">uitvaart-platform.nl</a> of bel de Luisterlijn: <a href="tel:09000767">0900-0767</a>.'],
+  lang: ['Rouw heeft geen vaste tijdsduur. De acute pijn wordt voor de meesten na enkele maanden iets draaglijker, maar rouw kan jaren duren. Dat is volkomen normaal.'],
+  default: ['Dat klinkt heel zwaar. Dank je dat je dit deelt. Wil je me meer vertellen over wat je doormaakt?', 'Ik hoor je. Verdriet heeft de ruimte nodig om er te zijn. Hoe lang rouw je al?', 'Je bent niet alleen hierin. Wat heb je op dit moment het meest nodig?']
+};
+
+function verstuurChat() {
+  var input = document.getElementById('chatInput');
+  var tekst = input.value.trim(); if (!tekst) return;
+  voegBerichtToe(tekst, 'gebruiker'); input.value = '';
+  setTimeout(function() {
+    var antwoord = bepaalAntwoord(tekst.toLowerCase());
+    voegBerichtToe(antwoord, 'ai');
+  }, 1000 + Math.random() * 600);
+}
+
+function stuurSnel(tekst) { document.getElementById('chatInput').value = tekst; verstuurChat(); toonTab('chat', document.querySelectorAll('.rw-tab')[3]); }
+
+function voegBerichtToe(tekst, wie) {
+  var berichten = document.getElementById('chatBerichten');
+  var div = document.createElement('div'); div.className = 'rw-chat-bericht ' + wie;
+  div.innerHTML = '<div class="rw-chat-avatar">' + (wie === 'ai' ? '💛' : '👤') + '</div><div class="rw-chat-bubbel">' + tekst + '</div>';
+  berichten.appendChild(div); berichten.scrollTop = berichten.scrollHeight;
+}
+
+function bepaalAntwoord(t) {
+  if (t.includes('verdriet') || t.includes('huil') || t.includes('mis')) return chatAntwoorden.verdriet[0];
+  if (t.includes('boos') || t.includes('kwaad') || t.includes('woede')) return chatAntwoorden.boos[0];
+  if (t.includes('schuld') || t.includes('spijt')) return chatAntwoorden.schuld[0];
+  if (t.includes('alleen') || t.includes('eenzaam')) return chatAntwoorden.alleen[0];
+  if (t.includes('hulp') || t.includes('begeleider')) return chatAntwoorden.hulp[0];
+  if (t.includes('lang') || t.includes('duurt') || t.includes('wanneer')) return chatAntwoorden.lang[0];
+  return chatAntwoorden.default[Math.floor(Math.random() * chatAntwoorden.default.length)];
+}
+
+// ── ZELFZORG ──
+var ZELFZORG_KEY = 'rouw_zelfzorg_' + new Date().toDateString();
+function laadZelfzorg() {
+  try {
+    var gedaan = JSON.parse(localStorage.getItem(ZELFZORG_KEY) || '[]');
+    gedaan.forEach(function(id) {
+      var el = document.querySelector('[data-id="' + id + '"]');
+      if (el) { el.classList.add('gedaan'); el.querySelector('.rw-zelfzorg-check').textContent = '✓'; }
+    });
+  } catch(e) {}
+  updateZelfzorg();
+}
+
+function toggleZelfzorg(el, id) {
+  el.classList.toggle('gedaan');
+  el.querySelector('.rw-zelfzorg-check').textContent = el.classList.contains('gedaan') ? '✓' : '';
+  try {
+    var gedaan = JSON.parse(localStorage.getItem(ZELFZORG_KEY) || '[]');
+    if (el.classList.contains('gedaan')) { if (!gedaan.includes(id)) gedaan.push(id); }
+    else { gedaan = gedaan.filter(function(d) { return d !== id; }); }
+    localStorage.setItem(ZELFZORG_KEY, JSON.stringify(gedaan));
+  } catch(e) {}
+  updateZelfzorg();
+}
+
+function updateZelfzorg() {
+  var gedaan = document.querySelectorAll('.rw-zelfzorg-item.gedaan').length;
+  document.getElementById('zelfzorgNr').textContent = gedaan;
+  document.getElementById('zelfzorgBalk').style.width = Math.round((gedaan/12)*100) + '%';
+}
+
+// ── FAQ ──
+var faqData = [
+  { v: 'Hoe lang duurt rouw?', a: 'Er is geen vaste tijdsduur. De eerste acute pijn wordt voor velen na enkele maanden iets draaglijker, maar rouw kan jaren duren. Dat is volkomen normaal.' },
+  { v: 'Is het normaal om ook opluchting te voelen?', a: 'Ja, zeker als iemand lang ziek was. Opluchting en rouw kunnen prima naast elkaar bestaan. Je hoeft je daar niet voor te schamen.' },
+  { v: 'Wanneer moet ik professionele hulp zoeken?', a: 'Zoek hulp als je meer dan twee maanden nauwelijks kunt functioneren, als je gedachten hebt aan zelfbeschadiging, of als je het gevoel hebt vast te zitten. <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" target="_blank">Vind een rouwbegeleider</a>.' },
+  { v: 'Mag ik lachen als ik rouw?', a: 'Ja. Lachen, genieten van een mooie dag, plezier maken is geen verraad. Vreugde en verdriet kunnen naast elkaar bestaan.' },
+  { v: 'Hoe help ik iemand die rouwt?', a: 'Wees aanwezig. Zeg niet "ik begrijp hoe je je voelt". Zeg liever: "Ik denk aan je." Doe concrete dingen: koken, rijden, aanwezig zijn.' },
+  { v: 'Rouw ik op de goede manier?', a: 'Er is geen goede of verkeerde manier. Huilen, niet huilen, boosheid, stilte. Jouw rouw is van jou. Er bestaat geen handleiding.' }
+];
+
+function laadFaq() {
+  document.getElementById('faqLijst').innerHTML = faqData.map(function(item, i) {
+    return '<div class="rw-faq-item"><button class="rw-faq-vraag" onclick="toggleFaq(this,' + i + ')">' + item.v + '<span class="rw-faq-icoon">+</span></button><div class="rw-faq-antwoord" id="faq' + i + '">' + item.a + '</div></div>';
+  }).join('');
+}
+
+function toggleFaq(btn, i) {
+  var a = document.getElementById('faq' + i); var isOpen = a.classList.contains('open');
+  document.querySelectorAll('.rw-faq-antwoord').forEach(function(x) { x.classList.remove('open'); });
+  document.querySelectorAll('.rw-faq-vraag').forEach(function(x) { x.classList.remove('open'); });
+  if (!isOpen) { a.classList.add('open'); btn.classList.add('open'); }
+}
+
+// ── INIT ──
+laadZelfzorg();
+toonEntries();
+laadFaq();
+</script>
+</body>
+</html>
