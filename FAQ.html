@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veelgestelde vragen over uitvaart en rouw — Uitvaart-Platform.nl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; }
+
+/* ── ANIMATIES ── */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes shimmer { from { background-position:-200% center; } to { background-position:200% center; } }
+@keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.05); } }
+
+/* ── HERO ── */
+.faq-hero { background: linear-gradient(135deg, #2a0d24 0%, #4a1942 60%, #6b3060 100%); padding: 80px 24px 100px; text-align: center; position: relative; overflow: hidden; }
+.faq-hero::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 70% 60% at 80% 10%, rgba(232,131,74,0.18) 0%, transparent 55%), radial-gradient(ellipse 50% 60% at 10% 80%, rgba(58,18,51,0.5) 0%, transparent 55%); pointer-events:none; }
+.faq-hero-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 2; animation: fadeInUp 0.7s ease; }
+.faq-hero-label { display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:#e8834a; margin-bottom:16px; background:rgba(232,131,74,0.12); border:1px solid rgba(232,131,74,0.3); border-radius:20px; padding:5px 16px; }
+.faq-hero h1 { font-size:clamp(1.9rem,4.5vw,3rem); font-weight:900; color:#fff; line-height:1.15; margin-bottom:16px; letter-spacing:-0.02em; }
+.faq-hero h1 em { font-style:italic; font-weight:300; color:rgba(255,255,255,0.55); display:block; font-size:0.85em; }
+.faq-hero-sub { font-size:0.92rem; color:rgba(255,255,255,0.65); max-width:580px; margin:0 auto 40px; line-height:1.85; font-weight:300; }
+
+/* ZOEKBALK */
+.faq-zoek-wrap { position:relative; max-width:600px; margin:0 auto 32px; }
+.faq-zoek-input { width:100%; padding:18px 56px 18px 24px; border:none; border-radius:14px; font-family:'Poppins',sans-serif; font-size:0.92rem; color:#1e1520; background:#fff; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
+.faq-zoek-input:focus { outline:none; box-shadow:0 8px 32px rgba(232,131,74,0.3); }
+.faq-zoek-input::placeholder { color:#b0a8b0; }
+.faq-zoek-icoon { position:absolute; right:18px; top:50%; transform:translateY(-50%); font-size:1.2rem; pointer-events:none; }
+.faq-zoek-resultaat { font-size:0.76rem; color:rgba(255,255,255,0.5); margin-top:10px; min-height:20px; }
+
+/* STATS */
+.faq-stats { display:flex; justify-content:center; gap:48px; flex-wrap:wrap; }
+.faq-stat { text-align:center; }
+.faq-stat-nr { font-size:2.2rem; font-weight:900; color:#e8834a; line-height:1; letter-spacing:-0.02em; }
+.faq-stat-label { font-size:0.7rem; color:rgba(255,255,255,0.45); font-weight:300; margin-top:3px; }
+
+/* ── CATEGORIE NAV ── */
+.faq-nav { background:#fff; border-bottom:1px solid #e2d9e0; padding:16px 24px; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+.faq-nav-inner { max-width:1000px; margin:0 auto; }
+.faq-nav-label { font-size:0.62rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:#6b6570; margin-bottom:10px; display:block; }
+.faq-nav-lijst { display:flex; flex-wrap:wrap; gap:7px; list-style:none; }
+.faq-nav-item { display:inline-flex; align-items:center; gap:5px; background:#faf7f2; border:1.5px solid #e2d9e0; border-radius:20px; padding:6px 14px; font-size:0.76rem; font-weight:600; color:#4a1942; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+.faq-nav-item:hover { background:#4a1942; color:#fff; border-color:#4a1942; }
+.faq-nav-item.actief { background:#4a1942; color:#fff; border-color:#4a1942; }
+.faq-nav-item-teller { background:rgba(255,255,255,0.2); border-radius:10px; padding:1px 7px; font-size:0.62rem; }
+.faq-nav-item:not(.actief) .faq-nav-item-teller { background:rgba(74,25,66,0.1); color:#4a1942; }
+
+/* ── FILTER BALK ── */
+.faq-filter { background:#faf7f2; border-bottom:1px solid #e2d9e0; padding:12px 24px; }
+.faq-filter-inner { max-width:1000px; margin:0 auto; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.faq-filter-label { font-size:0.74rem; font-weight:700; color:#4a1942; flex-shrink:0; }
+.faq-filter-knoppen { display:flex; gap:6px; flex-wrap:wrap; }
+.faq-filter-knop { padding:5px 13px; border:1.5px solid #e2d9e0; border-radius:16px; font-family:'Poppins',sans-serif; font-size:0.72rem; font-weight:600; color:#6b6570; background:#fff; cursor:pointer; transition:all 0.18s; }
+.faq-filter-knop:hover { border-color:#4a1942; color:#4a1942; }
+.faq-filter-knop.actief { background:#e8834a; border-color:#e8834a; color:#fff; }
+.faq-gevonden { margin-left:auto; font-size:0.72rem; color:#6b6570; font-weight:300; }
+
+/* ── MAIN LAYOUT ── */
+.faq-main { max-width:1000px; margin:0 auto; padding:48px 24px; display:grid; grid-template-columns:1fr 280px; gap:32px; align-items:start; }
+
+/* ── CATEGORIE BLOKKEN ── */
+.faq-categorie { margin-bottom:48px; scroll-margin-top:100px; }
+.faq-cat-header { display:flex; align-items:center; gap:14px; margin-bottom:20px; padding-bottom:14px; border-bottom:2px solid #e2d9e0; }
+.faq-cat-icoon { width:44px; height:44px; background:#4a1942; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+.faq-cat-naam { font-size:1.05rem; font-weight:800; color:#4a1942; }
+.faq-cat-aantal { font-size:0.72rem; color:#6b6570; font-weight:300; margin-top:2px; }
+.faq-cat-voortgang { margin-left:auto; display:flex; align-items:center; gap:8px; }
+.faq-cat-voortgang-balk-bg { width:80px; height:5px; background:#f0ebef; border-radius:3px; overflow:hidden; }
+.faq-cat-voortgang-balk { height:100%; background:linear-gradient(90deg, #4a1942, #e8834a); border-radius:3px; transition:width 0.5s ease; }
+.faq-cat-voortgang-tekst { font-size:0.62rem; color:#6b6570; font-weight:300; white-space:nowrap; }
+
+/* ── FAQ ITEMS ── */
+.faq-item { background:#fff; border:1px solid #e2d9e0; border-radius:12px; margin-bottom:8px; overflow:hidden; transition:all 0.2s; }
+.faq-item:hover { box-shadow:0 4px 20px rgba(74,25,66,0.08); transform:translateY(-1px); }
+.faq-item.verborgen { display:none; }
+.faq-item.gelezen { border-left:3px solid #2d7a4f; }
+.faq-vraag { width:100%; padding:17px 20px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:14px; background:none; border:none; font-family:'Poppins',sans-serif; font-size:0.88rem; font-weight:700; color:#1e1520; text-align:left; transition:all 0.18s; }
+.faq-vraag:hover { color:#4a1942; }
+.faq-vraag.open { color:#4a1942; }
+.faq-vraag-rechts { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.faq-tag { font-size:0.58rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:2px 8px; border-radius:8px; }
+.faq-tag.praktisch { background:rgba(74,25,66,0.08); color:#4a1942; }
+.faq-tag.financieel { background:rgba(46,122,79,0.1); color:#2d7a4f; }
+.faq-tag.rouw { background:rgba(232,131,74,0.1); color:#c8622a; }
+.faq-tag.wettelijk { background:rgba(58,18,51,0.08); color:#3a1233; }
+.faq-tag.trending { background:rgba(232,131,74,0.12); color:#e8834a; }
+.faq-plus { font-size:1.1rem; color:#e8834a; font-weight:300; transition:transform 0.25s; line-height:1; }
+.faq-vraag.open .faq-plus { transform:rotate(45deg); }
+.faq-antwoord { display:none; padding:0 20px 18px; font-size:0.84rem; color:#444; font-weight:300; line-height:1.85; border-top:1px solid #f0ebef; }
+.faq-antwoord.open { display:block; animation:fadeIn 0.25s ease; }
+.faq-antwoord p { margin-bottom:10px; }
+.faq-antwoord p:last-child { margin-bottom:0; }
+.faq-antwoord a { color:#4a1942; font-weight:600; }
+.faq-antwoord a:hover { color:#e8834a; }
+.faq-antwoord strong { color:#1e1520; font-weight:700; }
+.faq-antwoord .faq-tip { background:rgba(232,131,74,0.08); border-left:3px solid #e8834a; padding:10px 14px; border-radius:0 8px 8px 0; margin-top:10px; font-size:0.8rem; }
+.faq-antwoord .faq-let-op { background:rgba(74,25,66,0.06); border-left:3px solid #4a1942; padding:10px 14px; border-radius:0 8px 8px 0; margin-top:10px; font-size:0.8rem; }
+
+/* ── ZIJPANEEL ── */
+.faq-zij { position:sticky; top:120px; display:flex; flex-direction:column; gap:16px; }
+.faq-zij-kaart { background:#fff; border:1px solid #e2d9e0; border-radius:14px; overflow:hidden; }
+.faq-zij-kaart-header { padding:14px 18px; background:#4a1942; }
+.faq-zij-kaart-titel { font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-bottom:3px; }
+.faq-zij-kaart-naam { font-size:0.9rem; font-weight:800; color:#fff; }
+.faq-zij-body { padding:14px 18px; }
+.faq-vooruitgang { margin-bottom:14px; }
+.faq-vooruitgang-label { font-size:0.72rem; color:#6b6570; font-weight:300; margin-bottom:5px; display:flex; justify-content:space-between; }
+.faq-vooruitgang-balk-bg { height:7px; background:#f0ebef; border-radius:4px; overflow:hidden; }
+.faq-vooruitgang-balk { height:100%; background:linear-gradient(90deg, #4a1942, #e8834a); border-radius:4px; transition:width 0.5s ease; }
+.faq-populair-item { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid #f0ebef; cursor:pointer; transition:all 0.18s; }
+.faq-populair-item:last-child { border-bottom:none; }
+.faq-populair-item:hover { color:#4a1942; }
+.faq-populair-nr { font-size:0.7rem; font-weight:800; color:#e8834a; flex-shrink:0; margin-top:2px; min-width:18px; }
+.faq-populair-tekst { font-size:0.76rem; color:#4a1942; font-weight:500; line-height:1.4; }
+.faq-contact-knop { display:block; background:#4a1942; color:#fff; border-radius:9px; padding:11px 16px; text-align:center; text-decoration:none; font-size:0.8rem; font-weight:700; margin-bottom:8px; transition:background 0.2s; }
+.faq-contact-knop:hover { background:#3a1233; }
+.faq-contact-knop.oranje { background:#e8834a; }
+.faq-contact-knop.oranje:hover { background:#c8622a; }
+.faq-contact-info { font-size:0.72rem; color:#6b6570; font-weight:300; line-height:1.7; }
+.faq-contact-info a { color:#4a1942; font-weight:600; }
+
+/* ── PRODUCTEN ── */
+.faq-product { border:2px solid #e2d9e0; border-radius:14px; overflow:hidden; margin-bottom:8px; }
+.faq-product-header { padding:22px 24px; display:flex; align-items:center; gap:16px; }
+.faq-product-header.paars { background:#4a1942; }
+.faq-product-header.oranje { background:linear-gradient(135deg, #c8622a, #e8834a); }
+.faq-product-badge { font-size:0.6rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:14px; background:rgba(255,255,255,0.15); color:#fff; display:inline-block; margin-bottom:5px; }
+.faq-product-titel { font-size:clamp(1.1rem,2vw,1.4rem); font-weight:800; color:#fff; line-height:1.2; margin-bottom:5px; }
+.faq-product-sub { font-size:0.8rem; color:rgba(255,255,255,0.7); font-weight:300; line-height:1.6; max-width:480px; }
+.faq-product-icoon { font-size:2.5rem; flex-shrink:0; }
+.faq-product-body { background:#fff; padding:20px 24px; }
+.faq-product-link { display:inline-block; margin-top:16px; padding:11px 22px; border-radius:8px; font-weight:700; font-size:0.82rem; text-decoration:none; transition:all 0.2s; }
+.faq-product-link.paars { background:#4a1942; color:#fff; }
+.faq-product-link.paars:hover { background:#3a1233; }
+.faq-product-link.oranje { background:#e8834a; color:#fff; }
+.faq-product-link.oranje:hover { background:#c8622a; }
+
+/* ── LEEG STAAT ── */
+.faq-leeg { text-align:center; padding:60px 24px; }
+.faq-leeg-icoon { font-size:3rem; margin-bottom:14px; }
+.faq-leeg-titel { font-size:1rem; font-weight:700; color:#4a1942; margin-bottom:8px; }
+.faq-leeg-sub { font-size:0.84rem; color:#6b6570; font-weight:300; line-height:1.7; }
+
+/* ── HIGHLIGHT ── */
+.faq-highlight { background:#4a1942; border-radius:14px; padding:28px 32px; margin:32px 0; position:relative; overflow:hidden; }
+.faq-highlight::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 70% at 90% 10%, rgba(232,131,74,0.12) 0%, transparent 60%); pointer-events:none; }
+.faq-highlight p { color:rgba(255,255,255,0.82); font-size:0.88rem; font-weight:300; line-height:1.85; position:relative; }
+.faq-highlight strong { color:#fff; font-weight:700; }
+.faq-highlight a { color:#e8834a; font-weight:600; }
+
+/* ── CTA BOTTOM ── */
+.faq-cta { background:linear-gradient(135deg, #2a0d24, #4a1942); border-radius:16px; padding:56px 48px; text-align:center; position:relative; overflow:hidden; margin:0 24px 48px; }
+.faq-cta::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 70% at 80% 20%, rgba(232,131,74,0.12) 0%, transparent 60%); pointer-events:none; }
+.faq-cta h3 { font-size:clamp(1.3rem,3vw,1.9rem); font-weight:900; color:#fff; margin-bottom:10px; position:relative; letter-spacing:-0.02em; }
+.faq-cta p { color:rgba(255,255,255,0.62); font-size:0.88rem; font-weight:300; margin-bottom:28px; line-height:1.8; max-width:500px; margin-left:auto; margin-right:auto; position:relative; }
+.faq-cta-knoppen { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; position:relative; }
+.faq-cta-knop-o { display:inline-block; background:#e8834a; color:#fff; padding:14px 30px; border-radius:10px; text-decoration:none; font-weight:700; font-size:0.88rem; transition:all 0.2s; }
+.faq-cta-knop-o:hover { background:#c8622a; transform:translateY(-2px); }
+.faq-cta-knop-s { display:inline-block; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.25); color:#fff; padding:14px 30px; border-radius:10px; text-decoration:none; font-weight:600; font-size:0.88rem; transition:background 0.2s; }
+.faq-cta-knop-s:hover { background:rgba(255,255,255,0.18); }
+
+/* ── RESPONSIVE ── */
+@media (max-width:900px) {
+  .faq-main { grid-template-columns:1fr; }
+  .faq-zij { position:static; }
+  .faq-cta { margin:0 16px 40px; padding:40px 24px; }
+}
+@media (max-width:600px) {
+  .faq-hero { padding:60px 16px 80px; }
+  .faq-stats { gap:24px; }
+  .faq-main { padding:32px 16px; }
+  .faq-cat-voortgang { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="faq-hero">
+  <div class="faq-hero-inner">
+    <div class="faq-hero-label">Uitvaart-Platform.nl — Kennisbank</div>
+    <h1>Veelgestelde vragen over
+      <em>uitvaart, rouw en afscheid</em>
+    </h1>
+    <p class="faq-hero-sub">Meer dan 60 vragen beantwoord door onze redactie. Helder, begrijpelijk en altijd vanuit betrokkenheid. Gebruik de zoekfunctie om direct jouw antwoord te vinden.</p>
+
+    <div class="faq-zoek-wrap">
+      <input type="text" class="faq-zoek-input" id="zoekInput" placeholder="Zoek in alle vragen... bijv. 'kosten crematie' of 'rouwverlof'" oninput="zoek(this.value)">
+      <span class="faq-zoek-icoon">🔍</span>
+      <div class="faq-zoek-resultaat" id="zoekResultaat"></div>
+    </div>
+
+    <div class="faq-stats">
+      <div class="faq-stat"><div class="faq-stat-nr">60+</div><div class="faq-stat-label">Vragen beantwoord</div></div>
+      <div class="faq-stat"><div class="faq-stat-nr">10</div><div class="faq-stat-label">Categorieën</div></div>
+      <div class="faq-stat"><div class="faq-stat-nr">100%</div><div class="faq-stat-label">Onafhankelijk</div></div>
+      <div class="faq-stat"><div class="faq-stat-nr">Gratis</div><div class="faq-stat-label">Altijd toegankelijk</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIE NAV -->
+<div class="faq-nav">
+  <div class="faq-nav-inner">
+    <span class="faq-nav-label">Categorieën</span>
+    <div class="faq-nav-lijst">
+      <span class="faq-nav-item actief" onclick="filterCategorie('alle',this)">Alle vragen <span class="faq-nav-item-teller">60+</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('regelen',this)">📞 Uitvaart regelen <span class="faq-nav-item-teller">8</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('begraven',this)">⚰️ Begraven & cremeren <span class="faq-nav-item-teller">7</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('kosten',this)">💶 Kosten & verzekering <span class="faq-nav-item-teller">7</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('rouw',this)">💔 Rouw & verwerking <span class="faq-nav-item-teller">8</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('invulling',this)">✨ Invulling uitvaart <span class="faq-nav-item-teller">7</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('nalatenschap',this)">📋 Nalatenschap & recht <span class="faq-nav-item-teller">6</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('over-ons',this)">🌐 Over ons platform <span class="faq-nav-item-teller">8</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('magazine',this)">📖 Uitvaart-Inside <span class="faq-nav-item-teller">5</span></span>
+      <span class="faq-nav-item" onclick="filterCategorie('dossier',this)">📦 The Perfect Goodbye <span class="faq-nav-item-teller">5</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- FILTER BALK -->
+<div class="faq-filter">
+  <div class="faq-filter-inner">
+    <span class="faq-filter-label">Filter op type:</span>
+    <div class="faq-filter-knoppen">
+      <button class="faq-filter-knop actief" onclick="filterType('alle',this)">Alle</button>
+      <button class="faq-filter-knop" onclick="filterType('praktisch',this)">Praktisch</button>
+      <button class="faq-filter-knop" onclick="filterType('financieel',this)">Financieel</button>
+      <button class="faq-filter-knop" onclick="filterType('rouw',this)">Rouw</button>
+      <button class="faq-filter-knop" onclick="filterType('wettelijk',this)">Wettelijk</button>
+      <button class="faq-filter-knop" onclick="filterType('trending',this)">🔥 Trending</button>
+    </div>
+    <span class="faq-gevonden" id="aantalGevonden">60+ vragen</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="faq-main">
+
+  <!-- LINKER KOLOM: VRAGEN -->
+  <div id="faqLijst">
+
+    <!-- CATEGORIE 1: UITVAART REGELEN -->
+    <div class="faq-categorie" id="cat-regelen" data-cat="regelen">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">📞</div>
+        <div>
+          <div class="faq-cat-naam">Uitvaart regelen</div>
+          <div class="faq-cat-aantal">Praktische vragen voor de eerste dagen na een overlijden</div>
+        </div>
+        <div class="faq-cat-voortgang">
+          <div class="faq-cat-voortgang-balk-bg"><div class="faq-cat-voortgang-balk" style="width:100%"></div></div>
+          <span class="faq-cat-voortgang-tekst">8 vragen</span>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="regelen" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wie bel ik als eerste bij een overlijden? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Bij een overlijden bel je altijd eerst een arts. Je eigen huisarts of de huisartsenpost. De arts stelt het overlijden officieel vast en maakt de wettelijke documenten op. Daarna bel je een uitvaartondernemer voor het vervoer van de overledene.</p><p>Als er een uitvaartverzekering is, hoef je niet verplicht de verzekeraar te bellen vóór de uitvaartondernemer. Je bent altijd vrij om zelf een uitvaartondernemer te kiezen die bij je past.</p><div class="faq-tip">💡 Vind een uitvaartondernemer bij jou in de buurt via onze <a href="https://uitvaart-platform.nl/bedrijven/c/uitvaartondernemingen">bedrijvengids</a>.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="regelen" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Binnen hoeveel dagen moet iemand begraven of gecremeerd worden? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>In Nederland moet een overledene uiterlijk op de <strong>zesde werkdag na het overlijden</strong> begraven of gecremeerd worden. Dit is vastgelegd in de Wet op de Lijkbezorging. Met een vergunning van de burgemeester is uitstel mogelijk als deze termijn om gegronde redenen overschreden moet worden.</p><div class="faq-let-op">⚠️ In de praktijk vindt de uitvaart meestal binnen 3 tot 5 dagen plaats.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="regelen" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wie is verantwoordelijk voor het regelen van de uitvaart? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Als er een testament is, staat daarin vaak wie de uitvaart regelt. Is er geen testament, dan neemt meestal de partner of de kinderen het initiatief. Degene die de opdracht geeft aan een uitvaartondernemer is verantwoordelijk voor de betaling.</p><p>Als er geen nabestaanden zijn of niemand de kosten kan dragen, regelt de gemeente uiteindelijk een sobere uitvaart via de Wet Lijkbezorging.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="regelen" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat zijn de eerste stappen direct na een overlijden? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p><strong>1.</strong> Bel de huisarts of huisartsenpost voor de overlijdensverklaring.<br><strong>2.</strong> Bel een uitvaartondernemer voor vervoer van de overledene.<br><strong>3.</strong> Informeer directe familie en naasten.<br><strong>4.</strong> Zoek naar een testament en uitvaartverzekering.<br><strong>5.</strong> Doe binnen 5 werkdagen aangifte van overlijden bij de gemeente.</p><div class="faq-tip">💡 Gebruik ons interactieve <a href="https://uitvaart-platform.nl/wat-regelen-na-overlijden-compleet-stappenplan">stappenplan</a> met alle 23 stappen.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="regelen" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Ben ik verplicht mijn uitvaartverzekering in te schakelen? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Nee. Je mag altijd zelf een uitvaartondernemer kiezen. De verzekeraar keert dan een vergoeding uit. Het zelf kiezen van een uitvaartondernemer geeft je meer vrijheid voor een persoonlijk afscheid.</p><p>Bij een naturaverzekering regelt de verzekeraar de uitvaart direct. Bij een kapitaalverzekering ontvangen nabestaanden een geldbedrag waarmee ze zelf de uitvaart betalen.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="regelen" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe doe ik aangifte van overlijden bij de gemeente? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Aangifte van overlijden moet binnen <strong>5 werkdagen</strong> bij de gemeente van overlijden worden gedaan. In de meeste gevallen regelt de uitvaartondernemer dit voor jou. Je hebt nodig: de overlijdensverklaring van de arts en het identiteitsbewijs van de overledene.</p><p>Na aangifte ontvang je een akte van overlijden. Vraag meteen meerdere gewaarmerkte afschriften aan. Je hebt die nodig voor de bank, het pensioenfonds en de verzekeraar.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="regelen" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Welke instanties moet ik informeren na een overlijden? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Na het overlijden informeer je onder andere: de werkgever of uitkeringsinstantie (UWV/SVB), de bank, de zorgverzekeraar, het pensioenfonds, de Belastingdienst, en alle verzekeraars. Abonnementen en lidmaatschappen moeten ook worden opgezegd.</p><div class="faq-tip">💡 De gemeente meldt het overlijden automatisch aan de Belastingdienst en de SVB, maar het is verstandig dit ook zelf te controleren.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="regelen" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Kan ik een uitvaart ook zelf regelen zonder uitvaartondernemer? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, dat is wettelijk toegestaan. Een nabestaande mag zelf de uitvaart regelen, maar moet wel voldoen aan alle wettelijke verplichtingen rondom lijkbezorging, aangifte en transport. Dit wordt een "eigen beheer uitvaart" genoemd.</p><p>In de praktijk is dit complex en emotioneel zwaar. Een uitvaartondernemer neemt veel werk uit handen in een moeilijke periode. Als kosten een bezwaar zijn, is een sober of directe crematie goedkoper dan een volledige eigen beheer uitvaart.</p></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE 2: BEGRAVEN & CREMEREN -->
+    <div class="faq-categorie" id="cat-begraven" data-cat="begraven">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">⚰️</div>
+        <div>
+          <div class="faq-cat-naam">Begraven & cremeren</div>
+          <div class="faq-cat-aantal">Alles over de keuze tussen begraven, cremeren en groene alternatieven</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="begraven" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat is het verschil tussen begraven en cremeren? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Bij <strong>begraven</strong> wordt het lichaam in een kist of wade in de grond bijgezet op een begraafplaats. Het graf blijft jarenlang bewaard. Bij <strong>cremeren</strong> wordt het lichaam verbrand in een crematorium, waarna de as overblijft in een urn. Cremeren is over het algemeen goedkoper en biedt meer flexibiliteit voor de asbestemming.</p><div class="faq-tip">💡 Gebruik onze <a href="https://uitvaart-platform.nl/uitvaartplanner">Uitvaartplanner</a> om de kosten van beide opties te vergelijken voor jouw regio.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="begraven" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wanneer mag ik de as ophalen na een crematie? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>In Nederland is wettelijk bepaald dat de as pas <strong>vier weken na de crematie</strong> wordt vrijgegeven. Je ontvangt een formulier waarop je aangeeft wie de as mag ophalen en wat de gewenste asbestemming is.</p><p>De as mag worden bewaard in een urn, verstrooid worden op een daarvoor bestemde plek, of verwerkt worden in herinneringssieraden.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="begraven" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Mag je de as van een crematie thuis bewaren? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, in Nederland mag de as van een overledene thuis worden bewaard in een gesloten urn. Er is geen verplichting om de as te begraven of te verstrooien. Wel gelden er regels voor het verstrooien van as: op eigen terrein mag het altijd, op openbaar terrein heb je toestemming van de grondeigenaar nodig. Op zee verstrooien mag met een ontheffing.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="begraven" data-type="trending">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat is een natuurbegraving en hoe werkt dat? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Bij een natuurbegraving wordt iemand begraven op een erkende natuurbegraafplaats, vaak in een biologisch afbreekbare kist of wade. Het graf gaat op in de natuur, er wordt geen grafsteen geplaatst en onderhoud is niet nodig. De natuur neemt het over.</p><p>Natuurbegraving is populairder dan ooit en kost gemiddeld tussen de €1.500 en €5.000 voor het grafrecht. Nederland telt tientallen erkende natuurbegraafplaatsen.</p><div class="faq-tip">💡 Vind een natuurbegraafplaats via onze <a href="https://uitvaart-platform.nl/bedrijven">bedrijvengids</a>.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="begraven" data-type="trending">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat is resomeren en mag het in Nederland? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Resomeren (ook wel aquamatie of alkalische hydrolyse) is een duurzaam alternatief waarbij het lichaam oplost in een waterige alkalische oplossing op hoge temperatuur. Het is milieuvriendelijker dan cremeren. Resomeren is op dit moment <strong>nog niet wettelijk toegestaan in Nederland</strong>, maar er wordt actief gewerkt aan wetgeving.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="begraven" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe lang heeft een graf op een begraafplaats? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Het grafrecht wordt doorgaans voor een periode van <strong>10 of 20 jaar</strong> afgegeven, afhankelijk van de begraafplaats. Na afloop van deze termijn kan het grafrecht verlengd worden. Wordt het niet verlengd, dan mag de begraafplaats het graf ruimen. Op sommige begraafplaatsen is een eeuwig grafrecht beschikbaar, maar dat is aanzienlijk duurder.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="begraven" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wanneer mag een grafsteen geplaatst worden? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Na een begrafenis moet de grond voldoende inklinken voordat een grafsteen of grafmonument geplaatst kan worden. Dit duurt doorgaans <strong>3 tot 6 maanden</strong>. Begraafplaatsen hebben ook eigen regels over afmetingen en materiaal van grafmonumenten. Informeer altijd bij de begraafplaats.</p><div class="faq-tip">💡 Vind een grafsteenspecialist via onze <a href="https://uitvaart-platform.nl/bedrijven">bedrijvengids</a>.</div></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE 3: KOSTEN & VERZEKERING -->
+    <div class="faq-categorie" id="cat-kosten" data-cat="kosten">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">💶</div>
+        <div>
+          <div class="faq-cat-naam">Kosten & uitvaartverzekering</div>
+          <div class="faq-cat-aantal">Alles over prijzen, verzekeringen en financiële planning</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="kosten" data-type="financieel">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat kost een uitvaart gemiddeld in Nederland in 2025? <div class="faq-vraag-rechts"><span class="faq-tag financieel">Financieel</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>De gemiddelde uitvaart in Nederland kost in 2025 tussen de <strong>€7.500 en €10.000</strong>. Uitvaarten zijn de afgelopen tien jaar met ruim 50% in prijs gestegen. De kosten variëren sterk per regio: in Amsterdam en de Randstad betaal je gemiddeld 25% meer dan in Friesland of Zeeland.</p><p>Een eenvoudige directe crematie begint rond de <strong>€2.500 tot €4.000</strong>. Een uitgebreide begrafenis kan oplopen tot <strong>€15.000 of meer</strong>.</p><div class="faq-tip">💡 Bereken de kosten voor jouw specifieke situatie met onze <a href="https://uitvaart-platform.nl/uitvaartplanner">Uitvaartplanner</a>.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="kosten" data-type="financieel">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Is begraven of cremeren goedkoper? <div class="faq-vraag-rechts"><span class="faq-tag financieel">Financieel</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p><strong>Cremeren is over het algemeen goedkoper</strong> dan begraven. Bij crematie zijn er geen kosten voor een graf, grafrecht of een grafsteen. De grootste kostenpost bij begraven is het grafrecht: gemiddeld €1.500 tot €5.000 voor 20 jaar, en in de Randstad zelfs €4.000 tot €6.000.</p><p>Daarnaast komen bij een begrafenis kosten voor onderhoud, een grafsteen en eventueel een grafmonument. Over een periode van 20 jaar kan een begrafenis gemiddeld €5.000 tot €10.000 duurder uitvallen dan een crematie.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="kosten" data-type="financieel">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Ben ik verplicht een uitvaartverzekering af te sluiten? <div class="faq-vraag-rechts"><span class="faq-tag financieel">Financieel</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Nee, een uitvaartverzekering is <strong>niet verplicht</strong> in Nederland. Wel is het verstandig om de kosten van een uitvaart vooraf te regelen, zodat nabestaanden hier niet mee worden belast. Een alternatief is gericht sparen voor je uitvaart.</p><p>Veel oudere polissen zijn niet meer toereikend voor de huidige uitvaartkosten. Laat je polis regelmatig controleren op de indexering.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="kosten" data-type="financieel">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat dekt een uitvaartverzekering wel en niet? <div class="faq-vraag-rechts"><span class="faq-tag financieel">Financieel</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Een uitvaartverzekering dekt de kosten van de uitvaart bij overlijden. Er zijn twee soorten: een <strong>naturaverzekering</strong> (de verzekeraar regelt de uitvaart zelf) en een <strong>kapitaalverzekering</strong> (nabestaanden ontvangen een geldbedrag).</p><p>Wat niet standaard gedekt wordt: repatriëring vanuit het buitenland, nalatenschap en notariskosten, rouwbegeleiding en herinneringsproducten. Check altijd de polisvoorwaarden.</p><div class="faq-let-op">⚠️ Veel polissen van meer dan 10 jaar oud dekken niet meer de volledige uitvaartkosten van 2025. Laat uw polis controleren.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="kosten" data-type="financieel">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat is het verschil tussen een natura- en kapitaalverzekering? <div class="faq-vraag-rechts"><span class="faq-tag financieel">Financieel</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Bij een <strong>naturaverzekering</strong> regelt de verzekeringsmaatschappij zelf de uitvaart. Je bent meer afhankelijk van hun aanbod en dienstverleners. Bij een <strong>kapitaalverzekering</strong> ontvangen nabestaanden een geldbedrag waarmee ze zelf de uitvaart kunnen betalen. Dit geeft meer keuzevrijheid maar vereist ook meer eigen organisatie in een moeilijke periode.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="kosten" data-type="financieel">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Betaalt de gemeente een uitvaart als er geen geld is? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja. Als er onvoldoende middelen zijn voor een uitvaart en geen familie die kan of wil betalen, zorgt de gemeente voor een sobere begrafenis of crematie via de <strong>Wet Lijkbezorging</strong>. De gemeente probeert daarna de kosten te verhalen op de nalatenschap.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="kosten" data-type="financieel">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe kan ik besparen op uitvaartkosten? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p><strong>1. Vergelijk offertes:</strong> Vraag minimaal 3 offertes op bij verschillende uitvaartondernemers. Prijsverschillen van €1.000 tot €3.000 zijn normaal.<br><strong>2. Kies bewust:</strong> Een eenvoudige crematie is aanzienlijk goedkoper dan een uitgebreide begrafenis.<br><strong>3. Zelf regelen:</strong> Bloemen, catering en drukwerk zelf regelen scheelt vaak €500 tot €1.500.<br><strong>4. Vooruit plannen:</strong> Een uitvaartverzekering nu afsluiten is goedkoper dan op latere leeftijd.<br><strong>5. Directe crematie:</strong> Zonder plechtigheid, alleen direct cremeren, kan al vanaf €2.500.</p></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE 4: ROUW & VERWERKING -->
+    <div class="faq-categorie" id="cat-rouw" data-cat="rouw">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">💔</div>
+        <div>
+          <div class="faq-cat-naam">Rouw & verwerking</div>
+          <div class="faq-cat-aantal">Eerlijke antwoorden op de moeilijkste vragen over rouw</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="rouw" data-type="rouw">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe lang duurt rouwverwerking? <div class="faq-vraag-rechts"><span class="faq-tag rouw">Rouw</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Rouwverwerking is voor iedereen anders en kent <strong>geen vaste tijdsduur</strong>. De eerste acute pijn wordt voor veel mensen na enkele maanden iets draaglijker, maar rouw kan jaren duren. Na een jaar, vijf jaar of tien jaar kunnen er nog intense momenten zijn, rond verjaardagen of feestdagen. Dat is volkomen normaal.</p><p>Rouw gaat niet over. Je leert er een plek mee te geven in je leven.</p><div class="faq-tip">💡 Bezoek onze <a href="https://uitvaart-platform.nl/rouwenverlies">Rouw & Verlies pagina</a> voor tools en begeleiding.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="rouw" data-type="rouw">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Is het normaal dat ik me schuldig voel na een overlijden? <div class="faq-vraag-rechts"><span class="faq-tag rouw">Rouw</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, schuldgevoelens zijn bij rouw bijna universeel. "Had ik maar", "als ik toch" zijn gedachten die bijna iedereen kent. Het betekent dat je om de ander gaf. Maar je deed wat je kon, met de kennis en mogelijkheden die je op dat moment had.</p><p>Als schuldgevoelens aanhouden en overweldigend zijn, kan een rouwbegeleider helpen om deze gevoelens te onderzoeken en een plek te geven.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="rouw" data-type="rouw">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Is het normaal dat ik ook opluchting voel na een overlijden? <div class="faq-vraag-rechts"><span class="faq-tag rouw">Rouw</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, absoluut. Zeker als iemand lang ziek was of veel heeft geleden, is opluchting een heel normaal gevoel naast het verdriet. Dat wil niet zeggen dat je blij bent met het verlies, maar dat je blij bent dat het lijden voorbij is. Opluchting en rouw kunnen prima naast elkaar bestaan. Jij hoeft je hier niet voor te schamen.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="rouw" data-type="rouw">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wanneer is professionele rouwbegeleiding zinvol? <div class="faq-vraag-rechts"><span class="faq-tag rouw">Rouw</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Zoek professionele hulp als: je meer dan 2 maanden nauwelijks kunt functioneren, als het dagelijks leven volledig is stilgevallen, als je gedachten hebt aan zelfbeschadiging, als je je sociaal volledig terugtrekt of als je het gevoel hebt vast te zitten.</p><p>Professionele begeleiding is geen teken van zwakte. Het is een daad van zelfzorg.</p><div class="faq-tip">💡 Vind een gecertificeerde rouwbegeleider bij jou in de buurt: <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg">rouwbegeleiders vinden</a>.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="rouw" data-type="rouw">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Heeft een werknemer recht op rouwverlof? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Rouwverlof is in Nederland momenteel <strong>niet wettelijk vastgelegd</strong>. Er ligt wel een wetsvoorstel bij de Tweede Kamer. In de meeste gevallen valt rouwverlof onder calamiteitenverlof: kortstondig verlof om zaken te regelen rondom de uitvaart.</p><p>Steeds meer werkgevers gaan hier ruimhartig mee om. Uit onderzoek van CNV (2023) bleek dat 1 op de 10 werknemers een burn-out kreeg door de combinatie van rouw en werk. Bespreek dit open met je werkgever.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="rouw" data-type="rouw">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Is het raar dat ik soms vergeet dat iemand dood is? <div class="faq-vraag-rechts"><span class="faq-tag rouw">Rouw</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Helemaal niet. Je brein heeft tijd nodig om de nieuwe werkelijkheid te accepteren. Het is normaal om nog een bord extra te dekken, te denken "dat moet ik even vertellen" of naar de telefoon te grijpen om te bellen. Deze momenten van vergeten en herinneren zijn pijnlijk maar horen bij het verwerkingsproces. Ze worden na verloop van tijd minder frequent.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="rouw" data-type="rouw">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe krijg ik lichamelijke klachten door rouw? <div class="faq-vraag-rechts"><span class="faq-tag rouw">Rouw</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Rouw heeft ook een grote lichamelijke component. Veel mensen ervaren: vermoeidheid, slaapproblemen, gebrek aan eetlust, concentratieproblemen, hoofdpijn, hartkloppingen en een gevoel van druk op de borst. Dit zijn normale reacties van je lichaam op extreme stress.</p><p>Zorg goed voor basisbehoeften: eten, drinken, slapen en bewegen. Als lichamelijke klachten langdurig aanhouden, raadpleeg dan je huisarts.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="rouw" data-type="rouw">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe help ik iemand die rouwt? Wat zeg ik? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p><strong>Wat wel werkt:</strong> "Ik denk aan je", "Ik ben er als je wilt praten", "Vertel me over hem/haar." Doe concrete dingen: koken, rijden, aanwezig zijn. Blijf contact houden ook weken en maanden later.</p><p><strong>Wat niet werkt:</strong> "Ik begrijp hoe je je voelt", "Het wordt beter", "Je moet verder", "Geef het een plekje." Rouw kent geen tijdslimiet en je kunt het verlies niet ongedaan maken.</p></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE 5: INVULLING UITVAART -->
+    <div class="faq-categorie" id="cat-invulling" data-cat="invulling">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">✨</div>
+        <div>
+          <div class="faq-cat-naam">Invulling van de uitvaart</div>
+          <div class="faq-cat-aantal">Van persoonlijk afscheid tot bijzondere keuzes</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="invulling" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe maak ik een uitvaart persoonlijk? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Een uitvaart kun je op vele manieren persoonlijk maken: persoonlijke muziekkeuze, een bijzonder vervoermiddel, een beschilderde of handgemaakte kist, een unieke locatie, thematische decoratie of een gedicht. Er zijn geen strikte regels, alles is mogelijk zolang het past bij de overledene.</p><div class="faq-tip">💡 Gebruik onze <a href="https://uitvaart-platform.nl/uitvaart-matchmaker">Uitvaart Matchmaker</a> om de juiste specialisten te vinden voor een persoonlijk afscheid.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="invulling" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Mag ik iemand thuis opbaren? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, in de meeste gevallen is <strong>thuisopbaring mogelijk</strong>. Dit geeft nabestaanden de kans in alle rust afscheid te nemen in een vertrouwde omgeving. De uitvaartverzorger zorgt voor de benodigde koeling en verzorging. Overleg altijd van tevoren met je uitvaartondernemer over de praktische mogelijkheden.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="invulling" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat zijn de mogelijkheden voor asverstrooiing? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Na een crematie zijn er diverse mogelijkheden: <strong>bewaren</strong> in een urn thuis, <strong>verstrooien</strong> op zee, in de natuur of op een strooiveld, <strong>bijzetten</strong> in een urnenmuur of urnenkelder, of verwerken in herinneringssieraden, een herdenkingsboom of een rif.</p><div class="faq-tip">💡 Vind asverstrooiing specialisten via onze <a href="https://uitvaart-platform.nl/bedrijven">bedrijvengids</a>.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="invulling" data-type="trending">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat is een directe crematie en wat kost die? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Bij een directe crematie wordt de overledene gecremeerd zonder uitgebreide plechtigheid. Er is geen dienst in een aula of kerk. De familie kan daarna zelf een herdenkingsmoment organiseren wanneer ze daar aan toe zijn. Een directe crematie kost gemiddeld tussen de <strong>€2.500 en €4.500</strong> en is daarmee de goedkoopste optie.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="invulling" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Mogen kinderen aanwezig zijn bij een uitvaart? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, en in de meeste gevallen is het goed en helpend om een kind te betrekken bij de uitvaart. Kinderen begrijpen de dood al vroeg als een definitieve werkelijkheid en het afscheid nemen helpt hen bij de verwerking. Betrek kinderen in de keuze of ze willen komen, leg eerlijk uit wat ze kunnen verwachten en bied hen een actieve rol aan als ze dat willen.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="invulling" data-type="trending">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Kan ik een uitvaart livestreamen voor mensen die niet aanwezig kunnen zijn? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, livestreaming van een uitvaart is steeds populairder. Zeker voor mensen die ver weg wonen, ziek zijn of niet kunnen reizen is dit een waardevolle optie. Veel uitvaartondernemers en crematoria bieden dit standaard aan. Kosten liggen gemiddeld tussen €200 en €500.</p><div class="faq-tip">💡 Vind een specialist voor livestreaming via onze <a href="https://uitvaart-platform.nl/bedrijven">bedrijvengids</a>.</div></div>
+      </div>
+
+      <div class="faq-item" data-cat="invulling" data-type="trending">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat zijn herinneringssieraden en hoe werken ze? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Herinneringssieraden zijn sieraden die een kleine hoeveelheid as, haar of vingerafdruk van de overledene bevatten. Denk aan ringen, hangers of armbanden. Er zijn zelfs opties om as om te zetten in een persoonlijk gemaakte diamant. Prijzen variëren van €100 voor een eenvoudig hangerje tot meer dan €2.500 voor een as-diamant.</p></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE 6: NALATENSCHAP -->
+    <div class="faq-categorie" id="cat-nalatenschap" data-cat="nalatenschap">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">📋</div>
+        <div>
+          <div class="faq-cat-naam">Nalatenschap & juridische zaken</div>
+          <div class="faq-cat-aantal">Erfenis, erfbelasting en notaris</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="nalatenschap" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Moet ik erfbelasting betalen? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Erfbelasting betaal je als de erfenis boven de vrijstelling uitkomt. De vrijstellingen in 2025 zijn: partner <strong>€795.000</strong>, kind of kleinkind <strong>€22.918</strong>, overige erfgenamen <strong>€2.658</strong>. Boven deze bedragen betaal je 10% tot 40% erfbelasting, afhankelijk van de relatie tot de overledene en de hoogte van de erfenis. Aangifte erfbelasting moet binnen 8 maanden na het overlijden worden ingediend.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="nalatenschap" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Mag ik een erfenis weigeren? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, je mag een erfenis weigeren. Dit is verstandig als er meer schulden dan bezittingen zijn. Als erfgenaam ben je anders aansprakelijk voor de schulden. Je kunt ook kiezen voor beneficiaire aanvaarding: je aanvaardt de erfenis maar bent dan niet persoonlijk aansprakelijk voor schulden boven de waarde van de erfenis. Schakel een notaris in voor advies.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="nalatenschap" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat is een verklaring van erfrecht en wanneer heb ik die nodig? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Een verklaring van erfrecht is een notariële akte die bewijst wie de erfgenamen zijn en wie bevoegd is om de nalatenschap af te wikkelen. Je hebt deze verklaring nodig bij de bank voor toegang tot rekeningen, bij de notaris voor onroerend goed, en bij het kadaster. De kosten bedragen gemiddeld €300 tot €600.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="nalatenschap" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe werkt het met toeslagen en uitkeringen na een overlijden? <div class="faq-vraag-rechts"><span class="faq-tag wettelijk">Wettelijk</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Als je partner overlijdt, worden toeslagen automatisch aangepast. De SVB stopt de AOW van de overledene na melding. Controleer of je recht hebt op een nabestaandenuitkering (ANW) van de SVB. Als de overledene alleenstaand was, worden alle toeslagen automatisch stopgezet. Erfgenamen kunnen nog een definitieve afrekening ontvangen.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="nalatenschap" data-type="financieel">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe werkt een nabestaandenpensioen? <div class="faq-vraag-rechts"><span class="faq-tag financieel">Financieel</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Als je partner overlijdt, heb je mogelijk recht op nabestaandenpensioen via het pensioenfonds van de overledene. Meld het overlijden zo snel mogelijk bij het pensioenfonds. Niet alle pensioenfondsen hebben nabestaandenpensioen en de voorwaarden verschillen per fonds. Controleer ook of je recht hebt op ANW-uitkering van de SVB: bel 1-800-0044.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="nalatenschap" data-type="wettelijk">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat gebeurt er met de digitale accounts van de overledene? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>DigiD wordt automatisch geblokkeerd na melding bij de gemeente. E-mail en sociale media accounts gaan niet automatisch dicht. Platforms zoals Facebook bieden een "herdenkingsprofiel" aan. Voor e-mail en andere accounts heb je doorgaans inloggegevens nodig. Sommige diensten accepteren een overlijdensakte en verzoek van nabestaanden om accounts te sluiten. Leg digitale accounts en wachtwoorden vast in een nabestaandendossier.</p></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE 7: OVER ONS -->
+    <div class="faq-categorie" id="cat-over-ons" data-cat="over-ons">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">🌐</div>
+        <div>
+          <div class="faq-cat-naam">Over Uitvaart-Platform.nl</div>
+          <div class="faq-cat-aantal">Alles over ons onafhankelijke platform</div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="over-ons" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Wat is Uitvaart-Platform.nl? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Uitvaart-Platform.nl is het <strong>toonaangevende onafhankelijke online platform</strong> in Nederland voor informatie, inspiratie en trends op het gebied van uitvaart en rouw. Wij bieden uitgebreide artikelen, praktische tools, een bedrijvengids met honderden specialisten en twee eigen producten: het magazine Uitvaart-Inside en het nabestaandendossier The Perfect Goodbye.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="over-ons" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Is Uitvaart-Platform.nl een uitvaartondernemer? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Nee, wij zijn een <strong>onafhankelijk informatieplatform en bedrijvengids</strong>. Wij helpen je bij het vinden van de juiste specialist die past bij jouw wensen. Wij zijn niet verbonden aan een specifieke uitvaartorganisatie, verzekeraar of brancheorganisatie.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="over-ons" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe vind ik een uitvaartondernemer of specialist via jullie platform? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Via onze <a href="https://uitvaart-platform.nl/bedrijven">bedrijvengids</a> vind je uitvaartondernemers, rouwbegeleiders en andere specialisten in heel Nederland. Je kunt zoeken op categorie, regio of specialisme. Of gebruik onze <a href="https://uitvaart-platform.nl/uitvaart-matchmaker">Uitvaart Matchmaker</a> voor persoonlijke aanbevelingen op basis van jouw situatie.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="over-ons" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Kan ik mijn bedrijf aanmelden op Uitvaart-Platform.nl? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja. Ben je actief in de uitvaartbranche? Dan kun je je aanmelden voor een vermelding in onze bedrijvengids. Neem contact op via <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a> of bekijk onze <a href="https://uitvaart-platform.nl/adverteren">adverteerpagina</a> voor informatie over de mogelijkheden en tarieven.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="over-ons" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Hoe is Uitvaart-Platform.nl te bereiken? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Je kunt ons bereiken via <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a> of telefonisch op <a href="tel:085-4852152">085-4852152</a>. Bereikbaar op werkdagen van 9:00 tot 17:00. Wij reageren doorgaans binnen één werkdag.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="over-ons" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Werkt Uitvaart-Platform.nl samen met andere organisaties? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ja, wij werken samen met o.a. <strong>DPG Media</strong> en onze informatie wordt door de <strong>Rijksoverheid</strong> gebruikt als referentie. Daarnaast werken wij samen met brancheorganisaties, goede doelen en specialisten om onze informatie zo betrouwbaar mogelijk te houden.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="over-ons" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Welke gratis tools biedt Uitvaart-Platform.nl aan? <div class="faq-vraag-rechts"><span class="faq-tag trending">🔥 Trending</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Wij bieden de volgende gratis tools aan:</p><p><strong>Uitvaart Matchmaker</strong> — persoonlijke aanbevelingen voor de juiste specialist.<br><strong>Uitvaartplanner</strong> — kostencalculator met regionale prijzen en PDF download.<br><strong>Stappenplan</strong> — interactief stappenplan met alle 23 stappen na een overlijden.<br><strong>Rouw & Verlies</strong> — tools voor rouwverwerking, dagboek en begeleiding.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="over-ons" data-type="praktisch">
+        <button class="faq-vraag" onclick="toggleVraag(this)">Is de informatie op Uitvaart-Platform.nl actueel? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+        <div class="faq-antwoord"><p>Ons redactieteam publiceert regelmatig nieuwe artikelen over ontwikkelingen in de uitvaartbranche, nieuwe wetgeving en trends. Heb je verouderde informatie gevonden? Laat het ons weten via <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a>.</p></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE 8: UITVAART-INSIDE -->
+    <div class="faq-categorie" id="cat-magazine" data-cat="magazine">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">📖</div>
+        <div>
+          <div class="faq-cat-naam">Uitvaart-Inside magazine</div>
+          <div class="faq-cat-aantal">Het enige glossy uitvaartmagazine van Nederland</div>
+        </div>
+      </div>
+
+      <div class="faq-product" id="prod-magazine">
+        <div class="faq-product-header paars">
+          <div class="faq-product-icoon">📖</div>
+          <div>
+            <span class="faq-product-badge">Glossy uitvaartmagazine</span>
+            <div class="faq-product-titel">Uitvaart-Inside</div>
+            <div class="faq-product-sub">Het enige glossy magazine in Nederland volledig gewijd aan uitvaart, rouw en afscheid, voor professionals én particulieren.</div>
+          </div>
+        </div>
+        <div class="faq-product-body">
+          <div class="faq-item" data-cat="magazine" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Wat is Uitvaart-Inside? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>Uitvaart-Inside is het <strong>glossy magazine van Uitvaart-Platform.nl</strong>, het enige magazine in Nederland volledig gewijd aan uitvaart, rouw en afscheid. Het telt meer dan 120 pagina's en bevat inspirerende verhalen, interviews met professionals, trends en praktische informatie.</p></div>
+          </div>
+          <div class="faq-item" data-cat="magazine" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Hoe kan ik Uitvaart-Inside bestellen? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>Uitvaart-Inside is verkrijgbaar via <a href="http://www.uitvaart-inside.nl">uitvaart-inside.nl</a> en uitvaart-platform.nl. Voor meer informatie neem je contact op via <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a> of <a href="tel:085-4852152">085-4852152</a>.</p></div>
+          </div>
+          <div class="faq-item" data-cat="magazine" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Kan ik adverteren in Uitvaart-Inside? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>Ja, Uitvaart-Inside biedt diverse advertentiemogelijkheden: <strong>4 advertentieformaten</strong>, <strong>3 exclusieve coverposities</strong> en uitgebreide <strong>branded content</strong> mogelijkheden. Het aantal plaatsen per editie is beperkt. Bekijk alle opties op onze <a href="https://uitvaart-platform.nl/adverteren-uitvaart-inside">adverteerpagina</a>.</p></div>
+          </div>
+          <div class="faq-item" data-cat="magazine" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Wat is branded content in Uitvaart-Inside? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>Branded content is een redactioneel artikel of interview geschreven door <strong>onze redactie</strong> over jouw bedrijf, dienst of expertise. Beschikbaar als spread (2 pagina's), 3 pagina's of 4 pagina's. Neem contact op voor een vrijblijvend voorstel via <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a>.</p></div>
+          </div>
+          <div class="faq-item" data-cat="magazine" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Voor wie is Uitvaart-Inside bedoeld? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>Uitvaart-Inside is er voor iedereen met een betrokkenheid bij uitvaart en rouw: zowel <strong>particulieren</strong> als <strong>brancheprofessionals</strong>. Het magazine wordt gedistribueerd via uitvaartondernemers, rouwcentra, ziekenhuizen en online bestellingen door heel Nederland.</p></div>
+          </div>
+          <a href="https://uitvaart-platform.nl/adverteren-uitvaart-inside" class="faq-product-link paars">📖 Bekijk advertentiemogelijkheden →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE 9: THE PERFECT GOODBYE -->
+    <div class="faq-categorie" id="cat-dossier" data-cat="dossier">
+      <div class="faq-cat-header">
+        <div class="faq-cat-icoon">📦</div>
+        <div>
+          <div class="faq-cat-naam">The Perfect Goodbye</div>
+          <div class="faq-cat-aantal">Het nabestaandendossier van Uitvaart-Platform.nl</div>
+        </div>
+      </div>
+
+      <div class="faq-product">
+        <div class="faq-product-header oranje">
+          <div class="faq-product-icoon">📦</div>
+          <div>
+            <span class="faq-product-badge">Nabestaandendossier</span>
+            <div class="faq-product-titel">The Perfect Goodbye</div>
+            <div class="faq-product-sub">Leg jouw uitvaartwensen en administratieve zaken overzichtelijk vast. Een liefdevol geschenk voor jezelf en je dierbaren.</div>
+          </div>
+        </div>
+        <div class="faq-product-body">
+          <div class="faq-item" data-cat="dossier" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Wat is The Perfect Goodbye? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>The Perfect Goodbye is een <strong>zorgvuldig ontworpen nabestaandendossier</strong> van Uitvaart-Platform.nl. Met bijna <strong>150 doordachte vragen</strong> word je stap voor stap begeleid bij het vastleggen van je uitvaartwensen én praktische administratieve zaken. Van de keuze voor begraven of cremeren tot contactpersonen, abonnementen en wachtwoorden.</p></div>
+          </div>
+          <div class="faq-item" data-cat="dossier" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Voor wie is The Perfect Goodbye bedoeld? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>Voor <strong>iedereen</strong> die zijn of haar dierbaren wil ontzorgen. Of je nu jong of oud bent. In het bijzonder waardevol voor ouderen die het gesprek over afscheid willen openen, ouders die voor duidelijkheid willen zorgen, en mensen met een chronische ziekte die regie willen houden.</p></div>
+          </div>
+          <div class="faq-item" data-cat="dossier" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Wat staat er in The Perfect Goodbye? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>Het dossier bestaat uit twee delen. Deel 1 gaat over <strong>uitvaartwensen</strong>: sfeer, kist of urn, bloemen, muziek, sprekers en rouwkaarten. Deel 2 behandelt <strong>administratieve zaken</strong>: abonnementen, verzekeringen, digitale accounts, wachtwoorden en belangrijke documenten. Er is ook ruimte voor persoonlijke brieven aan dierbaren.</p></div>
+          </div>
+          <div class="faq-item" data-cat="dossier" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Hoe vul ik The Perfect Goodbye in? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>Wij adviseren om The Perfect Goodbye <strong>met een potlood in te vullen</strong>, zodat je eenvoudig aanpassingen kunt maken als wensen veranderen. Je bepaalt zelf het tempo. Je kunt het rustig alleen invullen of het samen bespreken met familie.</p></div>
+          </div>
+          <div class="faq-item" data-cat="dossier" data-type="praktisch">
+            <button class="faq-vraag" onclick="toggleVraag(this)">Hoe kan ik The Perfect Goodbye bestellen? <div class="faq-vraag-rechts"><span class="faq-tag praktisch">Praktisch</span><span class="faq-plus">+</span></div></button>
+            <div class="faq-antwoord"><p>The Perfect Goodbye is te bestellen via <a href="https://theperfectgoodbye.nl" target="_blank">Theperfectgoodbye.nl</a> of Uitvaart-Platform.nl. Neem contact op via <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a> of bel <a href="tel:085-4852152">085-4852152</a> voor meer informatie.</p></div>
+          </div>
+          <a href="https://theperfectgoodbye.nl" class="faq-product-link oranje" target="_blank">📦 Bestel The Perfect Goodbye →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEEG STAAT -->
+    <div class="faq-leeg" id="faqLeeg" style="display:none;">
+      <div class="faq-leeg-icoon">🔍</div>
+      <div class="faq-leeg-titel">Geen resultaten gevonden</div>
+      <div class="faq-leeg-sub">Geen vragen gevonden voor jouw zoekopdracht. Stel je vraag direct via <a href="mailto:info@uitvaart-platform.nl" style="color:#4a1942;font-weight:600;">info@uitvaart-platform.nl</a> en we beantwoorden hem binnen één werkdag.</div>
+    </div>
+
+    <div class="faq-highlight">
+      <p>Staat jouw vraag er niet bij? Ons team staat klaar om je persoonlijk te helpen. <strong>Neem contact op via info@uitvaart-platform.nl</strong>, wij reageren doorgaans binnen één werkdag. Je kunt ons ook bereiken via <strong>085-4852152</strong>, bereikbaar op werkdagen van 9:00 tot 17:00.</p>
+    </div>
+
+  </div>
+
+  <!-- ZIJPANEEL -->
+  <div class="faq-zij">
+
+    <!-- VOORTGANG GELEZEN -->
+    <div class="faq-zij-kaart">
+      <div class="faq-zij-kaart-header">
+        <div class="faq-zij-kaart-titel">Jouw sessie</div>
+        <div class="faq-zij-kaart-naam" id="gelezenTekst">0 vragen bekeken</div>
+      </div>
+      <div class="faq-zij-body">
+        <div class="faq-vooruitgang">
+          <div class="faq-vooruitgang-label"><span>Voortgang</span><span id="gelezenPct">0%</span></div>
+          <div class="faq-vooruitgang-balk-bg"><div class="faq-vooruitgang-balk" id="gelezenBalk" style="width:0%"></div></div>
+        </div>
+        <div style="font-size:0.72rem;color:#6b6570;font-weight:300;line-height:1.65;">Bekeken vragen worden bijgehouden. Gebruik de filters om specifieke onderwerpen te vinden.</div>
+      </div>
+    </div>
+
+    <!-- POPULAIRE VRAGEN -->
+    <div class="faq-zij-kaart">
+      <div class="faq-zij-kaart-header" style="background:#c8622a;">
+        <div class="faq-zij-kaart-titel">Meest bekeken</div>
+        <div class="faq-zij-kaart-naam">Populaire vragen</div>
+      </div>
+      <div class="faq-zij-body">
+        <div class="faq-populair-item" onclick="zoekEnOpen('kosten crematie')">
+          <span class="faq-populair-nr">1</span>
+          <span class="faq-populair-tekst">Wat kost een uitvaart in 2025?</span>
+        </div>
+        <div class="faq-populair-item" onclick="zoekEnOpen('hoe lang rouw')">
+          <span class="faq-populair-nr">2</span>
+          <span class="faq-populair-tekst">Hoe lang duurt rouwverwerking?</span>
+        </div>
+        <div class="faq-populair-item" onclick="zoekEnOpen('begraven cremeren')">
+          <span class="faq-populair-nr">3</span>
+          <span class="faq-populair-tekst">Begraven of cremeren, wat is goedkoper?</span>
+        </div>
+        <div class="faq-populair-item" onclick="zoekEnOpen('rouwverlof')">
+          <span class="faq-populair-nr">4</span>
+          <span class="faq-populair-tekst">Heeft een werknemer recht op rouwverlof?</span>
+        </div>
+        <div class="faq-populair-item" onclick="zoekEnOpen('as bewaren')">
+          <span class="faq-populair-nr">5</span>
+          <span class="faq-populair-tekst">Mag ik de as thuis bewaren?</span>
+        </div>
+        <div class="faq-populair-item" onclick="zoekEnOpen('directe crematie')">
+          <span class="faq-populair-nr">6</span>
+          <span class="faq-populair-tekst">Wat is een directe crematie?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="faq-zij-kaart">
+      <div class="faq-zij-kaart-header" style="background:#6b3060;">
+        <div class="faq-zij-kaart-titel">Persoonlijk advies</div>
+        <div class="faq-zij-kaart-naam">Vraag niet gevonden?</div>
+      </div>
+      <div class="faq-zij-body">
+        <a href="mailto:info@uitvaart-platform.nl" class="faq-contact-knop oranje">📩 Stel jouw vraag</a>
+        <a href="tel:085-4852152" class="faq-contact-knop">📞 085-4852152</a>
+        <div class="faq-contact-info">
+          Bereikbaar op werkdagen van 9:00 tot 17:00.<br>
+          Reactie binnen 1 werkdag.<br><br>
+          Of bezoek onze <a href="https://uitvaart-platform.nl/rouwenverlies">Rouw & Verlies pagina</a> voor emotionele ondersteuning.
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="faq-zij-kaart">
+      <div class="faq-zij-kaart-header">
+        <div class="faq-zij-kaart-titel">Gratis tools</div>
+        <div class="faq-zij-kaart-naam">Direct hulp nodig?</div>
+      </div>
+      <div class="faq-zij-body">
+        <a href="https://uitvaart-platform.nl/uitvaartplanner" class="faq-contact-knop" style="margin-bottom:6px;">🧮 Uitvaartplanner</a>
+        <a href="https://uitvaart-platform.nl/wat-regelen-na-overlijden-compleet-stappenplan" class="faq-contact-knop" style="background:#6b3060;margin-bottom:6px;">📋 Stappenplan</a>
+        <a href="https://uitvaart-platform.nl/rouwenverlies" class="faq-contact-knop oranje" style="margin-bottom:6px;">💛 Rouw & Verlies</a>
+        <a href="https://uitvaart-platform.nl/uitvaart-matchmaker" class="faq-contact-knop" style="background:#3a1233;">🔍 Uitvaart Matchmaker</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- CTA BOTTOM -->
+<div class="faq-cta">
+  <h3>Op zoek naar een specialist?</h3>
+  <p>Via de bedrijvengids van Uitvaart-Platform.nl vind je uitvaartondernemers, rouwbegeleiders en andere specialisten in heel Nederland. Onafhankelijk, betrouwbaar en volledig gratis.</p>
+  <div class="faq-cta-knoppen">
+    <a href="https://uitvaart-platform.nl/bedrijven" class="faq-cta-knop-o">🔍 Zoek een specialist</a>
+    <a href="https://uitvaart-platform.nl/artikelen" class="faq-cta-knop-s">📖 Lees onze artikelen</a>
+  </div>
+</div>
+
+<script>
+var actieveCategorie = 'alle';
+var actieveType = 'alle';
+var gelezenVragen = new Set();
+var totaalVragen = document.querySelectorAll('.faq-item').length;
+
+// ── ZOEKFUNCTIE ──
+function zoek(query) {
+  query = query.toLowerCase().trim();
+  var items = document.querySelectorAll('.faq-item');
+  var gevonden = 0;
+
+  if (query === '') {
+    items.forEach(function(item) {
+      item.classList.remove('verborgen');
+      toonCategorieen();
+    });
+    document.getElementById('zoekResultaat').textContent = '';
+    document.getElementById('aantalGevonden').textContent = totaalVragen + ' vragen';
+    filterNaBijwerken();
+    return;
+  }
+
+  actieveCategorie = 'alle';
+  actieveType = 'alle';
+  document.querySelectorAll('.faq-nav-item').forEach(function(n) { n.classList.remove('actief'); });
+  document.querySelector('.faq-nav-item').classList.add('actief');
+  document.querySelectorAll('.faq-filter-knop').forEach(function(k) { k.classList.remove('actief'); });
+  document.querySelector('.faq-filter-knop').classList.add('actief');
+
+  items.forEach(function(item) {
+    var tekst = item.textContent.toLowerCase();
+    if (tekst.includes(query)) {
+      item.classList.remove('verborgen');
+      gevonden++;
+    } else {
+      item.classList.add('verborgen');
+    }
+  });
+
+  toonCategorieen();
+  document.getElementById('zoekResultaat').textContent = gevonden + ' resultaten voor "' + query + '"';
+  document.getElementById('aantalGevonden').textContent = gevonden + ' vragen gevonden';
+
+  var leeg = document.getElementById('faqLeeg');
+  leeg.style.display = gevonden === 0 ? 'block' : 'none';
+}
+
+function zoekEnOpen(query) {
+  document.getElementById('zoekInput').value = query;
+  zoek(query);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── CATEGORIE FILTER ──
+function filterCategorie(cat, knop) {
+  actieveCategorie = cat;
+  document.querySelectorAll('.faq-nav-item').forEach(function(n) { n.classList.remove('actief'); });
+  knop.classList.add('actief');
+  document.getElementById('zoekInput').value = '';
+  filterNaBijwerken();
+  if (cat !== 'alle') {
+    var catEl = document.getElementById('cat-' + cat);
+    if (catEl) setTimeout(function() { catEl.scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
+  }
+}
+
+// ── TYPE FILTER ──
+function filterType(type, knop) {
+  actieveType = type;
+  document.querySelectorAll('.faq-filter-knop').forEach(function(k) { k.classList.remove('actief'); });
+  knop.classList.add('actief');
+  filterNaBijwerken();
+}
+
+function filterNaBijwerken() {
+  var items = document.querySelectorAll('.faq-item');
+  var gevonden = 0;
+  items.forEach(function(item) {
+    var catOK = actieveCategorie === 'alle' || item.getAttribute('data-cat') === actieveCategorie;
+    var typeOK = actieveType === 'alle' || item.getAttribute('data-type') === actieveType;
+    if (catOK && typeOK) {
+      item.classList.remove('verborgen');
+      gevonden++;
+    } else {
+      item.classList.add('verborgen');
+    }
+  });
+  toonCategorieen();
+  document.getElementById('aantalGevonden').textContent = gevonden + ' vragen';
+  document.getElementById('faqLeeg').style.display = gevonden === 0 ? 'block' : 'none';
+}
+
+function toonCategorieen() {
+  document.querySelectorAll('.faq-categorie').forEach(function(cat) {
+    var zichtbaar = cat.querySelectorAll('.faq-item:not(.verborgen)').length > 0;
+    cat.style.display = zichtbaar ? 'block' : 'none';
+  });
+}
+
+// ── VRAAG TOGGLE ──
+function toggleVraag(btn) {
+  var antwoord = btn.nextElementSibling;
+  var isOpen = antwoord.classList.contains('open');
+
+  // Sluit alle andere open vragen
+  document.querySelectorAll('.faq-vraag.open').forEach(function(q) {
+    if (q !== btn) {
+      q.classList.remove('open');
+      q.nextElementSibling.classList.remove('open');
+    }
+  });
+
+  if (!isOpen) {
+    btn.classList.add('open');
+    antwoord.classList.add('open');
+    // Markeer als gelezen
+    var item = btn.closest('.faq-item');
+    if (!item.classList.contains('gelezen')) {
+      item.classList.add('gelezen');
+      gelezenVragen.add(item);
+      updateGelezen();
+    }
+  } else {
+    btn.classList.remove('open');
+    antwoord.classList.remove('open');
+  }
+}
+
+function updateGelezen() {
+  var aantal = gelezenVragen.size;
+  var pct = Math.round((aantal / totaalVragen) * 100);
+  document.getElementById('gelezenTekst').textContent = aantal + ' ' + (aantal === 1 ? 'vraag' : 'vragen') + ' bekeken';
+  document.getElementById('gelezenPct').textContent = pct + '%';
+  document.getElementById('gelezenBalk').style.width = pct + '%';
+}
+
+// Initialiseer
+document.getElementById('aantalGevonden').textContent = totaalVragen + ' vragen';
+</script>
+</body>
+</html>
