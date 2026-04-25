@@ -513,13 +513,10 @@ body {
       <div class="rw-chat-avatar">💛</div>
       <div class="rw-chat-header-info">
         <div class="rw-chat-header-naam">Rouw Assistent</div>
-        <div class="rw-chat-header-status"><div class="rw-chat-status-dot"></div> <span id="chatStatusTekst">Beschikbaar om te luisteren</span></div>
+        <div class="rw-chat-header-status"><div class="rw-chat-status-dot"></div> Beschikbaar om te luisteren</div>
       </div>
     </div>
-    <div id="apiKeyWrap" style="padding:10px 16px;background:rgba(232,131,74,0.08);border-bottom:1px solid rgba(232,131,74,0.2);display:flex;gap:8px;align-items:center;">
-      <input type="password" id="apiKeyInput" placeholder="Vul jouw Anthropic API sleutel in om te starten..." style="flex:1;border:1.5px solid #e2d9e0;border-radius:8px;padding:8px 12px;font-family:'Poppins',sans-serif;font-size:0.76rem;color:#4a1942;background:#fff;">
-      <button onclick="slaApiKeyOp()" style="background:#4a1942;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:'Poppins',sans-serif;font-size:0.76rem;font-weight:700;cursor:pointer;">Opslaan</button>
-    </div>
+
     <div class="rw-chat-snel">
       <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik voel me zo verdrietig')">Ik voel me zo verdrietig</button>
       <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik voel me zo alleen')">Ik voel me zo alleen</button>
@@ -1122,113 +1119,22 @@ function bepaalAntwoord(tekst) {
 
 function willekeurig(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-// ── CHAT GESCHIEDENIS ──
-var chatGeschiedenis = [];
-var CHAT_KEY = 'rouw_chat_apikey';
-
-function slaApiKeyOp() {
-  var key = document.getElementById('apiKeyInput').value.trim();
-  if (!key) return;
-  try { localStorage.setItem(CHAT_KEY, key); } catch(e) {}
-  document.getElementById('apiKeyWrap').style.display = 'none';
-  document.getElementById('chatStatusTekst').textContent = 'AI actief — klaar om te luisteren';
-}
-
-function laadApiKey() {
-  try {
-    var key = localStorage.getItem(CHAT_KEY);
-    if (key) {
-      document.getElementById('apiKeyInput').value = key;
-      document.getElementById('apiKeyWrap').style.display = 'none';
-      document.getElementById('chatStatusTekst').textContent = 'AI actief — klaar om te luisteren';
-    }
-  } catch(e) {}
-}
-
-function getApiKey() {
-  try { return localStorage.getItem(CHAT_KEY) || document.getElementById('apiKeyInput').value.trim(); }
-  catch(e) { return document.getElementById('apiKeyInput').value.trim(); }
-}
-
-async function verstuurChat() {
+function verstuurChat() {
   var input = document.getElementById('chatInput');
   var tekst = input.value.trim();
   if (!tekst) return;
-
-  var apiKey = getApiKey();
-  if (!apiKey) {
-    document.getElementById('apiKeyWrap').style.display = 'flex';
-    document.getElementById('apiKeyInput').focus();
-    voegChatBerichtToe('Vul eerst jouw Anthropic API sleutel in om de AI chat te activeren.', 'ai');
-    return;
-  }
-
   voegChatBerichtToe(tekst, 'gebruiker');
   input.value = '';
-
-  chatGeschiedenis.push({ role: 'user', content: tekst });
-
   var typen = document.getElementById('chatTypen');
   typen.classList.add('zichtbaar');
   var berichten = document.getElementById('chatBerichten');
   berichten.scrollTop = berichten.scrollHeight;
-
-  try {
-    var response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 600,
-        system: `Je bent een warme, empathische en professionele rouwbegeleider van Uitvaart-Platform.nl. Je naam is Rosa.
-
-Je helpt mensen die rouwen of verlies hebben ervaren. Je luistert actief, reageert met echte empathie en geeft praktische maar menselijke begeleiding.
-
-Jouw aanpak:
-- Reageer altijd warm, persoonlijk en begripvol
-- Stel één verdiepende vervolgvraag per antwoord
-- Erken de gevoelens van de persoon zonder te oordelen
-- Geef concrete, helpende informatie over rouw als dat gevraagd wordt
-- Verwijs bij ernstige klachten of crisis naar de Luisterlijn (0900-0767) of een professionele rouwbegeleider via uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg
-- Gebruik geen streepjes (—) in je tekst
-- Schrijf in het Nederlands, warm en toegankelijk
-- Houd antwoorden menselijk en niet te lang (max 4 zinnen) tenzij uitleg nodig is
-- Noem af en toe dat rouwbegeleiders beschikbaar zijn via Uitvaart-Platform.nl als dat passend is
-
-Je bent geen vervanging voor professionele hulp maar een eerste warme steun.`,
-        messages: chatGeschiedenis.slice(-10)
-      })
-    });
-
+  setTimeout(function() {
     typen.classList.remove('zichtbaar');
-
-    if (!response.ok) {
-      var fout = await response.json();
-      if (response.status === 401) {
-        voegChatBerichtToe('De API sleutel klopt niet. Controleer je sleutel en probeer opnieuw.', 'ai');
-        document.getElementById('apiKeyWrap').style.display = 'flex';
-      } else {
-        voegChatBerichtToe('Er is even iets misgegaan. Probeer het opnieuw.', 'ai');
-      }
-      return;
-    }
-
-    var data = await response.json();
-    var antwoord = data.content[0].text;
-    chatGeschiedenis.push({ role: 'assistant', content: antwoord });
+    var antwoord = bepaalAntwoord(tekst.toLowerCase());
     voegChatBerichtToe(antwoord, 'ai');
-
-  } catch(e) {
-    typen.classList.remove('zichtbaar');
-    voegChatBerichtToe('Er is even iets misgegaan met de verbinding. Probeer het opnieuw.', 'ai');
-  }
-
-  berichten.scrollTop = berichten.scrollHeight;
+    berichten.scrollTop = berichten.scrollHeight;
+  }, 1000 + Math.random() * 800);
 }
 
 function stuurSnelBericht(tekst) {
@@ -1246,9 +1152,6 @@ function voegChatBerichtToe(tekst, wie) {
   berichten.appendChild(div);
   berichten.scrollTop = berichten.scrollHeight;
 }
-
-// Laad API key bij start
-laadApiKey();
 
 // ══ ZELFZORG ══
 var ZELFZORG_SLEUTEL = 'rouw_zelfzorg_' + new Date().toDateString();
