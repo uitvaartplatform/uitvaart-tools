@@ -310,6 +310,7 @@ body {
     <div class="rw-hero-knoppen">
       <button class="rw-hero-btn" onclick="toonTab('emotie')">💛 Hoe voel ik me?</button>
       <button class="rw-hero-btn-s" onclick="toonTab('coaches')">🌸 Vind hulp</button>
+      <button class="rw-hero-btn-s" onclick="toonTab('chat')">💬 Praat erover</button>
     </div>
     <div class="rw-hero-stats">
       <div><div class="rw-hero-stat-nr">1 op 5</div><div class="rw-hero-stat-label">Nederlanders ervaart gecompliceerde rouw</div></div>
@@ -321,10 +322,10 @@ body {
 
 <!-- TABS -->
 <div class="rw-tabs">
-  <button class="rw-tab" onclick="toonTab('emotie')">💛 Hoe voel ik me?</button>
+  <button class="rw-tab actief" onclick="toonTab('emotie')">💛 Hoe voel ik me?</button>
   <button class="rw-tab" onclick="toonTab('fasen')">🌿 Fasen van rouw</button>
   <button class="rw-tab" onclick="toonTab('dagboek')">📝 Rouwdagboek</button>
-  <button class="rw-tab actief" onclick="toonTab('chat')">💬 Praat erover</button>
+  <button class="rw-tab" onclick="toonTab('chat')">💬 Praat erover</button>
   <button class="rw-tab" onclick="toonTab('zelfzorg')">🫀 Zelfzorg</button>
   <button class="rw-tab" onclick="toonTab('kinderen')">👶 Kinderen</button>
   <button class="rw-tab" onclick="toonTab('coaches')">🌸 Hulp vinden</button>
@@ -334,7 +335,7 @@ body {
 <!-- ═══════════════════════════════
      TAB 1: EMOTIE CHECKER
 ═══════════════════════════════ -->
-<div class="rw-tabinhoud" id="tab-emotie">
+<div class="rw-tabinhoud actief" id="tab-emotie">
 
   <div class="rw-emotie-wrap">
     <div class="rw-emotie-header">
@@ -505,7 +506,7 @@ body {
 <!-- ═══════════════════════════════
      TAB 4: CHAT
 ═══════════════════════════════ -->
-<div class="rw-tabinhoud actief" id="tab-chat">
+<div class="rw-tabinhoud" id="tab-chat">
 
   <div class="rw-chat-wrap">
     <div class="rw-chat-header">
