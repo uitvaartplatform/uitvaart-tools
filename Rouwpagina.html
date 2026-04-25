@@ -321,10 +321,10 @@ body {
 
 <!-- TABS -->
 <div class="rw-tabs">
-  <button class="rw-tab actief" onclick="toonTab('emotie')">💛 Hoe voel ik me?</button>
+  <button class="rw-tab" onclick="toonTab('emotie')">💛 Hoe voel ik me?</button>
   <button class="rw-tab" onclick="toonTab('fasen')">🌿 Fasen van rouw</button>
   <button class="rw-tab" onclick="toonTab('dagboek')">📝 Rouwdagboek</button>
-  <button class="rw-tab" onclick="toonTab('chat')">💬 Praat erover</button>
+  <button class="rw-tab actief" onclick="toonTab('chat')">💬 Praat erover</button>
   <button class="rw-tab" onclick="toonTab('zelfzorg')">🫀 Zelfzorg</button>
   <button class="rw-tab" onclick="toonTab('kinderen')">👶 Kinderen</button>
   <button class="rw-tab" onclick="toonTab('coaches')">🌸 Hulp vinden</button>
@@ -334,7 +334,7 @@ body {
 <!-- ═══════════════════════════════
      TAB 1: EMOTIE CHECKER
 ═══════════════════════════════ -->
-<div class="rw-tabinhoud actief" id="tab-emotie">
+<div class="rw-tabinhoud" id="tab-emotie">
 
   <div class="rw-emotie-wrap">
     <div class="rw-emotie-header">
@@ -505,22 +505,31 @@ body {
 <!-- ═══════════════════════════════
      TAB 4: CHAT
 ═══════════════════════════════ -->
-<div class="rw-tabinhoud" id="tab-chat">
+<div class="rw-tabinhoud actief" id="tab-chat">
 
   <div class="rw-chat-wrap">
     <div class="rw-chat-header">
       <div class="rw-chat-avatar">💛</div>
       <div class="rw-chat-header-info">
         <div class="rw-chat-header-naam">Rouw Assistent</div>
-        <div class="rw-chat-header-status"><div class="rw-chat-status-dot"></div> Beschikbaar om te luisteren</div>
+        <div class="rw-chat-header-status"><div class="rw-chat-status-dot"></div> <span id="chatStatusTekst">Beschikbaar om te luisteren</span></div>
       </div>
+    </div>
+    <div id="apiKeyWrap" style="padding:10px 16px;background:rgba(232,131,74,0.08);border-bottom:1px solid rgba(232,131,74,0.2);display:flex;gap:8px;align-items:center;">
+      <input type="password" id="apiKeyInput" placeholder="Vul jouw Anthropic API sleutel in om te starten..." style="flex:1;border:1.5px solid #e2d9e0;border-radius:8px;padding:8px 12px;font-family:'Poppins',sans-serif;font-size:0.76rem;color:#4a1942;background:#fff;">
+      <button onclick="slaApiKeyOp()" style="background:#4a1942;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:'Poppins',sans-serif;font-size:0.76rem;font-weight:700;cursor:pointer;">Opslaan</button>
     </div>
     <div class="rw-chat-snel">
       <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik voel me zo verdrietig')">Ik voel me zo verdrietig</button>
-      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Hoe lang duurt rouw?')">Hoe lang duurt rouw?</button>
-      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik voel me schuldig')">Ik voel me schuldig</button>
-      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Wanneer moet ik hulp zoeken?')">Wanneer hulp zoeken?</button>
       <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik voel me zo alleen')">Ik voel me zo alleen</button>
+      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik voel me schuldig')">Ik voel me schuldig</button>
+      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik ben zo boos')">Ik ben zo boos</button>
+      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Hoe lang duurt rouw?')">Hoe lang duurt rouw?</button>
+      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik slaap niet meer')">Ik slaap niet meer</button>
+      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Mijn partner is overleden')">Mijn partner is overleden</button>
+      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik wil hulp zoeken')">Ik wil hulp zoeken</button>
+      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Is mijn gevoel normaal?')">Is dit normaal?</button>
+      <button class="rw-chat-snel-knop" onclick="stuurSnelBericht('Ik heb mijn huisdier verloren')">Mijn huisdier verloren</button>
     </div>
     <div class="rw-chat-berichten" id="chatBerichten">
       <div class="rw-chat-bericht ai">
@@ -973,39 +982,251 @@ function downloadDagboek() {
 }
 
 // ══ CHAT ══
+var chatGeschiedenisBerichten = [];
+
 var chatResponsen = {
-  verdriet: ['Verdriet is de diepste uitdrukking van liefde. Je mist iemand of iets met heel je wezen. Dat mag er zijn. Wil je me vertellen wie je mist?', 'Het is goed dat je dit uitspreekt. Verdriet heeft de ruimte nodig om er te zijn. Wat was je dierbare voor jou?'],
-  boos: ['Boosheid is een normale en noodzakelijke kant van rouw. Je mag boos zijn. Op het lot, op artsen, op jezelf of zelfs op degene die je verloren hebt. Waar is de boosheid het grootst?', 'Die woede heeft een plek nodig. Beweeg, schrijf, schreeuw als het helpt. Kun je me meer vertellen over wat je boos maakt?'],
-  schuld: ['Schuldgevoelens horen bij rouw voor bijna iedereen. Maar je deed wat je kon, op het moment dat je het deed. Wat maakt dat je je schuldig voelt?', 'Het is zwaar om met schuldgevoelens te leven. Weet dat je jezelf ook vergeving mag geven. Praten hierover met een rouwbegeleider kan heel waardevol zijn.'],
-  alleen: ['Rouw kan enorm eenzaam zijn, ook als je omgeven bent door mensen. Je bent hier niet alleen. Vertel me, mis je iemand om mee te praten?', 'Die eenzaamheid is heel herkenbaar. Soms begrijpt niemand precies wat jij verloren hebt. Een rouwgroep kan helpen. Mensen die echt begrijpen. Zal ik je daarnaar verwijzen?'],
-  hulp: ['Het is een groot teken van kracht om hulp te vragen. Op Uitvaart-Platform.nl vind je gecertificeerde rouwbegeleiders bij jou in de buurt: <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" target="_blank">bekijk rouwbegeleiders</a>. Of bel de Luisterlijn: <a href="tel:09000767">0900-0767</a> (gratis, 24/7).', 'Professionele begeleiding is geen teken van zwakte. Het is zelfzorg. <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" target="_blank">Hier vind je rouwbegeleiders</a> in jouw regio.'],
-  lang: ['Rouw heeft geen vaste tijdsduur. De acute pijn wordt voor veel mensen na een aantal maanden iets draaglijker, maar rouw kan jaren duren. Na een jaar, vijf jaar of tien jaar kunnen er nog intense momenten zijn. Dat is normaal. Rouw gaat niet over. Je leert ermee leven.', 'Er bestaat geen deadline voor rouw. Mensen die zeggen "het wordt beter" bedoelen het goed, maar rouw verloopt voor iedereen anders. Geef jezelf de tijd die jij nodig hebt.'],
-  normaal: ['Ja, wat je voelt is normaal. Rouw kent geen regels. Bijna alles wat je voelt, hoe tegenstrijdig of raar het ook lijkt, is een normale reactie op een abnormale situatie. Je bent niet gek, je bent aan het rouwen.', 'Rouw is zo complex en persoonlijk dat er eigenlijk geen "abnormaal" bestaat. Opluchting, boosheid, verdoving, lachen: het mag er allemaal zijn.'],
+
+  verdriet: [
+    'Verdriet is de diepste uitdrukking van liefde. Wat je voelt is een bewijs van hoe echt de verbinding was die je had. Er is geen tijdslimiet op dit gevoel, en je hoeft het niet weg te duwen. Wil je me vertellen wie je mist?',
+    'Ik hoor je. Dat gevoel van verdriet kan soms in golven komen: even wat beter, en dan opeens weer overweldigend. Dat is normaal. Je bent niet alleen. Wanneer voelt het verdriet het zwaarst voor jou?',
+    'Verdriet heeft de ruimte nodig om er te zijn. Huilen, stilzitten, niet kunnen functioneren: het mag allemaal. Je lichaam en geest verwerken iets enorms. Wat helpt jou op dit moment om de dag door te komen?',
+    'Het is goed dat je dit uitspreekt, ook al voelt het misschien zinloos om erover te praten. Woorden geven aan pijn is een van de manieren waarop mensen verwerken. Hoe lang draag je dit verdriet al met je mee?'
+  ],
+
+  boos: [
+    'Boosheid is een volkomen normale en zelfs noodzakelijke kant van rouw. Je mag boos zijn op het lot, op artsen, op de situatie, op jezelf of zelfs op degene die je verloren hebt. Het betekent dat het je wat deed. Waar zit de woede het meest?',
+    'Die boosheid heeft een uitweg nodig. Beweging helpt vaak: wandelen, hardlopen, zelfs schreeuwen in de auto. Schrijf het op als praten te moeilijk is. Wat je voelt is niet gek, het is rouw. Heeft iemand in jouw omgeving begrip voor deze boosheid?',
+    'Soms is boosheid makkelijker te voelen dan verdriet. Het geeft energie, terwijl verdriet uitput. Beide zijn eerlijk en beide horen bij rouw. Ik vraag me af: op wie of wat ben je het meest boos op dit moment?',
+    'Boosheid die nergens heen kan, kan omslaan in vermoeidheid of somberheid. Het helpt om haar bewust een plek te geven. Praten met een rouwbegeleider kan daarin heel waardevol zijn. Wil je weten hoe je er een kunt vinden?'
+  ],
+
+  schuld: [
+    'Schuldgevoelens zijn bijna universeel bij rouw. "Had ik maar", "als ik toch" zijn gedachten die bijna iedereen kent die verlies ervaart. Maar je deed wat je kon, met de kennis en mogelijkheden die je op dat moment had. Wil je me vertellen waar de schuldgevoelens over gaan?',
+    'Het is heel zwaar om met schuldgevoelens te leven. Weet dat schuldgevoel in rouw zelden terecht is, maar dat het gevoel toch heel reëel en pijnlijk is. Jezelf vergeving geven is misschien wel het moeilijkste onderdeel van rouw. Hoe lang heb je hier al last van?',
+    'Schuldgevoelens kunnen je rouw compliceren en het verwerken moeilijker maken. Een rouwbegeleider kan je helpen om deze gevoelens te onderzoeken en er anders mee om te gaan. Dat is geen teken van zwakte, maar van zelfzorg. Zou dat iets voor jou kunnen zijn?',
+    'Soms komen schuldgevoelens voort uit liefde. Omdat je zo graag had gewild dat het anders was. Dat zegt iets moois over jou, ook al voelt het nu alleen maar pijnlijk. Vertel me eens wat meer over de situatie als je dat wilt.'
+  ],
+
+  alleen: [
+    'Rouw kan enorm eenzaam zijn, ook als je omgeven bent door mensen die van je houden. Niemand begrijpt precies wat jij verloren hebt, want die band was uniek. Je bent hier niet alleen. Mis je iemand om echt mee te praten?',
+    'Die eenzaamheid is heel herkenbaar. Na een uitvaart gaat iedereen terug naar zijn eigen leven, terwijl jij nog midden in de pijn zit. Dat is een van de zwaarste kanten van rouw. Heb je mensen om je heen die begrijpen wat je doormaakt?',
+    'Soms helpt het om in contact te komen met anderen die ook rouwen. Een rouwgroep kan dat bieden: mensen die echt begrijpen zonder dat je hoeft uit te leggen. Zou zoiets je kunnen helpen? Op <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" target="_blank">Uitvaart-Platform.nl</a> vind je rouwbegeleiders en -groepen bij jou in de buurt.',
+    'Je hoeft dit niet alleen te dragen. Er zijn mensen die getraind zijn om naast je te staan in precies deze situatie. De Luisterlijn is ook altijd beschikbaar: <a href="tel:09000767">0900-0767</a>, gratis en 24/7. Hoe lang voel je je al zo alleen?'
+  ],
+
+  hulp: [
+    'Het is een groot teken van kracht om hulp te vragen. Echt. Op <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" target="_blank">Uitvaart-Platform.nl</a> vind je gecertificeerde rouwbegeleiders bij jou in de buurt. Of bel de Luisterlijn: <a href="tel:09000767">0900-0767</a>, gratis en 24 uur per dag beschikbaar.',
+    'Professionele begeleiding is geen teken van zwakte. Het is zelfzorg. Een rouwbegeleider biedt een veilige ruimte waar je alles kwijt kunt zonder oordeel. <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" target="_blank">Vind een rouwbegeleider in jouw regio</a>.',
+    'Als rouw je dagelijks leven ernstig belemmert, is het verstandig om hulp te zoeken. Dat kan bij je huisarts, een psycholoog of een rouwbegeleider. Bij crisis of donkere gedachten: bel altijd de Luisterlijn op <a href="tel:09000767">0900-0767</a>. Wat zou voor jou de eerste stap kunnen zijn?',
+    'Er zijn verschillende vormen van hulp. Een rouwbegeleider begeleidt je bij de emotionele verwerking. Een psycholoog helpt bij gecompliceerde rouw of depressie. En de Luisterlijn is er voor als je op dit moment iemand nodig hebt om mee te praten. Welke past het beste bij wat jij nu nodig hebt?'
+  ],
+
+  lang: [
+    'Er bestaat geen tijdslimiet op rouw. De eerste acute pijn wordt voor veel mensen na enkele maanden iets draaglijker, maar rouw kan jaren duren. Na een jaar, vijf jaar of tien jaar kunnen er nog intense momenten zijn, rond verjaardagen of feestdagen. Dat is volkomen normaal.',
+    'Rouw gaat niet over. Je leert er een plek mee te geven in je leven. Sommige dagen voelt het ver weg, andere dagen slaat het opeens hard toe. Beide zijn rouw. Hoe lang ben jij al aan het rouwen?',
+    'Er is geen deadline voor verdriet. De omgeving verwacht soms dat je "het een plekje hebt gegeven" na een paar maanden, maar rouw luistert niet naar verwachtingen. Jij bepaalt jouw tempo. Voelt de omgeving druk op je uit om verder te gaan?',
+    'Rouw verandert van vorm maar verdwijnt niet. Het wordt niet minder erg, maar je wordt sterker om het te dragen. Op goede dagen lijkt het ver weg. Op zware dagen is het er weer volop. Beide zijn normaal. Wanneer zijn de zwaarste momenten voor jou?'
+  ],
+
+  normaal: [
+    'Ja, wat je voelt is normaal. Rouw kent geen regels. Bijna alles wat je voelt, hoe tegenstrijdig of vreemd het ook lijkt, is een normale reactie op een abnormale situatie. Je bent niet gek. Je rouwt.',
+    'Rouw is zo persoonlijk en complex dat er eigenlijk geen "abnormaal" bestaat. Opluchting naast verdriet, lachen terwijl je huilt, boosheid en liefde tegelijk: het mag er allemaal zijn. Welk gevoel voelt voor jou het meest verwarrend?',
+    'Veel mensen vragen zich af of ze wel goed rouwen. Of ze wel genoeg huilen, of niet te veel, of de rouw wel lang genoeg duurt. Er is geen goede of verkeerde manier. Jouw rouw is van jou. Wat maakt dat je je afvraagt of het normaal is?',
+    'Soms schrikken mensen van de intensiteit van rouw, of juist van het ontbreken ervan. Beide zijn normaal. Verdoving is een beschermingsmechanisme. Intens verdriet is rouw die ruimte vraagt. Wat ervaar jij op dit moment het meest?'
+  ],
+
+  slaap: [
+    'Slaapproblemen horen bij rouw. Je lichaam en geest zijn overbelast en dat verstoort de slaap. Probeer een vaste routine te houden: zelfde bedtijd, geen schermen voor het slapen, een kopje thee. Heb je hier al langer last van?',
+    'Niet kunnen slapen door verdriet is heel herkenbaar. Soms helpt het om overdag even te bewegen zodat je lichaam vermoeid is. Een warm bad voor het slapen kan ook helpen. Als het aanhoudt, bespreek het dan met je huisarts. Hoe lang slaap je al slecht?'
+  ],
+
+  eten: [
+    'Geen eetlust bij rouw is heel normaal. Je lichaam heeft het zwaar en eten voelt soms zinloos. Probeer toch iets kleins te eten, ook al is het maar een cracker of een stuk fruit. Je lichaam heeft brandstof nodig om dit te kunnen dragen. Zorgt iemand voor je?',
+    'Rouw put het lichaam uit. Soms eet je te weinig, soms juist te veel als troost. Beide zijn begrijpelijk. Probeer bewust te zijn van wat je eet en drink in ieder geval voldoende water. Lukt het om voor jezelf te zorgen?'
+  ],
+
+  kind: [
+    'Kinderen rouwen anders dan volwassenen maar ze rouwen wel. Eerlijkheid en nabijheid zijn het belangrijkst. Gebruik het woord "dood" en geen eufemismen als "weggereisd" of "in slaap gevallen". Hoe oud is het kind?',
+    'Het is heel goed dat je aan het kind denkt. Kinderen hebben behoefte aan routine en veiligheid naast ruimte voor verdriet. Huil gerust voor het kind: zo laat je zien dat verdriet normaal is. Heeft het kind iemand om mee te praten?',
+    'Voor elk kind is de aanpak anders afhankelijk van de leeftijd. Op de tab "Kinderen" van deze pagina vind je tips per leeftijdsgroep. Wil je dat ik je er meer over vertel?'
+  ],
+
+  partner: [
+    'Het verlies van een partner is een van de zwaarste vormen van rouw. Je verliest niet alleen een persoon maar ook een toekomst, een routine, een thuis. Alles verandert tegelijk. Hoe lang geleden is je partner overleden?',
+    'Na het verlies van een partner kunnen praktische zaken als administratie en financiën overweldigend voelen terwijl je tegelijk rouwt. Probeer dit op te knippen in kleine stappen. Heb je mensen om je heen die kunnen helpen?',
+    'Rouwen om een partner gaat diep. Soms helpt het om contact te zoeken met anderen die hetzelfde hebben meegemaakt, via een rouwgroep voor weduwen of weduwnaars. Wil je weten hoe je die kunt vinden?'
+  ],
+
+  ouder: [
+    'Het verlies van een ouder, ook al was die oud of ziek, is altijd een groot verlies. Je verliest iemand die je al je leven kende, iemand die je origine is. Dat doet pijn op een manier die moeilijk uit te leggen is. Wil je me vertellen over je ouder?',
+    'Soms denken mensen dat het verlies van een oudere ouder minder zwaar hoort te zijn. Maar verlies is verlies, en de band met een ouder is diep geworteld. Je verdriet is volledig terecht. Hoe was jullie band?'
+  ],
+
+  kind_verlies: [
+    'Het verlies van een kind is het zwaarste wat een mens kan meemaken. Er zijn geen woorden die dit goed kunnen beschrijven. Ik ben hier en ik luister. Wil je me vertellen over jouw kind?',
+    'Wat je doormaakt is onvoorstelbaar zwaar. Rouw om een kind gaat tegen de natuurlijke orde in en kan mensen volledig ontwrichten. Professionele begeleiding is hierbij bijna altijd aan te raden. Ben je al in contact met een rouwbegeleider of psycholoog?'
+  ],
+
+  huisdier: [
+    'Het verlies van een huisdier is een volkomen serieuze vorm van rouw, ook al begrijpt niet iedereen dat. Een huisdier is familie. De pijn is reëel en verdient erkenning. Welk huisdier heb je verloren?',
+    'Veel mensen schamen zich voor het verdriet om een huisdier omdat de omgeving het soms bagatelliseert. Maar de band met een dier kan heel diep zijn. Jouw verdriet is volledig terecht. Hoe lang had je hem of haar?'
+  ],
+
+  crisis: [
+    'Ik maak me zorgen om je. Als je gedachten hebt aan jezelf iets aan te doen, bel dan nu de Luisterlijn op <a href="tel:09000767">0900-0767</a>. Ze zijn er 24 uur per dag, gratis en anoniem. Je hoeft dit niet alleen te dragen.',
+    'Wat je beschrijft klinkt heel zwaar. Bel alsjeblieft de Luisterlijn op <a href="tel:09000767">0900-0767</a> als je je nu niet veilig voelt. Of ga naar de huisartsenpost. Er zijn mensen die klaar staan om je te helpen, op dit moment.'
+  ],
+
+  dankbaar: [
+    'Fijn dat dit gesprek je iets heeft gebracht. Onthoud: je bent niet alleen. Op Uitvaart-Platform.nl vind je altijd <a href="https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg" target="_blank">professionele rouwbegeleiders</a> als je meer steun nodig hebt. Pas goed op jezelf.',
+    'Ik ben blij dat ik je even heb kunnen ondersteunen. Rouw is een lang proces. Kom gerust terug als je wilt praten. En vergeet niet: de Luisterlijn is er altijd, <a href="tel:09000767">0900-0767</a>, gratis en dag en nacht beschikbaar.'
+  ],
+
   default: [
-    'Dat klinkt heel zwaar. Dank je dat je dit deelt. Wil je me meer vertellen over wat je doormaakt?',
-    'Ik hoor je. Verdriet heeft de ruimte nodig om er te zijn. Wat heeft je vandaag het meest beziggehouden?',
-    'Het is goed dat je dit uitspreekt. Hoe lang rouw je al?',
-    'Je bent niet alleen in dit. Veel mensen herkennen wat jij beschrijft. Wat heb je op dit moment het meest nodig?',
-    'Dat is een eerlijk gevoel. Rouw is complex en tegenstrijdig. Er is geen goede of verkeerde manier. Hoe kan ik je vandaag het beste ondersteunen?'
+    'Ik hoor je. Wat je beschrijft klinkt heel zwaar. Rouw is anders voor iedereen en er is geen goede of verkeerde manier om het te doorleven. Wil je me meer vertellen over wat je doormaakt?',
+    'Dank je dat je dit deelt. Dat is niet altijd makkelijk. Ik ben hier om te luisteren, zonder oordeel. Hoe lang draag je dit al met je mee?',
+    'Je bent niet alleen, ook al voelt het soms zo. Veel mensen herkennen wat jij beschrijft. Wat heeft je vandaag het meest beziggehouden?',
+    'Rouw is complex en tegenstrijdig. Gevoelens kunnen door elkaar lopen en dat kan verwarrend zijn. Er is geen goede of verkeerde manier om te rouwen. Wat heb je op dit moment het meest nodig?',
+    'Het is moedig om hierover te praten. Vertel me meer als je dat wilt. Ik luister.',
+    'Ieder verlies is anders en ieder mens rouwt anders. Wat werkt voor de één hoeft niet te werken voor de ander. Hoe gaat het vandaag met je?',
+    'Soms is er geen antwoord dat het beter maakt, en dat is ook niet nodig. Soms is het genoeg om gehoord te worden. Ik ben hier. Vertel me wat er speelt.',
+    'Rouw vraagt enorm veel energie. Van je lichaam, van je geest, van je hart. Zorg je ook een beetje voor jezelf? Eet je, slaap je?'
   ]
 };
 
-function verstuurChat() {
+function bepaalAntwoord(tekst) {
+  // Crisis eerst altijd checken
+  if (tekst.includes('zelfmoord') || tekst.includes('niet meer wil leven') || tekst.includes('leven beëindigen') || tekst.includes('dood wil') || tekst.includes('mezelf iets aandoen')) return willekeurig(chatResponsen.crisis);
+  // Dankbaarheid
+  if (tekst.includes('dank') || tekst.includes('bedankt') || tekst.includes('geholpen') || tekst.includes('fijn gesprek')) return willekeurig(chatResponsen.dankbaar);
+  // Specifieke verliessoorten
+  if (tekst.includes('kind verloren') || tekst.includes('mijn kind') || tekst.includes('baby') || tekst.includes('miskraam')) return willekeurig(chatResponsen.kind_verlies);
+  if (tekst.includes('partner') || tekst.includes('man ') || tekst.includes('vrouw ') || tekst.includes('echtgenoot') || tekst.includes('echtgenote') || tekst.includes('geliefde')) return willekeurig(chatResponsen.partner);
+  if (tekst.includes('moeder') || tekst.includes('vader') || tekst.includes('mama') || tekst.includes('papa') || tekst.includes('ouder')) return willekeurig(chatResponsen.ouder);
+  if (tekst.includes('huisdier') || tekst.includes('hond') || tekst.includes('kat') || tekst.includes('dier')) return willekeurig(chatResponsen.huisdier);
+  if (tekst.includes('kind ') || tekst.includes('kinderen') || tekst.includes('zoon') || tekst.includes('dochter')) return willekeurig(chatResponsen.kind);
+  // Emoties
+  if (tekst.includes('verdriet') || tekst.includes('huil') || tekst.includes('mis ') || tekst.includes('gemis') || tekst.includes('tranen') || tekst.includes('pijn')) return willekeurig(chatResponsen.verdriet);
+  if (tekst.includes('boos') || tekst.includes('kwaad') || tekst.includes('woede') || tekst.includes('woedend') || tekst.includes('frustreer') || tekst.includes('niet eerlijk')) return willekeurig(chatResponsen.boos);
+  if (tekst.includes('schuld') || tekst.includes('spijt') || tekst.includes('had ik maar') || tekst.includes('als ik') || tekst.includes('mijn schuld')) return willekeurig(chatResponsen.schuld);
+  if (tekst.includes('alleen') || tekst.includes('eenzaam') || tekst.includes('niemand') || tekst.includes('begrijpt') || tekst.includes('isoleer')) return willekeurig(chatResponsen.alleen);
+  // Praktisch
+  if (tekst.includes('slaap') || tekst.includes('slapen') || tekst.includes('wakker') || tekst.includes('nacht')) return willekeurig(chatResponsen.slaap);
+  if (tekst.includes('eten') || tekst.includes('eetlust') || tekst.includes('honger') || tekst.includes('vergeet te eten')) return willekeurig(chatResponsen.eten);
+  if (tekst.includes('hulp') || tekst.includes('begeleider') || tekst.includes('therapie') || tekst.includes('coach') || tekst.includes('psycholoog') || tekst.includes('professioneel')) return willekeurig(chatResponsen.hulp);
+  if (tekst.includes('lang') || tekst.includes('duurt') || tekst.includes('wanneer') || tekst.includes('ooit over') || tekst.includes('beter word') || tekst.includes('hoe lang')) return willekeurig(chatResponsen.lang);
+  if (tekst.includes('normaal') || tekst.includes('gek') || tekst.includes('mag ik') || tekst.includes('hoort dit') || tekst.includes('is het normaal')) return willekeurig(chatResponsen.normaal);
+  return willekeurig(chatResponsen.default);
+}
+
+function willekeurig(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// ── CHAT GESCHIEDENIS ──
+var chatGeschiedenis = [];
+var CHAT_KEY = 'rouw_chat_apikey';
+
+function slaApiKeyOp() {
+  var key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) return;
+  try { localStorage.setItem(CHAT_KEY, key); } catch(e) {}
+  document.getElementById('apiKeyWrap').style.display = 'none';
+  document.getElementById('chatStatusTekst').textContent = 'AI actief — klaar om te luisteren';
+}
+
+function laadApiKey() {
+  try {
+    var key = localStorage.getItem(CHAT_KEY);
+    if (key) {
+      document.getElementById('apiKeyInput').value = key;
+      document.getElementById('apiKeyWrap').style.display = 'none';
+      document.getElementById('chatStatusTekst').textContent = 'AI actief — klaar om te luisteren';
+    }
+  } catch(e) {}
+}
+
+function getApiKey() {
+  try { return localStorage.getItem(CHAT_KEY) || document.getElementById('apiKeyInput').value.trim(); }
+  catch(e) { return document.getElementById('apiKeyInput').value.trim(); }
+}
+
+async function verstuurChat() {
   var input = document.getElementById('chatInput');
   var tekst = input.value.trim();
   if (!tekst) return;
+
+  var apiKey = getApiKey();
+  if (!apiKey) {
+    document.getElementById('apiKeyWrap').style.display = 'flex';
+    document.getElementById('apiKeyInput').focus();
+    voegChatBerichtToe('Vul eerst jouw Anthropic API sleutel in om de AI chat te activeren.', 'ai');
+    return;
+  }
+
   voegChatBerichtToe(tekst, 'gebruiker');
   input.value = '';
+
+  chatGeschiedenis.push({ role: 'user', content: tekst });
+
   var typen = document.getElementById('chatTypen');
   typen.classList.add('zichtbaar');
-  setTimeout(function() {
-    typen.classList.remove('zichtbaar');
-    var antwoord = bepaalAntwoord(tekst.toLowerCase());
-    voegChatBerichtToe(antwoord, 'ai');
-    var berichten = document.getElementById('chatBerichten');
-    berichten.scrollTop = berichten.scrollHeight;
-  }, 1200 + Math.random() * 800);
   var berichten = document.getElementById('chatBerichten');
+  berichten.scrollTop = berichten.scrollHeight;
+
+  try {
+    var response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 600,
+        system: `Je bent een warme, empathische en professionele rouwbegeleider van Uitvaart-Platform.nl. Je naam is Rosa.
+
+Je helpt mensen die rouwen of verlies hebben ervaren. Je luistert actief, reageert met echte empathie en geeft praktische maar menselijke begeleiding.
+
+Jouw aanpak:
+- Reageer altijd warm, persoonlijk en begripvol
+- Stel één verdiepende vervolgvraag per antwoord
+- Erken de gevoelens van de persoon zonder te oordelen
+- Geef concrete, helpende informatie over rouw als dat gevraagd wordt
+- Verwijs bij ernstige klachten of crisis naar de Luisterlijn (0900-0767) of een professionele rouwbegeleider via uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg
+- Gebruik geen streepjes (—) in je tekst
+- Schrijf in het Nederlands, warm en toegankelijk
+- Houd antwoorden menselijk en niet te lang (max 4 zinnen) tenzij uitleg nodig is
+- Noem af en toe dat rouwbegeleiders beschikbaar zijn via Uitvaart-Platform.nl als dat passend is
+
+Je bent geen vervanging voor professionele hulp maar een eerste warme steun.`,
+        messages: chatGeschiedenis.slice(-10)
+      })
+    });
+
+    typen.classList.remove('zichtbaar');
+
+    if (!response.ok) {
+      var fout = await response.json();
+      if (response.status === 401) {
+        voegChatBerichtToe('De API sleutel klopt niet. Controleer je sleutel en probeer opnieuw.', 'ai');
+        document.getElementById('apiKeyWrap').style.display = 'flex';
+      } else {
+        voegChatBerichtToe('Er is even iets misgegaan. Probeer het opnieuw.', 'ai');
+      }
+      return;
+    }
+
+    var data = await response.json();
+    var antwoord = data.content[0].text;
+    chatGeschiedenis.push({ role: 'assistant', content: antwoord });
+    voegChatBerichtToe(antwoord, 'ai');
+
+  } catch(e) {
+    typen.classList.remove('zichtbaar');
+    voegChatBerichtToe('Er is even iets misgegaan met de verbinding. Probeer het opnieuw.', 'ai');
+  }
+
   berichten.scrollTop = berichten.scrollHeight;
 }
 
@@ -1025,18 +1246,8 @@ function voegChatBerichtToe(tekst, wie) {
   berichten.scrollTop = berichten.scrollHeight;
 }
 
-function bepaalAntwoord(tekst) {
-  if (tekst.includes('verdriet') || tekst.includes('huil') || tekst.includes('mis')) return willekeurig(chatResponsen.verdriet);
-  if (tekst.includes('boos') || tekst.includes('kwaad') || tekst.includes('woede') || tekst.includes('frustreer')) return willekeurig(chatResponsen.boos);
-  if (tekst.includes('schuld') || tekst.includes('spijt') || tekst.includes('had ik maar')) return willekeurig(chatResponsen.schuld);
-  if (tekst.includes('alleen') || tekst.includes('eenzaam') || tekst.includes('niemand')) return willekeurig(chatResponsen.alleen);
-  if (tekst.includes('hulp') || tekst.includes('begeleider') || tekst.includes('therapie') || tekst.includes('coach')) return willekeurig(chatResponsen.hulp);
-  if (tekst.includes('lang') || tekst.includes('duurt') || tekst.includes('wanneer') || tekst.includes('over')) return willekeurig(chatResponsen.lang);
-  if (tekst.includes('normaal') || tekst.includes('gek') || tekst.includes('mag ik')) return willekeurig(chatResponsen.normaal);
-  return willekeurig(chatResponsen.default);
-}
-
-function willekeurig(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+// Laad API key bij start
+laadApiKey();
 
 // ══ ZELFZORG ══
 var ZELFZORG_SLEUTEL = 'rouw_zelfzorg_' + new Date().toDateString();
