@@ -59,8 +59,46 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 .faq-filter-knop.actief { background:#e8834a; border-color:#e8834a; color:#fff; }
 .faq-gevonden { margin-left:auto; font-size:0.72rem; color:#6b6570; font-weight:300; }
 
+/* ── SESSIE BALK ── */
+.faq-sessie-balk { background:#fff; border-bottom:1px solid #e2d9e0; padding:10px 24px; }
+.faq-sessie-inner { max-width:1000px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.faq-sessie-label { font-size:0.72rem; font-weight:700; color:#4a1942; flex-shrink:0; }
+.faq-sessie-balk-bg { flex:1; max-width:200px; height:5px; background:#f0ebef; border-radius:3px; overflow:hidden; }
+.faq-sessie-balk-fill { height:100%; background:linear-gradient(90deg, #4a1942, #e8834a); border-radius:3px; transition:width 0.5s ease; }
+.faq-sessie-tekst { font-size:0.7rem; color:#6b6570; font-weight:300; }
+
+/* ── POPULAIRE VRAGEN BLOK ── */
+.faq-populair-blok { background:#fff; border:1px solid #e2d9e0; border-radius:14px; padding:20px 24px; margin-bottom:24px; }
+.faq-populair-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.faq-populair-titel { font-size:0.84rem; font-weight:800; color:#4a1942; }
+.faq-populair-sub { font-size:0.72rem; color:#6b6570; font-weight:300; }
+.faq-populair-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.faq-pop-item { background:#faf7f2; border:1.5px solid #e2d9e0; border-radius:10px; padding:12px 14px; cursor:pointer; transition:all 0.2s; display:flex; align-items:flex-start; gap:10px; }
+.faq-pop-item:hover { border-color:#4a1942; background:#f0ebef; transform:translateY(-2px); }
+.faq-pop-nr { font-size:0.7rem; font-weight:900; color:#e8834a; flex-shrink:0; min-width:16px; }
+.faq-pop-tekst { font-size:0.76rem; font-weight:600; color:#4a1942; line-height:1.4; }
+
+/* ── TOOLS BLOK ONDERAAN ── */
+.faq-tools-blok { background:#4a1942; border-radius:14px; padding:24px 28px; margin:32px 0; display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; position:relative; overflow:hidden; }
+.faq-tools-blok::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 90% 50%, rgba(232,131,74,0.12) 0%, transparent 60%); pointer-events:none; }
+.faq-tools-titel { font-size:0.88rem; font-weight:800; color:#fff; margin-bottom:5px; position:relative; }
+.faq-tools-sub { font-size:0.76rem; color:rgba(255,255,255,0.55); font-weight:300; line-height:1.6; position:relative; }
+.faq-tools-knoppen { display:flex; gap:8px; flex-wrap:wrap; flex-shrink:0; position:relative; }
+.faq-tools-knop { display:inline-block; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:8px; padding:8px 14px; text-decoration:none; font-size:0.76rem; font-weight:700; transition:background 0.2s; white-space:nowrap; }
+.faq-tools-knop:hover { background:rgba(255,255,255,0.22); }
+.faq-tools-knop.oranje { background:#e8834a; border-color:#e8834a; }
+.faq-tools-knop.oranje:hover { background:#c8622a; }
+
+@media (max-width:700px) {
+  .faq-populair-grid { grid-template-columns:1fr 1fr; }
+  .faq-tools-blok { grid-template-columns:1fr; }
+}
+@media (max-width:480px) {
+  .faq-populair-grid { grid-template-columns:1fr; }
+}
+
 /* ── MAIN LAYOUT ── */
-.faq-main { max-width:1000px; margin:0 auto; padding:48px 24px; display:grid; grid-template-columns:1fr 280px; gap:32px; align-items:start; }
+.faq-main { max-width:1000px; margin:0 auto; padding:48px 24px; }
 
 /* ── CATEGORIE BLOKKEN ── */
 .faq-categorie { margin-bottom:48px; scroll-margin-top:100px; }
@@ -101,7 +139,7 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 .faq-antwoord .faq-let-op { background:rgba(74,25,66,0.06); border-left:3px solid #4a1942; padding:10px 14px; border-radius:0 8px 8px 0; margin-top:10px; font-size:0.8rem; }
 
 /* ── ZIJPANEEL ── */
-.faq-zij { position:sticky; top:120px; display:flex; flex-direction:column; gap:16px; }
+.faq-zij { display:none; }
 .faq-zij-kaart { background:#fff; border:1px solid #e2d9e0; border-radius:14px; overflow:hidden; }
 .faq-zij-kaart-header { padding:14px 18px; background:#4a1942; }
 .faq-zij-kaart-titel { font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-bottom:3px; }
@@ -238,11 +276,39 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
   </div>
 </div>
 
+<!-- SESSIE BALK -->
+<div class="faq-sessie-balk">
+  <div class="faq-sessie-inner">
+    <span class="faq-sessie-label">📖 Jouw sessie:</span>
+    <div class="faq-sessie-balk-bg"><div class="faq-sessie-balk-fill" id="gelezenBalk" style="width:0%"></div></div>
+    <span class="faq-sessie-tekst" id="gelezenTekst">0 van 60+ vragen bekeken</span>
+  </div>
+</div>
+
 <!-- MAIN -->
 <div class="faq-main">
 
   <!-- LINKER KOLOM: VRAGEN -->
   <div id="faqLijst">
+
+    <!-- POPULAIRE VRAGEN -->
+    <div class="faq-populair-blok">
+      <div class="faq-populair-header">
+        <div style="font-size:1.4rem;">🔥</div>
+        <div>
+          <div class="faq-populair-titel">Meest gezochte vragen</div>
+          <div class="faq-populair-sub">Klik op een vraag om direct het antwoord te zien</div>
+        </div>
+      </div>
+      <div class="faq-populair-grid">
+        <div class="faq-pop-item" onclick="zoekEnOpen('kosten uitvaart')"><span class="faq-pop-nr">1</span><span class="faq-pop-tekst">Wat kost een uitvaart in 2025?</span></div>
+        <div class="faq-pop-item" onclick="zoekEnOpen('hoe lang rouw')"><span class="faq-pop-nr">2</span><span class="faq-pop-tekst">Hoe lang duurt rouwverwerking?</span></div>
+        <div class="faq-pop-item" onclick="zoekEnOpen('begraven cremeren goedkoper')"><span class="faq-pop-nr">3</span><span class="faq-pop-tekst">Is begraven of cremeren goedkoper?</span></div>
+        <div class="faq-pop-item" onclick="zoekEnOpen('rouwverlof')"><span class="faq-pop-nr">4</span><span class="faq-pop-tekst">Heeft een werknemer recht op rouwverlof?</span></div>
+        <div class="faq-pop-item" onclick="zoekEnOpen('as bewaren')"><span class="faq-pop-nr">5</span><span class="faq-pop-tekst">Mag ik de as thuis bewaren?</span></div>
+        <div class="faq-pop-item" onclick="zoekEnOpen('directe crematie')"><span class="faq-pop-nr">6</span><span class="faq-pop-tekst">Wat is een directe crematie?</span></div>
+      </div>
+    </div>
 
     <!-- CATEGORIE 1: UITVAART REGELEN -->
     <div class="faq-categorie" id="cat-regelen" data-cat="regelen">
@@ -677,6 +743,20 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
       <div class="faq-leeg-sub">Geen vragen gevonden voor jouw zoekopdracht. Stel je vraag direct via <a href="mailto:info@uitvaart-platform.nl" style="color:#4a1942;font-weight:600;">info@uitvaart-platform.nl</a> en we beantwoorden hem binnen één werkdag.</div>
     </div>
 
+    <!-- TOOLS BLOK -->
+    <div class="faq-tools-blok">
+      <div>
+        <div class="faq-tools-titel">Meer hulp nodig?</div>
+        <div class="faq-tools-sub">Gebruik onze gratis tools of neem direct contact op met ons team.</div>
+      </div>
+      <div class="faq-tools-knoppen">
+        <a href="https://uitvaart-platform.nl/uitvaartplanner" class="faq-tools-knop">🧮 Uitvaartplanner</a>
+        <a href="https://uitvaart-platform.nl/wat-regelen-na-overlijden-compleet-stappenplan" class="faq-tools-knop">📋 Stappenplan</a>
+        <a href="https://uitvaart-platform.nl/rouwenverlies" class="faq-tools-knop oranje">💛 Rouw & Verlies</a>
+        <a href="mailto:info@uitvaart-platform.nl" class="faq-tools-knop">📩 Stel een vraag</a>
+      </div>
+    </div>
+
     <div class="faq-highlight">
       <p>Staat jouw vraag er niet bij? Ons team staat klaar om je persoonlijk te helpen. <strong>Neem contact op via info@uitvaart-platform.nl</strong>, wij reageren doorgaans binnen één werkdag. Je kunt ons ook bereiken via <strong>085-4852152</strong>, bereikbaar op werkdagen van 9:00 tot 17:00.</p>
     </div>
@@ -912,8 +992,7 @@ function toggleVraag(btn) {
 function updateGelezen() {
   var aantal = gelezenVragen.size;
   var pct = Math.round((aantal / totaalVragen) * 100);
-  document.getElementById('gelezenTekst').textContent = aantal + ' ' + (aantal === 1 ? 'vraag' : 'vragen') + ' bekeken';
-  document.getElementById('gelezenPct').textContent = pct + '%';
+  document.getElementById('gelezenTekst').textContent = aantal + ' van 60+ vragen bekeken';
   document.getElementById('gelezenBalk').style.width = pct + '%';
 }
 
