@@ -1,0 +1,673 @@
+<style>
+.kv * { font-family: 'Poppins', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+.kv { background: #faf7f2; color: #1e1520; line-height: 1.6; }
+
+/* ── INFO BANNER ── */
+.kv-banner {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-left: 5px solid #4a1942;
+  border-radius: 0 12px 12px 0;
+  padding: 20px 28px;
+  margin-bottom: 20px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.kv-banner h1 { font-size: clamp(1rem, 2vw, 1.3rem); font-weight: 800; color: #4a1942; margin-bottom: 4px; }
+.kv-banner p { font-size: 0.8rem; color: #6b6570; font-weight: 300; line-height: 1.65; max-width: 560px; }
+.kv-banner-stats { display: flex; gap: 20px; flex-wrap: wrap; flex-shrink: 0; }
+.kv-banner-stat-nr { font-size: 1.4rem; font-weight: 900; color: #4a1942; display: block; line-height: 1; }
+.kv-banner-stat-label { font-size: 0.63rem; color: #6b6570; font-weight: 300; margin-top: 2px; display: block; }
+
+/* ── INSTELLINGEN BALK ── */
+.kv-instellingen {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.kv-inst-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6b6570; flex-shrink: 0; }
+.kv-regio-select {
+  border: 1.5px solid #e2d9e0; border-radius: 8px; padding: 8px 14px;
+  font-family: 'Poppins', sans-serif; font-size: 0.82rem; color: #4a1942;
+  background: #fff; cursor: pointer; font-weight: 600; min-width: 180px;
+}
+.kv-regio-select:focus { outline: none; border-color: #4a1942; }
+.kv-regio-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(74,25,66,0.07); border-radius: 20px; padding: 5px 14px; font-size: 0.74rem; font-weight: 600; color: #4a1942; }
+.kv-inst-sep { width: 1px; height: 32px; background: #e2d9e0; flex-shrink: 0; }
+
+/* ── VERGELIJK GRID ── */
+.kv-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* ── UITVAART KAART ── */
+.kv-kaart {
+  background: #fff;
+  border: 2px solid #e2d9e0;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.25s;
+  display: flex; flex-direction: column;
+}
+.kv-kaart:hover { box-shadow: 0 8px 32px rgba(74,25,66,0.12); transform: translateY(-3px); }
+.kv-kaart.actief { border-color: #4a1942; }
+
+.kv-kaart-header {
+  padding: 20px 20px 16px;
+  text-align: center;
+  border-bottom: 1px solid #f0ebef;
+  position: relative;
+}
+.kv-kaart-emoji { font-size: 2rem; margin-bottom: 8px; display: block; }
+.kv-kaart-naam { font-size: 0.92rem; font-weight: 900; color: #4a1942; margin-bottom: 2px; }
+.kv-kaart-sub { font-size: 0.68rem; color: #6b6570; font-weight: 300; line-height: 1.4; }
+.kv-kaart-badge {
+  position: absolute; top: 10px; right: 10px;
+  background: #e8834a; color: #fff;
+  font-size: 0.55rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 10px;
+}
+.kv-kaart-badge.groen { background: #2e8b57; }
+.kv-kaart-badge.paars { background: #4a1942; }
+
+/* Totaalprijs */
+.kv-totaal-blok {
+  background: #4a1942;
+  padding: 16px 20px;
+  text-align: center;
+}
+.kv-totaal-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+.kv-totaal-prijs { font-size: 1.9rem; font-weight: 900; color: #e8834a; line-height: 1; }
+.kv-totaal-range { font-size: 0.64rem; color: rgba(255,255,255,0.4); margin-top: 3px; font-weight: 300; }
+
+/* Visuele kostenbalk */
+.kv-balk-wrap { padding: 14px 20px 0; }
+.kv-balk-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6b6570; margin-bottom: 8px; }
+.kv-balk-item { margin-bottom: 8px; }
+.kv-balk-rij { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+.kv-balk-naam { font-size: 0.68rem; color: #555; font-weight: 300; }
+.kv-balk-bedrag { font-size: 0.68rem; font-weight: 700; color: #4a1942; }
+.kv-balk-bar-track { height: 5px; background: #f0ebef; border-radius: 3px; overflow: hidden; }
+.kv-balk-bar-fill { height: 100%; border-radius: 3px; background: #4a1942; transition: width 0.6s ease; }
+.kv-balk-bar-fill.oranje { background: #e8834a; }
+.kv-balk-bar-fill.groen { background: #2e8b57; }
+.kv-balk-bar-fill.blauw { background: #2a6b9a; }
+.kv-balk-bar-fill.paars { background: #6b3060; }
+
+/* Kenmerken */
+.kv-kenmerken { padding: 14px 20px; }
+.kv-kenmerk { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f9f6f8; font-size: 0.72rem; color: #555; font-weight: 300; line-height: 1.4; }
+.kv-kenmerk:last-child { border-bottom: none; }
+.kv-kenmerk-icoon { flex-shrink: 0; font-size: 0.8rem; margin-top: 1px; }
+.kv-kenmerk.pro .kv-kenmerk-icoon::before { content: '✓'; color: #2e8b57; font-weight: 700; }
+.kv-kenmerk.con .kv-kenmerk-icoon::before { content: '✗'; color: #c0392b; font-weight: 700; }
+.kv-kenmerk.neutraal .kv-kenmerk-icoon::before { content: '•'; color: #e8834a; font-weight: 700; }
+
+/* Milieu indicator */
+.kv-milieu { padding: 0 20px 14px; }
+.kv-milieu-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6b6570; margin-bottom: 6px; }
+.kv-milieu-rij { display: flex; gap: 3px; }
+.kv-milieu-blok { height: 8px; flex: 1; border-radius: 2px; background: #f0ebef; }
+.kv-milieu-blok.vol { background: #2e8b57; }
+.kv-milieu-blok.vol.oranje { background: #e8834a; }
+.kv-milieu-blok.vol.rood { background: #c0392b; }
+
+/* CTA in kaart */
+.kv-kaart-cta { padding: 14px 20px; margin-top: auto; }
+.kv-kaart-knop {
+  display: block; text-align: center;
+  background: #faf7f2; border: 1.5px solid #e2d9e0;
+  border-radius: 8px; padding: 10px;
+  font-size: 0.75rem; font-weight: 700; color: #4a1942;
+  text-decoration: none; transition: all 0.2s;
+}
+.kv-kaart-knop:hover { background: #4a1942; color: #fff; border-color: #4a1942; }
+
+/* ── DETAILVERGELIJKING TABEL ── */
+.kv-tabel-sectie { background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+.kv-tabel-header { background: #4a1942; padding: 16px 24px; display: flex; align-items: center; gap: 10px; }
+.kv-tabel-header-titel { font-size: 0.88rem; font-weight: 800; color: #fff; }
+.kv-tabel-header-sub { font-size: 0.72rem; color: rgba(255,255,255,0.5); font-weight: 300; margin-left: auto; }
+.kv-tabel { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.kv-tabel th { background: #faf7f2; padding: 10px 16px; font-size: 0.7rem; font-weight: 700; color: #4a1942; text-align: left; border-bottom: 1px solid #e2d9e0; }
+.kv-tabel th:first-child { width: 28%; }
+.kv-tabel td { padding: 10px 16px; border-bottom: 1px solid #f5f2f4; color: #444; font-weight: 300; vertical-align: middle; }
+.kv-tabel tr:last-child td { border-bottom: none; }
+.kv-tabel tr:nth-child(even) td { background: #fdfbfd; }
+.kv-tabel .rij-naam { font-weight: 700; color: #4a1942; font-size: 0.76rem; }
+.kv-tabel .prijs-cel { font-weight: 700; color: #4a1942; }
+.kv-tabel .laagste { color: #2e8b57; font-weight: 900; }
+.kv-tabel .hoogste { color: #c0392b; }
+.kv-tabel .check { color: #2e8b57; font-weight: 700; }
+.kv-tabel .kruis { color: #c0392b; }
+.kv-tabel .neutraal-cel { color: #e8834a; font-weight: 600; }
+
+/* ── REGIO TABEL ── */
+.kv-regio-sectie { background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+
+/* ── TIPS BLOK ── */
+.kv-tips { background: #4a1942; border-radius: 12px; padding: 22px 26px; margin-bottom: 20px; position: relative; overflow: hidden; }
+.kv-tips::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(232,131,74,0.12) 0%, transparent 60%); pointer-events: none; }
+.kv-tips-titel { font-size: 0.84rem; font-weight: 800; color: #fff; margin-bottom: 12px; position: relative; }
+.kv-tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: relative; }
+.kv-tip { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; }
+.kv-tip-icoon { font-size: 1rem; flex-shrink: 0; }
+.kv-tip-tekst { font-size: 0.73rem; color: rgba(255,255,255,0.8); font-weight: 300; line-height: 1.55; }
+.kv-tip-tekst strong { color: #fff; font-weight: 700; }
+
+/* ── TOOLS FOOTER ── */
+.kv-tools { background: #4a1942; border-radius: 12px; padding: 20px 24px; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; position: relative; overflow: hidden; }
+.kv-tools::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 90% 50%, rgba(232,131,74,0.1) 0%, transparent 60%); pointer-events: none; }
+.kv-tools-tekst { position: relative; }
+.kv-tools-titel { font-size: 0.84rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
+.kv-tools-sub { font-size: 0.71rem; color: rgba(255,255,255,0.5); font-weight: 300; }
+.kv-tools-knoppen { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; position: relative; }
+.kv-tools-knop { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 8px; padding: 7px 14px; text-decoration: none; font-size: 0.72rem; font-weight: 700; }
+.kv-tools-knop.oranje { background: #e8834a; border-color: #e8834a; }
+
+@media (max-width: 900px) {
+  .kv-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .kv-grid { grid-template-columns: 1fr; }
+  .kv-tips-grid { grid-template-columns: 1fr; }
+  .kv-banner { flex-direction: column; }
+  .kv-instellingen { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<div class="kv">
+
+<!-- BANNER -->
+<div class="kv-banner">
+  <div>
+    <h1>⚖️ Uitvaart Kostenvergelijker Nederland 2025</h1>
+    <p>Vergelijk de kosten, kenmerken en milieu-impact van de vier meest gekozen uitvaartvormen in Nederland. Selecteer jouw regio voor aangepaste prijzen op basis van lokale tarieven.</p>
+  </div>
+  <div class="kv-banner-stats">
+    <div><span class="kv-banner-stat-nr">4</span><span class="kv-banner-stat-label">Uitvaartvormen</span></div>
+    <div><span class="kv-banner-stat-nr">12</span><span class="kv-banner-stat-label">Regio's</span></div>
+    <div><span class="kv-banner-stat-nr">20+</span><span class="kv-banner-stat-label">Kostenfactoren</span></div>
+  </div>
+</div>
+
+<!-- REGIO INSTELLING -->
+<div class="kv-instellingen">
+  <span class="kv-inst-label">🗺️ Jouw regio:</span>
+  <select class="kv-regio-select" id="regioSelect" onchange="updateRegio()">
+    <option value="landelijk">Nederland (landelijk gemiddelde)</option>
+    <option value="amsterdam">Amsterdam</option>
+    <option value="rotterdam">Rotterdam</option>
+    <option value="denhaag">Den Haag</option>
+    <option value="utrecht">Utrecht</option>
+    <option value="eindhoven">Eindhoven / Brabant</option>
+    <option value="groningen">Groningen / Noord</option>
+    <option value="arnhem">Arnhem / Gelderland</option>
+    <option value="maastricht">Maastricht / Limburg</option>
+    <option value="zeeland">Zeeland / Zeeuws-Vlaanderen</option>
+    <option value="friesland">Friesland / Drenthe</option>
+    <option value="platteland">Platteland (overige)</option>
+  </select>
+  <div class="kv-inst-sep"></div>
+  <span class="kv-regio-badge" id="regioBadge">📍 Landelijk gemiddelde</span>
+  <span style="font-size:0.72rem; color:#6b6570; font-weight:300;" id="regioToelichting">Prijzen gebaseerd op het Nederlandse landelijk gemiddelde 2024.</span>
+</div>
+
+<!-- VERGELIJK KAARTEN -->
+<div class="kv-grid" id="vergelijkGrid">
+
+  <!-- KAART 1: BEGRAVING -->
+  <div class="kv-kaart">
+    <div class="kv-kaart-header">
+      <span class="kv-kaart-emoji">⚰️</span>
+      <div class="kv-kaart-naam">Begraving</div>
+      <div class="kv-kaart-sub">Traditionele kistbegraving op een begraafplaats</div>
+    </div>
+    <div class="kv-totaal-blok">
+      <div class="kv-totaal-label">Geschatte totaalkosten</div>
+      <div class="kv-totaal-prijs" id="totaal-begraving">€ 9.400</div>
+      <div class="kv-totaal-range" id="range-begraving">Bandbreedte: € 5.000 – € 18.000</div>
+    </div>
+    <div class="kv-balk-wrap">
+      <div class="kv-balk-label">Kostenverdeling</div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Uitvaartondernemer</span><span class="kv-balk-bedrag" id="b-ondernemer-begraving">€ 3.500</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill" style="width:37%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Grafrecht (20 jr)</span><span class="kv-balk-bedrag" id="b-graf-begraving">€ 3.000</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill oranje" style="width:32%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Kist</span><span class="kv-balk-bedrag" id="b-kist-begraving">€ 900</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill paars" style="width:10%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Bloemen & rouwdrukwerk</span><span class="kv-balk-bedrag" id="b-extra-begraving">€ 700</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill blauw" style="width:7%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Grafmonument</span><span class="kv-balk-bedrag" id="b-monument-begraving">€ 1.200</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill groen" style="width:13%"></div></div>
+      </div>
+    </div>
+    <div class="kv-kenmerken">
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Permanente rustplaats met graf om te bezoeken</div>
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Rijke herdenkingstraditie, grafmonument mogelijk</div>
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Geschikt voor alle religies en culturen</div>
+      <div class="kv-kenmerk con"><span class="kv-kenmerk-icoon"></span>Hoogste kosten van alle uitvaartvormen</div>
+      <div class="kv-kenmerk con"><span class="kv-kenmerk-icoon"></span>Grafrecht vervalt na 10–20 jaar bij niet verlengen</div>
+      <div class="kv-kenmerk neutraal"><span class="kv-kenmerk-icoon"></span>Gemiddeld milieu-impact (120 kg CO₂)</div>
+    </div>
+    <div class="kv-milieu">
+      <div class="kv-milieu-label">🌿 Milieuvriendelijkheid</div>
+      <div class="kv-milieu-rij">
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok vol oranje"></div>
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok"></div>
+      </div>
+    </div>
+    <div class="kv-kaart-cta">
+      <a href="https://uitvaart-platform.nl/bedrijven/c/begraafplaats-crematorium" class="kv-kaart-knop">🔍 Vind een begraafplaats →</a>
+    </div>
+  </div>
+
+  <!-- KAART 2: CREMATIE -->
+  <div class="kv-kaart actief">
+    <div class="kv-kaart-header">
+      <span class="kv-kaart-badge">Meest gekozen</span>
+      <span class="kv-kaart-emoji">🔥</span>
+      <div class="kv-kaart-naam">Crematie</div>
+      <div class="kv-kaart-sub">Verbranding, as bewaren of verstrooien</div>
+    </div>
+    <div class="kv-totaal-blok">
+      <div class="kv-totaal-label">Geschatte totaalkosten</div>
+      <div class="kv-totaal-prijs" id="totaal-crematie">€ 7.100</div>
+      <div class="kv-totaal-range" id="range-crematie">Bandbreedte: € 2.200 – € 14.000</div>
+    </div>
+    <div class="kv-balk-wrap">
+      <div class="kv-balk-label">Kostenverdeling</div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Uitvaartondernemer</span><span class="kv-balk-bedrag" id="b-ondernemer-crematie">€ 3.200</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill" style="width:45%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Crematoriumtarief</span><span class="kv-balk-bedrag" id="b-graf-crematie">€ 1.400</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill oranje" style="width:20%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Kist</span><span class="kv-balk-bedrag" id="b-kist-crematie">€ 700</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill paars" style="width:10%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Bloemen & rouwdrukwerk</span><span class="kv-balk-bedrag" id="b-extra-crematie">€ 600</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill blauw" style="width:8%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Urn & asbestemming</span><span class="kv-balk-bedrag" id="b-monument-crematie">€ 500</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill groen" style="width:7%"></div></div>
+      </div>
+    </div>
+    <div class="kv-kenmerken">
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Flexibele asbestemming: thuis, zee of verstrooid</div>
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Lagere kosten dan traditionele begraving</div>
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Geen terugkerende grafrechten</div>
+      <div class="kv-kenmerk con"><span class="kv-kenmerk-icoon"></span>Hogere CO₂-uitstoot dan begraving (160 kg)</div>
+      <div class="kv-kenmerk con"><span class="kv-kenmerk-icoon"></span>Geen fysieke bezoekplek tenzij urn begraven</div>
+      <div class="kv-kenmerk neutraal"><span class="kv-kenmerk-icoon"></span>Keuze: plechtigheid voor of na crematie</div>
+    </div>
+    <div class="kv-milieu">
+      <div class="kv-milieu-label">🌿 Milieuvriendelijkheid</div>
+      <div class="kv-milieu-rij">
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok vol oranje"></div>
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok"></div>
+      </div>
+    </div>
+    <div class="kv-kaart-cta">
+      <a href="https://uitvaart-platform.nl/bedrijven/c/begraafplaats-crematorium" class="kv-kaart-knop">🔍 Vind een crematorium →</a>
+    </div>
+  </div>
+
+  <!-- KAART 3: NATUURBEGRAVING -->
+  <div class="kv-kaart">
+    <div class="kv-kaart-header">
+      <span class="kv-kaart-badge groen">Duurzaamst</span>
+      <span class="kv-kaart-emoji">🌳</span>
+      <div class="kv-kaart-naam">Natuurbegraving</div>
+      <div class="kv-kaart-sub">Begraving in een natuurgebied of bos</div>
+    </div>
+    <div class="kv-totaal-blok">
+      <div class="kv-totaal-label">Geschatte totaalkosten</div>
+      <div class="kv-totaal-prijs" id="totaal-natuur">€ 5.800</div>
+      <div class="kv-totaal-range" id="range-natuur">Bandbreedte: € 3.500 – € 9.500</div>
+    </div>
+    <div class="kv-balk-wrap">
+      <div class="kv-balk-label">Kostenverdeling</div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Uitvaartondernemer</span><span class="kv-balk-bedrag" id="b-ondernemer-natuur">€ 2.800</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill" style="width:48%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Grafrecht natuurbegraafplaats</span><span class="kv-balk-bedrag" id="b-graf-natuur">€ 1.800</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill oranje" style="width:31%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Biologische kist of lijkwade</span><span class="kv-balk-bedrag" id="b-kist-natuur">€ 600</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill paars" style="width:10%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Bloemen & rouwdrukwerk</span><span class="kv-balk-bedrag" id="b-extra-natuur">€ 400</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill blauw" style="width:7%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Herdenkingsboom (optioneel)</span><span class="kv-balk-bedrag" id="b-monument-natuur">€ 200</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill groen" style="width:3%"></div></div>
+      </div>
+    </div>
+    <div class="kv-kenmerken">
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Laagste milieu-impact van alle vormen (vrijwel 0 CO₂)</div>
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Rustige, groene omgeving voor herdenking</div>
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Herdenkingsboom als levend gedenkteken mogelijk</div>
+      <div class="kv-kenmerk con"><span class="kv-kenmerk-icoon"></span>Beperkt beschikbaar — slechts 30+ locaties in NL</div>
+      <div class="kv-kenmerk con"><span class="kv-kenmerk-icoon"></span>Geen grafsteen of monument toegestaan</div>
+      <div class="kv-kenmerk neutraal"><span class="kv-kenmerk-icoon"></span>Grafmarkering is eenvoudig (stok of steen)</div>
+    </div>
+    <div class="kv-milieu">
+      <div class="kv-milieu-label">🌿 Milieuvriendelijkheid</div>
+      <div class="kv-milieu-rij">
+        <div class="kv-milieu-blok vol"></div>
+        <div class="kv-milieu-blok vol"></div>
+        <div class="kv-milieu-blok vol"></div>
+        <div class="kv-milieu-blok vol"></div>
+        <div class="kv-milieu-blok vol"></div>
+      </div>
+    </div>
+    <div class="kv-kaart-cta">
+      <a href="https://uitvaart-platform.nl/bedrijven/c/begraafplaats-crematorium" class="kv-kaart-knop">🔍 Vind een natuurbegraafplaats →</a>
+    </div>
+  </div>
+
+  <!-- KAART 4: DIRECTE CREMATIE -->
+  <div class="kv-kaart">
+    <div class="kv-kaart-header">
+      <span class="kv-kaart-badge paars">Voordeligst</span>
+      <span class="kv-kaart-emoji">⚡</span>
+      <div class="kv-kaart-naam">Directe crematie</div>
+      <div class="kv-kaart-sub">Crematie zonder plechtigheid, later herdenken</div>
+    </div>
+    <div class="kv-totaal-blok">
+      <div class="kv-totaal-label">Geschatte totaalkosten</div>
+      <div class="kv-totaal-prijs" id="totaal-direct">€ 2.800</div>
+      <div class="kv-totaal-range" id="range-direct">Bandbreedte: € 1.800 – € 4.500</div>
+    </div>
+    <div class="kv-balk-wrap">
+      <div class="kv-balk-label">Kostenverdeling</div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Uitvaartondernemer</span><span class="kv-balk-bedrag" id="b-ondernemer-direct">€ 1.400</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill" style="width:50%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Crematoriumtarief</span><span class="kv-balk-bedrag" id="b-graf-direct">€ 800</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill oranje" style="width:29%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Eenvoudige kist</span><span class="kv-balk-bedrag" id="b-kist-direct">€ 350</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill paars" style="width:13%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Urn</span><span class="kv-balk-bedrag" id="b-extra-direct">€ 150</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill blauw" style="width:5%"></div></div>
+      </div>
+      <div class="kv-balk-item">
+        <div class="kv-balk-rij"><span class="kv-balk-naam">Overige kosten</span><span class="kv-balk-bedrag" id="b-monument-direct">€ 100</span></div>
+        <div class="kv-balk-bar-track"><div class="kv-balk-bar-fill groen" style="width:4%"></div></div>
+      </div>
+    </div>
+    <div class="kv-kenmerken">
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Veruit de laagste kosten van alle opties</div>
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Herdenkingsbijeenkomst later zelf plannen op eigen plek</div>
+      <div class="kv-kenmerk pro"><span class="kv-kenmerk-icoon"></span>Minimale administratieve druk voor nabestaanden</div>
+      <div class="kv-kenmerk con"><span class="kv-kenmerk-icoon"></span>Geen traditioneel afscheid of plechtigheid</div>
+      <div class="kv-kenmerk con"><span class="kv-kenmerk-icoon"></span>Minder mogelijkheid voor gezamenlijk rouwen direct na overlijden</div>
+      <div class="kv-kenmerk neutraal"><span class="kv-kenmerk-icoon"></span>Groeit sterk — ca. 8% kiest hier nu voor</div>
+    </div>
+    <div class="kv-milieu">
+      <div class="kv-milieu-label">🌿 Milieuvriendelijkheid</div>
+      <div class="kv-milieu-rij">
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok vol oranje"></div>
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok"></div>
+        <div class="kv-milieu-blok"></div>
+      </div>
+    </div>
+    <div class="kv-kaart-cta">
+      <a href="https://uitvaart-platform.nl/bedrijven/c/uitvaartondernemingen" class="kv-kaart-knop">🔍 Vind een aanbieder →</a>
+    </div>
+  </div>
+
+</div><!-- /kv-grid -->
+
+<!-- DETAILVERGELIJKING TABEL -->
+<div class="kv-tabel-sectie">
+  <div class="kv-tabel-header">
+    <span>📋</span>
+    <span class="kv-tabel-header-titel">Gedetailleerde vergelijking</span>
+    <span class="kv-tabel-header-sub">Alle factoren naast elkaar</span>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="kv-tabel">
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th>⚰️ Begraving</th>
+          <th>🔥 Crematie</th>
+          <th>🌳 Natuurbegraving</th>
+          <th>⚡ Directe crematie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rij-naam">Gemiddelde kosten</td>
+          <td class="prijs-cel hoogste">€ 9.400</td>
+          <td class="prijs-cel">€ 7.100</td>
+          <td class="prijs-cel">€ 5.800</td>
+          <td class="prijs-cel laagste">€ 2.800 ✓</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Goedkoopste variant</td>
+          <td>€ 5.000</td>
+          <td>€ 2.200</td>
+          <td>€ 3.500</td>
+          <td class="laagste">€ 1.800 ✓</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Duurste variant</td>
+          <td class="hoogste">€ 18.000</td>
+          <td>€ 14.000</td>
+          <td>€ 9.500</td>
+          <td class="laagste">€ 4.500 ✓</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Terugkerende kosten</td>
+          <td class="hoogste">Grafrecht elke 10–20 jr</td>
+          <td class="laagste check">Nee ✓</td>
+          <td class="laagste check">Nee ✓</td>
+          <td class="laagste check">Nee ✓</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">CO₂-uitstoot</td>
+          <td>~120 kg</td>
+          <td class="hoogste">~160 kg</td>
+          <td class="laagste check">~0 kg ✓</td>
+          <td>~160 kg</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Bezoekbare rustplaats</td>
+          <td class="check">Ja ✓</td>
+          <td class="neutraal-cel">Optioneel</td>
+          <td class="check">Ja ✓</td>
+          <td class="kruis">Nee</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Plechtigheid</td>
+          <td class="check">Ja ✓</td>
+          <td class="check">Ja ✓</td>
+          <td class="check">Ja ✓</td>
+          <td class="neutraal-cel">Later / apart</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Wettelijk toegestaan NL</td>
+          <td class="check">Ja ✓</td>
+          <td class="check">Ja ✓</td>
+          <td class="check">Ja ✓</td>
+          <td class="check">Ja ✓</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Geschikt voor alle religies</td>
+          <td class="check">Ja ✓</td>
+          <td class="neutraal-cel">Meeste</td>
+          <td class="neutraal-cel">Meeste</td>
+          <td class="neutraal-cel">Meeste</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Populariteit (2023)</td>
+          <td>35%</td>
+          <td class="laagste check">65% ✓ meest gekozen</td>
+          <td class="neutraal-cel">~2% (groeit snel)</td>
+          <td class="neutraal-cel">~8% (groeit sterk)</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Beschikbaarheid in NL</td>
+          <td class="check">Overal ✓</td>
+          <td class="check">Overal ✓</td>
+          <td>30+ locaties</td>
+          <td class="check">Overal ✓</td>
+        </tr>
+        <tr>
+          <td class="rij-naam">Snelheid regelen</td>
+          <td>3–5 dagen</td>
+          <td>2–4 dagen</td>
+          <td>3–5 dagen</td>
+          <td class="laagste check">1–2 dagen ✓</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- REGIO PRIJZEN TABEL -->
+<div class="kv-tabel-sectie">
+  <div class="kv-tabel-header">
+    <span>🗺️</span>
+    <span class="kv-tabel-header-titel">Regionale prijsverschillen crematie</span>
+    <span class="kv-tabel-header-sub">Verschil kan oplopen tot € 3.000+</span>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="kv-tabel">
+      <thead>
+        <tr>
+          <th>Regio</th>
+          <th>Gem. crematie totaal</th>
+          <th>Grafrecht / crematoriumtarief</th>
+          <th>t.o.v. landelijk gem.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="rij-naam">Amsterdam</td><td class="hoogste">€ 9.800</td><td>€ 2.400+</td><td class="hoogste">+38%</td></tr>
+        <tr><td class="rij-naam">Den Haag</td><td>€ 8.600</td><td>€ 1.900+</td><td class="hoogste">+21%</td></tr>
+        <tr><td class="rij-naam">Rotterdam</td><td>€ 8.200</td><td>€ 1.700+</td><td class="hoogste">+15%</td></tr>
+        <tr><td class="rij-naam">Utrecht</td><td>€ 7.900</td><td>€ 1.600+</td><td class="neutraal-cel">+11%</td></tr>
+        <tr><td class="rij-naam">Eindhoven / Brabant</td><td>€ 7.100</td><td>€ 1.400</td><td>±0%</td></tr>
+        <tr><td class="rij-naam">Arnhem / Gelderland</td><td>€ 6.800</td><td>€ 1.300</td><td class="laagste">-4%</td></tr>
+        <tr><td class="rij-naam">Maastricht / Limburg</td><td>€ 6.700</td><td>€ 1.250</td><td class="laagste">-6%</td></tr>
+        <tr><td class="rij-naam">Groningen / Noord</td><td>€ 6.400</td><td>€ 1.100</td><td class="laagste">-10%</td></tr>
+        <tr><td class="rij-naam">Friesland / Drenthe</td><td>€ 6.200</td><td>€ 1.050</td><td class="laagste">-13%</td></tr>
+        <tr><td class="rij-naam">Platteland (overige)</td><td class="laagste">€ 5.900</td><td class="laagste">€ 950</td><td class="laagste">-17% ✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- BESPAARTIPS -->
+<div class="kv-tips">
+  <div class="kv-tips-titel">💡 Zo bespaar je op uitvaartkosten — praktische tips</div>
+  <div class="kv-tips-grid">
+    <div class="kv-tip"><span class="kv-tip-icoon">📋</span><div class="kv-tip-tekst"><strong>Vraag minimaal 3 offertes op.</strong> De prijs voor dezelfde dienst kan tussen uitvaartondernemers tot €2.000 verschillen. Vergelijken loont altijd.</div></div>
+    <div class="kv-tip"><span class="kv-tip-icoon">📍</span><div class="kv-tip-tekst"><strong>Kies een uitvaartondernemer buiten de grote stad.</strong> Een ondernemer net buiten Amsterdam of Den Haag kan duizenden euro's schelen.</div></div>
+    <div class="kv-tip"><span class="kv-tip-icoon">⚡</span><div class="kv-tip-tekst"><strong>Directe crematie + eigen herdenkingsbijeenkomst</strong> is de goedkoopste optie. De herdenking organiseer je later zelf op een locatie naar keuze.</div></div>
+    <div class="kv-tip"><span class="kv-tip-icoon">🛡️</span><div class="kv-tip-tekst"><strong>Controleer je uitvaartverzekering.</strong> Polissen van vóór 2010 dekken gemiddeld maar 60% van de huidige kosten. Bijverzekeren is goedkoper dan het verschil later betalen.</div></div>
+    <div class="kv-tip"><span class="kv-tip-icoon">💐</span><div class="kv-tip-tekst"><strong>Bloemen rechtstreeks bij een rouwbloemist.</strong> Via de uitvaartondernemer betaal je vaak 30-40% meer voor exact dezelfde bloemstukken.</div></div>
+    <div class="kv-tip"><span class="kv-tip-icoon">📝</span><div class="kv-tip-tekst"><strong>Leg wensen nu vast.</strong> Wie vooruitplant via The Perfect Goodbye voorkomt dat nabestaanden in paniek dure keuzes maken. Vastgelegde wensen besparen gemiddeld €1.200.</div></div>
+  </div>
+</div>
+
+<!-- TOOLS FOOTER -->
+<div class="kv-tools">
+  <div class="kv-tools-tekst">
+    <div class="kv-tools-titel">Wil je een gedetailleerde berekening voor jouw situatie?</div>
+    <div class="kv-tools-sub">De uitvaartplanner berekent de exacte kosten inclusief alle opties, regiofactoren en verzekering.</div>
+  </div>
+  <div class="kv-tools-knoppen">
+    <a href="https://uitvaart-platform.nl/uitvaartplanner" class="kv-tools-knop oranje">📋 Start de uitvaartplanner</a>
+    <a href="https://uitvaart-platform.nl/bedrijven" class="kv-tools-knop">🔍 Bedrijvengids</a>
+    <a href="https://uitvaart-platform.nl/veelgestelde-vragen" class="kv-tools-knop">❓ Alle vragen</a>
+    <a href="https://theperfectgoodbye.nl" class="kv-tools-knop">📦 The Perfect Goodbye</a>
+  </div>
+</div>
+
+</div><!-- /kv -->
+
+<script>
+const REGIO_DATA = {
+  landelijk:  { factor: 1.00, tekst: "Landelijk gemiddelde",   toelichting: "Prijzen gebaseerd op het Nederlandse landelijk gemiddelde 2024." },
+  amsterdam:  { factor: 1.38, tekst: "Amsterdam",              toelichting: "Amsterdam heeft de hoogste uitvaartkosten van Nederland door hoge grondprijzen en locatiekosten." },
+  rotterdam:  { factor: 1.15, tekst: "Rotterdam",              toelichting: "Rotterdam ligt 15% boven het landelijk gemiddelde, met name door hogere crematoriumtarieven." },
+  denhaag:    { factor: 1.21, tekst: "Den Haag",               toelichting: "Den Haag ligt 21% boven het landelijk gemiddelde vanwege hogere gemeentelijke begraafplaatsen." },
+  utrecht:    { factor: 1.11, tekst: "Utrecht",                toelichting: "Utrecht ligt 11% boven het landelijk gemiddelde." },
+  eindhoven:  { factor: 1.00, tekst: "Eindhoven / Brabant",    toelichting: "Eindhoven en Brabant liggen op het landelijk gemiddelde." },
+  groningen:  { factor: 0.90, tekst: "Groningen / Noord",      toelichting: "Noord-Nederland ligt 10% onder het landelijk gemiddelde — voordelig voor uitvaartkosten." },
+  arnhem:     { factor: 0.96, tekst: "Arnhem / Gelderland",    toelichting: "Gelderland ligt iets onder het landelijk gemiddelde." },
+  maastricht: { factor: 0.94, tekst: "Maastricht / Limburg",   toelichting: "Limburg ligt 6% onder het landelijk gemiddelde." },
+  zeeland:    { factor: 0.92, tekst: "Zeeland",                toelichting: "Zeeland heeft relatief lage uitvaartkosten vergeleken met het landelijk gemiddelde." },
+  friesland:  { factor: 0.87, tekst: "Friesland / Drenthe",    toelichting: "Friesland en Drenthe behoren tot de goedkoopste regio's van Nederland." },
+  platteland: { factor: 0.83, tekst: "Platteland",             toelichting: "Op het platteland zijn de uitvaartkosten gemiddeld 17% lager dan in de stad." }
+};
+
+const BASIS = {
+  begraving: { totaal: 9400, min: 5000, max: 18000 },
+  crematie:  { totaal: 7100, min: 2200, max: 14000 },
+  natuur:    { totaal: 5800, min: 3500, max: 9500  },
+  direct:    { totaal: 2800, min: 1800, max: 4500  }
+};
+
+function fmt(n) {
+  return '€ ' + Math.round(n).toLocaleString('nl-NL');
+}
+
+function updateRegio() {
+  const val = document.getElementById('regioSelect').value;
+  const r = REGIO_DATA[val];
+  document.getElementById('regioBadge').textContent = '📍 ' + r.tekst;
+  document.getElementById('regioToelichting').textContent = r.toelichting;
+
+  ['begraving','crematie','natuur','direct'].forEach(function(type) {
+    const b = BASIS[type];
+    const t = Math.round(b.totaal * r.factor);
+    const mn = Math.round(b.min * r.factor);
+    const mx = Math.round(b.max * r.factor);
+    document.getElementById('totaal-' + type).textContent = fmt(t);
+    document.getElementById('range-' + type).textContent = 'Bandbreedte: ' + fmt(mn) + ' – ' + fmt(mx);
+  });
+}
+</script>
