@@ -19,7 +19,7 @@ body {
   position: relative;
 }
 .rw-wrap * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-.rw-wrap { background: #faf7f2; color: #1e1520; line-height: 1.6; }
+.rw-wrap { background: #faf7f2; color: #1e1520; line-height: 1.6; padding-top: 16px; }
 
 /* ── ANIMATIES ── */
 @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
@@ -282,6 +282,18 @@ body {
   .rw-fase-btn { font-size:0.74rem; padding:8px 12px; }
   .rw-cta-blok { padding:28px 20px; }
 }
+
+/* INFO BANNER (vervangt hero) */
+.rw-info-banner { background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; padding: 20px 24px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.rw-info-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+.rw-info-stat-nr { font-size: 1.4rem; font-weight: 900; color: #4a1942; line-height: 1; }
+.rw-info-stat-label { font-size: 0.68rem; color: #6b6570; font-weight: 300; margin-top: 2px; }
+.rw-info-knoppen { display: flex; gap: 8px; flex-wrap: wrap; }
+.rw-info-btn { background: #4a1942; color: #fff; border-radius: 8px; padding: 9px 16px; font-size: 0.78rem; font-weight: 700; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; white-space: nowrap; }
+.rw-info-btn:hover { background: #6b3060; transform: translateY(-1px); }
+.rw-info-btn-s { background: none; border: 1.5px solid #e2d9e0; color: #4a1942; border-radius: 8px; padding: 9px 16px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; white-space: nowrap; }
+.rw-info-btn-s:hover { border-color: #4a1942; background: #f0ebef; }
+@media (max-width: 580px) { .rw-info-banner { flex-direction: column; align-items: flex-start; } .rw-info-stats { gap: 18px; } }
 </style>
 
 <div class="rw-wrap">
@@ -296,27 +308,18 @@ body {
   <a href="tel:09000767" class="rw-nood-tel">📞 0900-0767 (gratis)</a>
 </div>
 
-<!-- HERO -->
-<div class="rw-hero">
-  <div class="rw-hero-inner">
-    <div class="rw-hero-badge">
-      <div class="rw-hero-badge-dot"></div>
-      <span>Rouw & Verlies</span>
-    </div>
-    <h1>Rouw en verlies zijn geen zwakte.
-      <em>Ze zijn de prijs van liefde.</em>
-    </h1>
-    <p class="rw-hero-sub">Verlies is een van de zwaarste ervaringen die een mens kan meemaken. Op deze pagina vind je eerlijke informatie, praktische tools en professionele hulp om jouw rouw- en verliesproces te begrijpen en te doorleven. Op jouw manier, in jouw tempo.</p>
-    <div class="rw-hero-knoppen">
-      <button class="rw-hero-btn" onclick="toonTab('emotie')">💛 Hoe voel ik me?</button>
-      <button class="rw-hero-btn-s" onclick="toonTab('coaches')">🌸 Vind hulp</button>
-      <button class="rw-hero-btn-s" onclick="toonTab('chat')">💬 Praat erover</button>
-    </div>
-    <div class="rw-hero-stats">
-      <div><div class="rw-hero-stat-nr">1 op 5</div><div class="rw-hero-stat-label">Nederlanders ervaart gecompliceerde rouw</div></div>
-      <div><div class="rw-hero-stat-nr">13 maanden</div><div class="rw-hero-stat-label">Gemiddelde duur acute rouwfase</div></div>
-      <div><div class="rw-hero-stat-nr">Altijd</div><div class="rw-hero-stat-label">Hulp beschikbaar via onze rouwcoaches</div></div>
-    </div>
+
+<!-- INFO BANNER -->
+<div class="rw-info-banner">
+  <div class="rw-info-stats">
+    <div><div class="rw-info-stat-nr">1 op 5</div><div class="rw-info-stat-label">Nederlanders ervaart gecompliceerde rouw</div></div>
+    <div><div class="rw-info-stat-nr">13 maanden</div><div class="rw-info-stat-label">Gemiddelde duur van de acute rouwfase</div></div>
+    <div><div class="rw-info-stat-nr">Altijd</div><div class="rw-info-stat-label">Hulp beschikbaar via onze rouwcoaches</div></div>
+  </div>
+  <div class="rw-info-knoppen">
+    <button class="rw-info-btn" onclick="toonTab('emotie')">💛 Hoe voel ik me?</button>
+    <button class="rw-info-btn-s" onclick="toonTab('coaches')">🌸 Vind hulp</button>
+    <button class="rw-info-btn-s" onclick="toonTab('chat')">💬 Praat erover</button>
   </div>
 </div>
 
