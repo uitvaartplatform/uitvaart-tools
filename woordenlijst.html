@@ -12,12 +12,6 @@
 .woordenlijst-wrap * { font-family: 'Poppins', sans-serif; box-sizing: border-box; }
 
 /* HERO */
-.wl-hero { background: #4a1942; padding: 48px 24px 64px; text-align: center; position: relative; overflow: hidden; }
-.wl-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(232,131,74,0.12) 0%, transparent 60%); }
-.wl-hero-label { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #e8834a; margin-bottom: 16px; position: relative; }
-.wl-hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 16px; position: relative; }
-.wl-hero p { font-size: 0.95rem; color: rgba(255,255,255,0.7); max-width: 580px; margin: 0 auto 28px; line-height: 1.7; font-weight: 300; position: relative; }
-.wl-hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; position: relative; }
 .wl-stat-getal { font-size: 2rem; font-weight: 700; color: #e8834a; display: block; line-height: 1; }
 .wl-stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.55); font-weight: 300; letter-spacing: 0.05em; }
 
@@ -131,8 +125,6 @@
 
 /* MOBIEL */
 @media (max-width: 580px) {
-  .wl-hero { padding: 40px 16px 52px; }
-  .wl-hero-stats { gap: 24px; }
   .wl-zoekbalk { padding: 10px 14px; }
   .wl-alfabet { padding: 8px 14px; }
   .wl-alfa-knop { padding: 4px 7px; font-size: 0.76rem; }
@@ -159,7 +151,6 @@
 </head>
 <body>
 <div class="woordenlijst-wrap">
-
 
 <!-- INFO BANNER -->
 <div class="wl-info-banner">
@@ -726,6 +717,49 @@ document.querySelectorAll('.wl-cat-blok').forEach(function(b){
 
 // Start
 wlBouw();
+
+// ── AUTO HOOGTE VOOR IFRAME IN SOFFIE ──
+(function() {
+  function stuurHoogte() {
+    var hoogte = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+    window.parent.postMessage({ frameHeight: hoogte }, '*');
+  }
+
+  // Direct bij laden
+  stuurHoogte();
+
+  // Bij resize van venster
+  window.addEventListener('resize', function() {
+    setTimeout(stuurHoogte, 100);
+  });
+
+  // ResizeObserver: reageert op uitklappen, tabs wisselen, animaties
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function() {
+      stuurHoogte();
+    });
+    ro.observe(document.body);
+  }
+
+  // MutationObserver: reageert op DOM wijzigingen (classes, style, content)
+  if (window.MutationObserver) {
+    var mo = new MutationObserver(function() {
+      setTimeout(stuurHoogte, 50);
+    });
+    mo.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+})();
+
 </script>
 </body>
 </html>
