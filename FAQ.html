@@ -242,25 +242,27 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
   .faq-hero-knoppen { flex-direction:column; align-items:center; }
   .faq-stat { min-width:80px; }
 }
+
+/* INFO BANNER (vervangt hero) */
+.faq-info-banner { background: #faf7f2; border: 1px solid #e2d9e0; border-radius: 14px; padding: 20px 28px; margin-bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.faq-info-tekst { font-size: 0.84rem; color: #6b6570; font-weight: 300; line-height: 1.7; max-width: 500px; }
+.faq-info-tekst strong { color: #4a1942; font-weight: 700; }
+.faq-info-stats { display: flex; gap: 24px; flex-wrap: wrap; flex-shrink: 0; }
+.faq-info-stat-nr { font-size: 1.4rem; font-weight: 900; color: #4a1942; display: block; line-height: 1; }
+.faq-info-stat-label { font-size: 0.65rem; color: #6b6570; font-weight: 300; margin-top: 3px; display: block; }
+@media (max-width: 640px) { .faq-info-banner { flex-direction: column; align-items: flex-start; } .faq-info-stats { gap: 16px; } }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<div class="faq-hero">
-  <div class="faq-hero-inner">
-    <div class="faq-hero-label">Uitvaart-Platform.nl — Kennisbank</div>
-    <h1>Veelgestelde vragen over
-      <em>uitvaart, rouw en afscheid</em>
-    </h1>
-    <p class="faq-hero-sub">Meer dan 60 vragen beantwoord door onze redactie. Helder, begrijpelijk en altijd vanuit betrokkenheid. Gebruik de zoekfunctie om direct jouw antwoord te vinden.</p>
-
-    <div class="faq-stats">
-      <div class="faq-stat"><div class="faq-stat-nr">60+</div><div class="faq-stat-label">Vragen beantwoord</div></div>
-      <div class="faq-stat"><div class="faq-stat-nr">10</div><div class="faq-stat-label">Categorieën</div></div>
-      <div class="faq-stat"><div class="faq-stat-nr">100%</div><div class="faq-stat-label">Onafhankelijk</div></div>
-      <div class="faq-stat"><div class="faq-stat-nr">Gratis</div><div class="faq-stat-label">Altijd toegankelijk</div></div>
-    </div>
+<!-- INFO BANNER -->
+<div class="faq-info-banner">
+  <div class="faq-info-tekst">Meer dan <strong>60 vragen</strong> beantwoord door onze redactie. Helder, begrijpelijk en altijd vanuit betrokkenheid. Gebruik de zoekfunctie of filter op categorie om direct jouw antwoord te vinden.</div>
+  <div class="faq-info-stats">
+    <div><span class="faq-info-stat-nr">60+</span><span class="faq-info-stat-label">Vragen beantwoord</span></div>
+    <div><span class="faq-info-stat-nr">10</span><span class="faq-info-stat-label">Categorieen</span></div>
+    <div><span class="faq-info-stat-nr">100%</span><span class="faq-info-stat-label">Onafhankelijk</span></div>
+    <div><span class="faq-info-stat-nr">Gratis</span><span class="faq-info-stat-label">Altijd toegankelijk</span></div>
   </div>
 </div>
 
