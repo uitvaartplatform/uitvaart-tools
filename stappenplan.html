@@ -19,7 +19,7 @@ body {
   position: relative;
 }
 .sp-wrap * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-.sp-wrap { background: #faf7f2; color: #1e1520; line-height: 1.6; }
+.sp-wrap { background: #faf7f2; color: #1e1520; line-height: 1.6; padding-top: 24px; }
 
 /* ── HERO ── */
 .sp-hero { background: #4a1942; border-radius: 16px; padding: 56px 48px; position: relative; overflow: hidden; margin-bottom: 14px; }
@@ -192,25 +192,31 @@ body {
   .sp-highlight { margin: 0 16px 14px; }
   .sp-voortgang-fases { grid-template-columns: 1fr 1fr; }
 }
+
+/* INFO BANNER (vervangt hero) */
+.sp-info-banner { background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; padding: 20px 24px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.sp-info-links { flex: 1; }
+.sp-info-sub { font-size: 0.82rem; color: #6b6570; font-weight: 300; line-height: 1.65; max-width: 540px; }
+.sp-info-knoppen { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
+.sp-info-btn { background: #4a1942; color: #fff; border-radius: 8px; padding: 9px 16px; font-size: 0.78rem; font-weight: 700; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; white-space: nowrap; }
+.sp-info-btn:hover { background: #6b3060; transform: translateY(-1px); }
+.sp-info-btn-s { background: none; border: 1.5px solid #e2d9e0; color: #4a1942; border-radius: 8px; padding: 9px 16px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; white-space: nowrap; }
+.sp-info-btn-s:hover { border-color: #4a1942; background: #f0ebef; }
+@media (max-width: 580px) { .sp-info-banner { flex-direction: column; } .sp-info-knoppen { width: 100%; } }
 </style>
 
 <div class="sp-wrap">
 
-<!-- HERO -->
-<div class="sp-hero">
-  <div class="sp-hero-inner">
-    <div class="sp-hero-badge">
-      <div class="sp-hero-badge-dot"></div>
-      <span>Compleet stappenplan</span>
-    </div>
-    <h1>Wat regelen na overlijden?
-      <em>Stap voor stap door de moeilijkste dagen</em>
-    </h1>
-    <p class="sp-hero-sub">23 stappen verdeeld over 4 fases. Vink elke stap af als die geregeld is. Jouw voortgang wordt automatisch opgeslagen zodat je later verder kunt.</p>
-    <div class="sp-hero-knoppen">
-      <button class="sp-hero-btn" onclick="window.print()">🖨️ Afdrukken</button>
-      <button class="sp-hero-btn-s" onclick="resetAlles()">↺ Opnieuw beginnen</button>
-    </div>
+
+
+<!-- INFO BANNER -->
+<div class="sp-info-banner sp-no-print">
+  <div class="sp-info-links">
+    <div class="sp-info-sub">23 stappen verdeeld over 4 fases. Vink elke stap af als die geregeld is. Jouw voortgang wordt automatisch opgeslagen zodat je later verder kunt.</div>
+  </div>
+  <div class="sp-info-knoppen">
+    <button class="sp-info-btn" onclick="window.print()">🖨️ Afdrukken</button>
+    <button class="sp-info-btn-s" onclick="resetAlles()">↺ Opnieuw beginnen</button>
   </div>
 </div>
 
