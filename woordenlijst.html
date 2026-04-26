@@ -147,24 +147,30 @@
   .wl-zoek-teller { display: none; }
   .wl-zoek-rij { flex-wrap: wrap; }
 }
+
+/* INFO BANNER (vervangt hero) */
+.wl-info-banner { background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; padding: 18px 24px; margin-bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.wl-info-sub { font-size: 0.82rem; color: #6b6570; font-weight: 300; line-height: 1.65; max-width: 500px; }
+.wl-info-stats { display: flex; gap: 24px; flex-wrap: wrap; flex-shrink: 0; }
+.wl-info-stat-nr { font-size: 1.4rem; font-weight: 900; color: #4a1942; line-height: 1; }
+.wl-info-stat-label { font-size: 0.65rem; color: #6b6570; font-weight: 300; margin-top: 2px; }
+@media (max-width: 580px) { .wl-info-banner { flex-direction: column; } .wl-info-stats { gap: 16px; } }
 </style>
 </head>
 <body>
 <div class="woordenlijst-wrap">
 
-<!-- HERO -->
-<div class="wl-hero">
-  <div class="wl-hero-label">Uitvaart-Platform.nl</div>
-  <h1>Woordenlijst uitvaart &amp; rouw</h1>
-  <p>Alle begrippen rondom uitvaart, begrafenis, crematie, rouwverwerking en erfrecht helder en begrijpelijk uitgelegd.</p>
-  <div class="wl-hero-stats">
-    <div><span class="wl-stat-getal" id="wlStatAantal">65+</span><span class="wl-stat-label">Begrippen</span></div>
-    <div><span class="wl-stat-getal">8</span><span class="wl-stat-label">Categorieen</span></div>
-    <div><span class="wl-stat-getal">A tot Z</span><span class="wl-stat-label">Alfabetisch</span></div>
+
+<!-- INFO BANNER -->
+<div class="wl-info-banner">
+  <div class="wl-info-sub">Alle begrippen rondom uitvaart, begrafenis, crematie, rouwverwerking en erfrecht helder en begrijpelijk uitgelegd. Gebruik de zoekbalk of filter op categorie.</div>
+  <div class="wl-info-stats">
+    <div><div class="wl-info-stat-nr" id="wlStatAantal2">65+</div><div class="wl-info-stat-label">Begrippen</div></div>
+    <div><div class="wl-info-stat-nr">8</div><div class="wl-info-stat-label">Categorieen</div></div>
+    <div><div class="wl-info-stat-nr">A-Z</div><div class="wl-info-stat-label">Alfabetisch</div></div>
   </div>
 </div>
 
-<!-- ZOEK + FILTER BALK -->
 <div class="wl-zoekbalk">
   <div class="wl-zoekbalk-inner">
     <div class="wl-zoek-rij">
