@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda — Uitvaart-Platform.nl</title>
+<style>
+* { font-family: 'Poppins', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #faf7f2; color: #1e1520; line-height: 1.6; }
+
+/* ── INFOBANNER ── */
+.ag-banner {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-left: 5px solid #4a1942;
+  border-radius: 0 12px 12px 0;
+  padding: 20px 28px;
+  margin-bottom: 16px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.ag-banner h1 { font-size: clamp(1rem, 2vw, 1.3rem); font-weight: 800; color: #4a1942; margin-bottom: 4px; }
+.ag-banner p { font-size: 0.8rem; color: #6b6570; font-weight: 300; line-height: 1.65; max-width: 520px; }
+.ag-aanmeld-knop {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: #4a1942; color: #fff;
+  border-radius: 10px; padding: 10px 18px;
+  font-size: 0.78rem; font-weight: 700; text-decoration: none;
+  white-space: nowrap; flex-shrink: 0;
+  transition: background 0.2s, transform 0.15s;
+}
+.ag-aanmeld-knop:hover { background: #6b3060; transform: translateY(-1px); }
+
+/* ── FILTER BALK ── */
+.ag-filters {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.ag-filter-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #6b6570; flex-shrink: 0; }
+.ag-filter-knop {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #faf7f2; border: 1.5px solid #e2d9e0;
+  border-radius: 20px; padding: 5px 14px;
+  font-size: 0.73rem; font-weight: 600; color: #4a1942;
+  cursor: pointer; transition: all 0.18s; white-space: nowrap;
+}
+.ag-filter-knop:hover { border-color: #4a1942; }
+.ag-filter-knop.actief { background: #4a1942; color: #fff; border-color: #4a1942; }
+.ag-filter-sep { width: 1px; height: 24px; background: #e2d9e0; flex-shrink: 0; }
+.ag-teller { font-size: 0.7rem; color: #6b6570; font-weight: 300; margin-left: auto; }
+
+/* ── TIJDLIJN LABEL ── */
+.ag-tijdlijn-label {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #e8834a;
+  margin-bottom: 10px; margin-top: 4px; display: block;
+}
+
+/* ── EVENT GRID ── */
+.ag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* ── EVENT KAART ── */
+.ag-kaart {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.22s;
+  display: flex; flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+.ag-kaart:hover { box-shadow: 0 8px 28px rgba(74,25,66,0.12); transform: translateY(-3px); border-color: #6b3060; }
+.ag-kaart.verleden { opacity: 0.6; }
+.ag-kaart.verleden:hover { opacity: 1; }
+
+.ag-kaart-datumband {
+  background: #4a1942;
+  padding: 12px 18px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.ag-kaart-datum-blok { display: flex; align-items: center; gap: 10px; }
+.ag-kaart-dag { font-size: 1.6rem; font-weight: 900; color: #fff; line-height: 1; }
+.ag-kaart-maand-jaar { display: flex; flex-direction: column; }
+.ag-kaart-maand { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.1em; line-height: 1; }
+.ag-kaart-jaar { font-size: 0.68rem; color: rgba(255,255,255,0.4); font-weight: 300; }
+.ag-kaart-cat-badge {
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 10px; white-space: nowrap;
+}
+.ag-kaart-cat-badge.branche { background: rgba(232,131,74,0.2); color: #e8834a; }
+.ag-kaart-cat-badge.consument { background: rgba(255,255,255,0.15); color: #fff; }
+.ag-kaart-cat-badge.opleiding { background: rgba(46,139,87,0.25); color: #5aba7e; }
+.ag-kaart-cat-badge.beurs { background: rgba(100,160,220,0.25); color: #8ac4f0; }
+.ag-kaart-cat-badge.netwerk { background: rgba(200,100,200,0.25); color: #e0a0e0; }
+
+.ag-kaart-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.ag-kaart-titel { font-size: 0.9rem; font-weight: 800; color: #4a1942; line-height: 1.3; }
+.ag-kaart-org { font-size: 0.72rem; color: #e8834a; font-weight: 600; }
+.ag-kaart-omschrijving { font-size: 0.76rem; color: #6b6570; font-weight: 300; line-height: 1.6; flex: 1; }
+
+.ag-kaart-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.ag-kaart-meta-item {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.68rem; color: #888; font-weight: 300;
+}
+.ag-kaart-meta-icoon { font-size: 0.75rem; }
+
+.ag-kaart-footer {
+  padding: 10px 18px;
+  border-top: 1px solid #f0ebef;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ag-kaart-link-tekst { font-size: 0.72rem; font-weight: 700; color: #4a1942; }
+.ag-kaart-pijl {
+  width: 28px; height: 28px; background: #faf7f2; border: 1px solid #e2d9e0;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; transition: all 0.2s;
+}
+.ag-kaart:hover .ag-kaart-pijl { background: #4a1942; color: #fff; border-color: #4a1942; }
+
+/* Verleden badge */
+.ag-verleden-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #f0ebef; border-radius: 6px; padding: 3px 8px;
+  font-size: 0.6rem; font-weight: 600; color: #6b6570;
+}
+
+/* ── LEEG STAAT ── */
+.ag-leeg {
+  background: #fff; border: 1px solid #e2d9e0; border-radius: 14px;
+  padding: 48px 24px; text-align: center; margin-bottom: 20px;
+}
+.ag-leeg-icoon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+.ag-leeg-titel { font-size: 0.92rem; font-weight: 700; color: #4a1942; margin-bottom: 6px; }
+.ag-leeg-sub { font-size: 0.78rem; color: #6b6570; font-weight: 300; }
+
+/* ── EVENT AANMELDEN BLOK ── */
+.ag-aanmeld-blok {
+  background: #4a1942; border-radius: 14px; padding: 24px 28px;
+  margin-bottom: 0; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.ag-aanmeld-blok::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 30%, rgba(232,131,74,0.12) 0%, transparent 60%); pointer-events: none; }
+.ag-aanmeld-tekst { position: relative; }
+.ag-aanmeld-titel { font-size: 0.9rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.ag-aanmeld-sub { font-size: 0.76rem; color: rgba(255,255,255,0.55); font-weight: 300; max-width: 380px; line-height: 1.6; }
+.ag-aanmeld-knoppen { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; position: relative; }
+.ag-aanmeld-btn {
+  display: inline-block; background: #e8834a; color: #fff;
+  border-radius: 9px; padding: 10px 18px;
+  font-size: 0.78rem; font-weight: 700; text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+.ag-aanmeld-btn:hover { background: #c8622a; transform: translateY(-1px); }
+.ag-aanmeld-btn.wit {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;
+}
+.ag-aanmeld-btn.wit:hover { background: rgba(255,255,255,0.2); }
+
+/* ── VERBERG KLASSE ── */
+.ag-verborgen { display: none !important; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .ag-banner { flex-direction: column; }
+  .ag-filters { gap: 7px; }
+  .ag-filter-knop { font-size: 0.68rem; padding: 4px 11px; }
+  .ag-grid { grid-template-columns: 1fr; }
+  .ag-aanmeld-blok { flex-direction: column; }
+  .ag-kaart-omschrijving { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div style="max-width:960px; margin:0 auto; padding:20px 16px;">
+
+<!-- ═══════════════════════════════════════════════
+     EVENTS — HIER BEHEER JE DE AGENDA
+     Voeg events toe of verwijder ze in deze lijst.
+     Formaat: zie uitleg per veld hieronder.
+═══════════════════════════════════════════════ -->
+<script>
+const EVENTS = [
+
+  // ── VOORBEELD EVENTS — vervang door echte events ──
+
+  {
+    datum:       "2025-05-15",           // JJJJ-MM-DD (bepaalt volgorde + dag/maand/jaar weergave)
+    titel:       "Uitvaartbeurs Nederland 2025",
+    organisator: "BGNU",
+    omschrijving:"Dé jaarlijkse ontmoetingsplaats voor de uitvaartbranche. Met lezingen, workshops en nieuwe producten en diensten.",
+    locatie:     "Jaarbeurs Utrecht",
+    tijd:        "09:00 – 17:00",
+    categorie:   "beurs",               // branche | consument | opleiding | beurs | netwerk
+    link:        "https://www.bgnu.nl",
+    gratis:      false,
+    online:      false,
+  },
+  {
+    datum:       "2025-05-22",
+    titel:       "Rouwcafé Amsterdam — open gesprek over verlies",
+    organisator: "Rouwzorg Amsterdam",
+    omschrijving:"Een laagdrempelige bijeenkomst waar iedereen welkom is om te praten over verlies en rouw. Gratis toegang, aanmelden niet verplicht.",
+    locatie:     "Café De Jaren, Amsterdam",
+    tijd:        "19:00 – 21:30",
+    categorie:   "consument",
+    link:        "https://uitvaart-platform.nl/bedrijven/c/rouwbegeleiding-en-nazorg",
+    gratis:      true,
+    online:      false,
+  },
+  {
+    datum:       "2025-06-03",
+    titel:       "Opleiding Uitvaartverzorger — Startdag nieuw cohort",
+    organisator: "ROC Midden Nederland",
+    omschrijving:"Start van de nieuwe opleiding tot gecertificeerd uitvaartverzorger. MBO-niveau, erkend door BGNU. Open dag voor geïnteresseerden.",
+    locatie:     "ROC Midden Nederland, Utrecht",
+    tijd:        "10:00 – 14:00",
+    categorie:   "opleiding",
+    link:        "https://uitvaart-platform.nl/bedrijven/c/uitvaartondernemingen",
+    gratis:      true,
+    online:      false,
+  },
+  {
+    datum:       "2025-06-18",
+    titel:       "Webinar: Digitale nalatenschap — wat laat jij achter?",
+    organisator: "Uitvaart-Platform.nl",
+    omschrijving:"Online webinar over digitale accounts, crypto en sociale media na overlijden. Praktische tips voor nabestaanden en uitvaartprofessionals.",
+    locatie:     "Online via Zoom",
+    tijd:        "20:00 – 21:15",
+    categorie:   "branche",
+    link:        "https://uitvaart-platform.nl",
+    gratis:      true,
+    online:      true,
+  },
+  {
+    datum:       "2025-07-04",
+    titel:       "Netwerkborrel Uitvaartbranche Noord-Holland",
+    organisator: "Nardus Regio Noord-Holland",
+    omschrijving:"Informele netwerkavond voor uitvaartprofessionals in Noord-Holland. Kennismaken, ervaringen delen en samenwerking verkennen.",
+    locatie:     "De Boeren, Haarlem",
+    tijd:        "17:00 – 20:00",
+    categorie:   "netwerk",
+    link:        "https://www.nardus.nl",
+    gratis:      false,
+    online:      false,
+  },
+  {
+    datum:       "2025-08-23",
+    titel:       "Open dag Natuurbegraafplaats De Vlinderhof",
+    organisator: "Natuurbegraafplaats De Vlinderhof",
+    omschrijving:"Kom kennismaken met duurzame uitvaartmogelijkheden op deze prachtige locatie in de natuur. Rondleidingen het hele dag door.",
+    locatie:     "Holten, Overijssel",
+    tijd:        "10:00 – 16:00",
+    categorie:   "consument",
+    link:        "https://uitvaart-platform.nl/bedrijven/c/begraafplaats-crematorium",
+    gratis:      true,
+    online:      false,
+  },
+  {
+    datum:       "2025-09-10",
+    titel:       "Congres Palliatieve Zorg & Afscheid 2025",
+    organisator: "Agora Palliatieve Zorg",
+    omschrijving:"Jaarlijks nationaal congres over palliatieve zorg, stervensbegeleiding en een waardig levenseinde. Voor zorgprofessionals en uitvaartbranche.",
+    locatie:     "NBC Nieuwegein",
+    tijd:        "08:30 – 17:30",
+    categorie:   "branche",
+    link:        "https://www.agora.nl",
+    gratis:      false,
+    online:      false,
+  },
+  {
+    datum:       "2025-10-02",
+    titel:       "Workshop: Rouw op de werkplek — voor HR professionals",
+    organisator: "Uitvaart-Platform.nl & Rouwzorg.nl",
+    omschrijving:"Praktische workshop voor HR-managers en leidinggevenden over hoe je medewerkers in rouw het beste kunt begeleiden en ondersteunen.",
+    locatie:     "Online via Teams",
+    tijd:        "14:00 – 16:30",
+    categorie:   "branche",
+    link:        "https://uitvaart-platform.nl",
+    gratis:      false,
+    online:      true,
+  },
+  {
+    datum:       "2025-11-14",
+    titel:       "Herdenkingsavond — Lichtjes in de nacht",
+    organisator: "Rouwcentrum Hemeltuin Rotterdam",
+    omschrijving:"Een jaarlijkse herdenkingsavond voor iedereen die een dierbare heeft verloren. Kaarsjes oplichten, muziek en gezamenlijk herdenken.",
+    locatie:     "Rouwcentrum Hemeltuin, Rotterdam",
+    tijd:        "19:00 – 21:00",
+    categorie:   "consument",
+    link:        "https://uitvaart-platform.nl/bedrijven/c/rouwcentra",
+    gratis:      true,
+    online:      false,
+  },
+  {
+    datum:       "2025-11-28",
+    titel:       "Jaarcongres Uitvaartbranche 2025",
+    organisator: "BGNU & Nardus",
+    omschrijving:"Het grootste jaarlijkse congres voor de Nederlandse uitvaartbranche. Trends, innovaties, wet- en regelgeving en netwerkmogelijkheden.",
+    locatie:     "WTC Rotterdam",
+    tijd:        "09:00 – 18:00",
+    categorie:   "branche",
+    link:        "https://www.bgnu.nl",
+    gratis:      false,
+    online:      false,
+  },
+
+];
+// ═══ EINDE EVENTS LIJST ═══
+
+// ── Hulpfuncties ──
+const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+const MAANDEN_LANG = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+const CAT_LABELS = { branche:'Branche', consument:'Consument', opleiding:'Opleiding', beurs:'Beurs', netwerk:'Netwerk' };
+const CAT_EMOJIS = { branche:'🏢', consument:'💜', opleiding:'🎓', beurs:'🏛️', netwerk:'🤝' };
+
+function parseDate(str) { const [y,m,d] = str.split('-').map(Number); return new Date(y,m-1,d); }
+function isVerleden(str) { const d = parseDate(str); const t = new Date(); t.setHours(0,0,0,0); return d < t; }
+
+// Sorteer: aankomende events eerst (oplopend), daarna verleden (aflopend)
+const aankomend = EVENTS.filter(e => !isVerleden(e.datum)).sort((a,b) => parseDate(a.datum)-parseDate(b.datum));
+const verleden  = EVENTS.filter(e =>  isVerleden(e.datum)).sort((a,b) => parseDate(b.datum)-parseDate(a.datum));
+const alleEvents = [...aankomend, ...verleden];
+
+let actieveFilter = 'alle';
+
+function maakKaart(ev, verledenFlag) {
+  const d = parseDate(ev.datum);
+  const dag = d.getDate();
+  const maand = MAANDEN[d.getMonth()];
+  const maandLang = MAANDEN_LANG[d.getMonth()];
+  const jaar = d.getFullYear();
+
+  const catClass = ev.categorie || 'branche';
+  const catLabel = CAT_LABELS[catClass] || catClass;
+  const catEmoji = CAT_EMOJIS[catClass] || '📅';
+
+  const gratisBadge = ev.gratis ? '<span class="ag-kaart-meta-item"><span class="ag-kaart-meta-icoon">🎟️</span> Gratis</span>' : '';
+  const onlineBadge = ev.online ? '<span class="ag-kaart-meta-item"><span class="ag-kaart-meta-icoon">💻</span> Online</span>' : '';
+  const verledenBadge = verledenFlag ? '<span class="ag-verleden-badge">📁 Afgelopen</span>' : '';
+
+  return `
+  <a href="${ev.link}" target="_blank" rel="noopener"
+     class="ag-kaart${verledenFlag ? ' verleden' : ''}"
+     data-cat="${catClass}">
+    <div class="ag-kaart-datumband">
+      <div class="ag-kaart-datum-blok">
+        <div class="ag-kaart-dag">${dag}</div>
+        <div class="ag-kaart-maand-jaar">
+          <div class="ag-kaart-maand">${maand} ${jaar}</div>
+          <div class="ag-kaart-jaar">${ev.tijd || ''}</div>
+        </div>
+      </div>
+      <span class="ag-kaart-cat-badge ${catClass}">${catEmoji} ${catLabel}</span>
+    </div>
+    <div class="ag-kaart-body">
+      <div class="ag-kaart-titel">${ev.titel}</div>
+      ${ev.organisator ? `<div class="ag-kaart-org">📌 ${ev.organisator}</div>` : ''}
+      ${ev.omschrijving ? `<div class="ag-kaart-omschrijving">${ev.omschrijving}</div>` : ''}
+      <div class="ag-kaart-meta">
+        <span class="ag-kaart-meta-item"><span class="ag-kaart-meta-icoon">📍</span> ${ev.locatie}</span>
+        ${gratisBadge}${onlineBadge}${verledenBadge}
+      </div>
+    </div>
+    <div class="ag-kaart-footer">
+      <span class="ag-kaart-link-tekst">Meer informatie</span>
+      <span class="ag-kaart-pijl">→</span>
+    </div>
+  </a>`;
+}
+
+function renderAlles() {
+  const gridAankomend = document.getElementById('gridAankomend');
+  const gridVerleden  = document.getElementById('gridVerleden');
+  const secVerleden   = document.getElementById('secVerleden');
+  const leegAankomend = document.getElementById('leegAankomend');
+
+  const aankomendGefilterd = aankomend.filter(e => actieveFilter === 'alle' || e.categorie === actieveFilter);
+  const verledenGefilterd  = verleden.filter(e => actieveFilter === 'alle' || e.categorie === actieveFilter);
+
+  gridAankomend.innerHTML = aankomendGefilterd.map(e => maakKaart(e, false)).join('');
+  gridVerleden.innerHTML  = verledenGefilterd.map(e => maakKaart(e, true)).join('');
+
+  leegAankomend.classList.toggle('ag-verborgen', aankomendGefilterd.length > 0);
+  secVerleden.classList.toggle('ag-verborgen', verledenGefilterd.length === 0);
+
+  // Teller updaten
+  const totaal = aankomendGefilterd.length + verledenGefilterd.length;
+  document.getElementById('agTeller').textContent = totaal + ' event' + (totaal !== 1 ? 's' : '') + ' gevonden';
+}
+
+function filterOp(cat, el) {
+  actieveFilter = cat;
+  document.querySelectorAll('.ag-filter-knop').forEach(b => b.classList.remove('actief'));
+  el.classList.add('actief');
+  renderAlles();
+}
+
+window.addEventListener('DOMContentLoaded', renderAlles);
+</script>
+
+<!-- ── INFO BANNER ── -->
+<div class="ag-banner">
+  <div>
+    <h1>📅 Uitvaart Agenda Nederland 2025</h1>
+    <p>Beurzen, lezingen, herdenkingen, opleidingen en netwerkevents voor de uitvaartbranche en nabestaanden. Filter op categorie om te vinden wat bij jou past.</p>
+  </div>
+  <a href="mailto:info@uitvaart-platform.nl?subject=Event aanmelden voor de agenda" class="ag-aanmeld-knop">✉️ Event aanmelden</a>
+</div>
+
+<!-- ── FILTER BALK ── -->
+<div class="ag-filters">
+  <span class="ag-filter-label">Filter:</span>
+  <button class="ag-filter-knop actief" onclick="filterOp('alle',this)">📅 Alle events</button>
+  <button class="ag-filter-knop" onclick="filterOp('branche',this)">🏢 Branche</button>
+  <button class="ag-filter-knop" onclick="filterOp('consument',this)">💜 Consument</button>
+  <button class="ag-filter-knop" onclick="filterOp('opleiding',this)">🎓 Opleiding</button>
+  <button class="ag-filter-knop" onclick="filterOp('beurs',this)">🏛️ Beurs</button>
+  <button class="ag-filter-knop" onclick="filterOp('netwerk',this)">🤝 Netwerk</button>
+  <span class="ag-filter-sep"></span>
+  <span class="ag-teller" id="agTeller"></span>
+</div>
+
+<!-- ── AANKOMENDE EVENTS ── -->
+<span class="ag-tijdlijn-label">🟠 Aankomende events</span>
+<div class="ag-grid" id="gridAankomend"></div>
+<div class="ag-leeg ag-verborgen" id="leegAankomend">
+  <span class="ag-leeg-icoon">📭</span>
+  <div class="ag-leeg-titel">Geen events gevonden in deze categorie</div>
+  <div class="ag-leeg-sub">Bekijk een andere categorie of meld je eigen event aan.</div>
+</div>
+
+<!-- ── VERLEDEN EVENTS ── -->
+<div id="secVerleden">
+  <span class="ag-tijdlijn-label" style="margin-top:12px;">📁 Afgelopen events</span>
+  <div class="ag-grid" id="gridVerleden"></div>
+</div>
+
+<!-- ── EVENT AANMELDEN ── -->
+<div class="ag-aanmeld-blok">
+  <div class="ag-aanmeld-tekst">
+    <div class="ag-aanmeld-titel">📢 Staat jouw event er niet bij?</div>
+    <div class="ag-aanmeld-sub">Organiseer je een beurs, lezing, open dag, netwerkborrel of herdenkingsavond voor de uitvaartbranche of nabestaanden? Meld het gratis aan en bereik duizenden geïnteresseerden.</div>
+  </div>
+  <div class="ag-aanmeld-knoppen">
+    <a href="mailto:info@uitvaart-platform.nl?subject=Event aanmelden agenda Uitvaart-Platform.nl" class="ag-aanmeld-btn">✉️ Meld event aan</a>
+    <a href="https://uitvaart-platform.nl/bedrijven" class="ag-aanmeld-btn wit">🔍 Bedrijvengids</a>
+  </div>
+</div>
+
+</div><!-- /max-width wrapper -->
+</body>
+</html>
