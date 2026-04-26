@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Woordenlijst uitvaart & rouw | Uitvaart-Platform.nl</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"DefinedTermSet","name":"Woordenlijst uitvaart en rouw","description":"Meer dan 65 begrippen rondom uitvaart, begrafenis, crematie, rouwverwerking en erfrecht, helder uitgelegd door Uitvaart-Platform.nl","url":"https://uitvaart-platform.nl/woordenlijst","inLanguage":"nl","publisher":{"@type":"Organization","name":"Uitvaart-Platform.nl","url":"https://uitvaart-platform.nl"}}
+</script>
+<style>
+.woordenlijst-wrap * { font-family: 'Poppins', sans-serif; box-sizing: border-box; }
+
+/* HERO */
+.wl-hero { background: #4a1942; padding: 48px 24px 64px; text-align: center; position: relative; overflow: hidden; }
+.wl-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(232,131,74,0.12) 0%, transparent 60%); }
+.wl-hero-label { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #e8834a; margin-bottom: 16px; position: relative; }
+.wl-hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 16px; position: relative; }
+.wl-hero p { font-size: 0.95rem; color: rgba(255,255,255,0.7); max-width: 580px; margin: 0 auto 28px; line-height: 1.7; font-weight: 300; position: relative; }
+.wl-hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; position: relative; }
+.wl-stat-getal { font-size: 2rem; font-weight: 700; color: #e8834a; display: block; line-height: 1; }
+.wl-stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.55); font-weight: 300; letter-spacing: 0.05em; }
+
+/* ZOEK + FILTER BALK */
+.wl-zoekbalk { background: #fff; border-bottom: 1px solid #e2d9e0; padding: 14px 24px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(74,25,66,0.06); }
+.wl-zoekbalk-inner { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+.wl-zoek-rij { display: flex; align-items: center; gap: 10px; }
+.wl-zoek-wrap { position: relative; flex: 1; max-width: 460px; }
+.wl-zoek-input { width: 100%; padding: 9px 36px 9px 14px; border: 1.5px solid #e2d9e0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.84rem; color: #1e1520; background: #faf7f2; transition: all 0.2s; }
+.wl-zoek-input:focus { outline: none; border-color: #4a1942; background: #fff; box-shadow: 0 0 0 3px rgba(74,25,66,0.07); }
+.wl-zoek-input::placeholder { color: #b8aeb8; }
+.wl-zoek-icoon { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); font-size: 0.88rem; pointer-events: none; opacity: 0.45; }
+.wl-wis-knop { background: none; border: 1px solid #e2d9e0; border-radius: 6px; color: #6b6570; cursor: pointer; font-size: 0.74rem; font-family: 'Poppins', sans-serif; padding: 5px 11px; transition: all 0.18s; display: none; white-space: nowrap; }
+.wl-wis-knop:hover { border-color: #4a1942; color: #4a1942; }
+.wl-wis-knop.aan { display: block; }
+.wl-zoek-teller { font-size: 0.73rem; color: #9a909a; font-weight: 300; margin-left: auto; white-space: nowrap; }
+.wl-cat-filter { display: flex; gap: 5px; flex-wrap: wrap; }
+.wl-cat-knop { padding: 4px 11px; border: 1.5px solid #e2d9e0; border-radius: 20px; font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 600; color: #6b6570; background: #faf7f2; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+.wl-cat-knop:hover { border-color: #4a1942; color: #4a1942; }
+.wl-cat-knop.actief { background: #4a1942; border-color: #4a1942; color: #fff; }
+.wl-cat-knop[data-cat="praktisch"].actief { background: #1a5276; border-color: #1a5276; }
+.wl-cat-knop[data-cat="ceremonie"].actief { background: #6c2d6a; border-color: #6c2d6a; }
+.wl-cat-knop[data-cat="juridisch"].actief { background: #7d6608; border-color: #7d6608; }
+.wl-cat-knop[data-cat="financieel"].actief { background: #1a7a5a; border-color: #1a7a5a; }
+.wl-cat-knop[data-cat="rouw"].actief { background: #a04000; border-color: #a04000; }
+.wl-cat-knop[data-cat="natuur"].actief { background: #1e8449; border-color: #1e8449; }
+.wl-cat-knop[data-cat="religie"].actief { background: #6c3483; border-color: #6c3483; }
+.wl-cat-knop[data-cat="medisch"].actief { background: #922b21; border-color: #922b21; }
+
+/* ALFABET */
+.wl-alfabet { background: #fff; border-bottom: 1px solid #e2d9e0; padding: 10px 24px; }
+.wl-alfabet-inner { max-width: 900px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; }
+.wl-alfa-knop { display: inline-block; padding: 5px 10px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: #4a1942; text-decoration: none; border: 1px solid transparent; transition: all 0.2s; cursor: pointer; background: none; font-family: 'Poppins', sans-serif; }
+.wl-alfa-knop:hover { background: #4a1942; color: #fff; }
+.wl-alfa-knop.leeg { color: #e2d9e0; pointer-events: none; }
+
+/* INTRO */
+.wl-intro { max-width: 900px; margin: 0 auto; padding: 40px 24px 24px; }
+.wl-intro p { font-size: 0.95rem; color: #6b6570; line-height: 1.8; font-weight: 300; }
+.wl-intro strong { color: #4a1942; font-weight: 600; }
+
+/* CAT BLOKKEN */
+.wl-categorie-blokken { max-width: 900px; margin: 0 auto; padding: 0 24px 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 12px; }
+.wl-cat-blok { background: #fff; border: 1px solid #e2d9e0; border-radius: 10px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s; display: block; }
+.wl-cat-blok:hover { border-color: #4a1942; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(74,25,66,0.1); }
+.wl-cat-icoon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.wl-cat-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; display: block; }
+.wl-cat-sub { font-size: 0.72rem; color: #6b6570; display: block; margin-top: 2px; }
+
+/* LIJST */
+.wl-lijst { max-width: 900px; margin: 0 auto; padding: 16px 24px 60px; }
+.wl-letter-sectie { margin-bottom: 48px; scroll-margin-top: 160px; }
+.wl-letter-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #4a1942; }
+.wl-letter { font-size: 2.8rem; font-weight: 700; color: #4a1942; line-height: 1; }
+.wl-letter-lijn { flex: 1; height: 1px; background: #e2d9e0; }
+.wl-letter-count { font-size: 0.68rem; color: #9a909a; font-weight: 300; }
+
+/* BEGRIP - exact zoals origineel maar dan als div ipv details */
+.wl-begrip { background: #fff; border: 1px solid #e2d9e0; border-radius: 10px; margin-bottom: 10px; overflow: hidden; transition: box-shadow 0.2s; }
+.wl-begrip:hover { box-shadow: 0 2px 16px rgba(74,25,66,0.08); }
+.wl-begrip.verborgen { display: none; }
+.wl-begrip-header { padding: 16px 20px; cursor: pointer; display: flex; align-items: flex-start; gap: 14px; transition: background 0.15s; }
+.wl-begrip-header:hover { background: #faf7f2; }
+.wl-begrip-info { flex: 1; }
+.wl-begrip-term { font-size: 1rem; font-weight: 600; color: #4a1942; line-height: 1.3; }
+.wl-begrip-kort { font-size: 0.8rem; color: #6b6570; font-weight: 300; margin-top: 2px; }
+.wl-tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; margin-top: 2px; }
+.tag-praktisch { background: #e8f4fd; color: #1a5276; }
+.tag-ceremonie { background: #f9e8f5; color: #4a1942; }
+.tag-juridisch { background: #fef9e7; color: #7d6608; }
+.tag-financieel { background: #e8f8f5; color: #1a7a5a; }
+.tag-rouw { background: #fdebd0; color: #a04000; }
+.tag-natuur { background: #e9f7ef; color: #1e8449; }
+.tag-religie { background: #f4ecf7; color: #6c3483; }
+.tag-medisch { background: #fde8e8; color: #922b21; }
+.wl-plus { font-size: 1.2rem; color: #4a1942; font-weight: 300; flex-shrink: 0; margin-top: 1px; transition: transform 0.22s; line-height: 1; }
+.wl-begrip-header.open .wl-plus { transform: rotate(45deg); }
+
+.wl-inhoud { display: none; padding: 0 20px 20px; border-top: 1px solid #f0ebef; }
+.wl-inhoud.open { display: block; animation: wlFadeIn 0.2s ease; }
+@keyframes wlFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.wl-definitie { font-size: 0.92rem; line-height: 1.75; color: #444; font-weight: 300; margin-top: 14px; }
+.wl-definitie strong { color: #4a1942; font-weight: 600; }
+.wl-definitie em { font-style: italic; color: #6b6570; }
+.wl-extra { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.wl-extra-blok { background: #f0ebef; border-radius: 8px; padding: 12px 14px; }
+.wl-extra-titel { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #e8834a; margin-bottom: 4px; }
+.wl-extra-tekst { font-size: 0.8rem; color: #555; line-height: 1.6; font-weight: 300; }
+.wl-zie-ook { margin-top: 12px; font-size: 0.78rem; color: #6b6570; }
+.wl-zie-ook strong { font-weight: 600; color: #4a1942; }
+
+/* CTA */
+.wl-cta { background: #4a1942; border-radius: 12px; padding: 28px 32px; margin: 32px 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.wl-cta p { color: rgba(255,255,255,0.85); font-size: 0.88rem; font-weight: 300; line-height: 1.5; margin: 0; }
+.wl-cta strong { color: #fff; font-weight: 600; display: block; font-size: 0.95rem; margin-bottom: 4px; }
+.wl-cta-knop { display: inline-block; background: #e8834a; color: #fff; padding: 11px 22px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem; white-space: nowrap; transition: all 0.18s; }
+.wl-cta-knop:hover { background: #c8622a; transform: translateY(-1px); }
+
+/* LEEG */
+.wl-leeg { text-align: center; padding: 56px 24px; display: none; }
+.wl-leeg-icoon { font-size: 2.8rem; margin-bottom: 10px; }
+.wl-leeg-titel { font-size: 0.96rem; font-weight: 600; color: #4a1942; margin-bottom: 6px; }
+.wl-leeg-sub { font-size: 0.82rem; color: #6b6570; font-weight: 300; line-height: 1.7; }
+.wl-leeg-sub a { color: #4a1942; font-weight: 600; }
+
+/* FOOTER */
+.wl-footer { background: #fff; border-top: 1px solid #e2d9e0; padding: 40px 24px; text-align: center; }
+.wl-footer p { font-size: 0.83rem; color: #6b6570; font-weight: 300; line-height: 1.8; max-width: 600px; margin: 0 auto; }
+.wl-footer a { color: #4a1942; text-decoration: none; font-weight: 500; }
+.wl-footer a:hover { color: #e8834a; }
+
+/* MOBIEL */
+@media (max-width: 580px) {
+  .wl-hero { padding: 40px 16px 52px; }
+  .wl-hero-stats { gap: 24px; }
+  .wl-zoekbalk { padding: 10px 14px; }
+  .wl-alfabet { padding: 8px 14px; }
+  .wl-alfa-knop { padding: 4px 7px; font-size: 0.76rem; }
+  .wl-intro { padding: 24px 16px 16px; }
+  .wl-categorie-blokken { padding: 0 16px 12px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+  .wl-lijst { padding: 12px 16px 40px; }
+  .wl-extra { grid-template-columns: 1fr; }
+  .wl-begrip-header { padding: 14px 14px; }
+  .wl-tag { display: none; }
+  .wl-inhoud { padding: 0 14px 14px; }
+  .wl-cta { padding: 20px 16px; flex-direction: column; }
+  .wl-zoek-teller { display: none; }
+  .wl-zoek-rij { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<div class="woordenlijst-wrap">
+
+<!-- HERO -->
+<div class="wl-hero">
+  <div class="wl-hero-label">Uitvaart-Platform.nl</div>
+  <h1>Woordenlijst uitvaart &amp; rouw</h1>
+  <p>Alle begrippen rondom uitvaart, begrafenis, crematie, rouwverwerking en erfrecht helder en begrijpelijk uitgelegd.</p>
+  <div class="wl-hero-stats">
+    <div><span class="wl-stat-getal" id="wlStatAantal">65+</span><span class="wl-stat-label">Begrippen</span></div>
+    <div><span class="wl-stat-getal">8</span><span class="wl-stat-label">Categorieen</span></div>
+    <div><span class="wl-stat-getal">A tot Z</span><span class="wl-stat-label">Alfabetisch</span></div>
+  </div>
+</div>
+
+<!-- ZOEK + FILTER BALK -->
+<div class="wl-zoekbalk">
+  <div class="wl-zoekbalk-inner">
+    <div class="wl-zoek-rij">
+      <div class="wl-zoek-wrap">
+        <input type="text" class="wl-zoek-input" id="wlZoekInput" placeholder="Zoek een begrip... bijv. crematie of erfrecht">
+        <span class="wl-zoek-icoon">&#128269;</span>
+      </div>
+      <button class="wl-wis-knop" id="wlWisKnop">&#x2715; Wis</button>
+      <span class="wl-zoek-teller" id="wlZoekTeller"></span>
+    </div>
+    <div class="wl-cat-filter">
+      <button class="wl-cat-knop actief" data-cat="alle">Alle</button>
+      <button class="wl-cat-knop" data-cat="praktisch">&#128203; Praktisch</button>
+      <button class="wl-cat-knop" data-cat="ceremonie">&#128305; Ceremonie</button>
+      <button class="wl-cat-knop" data-cat="juridisch">&#9878; Juridisch</button>
+      <button class="wl-cat-knop" data-cat="financieel">&#128182; Financieel</button>
+      <button class="wl-cat-knop" data-cat="rouw">&#128153; Rouw</button>
+      <button class="wl-cat-knop" data-cat="natuur">&#127807; Natuur</button>
+      <button class="wl-cat-knop" data-cat="religie">Religie</button>
+      <button class="wl-cat-knop" data-cat="medisch">&#127973; Medisch</button>
+    </div>
+  </div>
+</div>
+
+<!-- ALFABET -->
+<nav class="wl-alfabet">
+  <div class="wl-alfabet-inner" id="wlAlfabetNav"></div>
+</nav>
+
+<!-- INTRO -->
+<div class="wl-intro">
+  <p>Bij een overlijden komen veel <strong>onbekende begrippen en termen</strong> op je af. Van juridische termen als 'verklaring van erfrecht' tot praktische zaken als 'rouwkamer' en 'condoleanceregister'. In deze uitgebreide woordenlijst vind je alles wat je moet weten, <strong>helder en begrijpelijk</strong> uitgelegd.</p>
+</div>
+
+<!-- CAT BLOKKEN -->
+<div class="wl-categorie-blokken">
+  <div class="wl-cat-blok" data-filter="praktisch"><span class="wl-cat-icoon">&#128203;</span><span class="wl-cat-naam">Praktisch</span><span class="wl-cat-sub">Regelen &amp; organiseren</span></div>
+  <div class="wl-cat-blok" data-filter="ceremonie"><span class="wl-cat-icoon">&#128305;</span><span class="wl-cat-naam">Ceremonie</span><span class="wl-cat-sub">Dienst &amp; afscheid</span></div>
+  <div class="wl-cat-blok" data-filter="juridisch"><span class="wl-cat-icoon">&#9878;</span><span class="wl-cat-naam">Juridisch</span><span class="wl-cat-sub">Recht &amp; documenten</span></div>
+  <div class="wl-cat-blok" data-filter="financieel"><span class="wl-cat-icoon">&#128182;</span><span class="wl-cat-naam">Financieel</span><span class="wl-cat-sub">Kosten &amp; verzekering</span></div>
+  <div class="wl-cat-blok" data-filter="rouw"><span class="wl-cat-icoon">&#128153;</span><span class="wl-cat-naam">Rouw</span><span class="wl-cat-sub">Verwerking &amp; steun</span></div>
+  <div class="wl-cat-blok" data-filter="natuur"><span class="wl-cat-icoon">&#127807;</span><span class="wl-cat-naam">Natuur</span><span class="wl-cat-sub">Groene uitvaart</span></div>
+  <div class="wl-cat-blok" data-filter="religie"><span class="wl-cat-icoon">&#9997;</span><span class="wl-cat-naam">Religie</span><span class="wl-cat-sub">Tradities &amp; rituelen</span></div>
+  <div class="wl-cat-blok" data-filter="medisch"><span class="wl-cat-icoon">&#127973;</span><span class="wl-cat-naam">Medisch</span><span class="wl-cat-sub">Overlijden &amp; lichaam</span></div>
+</div>
+
+<!-- BEGRIPPEN LIJST (dynamisch gevuld) -->
+<div class="wl-lijst" id="wlLijst"></div>
+<div class="wl-leeg" id="wlLeeg">
+  <div class="wl-leeg-icoon">&#128269;</div>
+  <div class="wl-leeg-titel">Geen begrippen gevonden</div>
+  <div class="wl-leeg-sub">Staat jouw begrip er niet bij? Mail naar <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a> en we voegen het toe.</div>
+</div>
+
+<!-- FOOTER -->
+<div class="wl-footer">
+  <p>Deze woordenlijst is samengesteld door de redactie van <a href="https://uitvaart-platform.nl">Uitvaart-Platform.nl</a>. Heb je een begrip gemist? Mail naar <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a>. Bekijk ook onze <a href="https://uitvaart-platform.nl/veelgestelde-vragen">veelgestelde vragen</a> of de <a href="https://uitvaart-platform.nl/bedrijven">bedrijvengids</a>.</p>
+</div>
+
+</div><!-- einde woordenlijst-wrap -->
+
+<script>
+// ============================================================
+// DATA — alle begrippen A-Z
+// Velden: t=term, k=korte omschrijving, c=categorie, l=letter,
+//         d=definitie (HTML), e=extra blokken [[titel,tekst]],
+//         z=zie-ook tekst
+// ============================================================
+var WL = [
+
+// A
+{t:'Aangifte van overlijden',k:'Verplichte melding bij de gemeente na een overlijden',c:'juridisch',l:'A',
+ d:'De aangifte van overlijden is een <strong>wettelijke verplichting</strong> die binnen vijf werkdagen na het overlijden bij de burgerlijke stand van de gemeente moet worden gedaan. In de praktijk regelt de uitvaartondernemer dit namens de nabestaanden. Na de aangifte ontvangt men een <em>verlof tot begraving of crematie</em>.',
+ e:[['Wettelijke termijn','Binnen 5 werkdagen na overlijden, voor de uitvaart'],['Wie doet dit?','Uitvaartondernemer of nabestaande bij de burgerlijke stand']],
+ z:'Verlof tot begraving of crematie, Akte van overlijden'},
+
+{t:'Akte van overlijden',k:'Officieel gemeentelijk document dat overlijden bevestigt',c:'juridisch',l:'A',
+ d:'De akte van overlijden is een <strong>officieel document van de burgerlijke stand</strong> dat formeel het overlijden bevestigt. Het bevat naam, geboortedatum, datum en plaats van overlijden. Onmisbaar voor het regelen van erfenis, pensioenen en bankrekeningen.',
+ e:[['Waarvoor nodig?','Bank, pensioen, verzekeraar, notaris, DigiD opheffen'],['Afschriften aanvragen','Via de gemeente, kosten ca. 15 euro per afschrift']]},
+
+{t:'Anticiperende rouw',k:'Rouw die begint voordat het overlijden plaatsvindt',c:'rouw',l:'A',
+ d:'Anticiperende rouw is de <strong>rouw die mensen ervaren als ze weten dat een verlies eraan komt</strong>, bijvoorbeeld bij een terminale ziekte van een geliefde. Het verdriet begint al voor het overlijden. Dit is een normale en erkende vorm van rouw die begeleiding behoeft.',
+ e:[['Kenmerken','Vooruitlopen op verlies, afscheid nemen, intense emoties'],['Begeleiding','Palliatieve zorgteams en rouwbegeleiders zijn hierin gespecialiseerd']]},
+
+{t:'Asbestemming',k:'Wat er na crematie met de as van de overledene gebeurt',c:'praktisch',l:'A',
+ d:'Na een crematie zijn er verschillende mogelijkheden voor de as. De as kan worden <strong>bewaard in een urn</strong> thuis, bijgezet op een urnenveld, uitgestrooid op zee of in de natuur, of verwerkt in een <em>herinneringssieraad</em>. Op privetterrein mag as worden uitgestrooid met toestemming van de eigenaar.',
+ e:[['Populaire opties','Urn thuis, strooiveld, zee, urnenmuur, herinneringssieraad'],['Wettelijk kader','Wet op de lijkbezorging regelt toegestane asbestemmingen']],
+ z:'Crematie, Urn, Strooiweide, Zeebesteding'},
+
+{t:'Aula',k:'Ruimte voor de uitvaartdienst op een begraafplaats of crematorium',c:'ceremonie',l:'A',
+ d:'Een aula is een <strong>ontvangst- en afscheidsruimte</strong> op een begraafplaats of crematorium. De meeste aulas bieden ruimte voor 30 tot 200 gasten en kunnen worden gepersonaliseerd met fotos, bloemen en muziek. Sommige aulas zijn ook te huren als externe locatie.',
+ e:[['Gemiddelde kosten','300 tot 1.200 euro, afhankelijk van locatie en duur'],['Alternatieven','Kerk, bijzondere locatie, thuis, buitenlocatie']]},
+
+// B
+{t:'Balsemen',k:'Conserveringstechniek om het lichaam langer te bewaren',c:'medisch',l:'B',
+ d:'Balsemen is een <strong>techniek waarbij het lichaam met conserverende vloeistoffen wordt behandeld</strong> zodat het langer bewaard blijft. In Nederland is het niet standaard en wordt voornamelijk toegepast bij repatriering vanuit het buitenland. Bij een groene uitvaart wordt balsemen bewust vermeden.',
+ e:[['Wanneer nodig','Bij repatriering, langdurige opbaring of op verzoek'],['Groen alternatief','Koeling volstaat bij normale opbaring tot 6 werkdagen']]},
+
+{t:'Begrafenis',k:'Het ter aarde bestellen van een overledene',c:'praktisch',l:'B',
+ d:'Een begrafenis is het <strong>begraven van het lichaam in een kist in de grond</strong> op een begraafplaats. In Nederland moet de begrafenis uiterlijk op de zesde werkdag na overlijden plaatsvinden. Een begrafenis is gemiddeld duurder dan een crematie vanwege de grafrechten.',
+ e:[['Gemiddelde kosten','7.000 tot 15.000 euro inclusief grafkosten'],['Wettelijke termijn','Uiterlijk 6 werkdagen na overlijden']],
+ z:'Crematie, Graf, Begraafplaats, Grafrecht'},
+
+{t:'Begraafplaats',k:'Officieel terrein bestemd voor het begraven van overledenen',c:'praktisch',l:'B',
+ d:'Een begraafplaats is een <strong>officieel aangewezen terrein voor het begraven van overledenen</strong>. Er zijn gemeentelijke, kerkelijke en particuliere begraafplaatsen. Elke begraafplaats heeft eigen regels voor grafmonumenten en onderhoud. Nederland telt meer dan 3.000 begraafplaatsen.',
+ e:[['Soorten','Gemeentelijk, kerkelijk, particulier, militair, natuur'],['Grafrecht','Doorgaans 10 tot 30 jaar, daarna verlengbaar']]},
+
+{t:'Beneficiaire aanvaarding',k:'Erfenis aanvaarden maar met bescherming van eigen bezittingen',c:'juridisch',l:'B',
+ d:'Beneficiaire aanvaarding betekent dat je een erfenis aanvaardt <strong>maar alleen aansprakelijk bent tot de hoogte van de nalatenschap zelf</strong>. Je eigen bezittingen zijn beschermd als de schulden groter blijken te zijn dan de erfenis. Veiliger dan zuivere aanvaarding bij onduidelijke financiele situatie.',
+ e:[['Aanvragen via','Rechtbank, via een schriftelijke verklaring'],['Advies','Raadpleeg een notaris als je twijfelt over schulden in de nalatenschap']],
+ z:'Erfenis, Nalatenschap, Testament'},
+
+{t:'Bidprentje',k:'Klein gedrukt kaartje ter nagedachtenis aan de overledene',c:'ceremonie',l:'B',
+ d:'Een bidprentje is een <strong>klein kaartje met foto en tekst ter herinnering</strong> aan de overledene. Oorspronkelijk rooms-katholiek gebruik, maar tegenwoordig ook door niet-religieuze families gebruikt. Moderne bidprentjes bevatten vaak een favoriet citaat of persoonlijke tekst.',
+ e:[['Inhoud','Foto, naam, geboortedatum, overlijdensdatum, persoonlijke tekst'],['Kosten','100 tot 300 euro voor 100 tot 200 stuks']]},
+
+{t:'Boedelruiming',k:'Professioneel leegmaken van de woning van de overledene',c:'praktisch',l:'B',
+ d:'Boedelruiming is het <strong>professioneel leegmaken en sorteren van de inboedel</strong> van de overledene. Nabestaanden kunnen dit zelf doen of uitbesteden aan een gespecialiseerd bedrijf dat ook schenkingen of verkoop regelt.',
+ e:[['Kosten','300 tot 3.000 euro, afhankelijk van grootte woning'],['Advies','Wacht met weggooien totdat de erfenis volledig is afgewikkeld']]},
+
+// C
+{t:'Ceremoniemeester',k:'Professionele begeleider van de uitvaartplechtigheid',c:'ceremonie',l:'C',
+ d:'Een ceremoniemeester is een <strong>professioneel begeleider die de uitvaartplechtigheid regisseert</strong>. Hij of zij introduceert sprekers, bewaakt de tijdsduur en zorgt dat de dienst verloopt zoals de familie wenst. Dit is een andere rol dan de uitvaartondernemer die de logistiek verzorgt.',
+ e:[['Kosten','400 tot 900 euro per plechtigheid'],['Vinden via','Uitvaart-Platform.nl bedrijvengids']]},
+
+{t:'Codicil',k:'Handgeschreven document met wensen naast het testament',c:'juridisch',l:'C',
+ d:'Een codicil is een <strong>volledig handgeschreven, gedateerd en ondertekend document</strong> met persoonlijke wensen die niet via een notaris hoeven te lopen. Een uitvaartcodicil bevat specifieke wensen over muziek, kleding, bloemen en asbestemming.',
+ e:[['Vereisten','Volledig handgeschreven, gedateerd en ondertekend'],['Verschil met testament','Codicil is geldig zonder notaris, testament niet']],
+ z:'Testament, Wensen voor de uitvaart'},
+
+{t:'Condoleance',k:'Het betuigen van medeleven aan nabestaanden',c:'ceremonie',l:'C',
+ d:'Condoleren betekent letterlijk <em>meelijden</em> en is het <strong>uitdrukken van medeleven aan nabestaanden</strong> na een overlijden. Dit kan persoonlijk, schriftelijk, digitaal of telefonisch. Na de uitvaartdienst is er doorgaans een condoleancebijeenkomst met koffie en gebak.'},
+
+{t:'Crematie',k:'Verbranding van het lichaam na overlijden',c:'praktisch',l:'C',
+ d:'Crematie is het <strong>verbranden van het lichaam van een overledene in een crematorium</strong>. In Nederland wordt inmiddels meer dan 73% gecremeerd. Na de crematie blijven botfragmenten over die worden verkleind tot as, gemiddeld 2 tot 3 kilo.',
+ e:[['Gemiddelde kosten','1.800 tot 3.500 euro voor de crematie zelf'],['As ophalen','Wettelijk pas 4 weken na de crematie']],
+ z:'Crematorium, Asbestemming, Urn, Directe crematie'},
+
+{t:'Crematorium',k:'Faciliteit waar overledenen worden gecremeerd',c:'praktisch',l:'C',
+ d:'Een crematorium is een <strong>faciliteit met crematieovens en doorgaans ook een aula</strong> voor afscheidsdiensten. Nederland telt circa 80 crematoria. Elk crematorium heeft eigen tarieven voor gebruik van de ruimte en de crematie zelf.',
+ e:[['Kosten gebruik','700 tot 2.500 euro inclusief aula'],['Aula capaciteit','Gemiddeld 50 tot 200 personen']]},
+
+// D
+{t:'Directe crematie',k:'Crematie zonder uitvaartdienst, de goedkoopste optie',c:'financieel',l:'D',
+ d:'Bij een directe crematie wordt de overledene gecremeerd <strong>zonder uitgebreide plechtigheid of aula-gebruik</strong>. Er zijn geen gasten bij de crematie aanwezig. Nabestaanden kunnen daarna op eigen moment een herdenkingsbijeenkomst organiseren. Dit is de <strong>meest betaalbare uitvaartoptie</strong>.',
+ e:[['Kosten','2.000 tot 4.500 euro totaal'],['Voordeel','Meer tijd en ruimte voor een persoonlijk herdenkingsmoment later']]},
+
+{t:'Doodskist',k:'Kist waarin de overledene wordt begraven of gecremeerd',c:'praktisch',l:'D',
+ d:'Een doodskist is een <strong>bak van hout, karton of ander materiaal</strong> voor begraving of crematie. Kisten zijn verkrijgbaar van eenvoudig grenen tot luxe mahonie. Steeds populairder zijn bespoten kisten met persoonlijke afbeeldingen.',
+ e:[['Prijsrange','500 euro (eenvoudig karton) tot 4.000 euro (luxe hout)'],['Materialen','Grenen, eiken, mahonie, wilgen, karton, bamboe, riet']]},
+
+{t:'Doodsberichtkaart',k:'Kaart waarmee het overlijden officieel aan de omgeving wordt gemeld',c:'ceremonie',l:'D',
+ d:'Een doodsberichtkaart informeert <strong>familie, vrienden en bekenden over het overlijden</strong>. Tegenwoordig zijn digitale varianten via e-mail of WhatsApp gebruikelijk naast de traditionele gedrukte rouwkaart.',
+ e:[['Modern alternatief','Digitale rouwkaart via e-mail of online condoleanceregister'],['Kosten gedrukt','100 tot 350 euro voor 50 tot 100 kaarten']]},
+
+// E
+{t:'Erfbelasting',k:'Belasting die erfgenamen betalen over een ontvangen erfenis',c:'financieel',l:'E',
+ d:'Erfbelasting is de <strong>belasting die erfgenamen betalen over het ontvangen erfdeel</strong>. Er gelden vrijstellingen: partners zijn vrijgesteld tot 795.000 euro, kinderen tot 22.918 euro. Boven deze bedragen betaal je 10% tot 40% afhankelijk van de relatie en het bedrag.',
+ e:[['Vrijstelling partner','795.000 euro belastingvrij (2024)'],['Tarieven','10% tot 40%, afhankelijk van bedrag en familieband']]},
+
+{t:'Erfenis',k:'Bezittingen en schulden die overgaan op de nabestaanden',c:'juridisch',l:'E',
+ d:'Een erfenis omvat alle <strong>bezittingen, schulden en rechten die na overlijden overgaan op de erfgenamen</strong>. Erfgenamen kunnen de erfenis zuiver aanvaarden, beneficiair aanvaarden of verwerpen. Zonder testament geldt wettelijke erfopvolging.',
+ z:'Testament, Verklaring van erfrecht, Legitieme portie, Erfbelasting'},
+
+{t:'Executeur',k:'Persoon aangewezen om de nalatenschap te beheren en af te wikkelen',c:'juridisch',l:'E',
+ d:'Een executeur is iemand die in een <strong>testament is aangewezen om de nalatenschap te beheren</strong>. De executeur betaalt schulden, regelt de verdeling van bezittingen en voert de uitvaartwensen uit als dat in het testament staat.'},
+
+// F
+{t:'Funerair',k:'Alles wat met uitvaart en begrafenis te maken heeft',c:'praktisch',l:'F',
+ d:'Funerair is een <strong>verzamelterm voor alles wat betrekking heeft op uitvaart en overlijden</strong>. De uitvaartbranche heet ook wel de funeraire sector. Nederland telt circa 1.800 uitvaartondernemers met een jaaromzet van circa 1,2 miljard euro.',
+ e:[['Funeraire sector','Circa 1.800 uitvaartondernemers in Nederland'],['Jaarlijkse omzet','Circa 1,2 miljard euro per jaar']]},
+
+// G
+{t:'Gecertificeerd uitvaartverzorger',k:'Professioneel opgeleide specialist in uitvaartzorg',c:'praktisch',l:'G',
+ d:'Een gecertificeerd uitvaartverzorger heeft een <strong>erkende MBO-opleiding gevolgd</strong> in uitvaartzorg, niveau 4, van circa twee jaar. Brancheorganisaties als BGNU en NUVU stellen aanvullende kwaliteitseisen aan hun leden.',
+ e:[['Opleiding','MBO niveau 4, circa 2 jaar'],['Brancheorganisaties','BGNU, NUVU, NFBV']]},
+
+{t:'Graf',k:'Plek in de grond waar een overledene is begraven',c:'praktisch',l:'G',
+ d:'Een graf is de <strong>plek op een begraafplaats waar een overledene is begraven</strong>. Er zijn eigen graven (exclusief grafrecht), algemene graven (gedeeld) en kindergraven. Het grafrecht bepaalt hoe lang de plek is gereserveerd.',
+ e:[['Grafrecht duur','Standaard 10 tot 30 jaar, daarna verlengbaar'],['Grafkosten','1.500 tot 5.000 euro afhankelijk van locatie en type']]},
+
+{t:'Grafmonument',k:'Steen of object ter markering en herinnering van een graf',c:'praktisch',l:'G',
+ d:'Een grafmonument is een <strong>duurzaam object op een graf ter herinnering</strong> aan de overledene. Materialen zijn graniet, marmer of leisteen. Mag pas worden geplaatst nadat de grond is ingeklonken, doorgaans 3 tot 6 maanden na de begrafenis.',
+ e:[['Kosten','800 tot 4.000 euro afhankelijk van materiaal en grootte'],['Plaatsingstermijn','Pas na 3 tot 6 maanden, check regels begraafplaats']]},
+
+{t:'Grafrecht',k:'Het recht om een graf gedurende een bepaalde periode te gebruiken',c:'financieel',l:'G',
+ d:'Grafrecht is het <strong>recht op exclusief gebruik van een grafplek</strong> op een begraafplaats, doorgaans voor 10, 20 of 30 jaar. Na afloop moet het worden verlengd, anders kan de begraafplaats de plek ruimen. In grote steden aanzienlijk duurder dan in de regio.',
+ e:[['Kosten regio','800 tot 2.500 euro voor 20 jaar'],['Kosten grote stad','Tot 6.000 euro in Amsterdam voor 20 jaar']]},
+
+{t:'Groene uitvaart',k:'Milieuvriendelijke uitvaart met minimale ecologische impact',c:'natuur',l:'G',
+ d:'Een groene uitvaart is een <strong>uitvaart met minimale ecologische impact</strong>. Kenmerken: begraving op een natuurbegraafplaats zonder grafsteen, biologisch afbreekbare kist van wilgen of riet, geen balsemen en bij voorkeur seizoensbloemen van lokale teelt.',
+ z:'Natuurbegraafplaats, Resomeren'},
+
+// H
+{t:'Herdenking',k:'Bijeenkomst ter nagedachtenis, soms weken na de uitvaart',c:'ceremonie',l:'H',
+ d:'Een herdenkingsbijeenkomst is een <strong>bijeenkomst ter nagedachtenis</strong> die soms weken of maanden na de uitvaart wordt georganiseerd. Dit geeft nabestaanden de ruimte om de eerste schok te verwerken. Populair bij directe crematie.',
+ e:[['Voordeel','Meer tijd om een betekenisvolle bijeenkomst te plannen'],['Locatie','Thuis, restaurant, park, boot of een bijzondere plek']]},
+
+{t:'Herinneringssieraad',k:'Sieraad gemaakt van of met as of haar van de overledene',c:'praktisch',l:'H',
+ d:'Een herinneringssieraad is een <strong>persoonlijk sieraad met daarin verwerkt as of haar</strong> van een overledene. Populair zijn ook as-diamanten: een laboratoriumproces waarbij crematie-as wordt omgezet in een echte diamant.',
+ e:[['Kosten','150 euro (eenvoudig) tot 5.000 euro en meer (as-diamant)'],['As-diamant','Laboratoriumproces van 6 tot 9 maanden, ca. 2.500 tot 8.000 euro']]},
+
+{t:'Hospice',k:'Speciale zorginstelling voor mensen in de laatste levensfase',c:'medisch',l:'H',
+ d:'Een hospice is een <strong>speciale zorginstelling voor mensen die ongeneeslijk ziek zijn</strong> en in hun laatste levensfase verkeren. De zorg is gericht op comfort, pijnbestrijding en waardig sterven, niet op genezing. Er zijn circa 200 hospices in Nederland.',
+ e:[['Soorten','Bijna-thuis-huis, high care hospice, palliatieve unit'],['Kosten','Grotendeels vergoed via zorgverzekering of WLZ']]},
+
+{t:'Humanistische uitvaart',k:'Niet-religieuze uitvaart waarbij het leven centraal staat',c:'ceremonie',l:'H',
+ d:'Een humanistische uitvaart is een <strong>persoonlijke uitvaart zonder religieuze elementen</strong>, waarbij het leven en de persoonlijkheid van de overledene de rode draad vormen. Een humanistisch geestelijk verzorger of ceremoniemeester begeleidt de dienst.',
+ e:[['Kenmerken','Persoonlijke verhalen, eigen muziekkeuze, geen religieuze teksten'],['Begeleiding','Humanistisch Verbond levert geestelijk verzorgers door heel Nederland']]},
+
+// I
+{t:'Islamitische uitvaart',k:'Uitvaart volgens islamitische tradities en religieuze regels',c:'religie',l:'I',
+ d:'Bij een islamitische uitvaart gelden strikte religieuze regels: het lichaam wordt gewassen (ghusl) en in een witte lijkwade gewikkeld (kafan). De begrafenis vindt bij voorkeur binnen 24 uur na overlijden plaats. Crematie is niet toegestaan. Begraving met het hoofd richting Mekka.',
+ e:[['Termijn','Bij voorkeur binnen 24 uur na overlijden'],['Crematie','Niet toegestaan in de islam']]},
+
+// J
+{t:'Joodse uitvaart',k:'Uitvaart volgens joodse tradities en gebruiken',c:'religie',l:'J',
+ d:'Bij een joodse uitvaart wordt het lichaam gewassen (tahara) door vrijwilligers van de chevra kadisja en gekleed in een eenvoudige witte lijkwade. Begraving vindt zo snel mogelijk plaats. In het orthodoxe jodendom is crematie niet toegestaan. Na de begrafenis volgt sjiva, een zevendaagse rouwperiode.',
+ e:[['Sjiva','Zevendaagse rouwperiode bij de familie thuis'],['Crematie','Niet toegestaan in het orthodoxe jodendom']]},
+
+// K
+{t:'Koffiedienst',k:'Bijeenkomst na de uitvaart voor koffie, condoleance en samenzijn',c:'ceremonie',l:'K',
+ d:'De koffiedienst is een <strong>bijeenkomst na de begrafenis of crematie</strong> waarbij nabestaanden en gasten samenkomen. Naast traditionele koffie met cake kiezen families steeds vaker voor een uitgebreide maaltijd op een bijzondere locatie.',
+ e:[['Catering kosten','8 tot 15 euro per persoon voor koffie en gebak'],['Locatie','Crematorium, restaurant, thuis, zalencentrum']]},
+
+// L
+{t:'Legitieme portie',k:'Wettelijk minimumaandeel in de erfenis voor kinderen',c:'juridisch',l:'L',
+ d:'De legitieme portie is het <strong>wettelijk gegarandeerde minimumaandeel van kinderen in de nalatenschap</strong>, ongeacht wat er in het testament staat. Kinderen kunnen nooit volledig worden onterfd. De legitieme portie bedraagt de helft van het wettelijke erfaandeel.'},
+
+{t:'Levenstestament',k:'Document met instructies voor als je zelf niet meer kunt beslissen',c:'juridisch',l:'L',
+ d:'Een levenstestament is een <strong>document opgesteld bij een notaris</strong> waarin je vastlegt wie beslissingen mag nemen over jouw financien en medische zorg als je dat zelf niet meer kunt. Het verschilt van een gewoon testament dat pas na overlijden geldig is.',
+ e:[['Inhoud','Medische beslissingen, financieel beheer, aanwijzing gevolmachtigde'],['Opstellen','Via notaris, kosten ca. 150 tot 400 euro']]},
+
+{t:'Lijkbezorging',k:'Het op waardige wijze ter ruste leggen van een overledene',c:'praktisch',l:'L',
+ d:'Lijkbezorging is de <strong>wettelijke term voor het ter ruste leggen van een overledene</strong>, hetzij door begraving, hetzij door crematie. De Wet op de lijkbezorging regelt alle verplichte stappen en termijnen in Nederland.',
+ z:'Wet op de lijkbezorging, Begrafenis, Crematie'},
+
+{t:'Livestreaming uitvaart',k:'Live uitzending van de uitvaartdienst via internet',c:'praktisch',l:'L',
+ d:'Livestreaming maakt het mogelijk dat <strong>mensen op afstand de uitvaartdienst live meekijken via internet</strong>. Waardevol voor internationale familie of mensen die door ziekte of afstand niet aanwezig kunnen zijn. Tegenwoordig aangeboden door de meeste crematoria.',
+ e:[['Kosten','200 tot 600 euro voor professionele livestream'],['Platforms','Besloten YouTube, Vimeo of uitvaartplatforms']]},
+
+// M
+{t:'Memoriam',k:'In memoriam: een eerbetoon aan de overledene',c:'ceremonie',l:'M',
+ d:'Een in memoriam (Latijn voor <em>ter nagedachtenis aan</em>) is een <strong>eerbetoon aan een overledene</strong>. Dit kan een tekst zijn die tijdens de uitvaart wordt voorgelezen, een advertentie in de krant, of een online herdenkingspagina.',
+ e:[['Krantadvertentie','100 tot 500 euro, afhankelijk van formaat en krant'],['Online herdenking','Gratis via overlijdensberichten.nl en vergelijkbare sites']]},
+
+{t:'Muziek bij de uitvaart',k:'Muziekkeuze als persoonlijk element van het afscheid',c:'ceremonie',l:'M',
+ d:'Muziek is een van de meest persoonlijke elementen van een uitvaart. Je kunt kiezen voor <strong>live muziek, opnames of een combinatie</strong>. Er zijn geen regels: van klassiek tot pop, van gospel tot een zelfgeschreven lied.',
+ e:[['Live muziek','Organist, pianist, zanger of koor: 200 tot 1.200 euro'],['Populaire keuzes','My Way (Sinatra), Time to Say Goodbye, Amazing Grace']]},
+
+// N
+{t:'Nabestaandendossier',k:'Persoonlijk document met uitvaartwensen en administratieve gegevens',c:'praktisch',l:'N',
+ d:'Een nabestaandendossier is een <strong>overzichtelijk document met uitvaartwensen, abonnementen, wachtwoorden en andere essentieel informatie</strong> voor de nabestaanden. Het ontlast hen enorm in een zware periode en voorkomt dat er dingen over het hoofd worden gezien.',
+ e:[['The Perfect Goodbye','Het nabestaandendossier van Uitvaart-Platform.nl'],['Bestellen','Via theperfectgoodbye.nl']]},
+
+{t:'Nalatenschap',k:'Het totaal van bezittingen en schulden na overlijden',c:'juridisch',l:'N',
+ d:'De nalatenschap is het <strong>totaal van alle bezittingen, schulden en rechten die iemand bij overlijden achterlaat</strong>. Uitvaartkosten worden doorgaans als eerste betaald uit de nalatenschap, voor de verdeling onder erfgenamen.',
+ z:'Erfenis, Testament, Executeur, Erfbelasting'},
+
+{t:'Natuurbegraafplaats',k:'Begraafplaats in een natuurgebied zonder traditionele grafstenen',c:'natuur',l:'N',
+ d:'Een natuurbegraafplaats is een <strong>begraafplaats in een bos- of weidgebied</strong> zonder grafstenen. De grafplek wordt gemarkeerd met een inheemse boom of houten paal. Na het verstrijken van het grafrecht keert de plek terug naar de natuur. Nederland telt meer dan 30 erkende natuurbegraafplaatsen.',
+ e:[['Kenmerken','Geen grafsteen, biologisch afbreekbare kist, boom als markering'],['Kosten','2.000 tot 5.000 euro, vergelijkbaar met reguliere begraving']]},
+
+// O
+{t:'Opbaren',k:'Het bewaren en tonen van het lichaam voor de uitvaart',c:'praktisch',l:'O',
+ d:'Opbaren is het <strong>bewaren van het lichaam tussen overlijden en uitvaart</strong>, zodat nabestaanden afscheid kunnen nemen. Dit kan thuis, bij de uitvaartondernemer of in een opbaarruimte bij het crematorium. Het lichaam wordt gekoeld bewaard.',
+ e:[['Thuisopbaring','Steeds populairder, uitvaartondernemer plaatst koelunit thuis'],['Duur','Tot de uitvaart, maximaal 6 werkdagen na overlijden']]},
+
+{t:'Overlijdensverklaring',k:'Medisch document dat het overlijden officieel vaststelt',c:'medisch',l:'O',
+ d:'De overlijdensverklaring is een <strong>officieel medisch document opgesteld door een arts</strong> dat het overlijden vaststelt en de doodsoorzaak vermeldt. Zonder dit document kan geen aangifte worden gedaan en mag de uitvaart niet plaatsvinden.',
+ e:[['Wie stelt op','Behandelend arts, huisarts of gemeentelijk lijkschouwer'],['Bij thuis overlijden','Bel direct de huisarts of de huisartsenpost']]},
+
+// P
+{t:'Palliatieve zorg',k:'Zorg gericht op comfort en kwaliteit van leven bij terminale ziekte',c:'medisch',l:'P',
+ d:'Palliatieve zorg is <strong>zorg gericht op comfort, waardigheid en kwaliteit van leven</strong> in de laatste fase van een ziekte. Het behandelt pijn en klachten, maar niet de ziekte zelf. Gegeven door huisartsen, thuisverpleging en in hospices.',
+ e:[['Hospice','Speciale zorginstelling voor de laatste levensfase'],['Thuis sterven','Meer dan 30% van de Nederlanders sterft in de eigen woning']]},
+
+{t:'Persoonlijke uitvaart',k:'Uitvaart volledig afgestemd op wie de overledene was',c:'ceremonie',l:'P',
+ d:'Een persoonlijke uitvaart is een uitvaart waarbij <strong>alles is afgestemd op de persoonlijkheid en het leven van de overledene</strong>: van de muziek en de bloemen tot de locatie en de kist. Er zijn geen vaste regels, alles is mogelijk.',
+ e:[['Mogelijkheden','Thema-uitvaart, bijzonder vervoer, bespoten kist, eigen locatie'],['Trend','73% van de Nederlanders wil een persoonlijk afscheid']]},
+
+// R
+{t:'Repatriering',k:'Het terugbrengen van een overledene vanuit het buitenland',c:'praktisch',l:'R',
+ d:'Repatriering is het <strong>transport van een overledene vanuit het buitenland naar Nederland</strong>, of omgekeerd. Dit vereist officiele documenten en internationale samenwerking. Een gespecialiseerde uitvaartondernemer coordineert het hele proces.',
+ e:[['Kosten Europa','1.000 tot 3.500 euro, afhankelijk van het land'],['Kosten intercontinentaal','3.000 tot 8.000 euro of meer']]},
+
+{t:'Resomeren',k:'Duurzame uitvaartmethode via alkalische hydrolyse',c:'natuur',l:'R',
+ d:'Resomeren (ook aquamatie of alkalische hydrolyse) is een <strong>duurzame methode waarbij het lichaam oplost in een alkalische waterige oplossing</strong>. Het heeft 85% minder CO2-uitstoot dan crematie. In Nederland nog niet wettelijk toegestaan.',
+ e:[['CO2-uitstoot','85% minder dan crematie, de meest duurzame optie'],['Status in NL','Nog niet wettelijk toegestaan, wetgeving in voorbereiding']]},
+
+{t:'Rouwbegeleiding',k:'Professionele begeleiding bij verlies en rouwverwerking',c:'rouw',l:'R',
+ d:'Rouwbegeleiding is <strong>professionele ondersteuning bij het verwerken van verlies</strong>. Een rouwbegeleider helpt mensen omgaan met verdriet na een overlijden, individueel of in groepsverband. Het is begeleiding bij een normaal menselijk proces, geen therapie.',
+ e:[['Wanneer zinvol?','Als rouw het dagelijks leven ernstig en langdurig belemmert'],['Vergoeding','Soms via zorgverzekering of werkgever, check polisvoorwaarden']],
+ z:'Rouwverwerking, Troostgesprek'},
+
+{t:'Rouwdrukwerk',k:'Gedrukte materialen rondom een uitvaart',c:'praktisch',l:'R',
+ d:'Rouwdrukwerk omvat alle <strong>gedrukte materialen bij een uitvaart</strong>: overlijdenskaarten, rouwbrieven, bidprentjes, dankbetuigingen en programmaboekjes voor de dienst.',
+ e:[['Onderdelen','Rouwkaart, bidprentje, programmaboekje, dankbetuiging'],['Kosten','150 tot 500 euro voor een complete set']]},
+
+{t:'Rouwkamer',k:'Speciale ruimte bij de uitvaartondernemer waar de overledene rust',c:'praktisch',l:'R',
+ d:'Een rouwkamer is een <strong>speciale ruimte bij de uitvaartondernemer of in een rouwcentrum</strong> waar de overledene is opgebaard. Nabestaanden kunnen hier op afspraak een bezoek brengen om afscheid te nemen.',
+ e:[['Bezoek','Doorgaans op afspraak, ook buiten kantooruren'],['Alternatief','Thuisopbaring in de eigen woning van de overledene']]},
+
+{t:'Rouwvervoer',k:'Speciaal voertuig voor het transport van de overledene',c:'praktisch',l:'R',
+ d:'Rouwvervoer is het <strong>transport van het lichaam van de overledene</strong> voor en tijdens de uitvaart. Bijzonder rouwvervoer zoals een paardenkoets, oldtimer of boot is steeds populairder.',
+ e:[['Bijzonder vervoer','Paardenkoets, oldtimer, motor, boot, tractor, bakfiets'],['Kosten','300 euro (standaard) tot 2.000 euro en meer (bijzonder)']]},
+
+{t:'Rouwverwerking',k:'Het persoonlijke proces van omgaan met verlies',c:'rouw',l:'R',
+ d:'Rouwverwerking is het <strong>persoonlijke proces van omgaan met verlies</strong> na een overlijden. Er bestaat geen vaste tijdsduur of methode. Het model van Kubler-Ross beschrijft vijf fasen: ontkenning, boosheid, onderhandelen, depressie en aanvaarding.',
+ e:[['Duur','Geen vaste tijdsduur, van maanden tot jaren'],['Professionele hulp','Zoek hulp als rouw het dagelijks leven maandenlang ernstig belemmert']]},
+
+// S
+{t:'Sobere uitvaart',k:'Eenvoudige uitvaart waarbij de kosten zo laag mogelijk zijn',c:'financieel',l:'S',
+ d:'Een sobere uitvaart is een <strong>eenvoudige uitvaart met minimale kosten</strong>, zoals een directe crematie zonder plechtigheid in een eenvoudige kist. Als er geen geld is, regelt de gemeente een sober afscheid.',
+ e:[['Minimumkosten','Directe crematie zonder dienst: vanaf ca. 2.000 euro'],['Besparen op','Kist, catering, bloemwerk, rouwdrukwerk, locatie']]},
+
+{t:'Strooiweide',k:'Officieel aangewezen plek voor het uitstrooien van as',c:'natuur',l:'S',
+ d:'Een strooiweide is een <strong>officieel aangewezen terrein op een begraafplaats of bij een crematorium</strong> waar crematie-as kan worden uitgestrooid. Doorgaans een groengebied zonder individuele grafmarkeringen.',
+ e:[['Kosten','Doorgaans 0 tot 500 euro, afhankelijk van crematorium'],['Op privetterrein','Altijd toegestaan met toestemming van de eigenaar']]},
+
+// T
+{t:'Testament',k:'Officieel document met laatste wil en erfenisregeling',c:'juridisch',l:'T',
+ d:'Een testament is een <strong>officieel juridisch document opgesteld bij een notaris</strong> waarin iemand zijn laatste wil vastlegt. Het regelt de verdeling van de erfenis, wijst een executeur aan en kan uitvaartwensen bevatten.',
+ e:[['Kosten opstellen','200 tot 500 euro bij een notaris'],['Raadplegen','Centraal Testamentenregister (CTR) opvraagbaar via notaris']],
+ z:'Erfenis, Executeur, Legitieme portie, Codicil'},
+
+{t:'Thuisopbaring',k:'Het opbaren van de overledene in de eigen woning',c:'praktisch',l:'T',
+ d:'Thuisopbaring is het <strong>opbaren van de overledene in de vertrouwde thuisomgeving</strong>. Een oude traditie die een sterke comeback maakt. Geeft nabestaanden de kans in alle intimiteit afscheid te nemen, op eigen tempo.',
+ e:[['Voordelen','Intiem, eigen regie, geen reistijd, vertrouwde omgeving'],['Praktisch','Uitvaartondernemer plaatst koelunit en adviseert over hygiene']]},
+
+{t:'Troostgesprek',k:'Ondersteunend gesprek met een geestelijk verzorger of rouwbegeleider',c:'rouw',l:'T',
+ d:'Een troostgesprek is een <strong>ondersteunend gesprek met een professional</strong> na een verlies. Dit kan een humanistisch geestelijk verzorger, dominee, imam, rouwbegeleider of psycholoog zijn.',
+ e:[['Via huisarts','Huisarts kan doorverwijzen naar psycholoog of rouwbegeleider'],['Gratis hulp','Luisterlijn: 0900-0767, 24 uur per dag, 7 dagen per week']]},
+
+// U
+{t:'Uitvaartcodicil',k:'Handgeschreven document met persoonlijke uitvaartwensen',c:'juridisch',l:'U',
+ d:'Een uitvaartcodicil is een <strong>volledig handgeschreven, gedateerd en ondertekend document</strong> met specifieke wensen voor de uitvaart. Geldig zonder notaris, mits het volledig handgeschreven is.',
+ e:[['Inhoud','Begraven of cremeren, muziek, bloemen, kleding, asbestemming'],['Bewaarplaats','Bij het testament, nabestaandendossier of bij de notaris']]},
+
+{t:'Uitvaartondernemer',k:'Professional die de volledige organisatie van een uitvaart verzorgt',c:'praktisch',l:'U',
+ d:'Een uitvaartondernemer is een <strong>professional die de volledige organisatie van een uitvaart op zich neemt</strong>: ophalen van de overledene, opbaring, aangifte, kist, transport en coordinatie. Nederland telt circa 1.800 uitvaartondernemers.',
+ e:[['Kies bewust','Vraag altijd minimaal 3 offertes, want prijzen varieren sterk'],['Vinden via','Uitvaart-Platform.nl bedrijvengids, zoek op regio']]},
+
+{t:'Uitvaartverzekering',k:'Verzekering die de kosten van een uitvaart dekt',c:'financieel',l:'U',
+ d:'Een uitvaartverzekering dekt de <strong>kosten van de uitvaart bij overlijden</strong>. Er zijn naturaverzekeringen (verzekeraar organiseert de uitvaart) en kapitaalverzekeringen (uitkering in geld). Let op: veel oudere polissen zijn niet meer toereikend voor de huidige kosten.',
+ e:[['Naturaverzekering','Verzekeraar organiseert de uitvaart direct'],['Kapitaalverzekering','Nabestaanden ontvangen een geldbedrag om zelf te besteden']]},
+
+{t:'Urn',k:'Houder voor de crematie-as van de overledene',c:'praktisch',l:'U',
+ d:'Een urn is een <strong>houder voor de as van een gecremeerde overledene</strong>. Van eenvoudig keramiek tot luxe handgemaakte design-urnen. Er zijn ook biologisch afbreekbare urnen, mini-urnen en zee-urnen die oplossen in water.',
+ e:[['Prijsrange','100 euro (eenvoudig) tot 1.500 euro en meer (design)'],['Soorten','Standaard, design, bio-afbreekbaar, mini-urn, zee-urn']]},
+
+// V
+{t:'Verklaring van erfrecht',k:'Notarieel document dat aantoont wie de erfgenamen zijn',c:'juridisch',l:'V',
+ d:'Een verklaring van erfrecht is een <strong>notarieel document dat bewijst wie de erfgenamen zijn</strong> en wie namens de nalatenschap mag handelen. Banken en andere instanties vragen dit document voordat zij zaken doen met erfgenamen.',
+ e:[['Waarvoor nodig?','Bank, hypotheek, effecten, overdracht onroerend goed'],['Kosten notaris','200 tot 500 euro, afhankelijk van complexiteit']]},
+
+{t:'Verlof tot begraving of crematie',k:'Officieel document dat toestemming geeft voor de uitvaart',c:'juridisch',l:'V',
+ d:'Het verlof tot begraving of crematie is een <strong>officieel gemeentelijk document dat toestemming geeft</strong> om de uitvaart te laten plaatsvinden. Zonder dit document mag geen begrafenis of crematie worden uitgevoerd.'},
+
+// W
+{t:'Wet op de lijkbezorging',k:'Nederlandse wet die alles rondom uitvaart en overlijden regelt',c:'juridisch',l:'W',
+ d:'De Wet op de lijkbezorging is de <strong>Nederlandse wet die alle aspecten van overlijden en uitvaart regelt</strong>: termijnen, documenten, toegestane vormen van lijkbezorging, asbestemming en bevoegdheden van uitvaartondernemers.',
+ e:[['Kernregel','Uitvaart uiterlijk 6 werkdagen na overlijden'],['Asverstrooiing op zee','Minimaal 500 meter uit de kust']]},
+
+{t:'Wensen voor de uitvaart',k:'Schriftelijk vastgelegde instructies voor de eigen uitvaart',c:'praktisch',l:'W',
+ d:'Uitvaartwensen zijn <strong>schriftelijk vastgelegde instructies over hoe iemand zijn uitvaart wil</strong>. Door dit vast te leggen worden nabestaanden ontlast van moeilijke beslissingen in een al zware periode.',
+ e:[['Vastleggen via','Testament, codicil, uitvaartcodicil of nabestaandendossier'],['Tip','Vertel nabestaanden mondeling waar de wensen staan bewaard']]},
+
+// Z
+{t:'Zeebesteding',k:'Het uitstrooien van crematie-as op zee',c:'natuur',l:'Z',
+ d:'Zeebesteding is het <strong>uitstrooien van crematie-as op zee</strong>. In Nederland is dit wettelijk toegestaan op minimaal 500 meter uit de kust. Nabestaanden kunnen meevaren of achteraf de exacte coordinaten ontvangen.',
+ e:[['Kosten','400 tot 1.200 euro, afhankelijk van locatie en meevarenden'],['Wettelijk','Minimaal 500 meter uit de kust, geen documenten vereist']]}
+
+]; // einde WL data
+
+// ============================================================
+// ENGINE
+// ============================================================
+var WL_CAT = 'alle';
+var WL_ZOEK = '';
+
+function wlCatLabel(c) {
+  return {praktisch:'Praktisch',ceremonie:'Ceremonie',juridisch:'Juridisch',
+          financieel:'Financieel',rouw:'Rouw',natuur:'Natuur',
+          religie:'Religie',medisch:'Medisch'}[c] || c;
+}
+
+function wlBouw() {
+  // Sorteer alfabetisch
+  WL.sort(function(a,b){ return a.t.localeCompare(b.t,'nl'); });
+
+  // Groepeer per letter
+  var perLetter = {};
+  WL.forEach(function(b){
+    if (!perLetter[b.l]) perLetter[b.l] = [];
+    perLetter[b.l].push(b);
+  });
+
+  // Bouw alfabet nav
+  var alfaEl = document.getElementById('wlAlfabetNav');
+  var html = '';
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function(letter){
+    var heeft = !!perLetter[letter];
+    html += '<button class="wl-alfa-knop' + (heeft ? '' : ' leeg') + '" onclick="wlSpringNaar(\'' + letter + '\')">' + letter + '</button>';
+  });
+  alfaEl.innerHTML = html;
+
+  // Bouw begrippen lijst
+  var lijstEl = document.getElementById('wlLijst');
+  var lijstHtml = '';
+  Object.keys(perLetter).sort().forEach(function(letter) {
+    var begrippen = perLetter[letter];
+    lijstHtml += '<div class="wl-letter-sectie" id="wlSec' + letter + '">';
+    lijstHtml += '<div class="wl-letter-header">';
+    lijstHtml += '<span class="wl-letter">' + letter + '</span>';
+    lijstHtml += '<span class="wl-letter-lijn"></span>';
+    lijstHtml += '<span class="wl-letter-count">' + begrippen.length + (begrippen.length === 1 ? ' begrip' : ' begrippen') + '</span>';
+    lijstHtml += '</div>';
+
+    // CTA na H
+    if (letter === 'H') {
+      lijstHtml += '<div class="wl-cta"><div><strong>Een uitvaartondernemer nodig?</strong><p>Via onze bedrijvengids vind je betrouwbare uitvaartondernemers en rouwbegeleiders in jouw regio.</p></div><a href="https://uitvaart-platform.nl/bedrijven" class="wl-cta-knop">Zoek in jouw regio</a></div>';
+    }
+
+    begrippen.forEach(function(b, i) {
+      var id = 'wlb' + letter + i;
+      var dTekst = (b.d || '').replace(/<[^>]+>/g, '').toLowerCase();
+      lijstHtml += '<div class="wl-begrip" data-cat="' + b.c + '" data-t="' + b.t.toLowerCase() + '" data-k="' + (b.k||'').toLowerCase() + '" data-d="' + dTekst.replace(/"/g,'') + '" id="' + id + '">';
+      // Header (klikbaar)
+      lijstHtml += '<div class="wl-begrip-header" onclick="wlToggle(\'' + id + '\')">';
+      lijstHtml += '<div class="wl-begrip-info"><div class="wl-begrip-term">' + b.t + '</div><div class="wl-begrip-kort">' + (b.k||'') + '</div></div>';
+      lijstHtml += '<span class="wl-tag tag-' + b.c + '">' + wlCatLabel(b.c) + '</span>';
+      lijstHtml += '<span class="wl-plus">+</span>';
+      lijstHtml += '</div>';
+      // Inhoud
+      lijstHtml += '<div class="wl-inhoud" id="wli' + id + '">';
+      lijstHtml += '<p class="wl-definitie">' + (b.d||'') + '</p>';
+      if (b.e && b.e.length) {
+        lijstHtml += '<div class="wl-extra">';
+        b.e.forEach(function(ex){
+          lijstHtml += '<div class="wl-extra-blok"><div class="wl-extra-titel">' + ex[0] + '</div><div class="wl-extra-tekst">' + ex[1] + '</div></div>';
+        });
+        lijstHtml += '</div>';
+      }
+      if (b.z) lijstHtml += '<p class="wl-zie-ook"><strong>Zie ook:</strong> ' + b.z + '</p>';
+      lijstHtml += '</div>';
+      lijstHtml += '</div>';
+    });
+
+    lijstHtml += '</div>';
+  });
+  lijstEl.innerHTML = lijstHtml;
+
+  // Update stat teller in hero
+  var statEl = document.getElementById('wlStatAantal');
+  if (statEl) statEl.textContent = WL.length + '+';
+
+  wlUpdateTeller();
+}
+
+function wlToggle(id) {
+  var header = document.querySelector('#' + id + ' .wl-begrip-header');
+  var inhoud = document.getElementById('wli' + id);
+  var wasOpen = header.classList.contains('open');
+
+  // Sluit alle anderen
+  document.querySelectorAll('.wl-begrip-header.open').forEach(function(h) {
+    if (h !== header) {
+      h.classList.remove('open');
+      var bid = h.closest('.wl-begrip').id;
+      document.getElementById('wli' + bid).classList.remove('open');
+    }
+  });
+
+  header.classList.toggle('open', !wasOpen);
+  inhoud.classList.toggle('open', !wasOpen);
+}
+
+function wlZoeken(q) {
+  WL_ZOEK = q.toLowerCase().trim();
+  document.getElementById('wlWisKnop').classList.toggle('aan', WL_ZOEK.length > 0);
+  wlVerwerk();
+}
+
+function wlWisZoek() {
+  document.getElementById('wlZoekInput').value = '';
+  WL_ZOEK = '';
+  document.getElementById('wlWisKnop').classList.remove('aan');
+  wlVerwerk();
+}
+
+function wlFilterCat(cat, knop) {
+  WL_CAT = cat;
+  document.querySelectorAll('.wl-cat-knop').forEach(function(k){ k.classList.remove('actief'); });
+  if (knop) {
+    knop.classList.add('actief');
+  } else {
+    var match = document.querySelector('.wl-cat-knop[data-cat="' + cat + '"]');
+    if (match) match.classList.add('actief');
+  }
+  wlVerwerk();
+  if (cat !== 'alle') {
+    document.getElementById('wlLijst').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function wlVerwerk() {
+  var items = document.querySelectorAll('.wl-begrip');
+  var zichtbaar = 0;
+  items.forEach(function(item) {
+    var catOK = WL_CAT === 'alle' || item.getAttribute('data-cat') === WL_CAT;
+    var zoekOK = WL_ZOEK === '' ||
+      item.getAttribute('data-t').indexOf(WL_ZOEK) > -1 ||
+      item.getAttribute('data-k').indexOf(WL_ZOEK) > -1 ||
+      item.getAttribute('data-d').indexOf(WL_ZOEK) > -1;
+    var toon = catOK && zoekOK;
+    item.classList.toggle('verborgen', !toon);
+    if (toon) zichtbaar++;
+  });
+
+  // Letter secties tonen/verbergen
+  document.querySelectorAll('.wl-letter-sectie').forEach(function(s) {
+    s.style.display = s.querySelectorAll('.wl-begrip:not(.verborgen)').length > 0 ? '' : 'none';
+  });
+
+  document.getElementById('wlLeeg').style.display = zichtbaar === 0 ? 'block' : 'none';
+  wlUpdateTeller(zichtbaar);
+}
+
+function wlUpdateTeller(n) {
+  var el = document.getElementById('wlZoekTeller');
+  if (!el) return;
+  var totaal = WL.length;
+  el.textContent = (n === undefined) ? totaal + ' begrippen' : n + ' van ' + totaal + ' begrippen';
+}
+
+function wlSpringNaar(letter) {
+  var el = document.getElementById('wlSec' + letter);
+  if (el && el.style.display !== 'none') {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// Events koppelen
+document.getElementById('wlZoekInput').addEventListener('input', function(){ wlZoeken(this.value); });
+document.getElementById('wlWisKnop').addEventListener('click', wlWisZoek);
+document.querySelectorAll('.wl-cat-knop').forEach(function(k){
+  k.addEventListener('click', function(){ wlFilterCat(this.getAttribute('data-cat'), this); });
+});
+document.querySelectorAll('.wl-cat-blok').forEach(function(b){
+  b.addEventListener('click', function(){ wlFilterCat(this.getAttribute('data-filter'), null); });
+});
+
+// Start
+wlBouw();
+</script>
+</body>
+</html>
