@@ -24,13 +24,7 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 .faq-hero h1 em { font-style:italic; font-weight:300; color:rgba(255,255,255,0.55); display:block; font-size:0.85em; }
 .faq-hero-sub { font-size:0.92rem; color:rgba(255,255,255,0.65); max-width:580px; margin:0 auto 40px; line-height:1.85; font-weight:300; }
 
-/* ZOEKBALK */
-.faq-zoek-wrap { position:relative; max-width:600px; margin:0 auto 32px; }
-.faq-zoek-input { width:100%; padding:18px 56px 18px 24px; border:none; border-radius:14px; font-family:'Poppins',sans-serif; font-size:0.92rem; color:#1e1520; background:#fff; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
-.faq-zoek-input:focus { outline:none; box-shadow:0 8px 32px rgba(232,131,74,0.3); }
-.faq-zoek-input::placeholder { color:#b0a8b0; }
-.faq-zoek-icoon { position:absolute; right:18px; top:50%; transform:translateY(-50%); font-size:1.2rem; pointer-events:none; }
-.faq-zoek-resultaat { font-size:0.76rem; color:rgba(255,255,255,0.5); margin-top:10px; min-height:20px; }
+
 
 /* STATS */
 .faq-stats { display:flex; justify-content:center; gap:48px; flex-wrap:wrap; }
@@ -203,15 +197,50 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 
 /* ── RESPONSIVE ── */
 @media (max-width:900px) {
-  .faq-main { grid-template-columns:1fr; }
-  .faq-zij { position:static; }
+  .faq-main { padding:32px 16px; }
   .faq-cta { margin:0 16px 40px; padding:40px 24px; }
+  .faq-nav { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .faq-nav-lijst { flex-wrap:nowrap; overflow-x:auto; padding-bottom:4px; }
+  .faq-filter-inner { gap:8px; }
+  #zoekInput { width:140px; }
 }
 @media (max-width:600px) {
-  .faq-hero { padding:60px 16px 80px; }
-  .faq-stats { gap:24px; }
-  .faq-main { padding:32px 16px; }
+  .faq-hero { padding:50px 16px 70px; }
+  .faq-hero h1 { font-size:1.7rem; }
+  .faq-stats { gap:20px; }
+  .faq-stat-nr { font-size:1.8rem; }
+  .faq-main { padding:24px 14px; }
   .faq-cat-voortgang { display:none; }
+  .faq-nav-inner { padding:0; }
+  .faq-nav { padding:12px 14px; }
+  .faq-filter { padding:10px 14px; }
+  .faq-filter-inner { flex-wrap:wrap; gap:8px; }
+  .faq-filter-knoppen { flex-wrap:wrap; gap:5px; }
+  .faq-filter-knop { padding:4px 10px; font-size:0.68rem; }
+  #zoekInput { width:100%; }
+  .faq-gevonden { display:none; }
+  .faq-sessie-balk { padding:8px 14px; }
+  .faq-sessie-balk-bg { max-width:100px; }
+  .faq-sessie-tekst { font-size:0.64rem; }
+  .faq-populair-blok { padding:16px; }
+  .faq-pop-item { padding:10px 12px; }
+  .faq-pop-tekst { font-size:0.72rem; }
+  .faq-cat-header { flex-wrap:wrap; }
+  .faq-cat-icoon { width:36px; height:36px; font-size:1rem; }
+  .faq-cat-naam { font-size:0.96rem; }
+  .faq-vraag { font-size:0.82rem; padding:14px 14px; }
+  .faq-tag { display:none; }
+  .faq-antwoord { padding:0 14px 14px; font-size:0.8rem; }
+  .faq-highlight { padding:20px 16px; }
+  .faq-tools-blok { padding:20px 16px; }
+  .faq-tools-knoppen { flex-direction:column; gap:6px; }
+  .faq-tools-knop { text-align:center; }
+  .faq-cta { padding:36px 16px; margin:0 0 32px; border-radius:12px; }
+  .faq-cta-knoppen { flex-direction:column; align-items:center; }
+  .faq-product-header { flex-direction:column; gap:10px; padding:18px 16px; }
+  .faq-product-body { padding:16px; }
+  .faq-hero-knoppen { flex-direction:column; align-items:center; }
+  .faq-stat { min-width:80px; }
 }
 </style>
 </head>
@@ -225,12 +254,6 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
       <em>uitvaart, rouw en afscheid</em>
     </h1>
     <p class="faq-hero-sub">Meer dan 60 vragen beantwoord door onze redactie. Helder, begrijpelijk en altijd vanuit betrokkenheid. Gebruik de zoekfunctie om direct jouw antwoord te vinden.</p>
-
-    <div class="faq-zoek-wrap">
-      <input type="text" class="faq-zoek-input" id="zoekInput" placeholder="Zoek in alle vragen... bijv. 'kosten crematie' of 'rouwverlof'" oninput="zoek(this.value)">
-      <span class="faq-zoek-icoon">🔍</span>
-      <div class="faq-zoek-resultaat" id="zoekResultaat"></div>
-    </div>
 
     <div class="faq-stats">
       <div class="faq-stat"><div class="faq-stat-nr">60+</div><div class="faq-stat-label">Vragen beantwoord</div></div>
@@ -272,7 +295,10 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
       <button class="faq-filter-knop" onclick="filterType('wettelijk',this)">Wettelijk</button>
       <button class="faq-filter-knop" onclick="filterType('trending',this)">🔥 Trending</button>
     </div>
-    <span class="faq-gevonden" id="aantalGevonden">60+ vragen</span>
+    <div style="display:flex;align-items:center;gap:10px;margin-left:auto;">
+      <input type="text" id="zoekInput" placeholder="🔍 Zoeken..." oninput="zoek(this.value)" style="border:1.5px solid #e2d9e0;border-radius:8px;padding:6px 12px;font-family:'Poppins',sans-serif;font-size:0.76rem;color:#4a1942;background:#fff;width:180px;">
+      <span class="faq-gevonden" id="aantalGevonden">60+ vragen</span>
+    </div>
   </div>
 </div>
 
@@ -873,12 +899,10 @@ function zoek(query) {
   var gevonden = 0;
 
   if (query === '') {
-    items.forEach(function(item) {
-      item.classList.remove('verborgen');
-      toonCategorieen();
-    });
-    document.getElementById('zoekResultaat').textContent = '';
+    items.forEach(function(item) { item.classList.remove('verborgen'); });
+    toonCategorieen();
     document.getElementById('aantalGevonden').textContent = totaalVragen + ' vragen';
+    document.getElementById('faqLeeg').style.display = 'none';
     filterNaBijwerken();
     return;
   }
@@ -901,17 +925,16 @@ function zoek(query) {
   });
 
   toonCategorieen();
-  document.getElementById('zoekResultaat').textContent = gevonden + ' resultaten voor "' + query + '"';
   document.getElementById('aantalGevonden').textContent = gevonden + ' vragen gevonden';
-
-  var leeg = document.getElementById('faqLeeg');
-  leeg.style.display = gevonden === 0 ? 'block' : 'none';
+  document.getElementById('faqLeeg').style.display = gevonden === 0 ? 'block' : 'none';
 }
 
 function zoekEnOpen(query) {
-  document.getElementById('zoekInput').value = query;
+  var zoekEl = document.getElementById('zoekInput');
+  if (zoekEl) zoekEl.value = query;
   zoek(query);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  var faqMain = document.getElementById('faqLijst');
+  if (faqMain) faqMain.scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
 // ── CATEGORIE FILTER ──
@@ -962,14 +985,16 @@ function toonCategorieen() {
 
 // ── VRAAG TOGGLE ──
 function toggleVraag(btn) {
-  var antwoord = btn.nextElementSibling;
+  var item = btn.closest('.faq-item');
+  var antwoord = item.querySelector('.faq-antwoord');
   var isOpen = antwoord.classList.contains('open');
 
   // Sluit alle andere open vragen
   document.querySelectorAll('.faq-vraag.open').forEach(function(q) {
     if (q !== btn) {
       q.classList.remove('open');
-      q.nextElementSibling.classList.remove('open');
+      var a = q.closest('.faq-item').querySelector('.faq-antwoord');
+      if (a) a.classList.remove('open');
     }
   });
 
@@ -977,7 +1002,6 @@ function toggleVraag(btn) {
     btn.classList.add('open');
     antwoord.classList.add('open');
     // Markeer als gelezen
-    var item = btn.closest('.faq-item');
     if (!item.classList.contains('gelezen')) {
       item.classList.add('gelezen');
       gelezenVragen.add(item);
