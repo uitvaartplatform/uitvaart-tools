@@ -238,44 +238,8 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
 }
 
 /* ── CONTACT BLOK NA RESULTAAT ── */
-.aat-contact-blok {
-  background: #fff; border: 2px solid #4a1942; border-radius: 16px;
-  padding: 28px 32px; margin-top: 16px; position: relative; overflow: hidden;
-}
-.aat-contact-blok::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #4a1942, #e8834a); }
-.aat-contact-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
-.aat-contact-icoon { width: 46px; height: 46px; background: #4a1942; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-.aat-contact-titel { font-size: 1rem; font-weight: 900; color: #4a1942; margin-bottom: 3px; }
-.aat-contact-sub { font-size: 0.76rem; color: #6b6570; font-weight: 300; line-height: 1.6; }
-.aat-contact-velden { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-.aat-contact-veld { display: flex; flex-direction: column; gap: 4px; }
-.aat-contact-label { font-size: 0.65rem; font-weight: 700; color: #4a1942; text-transform: uppercase; letter-spacing: 0.08em; }
-.aat-contact-input {
-  border: 1.5px solid #e2d9e0; border-radius: 9px; padding: 10px 14px;
-  font-family: 'Poppins', sans-serif; font-size: 0.8rem; color: #1e1520;
-  background: #faf7f2; transition: border-color 0.18s; outline: none; width: 100%;
-}
-.aat-contact-input:focus { border-color: #4a1942; background: #fff; }
-.aat-contact-input.vol { grid-column: 1 / -1; }
-.aat-contact-verzend {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; background: #4a1942; color: #fff; border: none; border-radius: 10px;
-  padding: 13px; font-family: 'Poppins', sans-serif; font-size: 0.84rem; font-weight: 800;
-  cursor: pointer; transition: all 0.2s; margin-top: 4px;
-}
-.aat-contact-verzend:hover { background: #6b3060; transform: translateY(-1px); }
-.aat-contact-disclaimer { font-size: 0.62rem; color: #aaa; font-weight: 300; text-align: center; margin-top: 8px; line-height: 1.5; }
-.aat-contact-succes { display: none; background: #e8f8f0; border: 1px solid #2e8b57; border-radius: 10px; padding: 16px 18px; text-align: center; margin-top: 12px; }
-.aat-contact-succes-icoon { font-size: 1.5rem; margin-bottom: 6px; display: block; }
-.aat-contact-succes-titel { font-size: 0.86rem; font-weight: 800; color: #2e8b57; margin-bottom: 3px; }
-.aat-contact-succes-sub { font-size: 0.74rem; color: #4a6b5a; font-weight: 300; }
-
 @media (max-width: 560px) {
-  .aat-contact-velden { grid-template-columns: 1fr; }
-  .aat-contact-blok { padding: 20px 18px; }
-}
-
-</style>
+  </style>
 </head>
 <body>
 
@@ -1073,43 +1037,8 @@ function renderResultaat(ranking, normHoofd, aanbExtra, normExtra, diensten, a, 
   </div>
   <button class="aat-opnieuw" onclick="opnieuw()">↺ Advies opnieuw berekenen</button>`;
 
+
   const el = document.getElementById('resultaat');
-  // Voeg contact blok toe aan html
-  html += `
-  <div class="aat-contact-blok" id="contactBlok">
-    <div class="aat-contact-header">
-      <div class="aat-contact-icoon">📬</div>
-      <div>
-        <div class="aat-contact-titel">Ontvang dit advies en wij nemen contact op</div>
-        <div class="aat-contact-sub">Laat jouw gegevens achter en wij sturen jou het advies per e-mail. Vervolgens neemt ons team binnen 1 werkdag vrijblijvend contact met je op voor een persoonlijk gesprek.</div>
-      </div>
-    </div>
-    <div class="aat-contact-velden">
-      <div class="aat-contact-veld">
-        <label class="aat-contact-label">Jouw naam</label>
-        <input type="text" class="aat-contact-input" id="contactNaam" placeholder="Voor- en achternaam">
-      </div>
-      <div class="aat-contact-veld">
-        <label class="aat-contact-label">Bedrijfsnaam</label>
-        <input type="text" class="aat-contact-input" id="contactBedrijf" placeholder="Naam van jouw bedrijf">
-      </div>
-      <div class="aat-contact-veld">
-        <label class="aat-contact-label">E-mailadres</label>
-        <input type="email" class="aat-contact-input" id="contactEmail" placeholder="jouw@email.nl">
-      </div>
-      <div class="aat-contact-veld">
-        <label class="aat-contact-label">Telefoonnummer (optioneel)</label>
-        <input type="tel" class="aat-contact-input" id="contactTel" placeholder="06 - ...">
-      </div>
-    </div>
-    <button class="aat-contact-verzend" onclick="verzendContact()">📩 Stuur mij het advies en neem contact op</button>
-    <p class="aat-contact-disclaimer">Volledig vrijblijvend. Geen spam. Wij reageren binnen 1 werkdag.</p>
-    <div class="aat-contact-succes" id="contactSucces">
-      <span class="aat-contact-succes-icoon">✅</span>
-      <div class="aat-contact-succes-titel">Verstuurd! Wij nemen snel contact op.</div>
-      <div class="aat-contact-succes-sub">Je ontvangt een bevestiging op jouw e-mailadres. Ons team neemt binnen 1 werkdag contact met je op.</div>
-    </div>
-  </div>`;
 
   el.innerHTML = html;
   document.querySelectorAll('.aat-vraag').forEach(v => v.classList.remove('actief'));
@@ -1165,58 +1094,7 @@ function verstuurLead() {
   }, 800);
 }
 
-function verzendContact() {
-  const naam = document.getElementById('contactNaam').value.trim();
-  const bedrijf = document.getElementById('contactBedrijf').value.trim();
-  const email = document.getElementById('contactEmail').value.trim();
-  const tel = document.getElementById('contactTel').value.trim();
 
-  if (!naam || !email) {
-    alert('Vul minimaal jouw naam en e-mailadres in.');
-    return;
-  }
-
-  // Bouw de e-mail inhoud op met alle antwoorden
-  const a = antwoorden;
-  const cats = (a.categorieen || []).join(', ') || 'Niet opgegeven';
-  const media = (a.media || []).join(', ') || 'Geen';
-  const extra = (a.extra || []).join(', ') || 'Geen';
-  const pub = (a.publicaties || []).join(', ') || 'Geen';
-
-  const subject = encodeURIComponent('Advertentie Advies Tool resultaat — ' + bedrijf);
-  const body = encodeURIComponent(
-    'NIEUW ADVIES AANVRAAG VIA DE ADVERTENTIE TOOL\n' +
-    '================================================\n\n' +
-    'CONTACTGEGEVENS\n' +
-    'Naam: ' + naam + '\n' +
-    'Bedrijf: ' + bedrijf + '\n' +
-    'E-mail: ' + email + '\n' +
-    'Telefoon: ' + (tel || 'Niet opgegeven') + '\n\n' +
-    'ADVIESRESULTAAT\n' +
-    'Aanbevolen pakket: ' + (document.querySelector('.aat-res-pakket.top .aat-res-pakket-naam')?.textContent || '-') + '\n\n' +
-    'ANTWOORDEN UIT DE TOOL\n' +
-    'Categorie(ën): ' + cats + '\n' +
-    'Doelgroep: ' + (a.doelgroep || '-') + '\n' +
-    'Bereik: ' + (a.bereik || '-') + '\n' +
-    'Bedrijfsprofiel: ' + (a.profiel || '-') + '\n' +
-    'Online aanwezigheid: ' + (a.online || '-') + '\n' +
-    'Website situatie: ' + (a.website || '-') + '\n' +
-    'Media behoefte: ' + media + '\n' +
-    'Extra zichtbaarheid: ' + extra + '\n' +
-    'Publicaties: ' + pub + '\n' +
-    'Budget: ' + (a.budget || '-') + '\n' +
-    'Prioriteit: ' + (a.prioriteit || '-') + '\n\n' +
-    'Verstuurd via: Advertentie Advies Tool op Uitvaart-Platform.nl'
-  );
-
-  window.location.href = 'mailto:info@uitvaart-platform.nl?subject=' + subject + '&body=' + body;
-
-  // Toon succesmelding
-  setTimeout(() => {
-    document.getElementById('contactSucces').style.display = 'block';
-    document.getElementById('contactBlok').querySelector('.aat-contact-verzend').style.display = 'none';
-  }, 500);
-}
 
 function opnieuw() {
   for (const k in antwoorden) delete antwoorden[k];
