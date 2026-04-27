@@ -8,6 +8,7 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { height: auto; }
+html, body { overflow-x: hidden; max-width: 100%; }
 body { 
   font-family: 'Poppins', sans-serif; 
   background: #faf7f2; 
@@ -210,21 +211,94 @@ body {
 .up-tabinhoud.actief { display: block; }
 
 /* ── RESPONSIVE ── */
+/* ── TABLET (max 900px) ── */
 @media (max-width: 900px) {
   .up-layout { grid-template-columns: 1fr; }
   .up-overzicht { position: static; }
   .up-wrap { padding: 16px; }
   .up-hero { padding: 40px 28px; }
-  .up-tabs { gap: 4px; }
+  .up-tabs { gap: 4px; flex-wrap: wrap; }
   .up-tab { min-width: 120px; font-size: 0.74rem; padding: 10px 12px; }
+  .up-tabel { font-size: 0.78rem; }
 }
+
+/* ── MOBIEL (max 600px) ── */
 @media (max-width: 600px) {
-  .up-hero { padding: 32px 18px; }
-  .up-hero-stats { gap: 20px; }
-  .up-rij { grid-template-columns: 1fr auto; }
-  .up-rij-prijs { grid-column: 2; }
-  .up-tabel { font-size: 0.72rem; }
-  .up-tabel th, .up-tabel td { padding: 8px 10px; }
+  /* Algemeen */
+  .up-wrap { padding: 10px; }
+
+  /* Info banner */
+  .up-info-banner { flex-direction: column; padding: 14px 16px; gap: 12px; }
+  .up-info-stats { gap: 14px; flex-wrap: wrap; }
+  .up-info-stat-nr { font-size: 1.1rem; }
+
+  /* Tabs — scrollbaar zodat ze niet overlappen */
+  .up-tabs {
+    display: flex; flex-wrap: nowrap; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px; padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .up-tabs::-webkit-scrollbar { display: none; }
+  .up-tab {
+    flex-shrink: 0; min-width: 100px;
+    font-size: 0.68rem; padding: 8px 10px;
+  }
+  .up-tab-icoon { font-size: 0.9rem; }
+
+  /* Layout — 1 kolom */
+  .up-layout { grid-template-columns: 1fr; gap: 10px; }
+  .up-opties { padding: 0; }
+
+  /* Secties */
+  .up-sectie { border-radius: 10px; margin-bottom: 8px; }
+  .up-sectie-header { padding: 12px 14px; gap: 8px; }
+  .up-sectie-nr { width: 24px; height: 24px; font-size: 0.72rem; flex-shrink: 0; }
+  .up-sectie-titel { font-size: 0.82rem; }
+  .up-sectie-sub { font-size: 0.66rem; }
+  .up-sectie-totaal { font-size: 0.78rem; }
+  .up-sectie-body { padding: 10px 14px; }
+
+  /* Rijen met sliders */
+  .up-rij { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; }
+  .up-rij-naam { font-size: 0.78rem; }
+  .up-rij-sub { font-size: 0.66rem; }
+  .up-rij-prijs { font-size: 0.84rem; align-self: flex-end; }
+  .up-rij-slider { width: 100%; }
+  .up-rij-slider-labels { font-size: 0.62rem; }
+
+  /* Overzicht blok */
+  .up-overzicht { border-radius: 10px; padding: 16px; }
+  .up-overzicht-titel { font-size: 0.84rem; }
+  .up-totaal-getal { font-size: 2rem; }
+  .up-balk-naam { font-size: 0.68rem; }
+  .up-balk-bedrag { font-size: 0.68rem; }
+
+  /* Tabel (vergelijken, tijdlijn) */
+  .up-tabel { font-size: 0.68rem; min-width: 360px; }
+  .up-tabel th, .up-tabel td { padding: 7px 8px; }
+
+  /* Tips grid */
+  .up-tips-grid { grid-template-columns: 1fr; }
+
+  /* Checklist */
+  .up-check-item { font-size: 0.78rem; padding: 8px 0; }
+
+  /* Regio select */
+  .up-regio-select { font-size: 0.8rem; width: 100%; }
+
+  /* Knoppen */
+  .up-pdf-knop { font-size: 0.78rem; padding: 11px 16px; width: 100%; text-align: center; }
+  .up-type-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .up-type-knop { padding: 12px 8px; font-size: 0.74rem; }
+}
+
+/* ── ZEER KLEIN (max 380px) ── */
+@media (max-width: 380px) {
+  .up-tab { min-width: 85px; font-size: 0.62rem; padding: 7px 8px; }
+  .up-sectie-header { padding: 10px 12px; }
+  .up-totaal-getal { font-size: 1.7rem; }
+  .up-type-grid { grid-template-columns: 1fr; }
 }
 
 /* INFO BANNER (vervangt hero) */
