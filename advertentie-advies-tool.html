@@ -796,7 +796,7 @@ function renderResultaat(ranking, normHoofd, aanbExtra, normExtra, diensten, a, 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function verstuurLead() {
+async function verstuurLead() {
   const naam = document.getElementById('leadNaam').value.trim();
   const bedrijf = document.getElementById('leadBedrijf').value.trim();
   const email = document.getElementById('leadEmail').value.trim();
@@ -807,39 +807,54 @@ function verstuurLead() {
     return;
   }
 
+  // Knop in laadstatus
+  const btn = document.querySelector('.aat-lead-verzend');
+  btn.textContent = 'Verzenden...';
+  btn.disabled = true;
+
   const adv = window._huidigAdvies || {};
-  const subject = encodeURIComponent('Nieuw advertentieadvies — ' + bedrijf + ' (' + adv.pakket + ')');
-  const body = encodeURIComponent(
-    'NIEUW ADVIESRESULTAAT VIA DE ADVERTENTIE ADVIES TOOL\n' +
-    '================================================\n\n' +
-    'CONTACTGEGEVENS:\n' +
-    'Naam: ' + naam + '\n' +
-    'Bedrijf: ' + bedrijf + '\n' +
-    'E-mail: ' + email + '\n' +
-    'Telefoon: ' + (tel || 'niet ingevuld') + '\n\n' +
-    'ADVIESRESULTAAT:\n' +
-    'Aanbevolen pakket: ' + adv.pakket + '\n' +
-    'Categorieën: ' + adv.categorieen + '\n' +
-    'Doelgroep: ' + adv.doelgroep + '\n' +
-    'Bereik: ' + adv.bereik + '\n' +
-    'Bedrijfsprofiel: ' + adv.profiel + '\n' +
-    'Budget: ' + adv.budget + '\n' +
-    'Extra wensen: ' + (adv.extra || 'geen') + '\n\n' +
-    '================================================\n' +
-    'Verstuurd via de Advertentie Advies Tool op uitvaart-platform.nl'
-  );
 
-  // Open mailto met alle info
-  window.location.href = 'mailto:info@uitvaart-platform.nl?subject=' + subject + '&body=' + body;
+  const data = {
+    naam: naam,
+    bedrijf: bedrijf,
+    email: email,
+    telefoon: tel || 'niet ingevuld',
+    aanbevolen_pakket: adv.pakket || '-',
+    categorieen: adv.categorieen || '-',
+    doelgroep: adv.doelgroep || '-',
+    bereik: adv.bereik || '-',
+    bedrijfsprofiel: adv.profiel || '-',
+    budget: adv.budget || '-',
+    _subject: 'Nieuw advertentieadvies — ' + bedrijf + ' (' + (adv.pakket || '') + ')',
+    _replyto: email
+  };
 
-  // Toon bevestiging
-  setTimeout(function() {
-    document.querySelector('.aat-lead-velden').style.display = 'none';
-    document.querySelector('.aat-lead-verzend').style.display = 'none';
-    document.querySelector('.aat-lead-of').style.display = 'none';
-    document.querySelector('.aat-lead-mailto').style.display = 'none';
-    document.getElementById('leadVerzond').style.display = 'block';
-  }, 800);
+  try {
+    const response = await fetch('https://formspree.io/f/maqaglqq', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      // Succes — toon bevestiging
+      document.querySelector('.aat-lead-velden').style.display = 'none';
+      btn.style.display = 'none';
+      const ofEl = document.querySelector('.aat-lead-of');
+      if (ofEl) ofEl.style.display = 'none';
+      const mailtoEl = document.querySelector('.aat-lead-mailto');
+      if (mailtoEl) mailtoEl.style.display = 'none';
+      document.getElementById('leadVerzond').style.display = 'block';
+    } else {
+      btn.textContent = '📩 Stuur mij dit advies en word gecontacteerd';
+      btn.disabled = false;
+      alert('Er ging iets mis. Probeer het opnieuw of mail ons op info@uitvaart-platform.nl');
+    }
+  } catch(err) {
+    btn.textContent = '📩 Stuur mij dit advies en word gecontacteerd';
+    btn.disabled = false;
+    alert('Er ging iets mis. Controleer je internetverbinding en probeer opnieuw.');
+  }
 }
 
 
