@@ -257,9 +257,9 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
 <div id="welkom" class="aat-welkom">
   <div class="aat-welkom-badge"><div class="aat-welkom-badge-dot"></div><span>Gratis &amp; Vrijblijvend Advies</span></div>
   <h1>Welk advertentiepakket past<br><em>bij jouw uitvaartbedrijf?</em></h1>
-  <p class="aat-welkom-sub">Beantwoord 11 gerichte vragen en ontvang direct een volledig persoonlijk advies op maat — inclusief de beste pakketten, aanvullende diensten en directe aanvraagmogelijkheid.</p>
+  <p class="aat-welkom-sub">Beantwoord 5 gerichte vragen en ontvang direct een volledig persoonlijk advies op maat — inclusief de beste pakketten, aanvullende diensten en directe aanvraagmogelijkheid.</p>
   <div class="aat-welkom-kenmerken">
-    <span class="aat-welkom-kenmerk">⚡ 5 minuten</span>
+    <span class="aat-welkom-kenmerk">⚡ 3 minuten</span>
     <span class="aat-welkom-kenmerk">🎯 Volledig op maat</span>
     <span class="aat-welkom-kenmerk">✓ Gratis</span>
     <span class="aat-welkom-kenmerk">🔒 Geen verplichtingen</span>
@@ -268,14 +268,8 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
     <div class="aat-stap-preview"><span>1</span>Jouw bedrijf</div>
     <div class="aat-stap-preview"><span>2</span>Doelgroep</div>
     <div class="aat-stap-preview"><span>3</span>Bereik</div>
-    <div class="aat-stap-preview"><span>4</span>Marketingdoel</div>
-    <div class="aat-stap-preview"><span>5</span>Online aanwezigheid</div>
-    <div class="aat-stap-preview"><span>6</span>Website</div>
-    <div class="aat-stap-preview"><span>7</span>Beeld &amp; media</div>
-    <div class="aat-stap-preview"><span>8</span>Extra zichtbaarheid</div>
-    <div class="aat-stap-preview"><span>9</span>Publicaties</div>
-    <div class="aat-stap-preview"><span>10</span>Budget</div>
-    <div class="aat-stap-preview"><span>11</span>Prioriteit</div>
+    <div class="aat-stap-preview"><span>4</span>Bedrijfsprofiel</div>
+    <div class="aat-stap-preview"><span>5</span>Budget</div>
   </div>
   <button class="aat-start-knop" onclick="start()">Start het advies →</button>
 </div>
@@ -283,45 +277,20 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
 <!-- ══ VRAAG 1: Categorieën (multi) ══ -->
 <div id="vraag1" class="aat-vraag">
   <span class="aat-vraag-cat">Jouw bedrijf</span>
-  <span class="aat-vraag-nr">Vraag 1 van 11</span>
+  <span class="aat-vraag-nr">Vraag 1 van 5</span>
   <div class="aat-vraag-titel">In welke categorie(ën) is jouw bedrijf actief?</div>
   <div class="aat-vraag-sub">Kies alle categorieën die van toepassing zijn. Dit zijn alle categorieën uit onze bedrijvengids.</div>
   <div class="aat-multi-hint">💡 Meerdere keuzes mogelijk</div>
   <div class="aat-cat-grid" id="cat-grid">
-    <div class="aat-cat-item" onclick="toggleCat(this,'afscheidskunst')"><div class="aat-cat-icoon-wrap">🎨</div><span class="aat-cat-naam">Afscheidskunst</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'asverstrooiing')"><div class="aat-cat-icoon-wrap">💨</div><span class="aat-cat-naam">Asverstrooiing</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'begraafplaats')"><div class="aat-cat-icoon-wrap">⚰️</div><span class="aat-cat-naam">Begraafplaats en crematorium</span><div class="aat-cat-check"></div></div>
+    <div class="aat-cat-item" onclick="toggleCat(this,'uitvaartondernemer')"><div class="aat-cat-icoon-wrap">⚰️</div><span class="aat-cat-naam">Uitvaartonderneming</span><div class="aat-cat-check"></div></div>
+    <div class="aat-cat-item" onclick="toggleCat(this,'fotograaf')"><div class="aat-cat-icoon-wrap">📷</div><span class="aat-cat-naam">Fotograaf</span><div class="aat-cat-check"></div></div>
     <div class="aat-cat-item" onclick="toggleCat(this,'bloemen')"><div class="aat-cat-icoon-wrap">🌸</div><span class="aat-cat-naam">Bloemen en rouwstukken</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'boedelruiming')"><div class="aat-cat-icoon-wrap">🏠</div><span class="aat-cat-naam">Boedelruiming</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'catering')"><div class="aat-cat-icoon-wrap">🍽️</div><span class="aat-cat-naam">Catering en condoleance</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'dieren')"><div class="aat-cat-icoon-wrap">🐾</div><span class="aat-cat-naam">Dierenuitvaarten</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'dragers')"><div class="aat-cat-icoon-wrap">🤝</div><span class="aat-cat-naam">Dragers</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'erfrecht')"><div class="aat-cat-icoon-wrap">⚖️</div><span class="aat-cat-naam">Erfrecht en notariaat</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'familiemediation')"><div class="aat-cat-icoon-wrap">👥</div><span class="aat-cat-naam">Familiemediation</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'fotograaf')"><div class="aat-cat-icoon-wrap">📷</div><span class="aat-cat-naam">Fotograaf uitvaart</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'geurbeleving')"><div class="aat-cat-icoon-wrap">🌿</div><span class="aat-cat-naam">Geurbeleving en sfeer</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'grafmonument')"><div class="aat-cat-icoon-wrap">🪨</div><span class="aat-cat-naam">Grafmonumenten en gedenktekens</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'grafzorg')"><div class="aat-cat-icoon-wrap">🌱</div><span class="aat-cat-naam">Grafzorg en onderhoud</span><div class="aat-cat-check"></div></div>
+    <div class="aat-cat-item" onclick="toggleCat(this,'rouwbegeleiding')"><div class="aat-cat-icoon-wrap">💜</div><span class="aat-cat-naam">Rouwcoach</span><div class="aat-cat-check"></div></div>
+    <div class="aat-cat-item" onclick="toggleCat(this,'kisten')"><div class="aat-cat-icoon-wrap">📦</div><span class="aat-cat-naam">Kisten</span><div class="aat-cat-check"></div></div>
+    <div class="aat-cat-item" onclick="toggleCat(this,'livestreaming')"><div class="aat-cat-icoon-wrap">📹</div><span class="aat-cat-naam">Livestreaming</span><div class="aat-cat-check"></div></div>
     <div class="aat-cat-item" onclick="toggleCat(this,'herinneringsproducten')"><div class="aat-cat-icoon-wrap">💝</div><span class="aat-cat-naam">Herinneringsproducten</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'herinneringssieraden')"><div class="aat-cat-icoon-wrap">💎</div><span class="aat-cat-naam">Herinneringssieraden</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'kinderuitvaart')"><div class="aat-cat-icoon-wrap">🌟</div><span class="aat-cat-naam">Kinderuitvaarten</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'kisten')"><div class="aat-cat-icoon-wrap">📦</div><span class="aat-cat-naam">Kisten en manden</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'kleding')"><div class="aat-cat-icoon-wrap">👗</div><span class="aat-cat-naam">Kleding en uitvaartmode</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'livestreaming')"><div class="aat-cat-icoon-wrap">📹</div><span class="aat-cat-naam">Livestreaming uitvaart</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'locatie')"><div class="aat-cat-icoon-wrap">🏛️</div><span class="aat-cat-naam">Locatie en aula</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'makelaar')"><div class="aat-cat-icoon-wrap">🔑</div><span class="aat-cat-naam">Makelaar nalatenschap</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'muziek')"><div class="aat-cat-icoon-wrap">🎵</div><span class="aat-cat-naam">Muziek en ceremonies</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'nalatenschap')"><div class="aat-cat-icoon-wrap">📋</div><span class="aat-cat-naam">Nalatenschap en administratie</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'opbaren')"><div class="aat-cat-icoon-wrap">🕯️</div><span class="aat-cat-naam">Opbaren en verzorging</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'repatriering')"><div class="aat-cat-icoon-wrap">✈️</div><span class="aat-cat-naam">Repatriëring</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'resomeren')"><div class="aat-cat-icoon-wrap">🌊</div><span class="aat-cat-naam">Resomeren</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'rituelen')"><div class="aat-cat-icoon-wrap">🙏</div><span class="aat-cat-naam">Rituelen en tradities</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'rouwbegeleiding')"><div class="aat-cat-icoon-wrap">💜</div><span class="aat-cat-naam">Rouwbegeleiding en nazorg</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'rouwcentrum')"><div class="aat-cat-icoon-wrap">🏠</div><span class="aat-cat-naam">Rouwcentra</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'rouwdrukwerk')"><div class="aat-cat-icoon-wrap">📄</div><span class="aat-cat-naam">Rouwdrukwerk en drukkerij</span><div class="aat-cat-check"></div></div>
     <div class="aat-cat-item" onclick="toggleCat(this,'rouwvervoer')"><div class="aat-cat-icoon-wrap">🚗</div><span class="aat-cat-naam">Rouwvervoer</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'uitvaartondernemer')"><div class="aat-cat-icoon-wrap">⚰️</div><span class="aat-cat-naam">Uitvaartondernemingen</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'verzekering')"><div class="aat-cat-icoon-wrap">🛡️</div><span class="aat-cat-naam">Uitvaartverzekering</span><div class="aat-cat-check"></div></div>
+    <div class="aat-cat-item" onclick="toggleCat(this,'anders')"><div class="aat-cat-icoon-wrap">💼</div><span class="aat-cat-naam">Anders</span><div class="aat-cat-check"></div></div>
   </div>
   <div class="aat-nav">
     <button class="aat-terug" onclick="terug(1)" style="visibility:hidden">← Terug</button>
@@ -332,7 +301,7 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
 <!-- ══ VRAAG 2: Doelgroep ══ -->
 <div id="vraag2" class="aat-vraag">
   <span class="aat-vraag-cat">Jouw bedrijf</span>
-  <span class="aat-vraag-nr">Vraag 2 van 11</span>
+  <span class="aat-vraag-nr">Vraag 2 van 5</span>
   <div class="aat-vraag-titel">Op welke doelgroep richt jij jouw diensten?</div>
   <div class="aat-vraag-sub">Dit bepaalt de beste kanalen en pakketten. Particulier gericht bereik je via de bedrijvengids en The Perfect Goodbye. Zakelijk via Uitvaart-Inside en de community.</div>
   <div class="aat-opties cols1">
@@ -361,7 +330,7 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
 <!-- ══ VRAAG 3: Bereik ══ -->
 <div id="vraag3" class="aat-vraag">
   <span class="aat-vraag-cat">Jouw bereik</span>
-  <span class="aat-vraag-nr">Vraag 3 van 11</span>
+  <span class="aat-vraag-nr">Vraag 3 van 5</span>
   <div class="aat-vraag-titel">In welk geografisch gebied wil jij gevonden worden?</div>
   <div class="aat-vraag-sub">Dit bepaalt het bereik van jouw vermelding in de bedrijvengids en welk pakket het meeste oplevert voor jou.</div>
   <div class="aat-opties cols1">
@@ -390,7 +359,7 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
 <!-- ══ VRAAG 4: Bedrijfsgrootte en doel ══ -->
 <div id="vraag4" class="aat-vraag">
   <span class="aat-vraag-cat">Jouw bedrijf</span>
-  <span class="aat-vraag-nr">Vraag 4 van 11</span>
+  <span class="aat-vraag-nr">Vraag 4 van 5</span>
   <div class="aat-vraag-titel">Hoe groot is jouw bedrijf en wat is jouw marketingdoel?</div>
   <div class="aat-vraag-sub">Kies het profiel dat het beste bij jouw situatie past.</div>
   <div class="aat-opties cols1">
@@ -417,204 +386,16 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
   </div>
   <div class="aat-nav">
     <button class="aat-terug" onclick="terug(4)">← Terug</button>
-    <button class="aat-volgende" id="btn4" onclick="volgende(4)" disabled>Volgende →</button>
+    <button class="aat-volgende" id="btn4" onclick="volgende(4,'Budget')" disabled>Volgende →</button>
   </div>
 </div>
 
 <!-- ══ VRAAG 5: Online aanwezigheid ══ -->
-<div id="vraag5" class="aat-vraag">
-  <span class="aat-vraag-cat">Online aanwezigheid</span>
-  <span class="aat-vraag-nr">Vraag 5 van 11</span>
-  <div class="aat-vraag-titel">Hoe is jouw huidige online zichtbaarheid?</div>
-  <div class="aat-vraag-sub">Dit helpt ons te bepalen welke basis je nodig hebt en welke aanvullende diensten jou het meest helpen.</div>
-  <div class="aat-opties cols1">
-    <div class="aat-optie" onclick="selecteer(this,'online','geen')">
-      <div class="aat-optie-icoon-wrap">🌑</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Nauwelijks online vindbaar</div><div class="aat-optie-desc">Geen of een verouderde website, weinig social media aanwezigheid en nauwelijks online vermeldingen.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'online','basis')">
-      <div class="aat-optie-icoon-wrap">🌓</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Basisaanwezigheid</div><div class="aat-optie-desc">Een website en enkele social media profielen, maar nog beperkt bereik en weinig engagement.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'online','goed')">
-      <div class="aat-optie-icoon-wrap">🌕</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Goede online aanwezigheid</div><div class="aat-optie-desc">Actieve website en social media, maar wil doorgroeien en meer families bereiken.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'online','sterk')">
-      <div class="aat-optie-icoon-wrap">⭐</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Sterke online positie</div><div class="aat-optie-desc">Gevestigde online reputatie en wil nu maximale zichtbaarheid op het meest relevante platform in de branche.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(5)">← Terug</button>
-    <button class="aat-volgende" id="btn5" onclick="volgende(5)" disabled>Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 6: Website ══ -->
-<div id="vraag6" class="aat-vraag">
-  <span class="aat-vraag-cat">Website en design</span>
-  <span class="aat-vraag-nr">Vraag 6 van 11</span>
-  <div class="aat-vraag-titel">Wat is jouw situatie rondom jouw website?</div>
-  <div class="aat-vraag-sub">Een professionele website is de basis van jouw online succes. Wij kunnen je hierbij helpen.</div>
-  <div class="aat-opties cols1">
-    <div class="aat-optie" onclick="selecteer(this,'website','geen')">
-      <div class="aat-optie-icoon-wrap">❌</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Ik heb geen website</div><div class="aat-optie-desc">Ik heb nog geen eigen website. Ik wil graag een professionele website laten bouwen die families aanspreekt.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'website','oud')">
-      <div class="aat-optie-icoon-wrap">🔄</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Ik heb een verouderde website die aan vernieuwing toe is</div><div class="aat-optie-desc">Mijn huidige website is gedateerd, niet mobielvriendelijk of sluit niet meer aan bij mijn bedrijfsidentiteit.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'website','voldoende')">
-      <div class="aat-optie-icoon-wrap">✅</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Ik heb een goede website en ben tevreden</div><div class="aat-optie-desc">Mijn website is modern en functioneert goed. Ik wil mijn online bereik uitbreiden via andere kanalen.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'website','optimalisatie')">
-      <div class="aat-optie-icoon-wrap">🔍</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Ik wil mijn website beter laten gevonden worden via Google</div><div class="aat-optie-desc">SEO-optimalisatie is mijn prioriteit. Ik wil hoger scoren in zoekmachines voor relevante zoekopdrachten.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(6)">← Terug</button>
-    <button class="aat-volgende" id="btn6" onclick="volgende(6)" disabled>Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 7: Beeld en media ══ -->
-<div id="vraag7" class="aat-vraag">
-  <span class="aat-vraag-cat">Beeld en media</span>
-  <span class="aat-vraag-nr">Vraag 7 van 11</span>
-  <div class="aat-vraag-titel">Welke behoefte heb jij op het gebied van foto's en video?</div>
-  <div class="aat-vraag-sub">Professionele beelden maken het verschil op jouw website, social media en in advertenties. Kies alles wat bij jou past.</div>
-  <div class="aat-multi-hint">💡 Meerdere keuzes mogelijk</div>
-  <div class="aat-opties cols2" id="media-opties">
-    <div class="aat-optie multi" onclick="toggleMulti(this,'foto-bedrijf')">
-      <div class="aat-optie-icoon-wrap">🏢</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Bedrijfsfotografie</div><div class="aat-optie-desc">Professionele foto's van mijn locatie, team en interieur voor de website en bedrijvengids.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'foto-portret')">
-      <div class="aat-optie-icoon-wrap">🤳</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Portretfotografie</div><div class="aat-optie-desc">Professionele foto's van mezelf en mijn team voor de website, social media en brochures.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'video-bedrijf')">
-      <div class="aat-optie-icoon-wrap">🎬</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Bedrijfsfilm</div><div class="aat-optie-desc">Een professionele introductiefilm die mijn bedrijf, waarden en diensten op een warme manier presenteert.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'video-social')">
-      <div class="aat-optie-icoon-wrap">📱</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Social media video's</div><div class="aat-optie-desc">Korte videoclips speciaal gemaakt voor Instagram, Facebook en LinkedIn.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'video-testimonial')">
-      <div class="aat-optie-icoon-wrap">💬</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Testimonialvideo's</div><div class="aat-optie-desc">Ervaringsverhalen van tevreden families of samenwerkingspartners op video voor vertrouwen en conversie.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'geen-media')">
-      <div class="aat-optie-icoon-wrap">✓</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Ik heb geen behoefte aan foto of video</div><div class="aat-optie-desc">Mijn beeldmateriaal is op orde. Ik focus op andere vormen van zichtbaarheid.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(7)">← Terug</button>
-    <button class="aat-volgende" id="btn7" onclick="volgende(7)">Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 8: Extra platformzichtbaarheid (multi) ══ -->
-<div id="vraag8" class="aat-vraag">
-  <span class="aat-vraag-cat">Extra zichtbaarheid</span>
-  <span class="aat-vraag-nr">Vraag 8 van 11</span>
-  <div class="aat-vraag-titel">Welke extra zichtbaarheid op Uitvaart-Platform.nl spreekt jou aan?</div>
-  <div class="aat-vraag-sub">Naast een vermelding in de bedrijvengids zijn er diverse mogelijkheden om jouw zichtbaarheid verder te vergroten. Kies alles wat aansluit bij jouw wensen.</div>
-  <div class="aat-multi-hint">💡 Meerdere keuzes mogelijk</div>
-  <div class="aat-opties cols2" id="extra-opties">
-    <div class="aat-optie multi" onclick="toggleMulti(this,'social-uitlichting')">
-      <div class="aat-optie-icoon-wrap">📱</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Social media uitlichting</div><div class="aat-optie-desc">Posts over jouw bedrijf op Facebook (30K+ leden), Instagram en LinkedIn van Uitvaart-Platform.nl.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'facebookgroep')">
-      <div class="aat-optie-icoon-wrap">👥</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Besloten Facebookgroep (8.500 leden)</div><div class="aat-optie-desc">Commerciële berichten plaatsen in onze actieve besloten branchegemeenschap voor directe leadgeneratie.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'banner')">
-      <div class="aat-optie-icoon-wrap">🖼️</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Bannerposities op het platform</div><div class="aat-optie-desc">Opvallende banners op homepage, bedrijvengids, artikelpaginas en agendapagina voor maximale exposure.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'skyscraper')">
-      <div class="aat-optie-icoon-wrap">🏗️</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Skyscraper in het uitschuifmenu</div><div class="aat-optie-desc">De prominentste bannerpositie op de homepage — zichtbaar voor elke bezoeker die het platform betreedt.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'branded')">
-      <div class="aat-optie-icoon-wrap">✍️</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Branded content artikel</div><div class="aat-optie-desc">Professioneel redactioneel stuk over jouw bedrijf geschreven door onze redactie. Langdurige SEO-zichtbaarheid.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'nieuwsbrief')">
-      <div class="aat-optie-icoon-wrap">📧</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Nieuwsbriefvermelding</div><div class="aat-optie-desc">Vermelding in onze wekelijkse nieuwsbrief naar duizenden nabestaanden en professionals.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(8)">← Terug</button>
-    <button class="aat-volgende" id="btn8" onclick="volgende(8)">Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 9: Publicaties (multi) ══ -->
-<div id="vraag9" class="aat-vraag">
-  <span class="aat-vraag-cat">Publicaties</span>
-  <span class="aat-vraag-nr">Vraag 9 van 11</span>
-  <div class="aat-vraag-titel">Ben jij geïnteresseerd in adverteren in onze publicaties?</div>
-  <div class="aat-vraag-sub">Naast het online platform hebben wij twee exclusieve gedrukte publicaties die jouw merk in een unieke context positioneren.</div>
-  <div class="aat-multi-hint">💡 Meerdere keuzes mogelijk</div>
-  <div class="aat-opties cols1">
-    <div class="aat-optie multi" onclick="toggleMulti(this,'inside')">
-      <div class="aat-optie-icoon-wrap">📖</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Uitvaart-Inside — het glossy uitvaartmagazine</div><div class="aat-optie-desc">Het toonaangevende magazine voor de uitvaartbranche met 120+ paginas. Bereik zowel professionals als betrokken consumenten in een hoogwaardige gedrukte omgeving. Formaten van 1 tot 4 paginas en coverposities.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'tpg')">
-      <div class="aat-optie-icoon-wrap">📦</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">The Perfect Goodbye — het nabestaandendossier</div><div class="aat-optie-desc">Het exclusieve jaarlijkse nabestaandendossier dat direct in handen komt van families die een uitvaart regelen of vooruitplannen. Maximale koopintentie van de lezer. Hele pagina, dubbele pagina of branded content.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie multi" onclick="toggleMulti(this,'geen-publicatie')">
-      <div class="aat-optie-icoon-wrap">💻</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Nee, ik focus op online zichtbaarheid</div><div class="aat-optie-desc">Gedrukte publicaties passen nu niet bij mijn strategie. Ik richt mij volledig op online kanalen.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(9)">← Terug</button>
-    <button class="aat-volgende" id="btn9" onclick="volgende(9)">Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 10: Budget ══ -->
-<div id="vraag10" class="aat-vraag">
+<div id="vraagBudget" class="aat-vraag">
   <span class="aat-vraag-cat">Budget</span>
-  <span class="aat-vraag-nr">Vraag 10 van 11</span>
+  <span class="aat-vraag-nr">Vraag 5 van 5</span>
   <div class="aat-vraag-titel">Wat is jouw globale maandelijkse marketingbudget?</div>
-  <div class="aat-vraag-sub">Dit helpt ons pakketten aan te bevelen die realistisch aansluiten bij jouw financiële mogelijkheden. Er is voor elk budget een passende oplossing.</div>
+  <div class="aat-vraag-sub">Dit helpt ons pakketten aan te bevelen die aansluiten bij jouw financiële mogelijkheden. Er is voor elk budget een passende oplossing.</div>
   <div class="aat-opties cols2">
     <div class="aat-optie" onclick="selecteer(this,'budget','laag')">
       <div class="aat-optie-icoon-wrap">💶</div>
@@ -623,7 +404,7 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
     </div>
     <div class="aat-optie" onclick="selecteer(this,'budget','midden')">
       <div class="aat-optie-icoon-wrap">💶💶</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">€150 tot €400 per maand</div><div class="aat-optie-desc">Groeiende investering voor regionaal bereik met aanvullende zichtbaarheid op sociale media.</div></div>
+      <div class="aat-optie-tekst"><div class="aat-optie-naam">€150 tot €400 per maand</div><div class="aat-optie-desc">Groeiende investering voor regionaal bereik met aanvullende zichtbaarheid.</div></div>
       <div class="aat-optie-check"></div>
     </div>
     <div class="aat-optie" onclick="selecteer(this,'budget','hoog')">
@@ -633,51 +414,16 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
     </div>
     <div class="aat-optie" onclick="selecteer(this,'budget','premium')">
       <div class="aat-optie-icoon-wrap">🏆</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">€800 of meer per maand</div><div class="aat-optie-desc">Premium aanwezigheid op alle kanalen inclusief magazine, dossier en branded content artikelen.</div></div>
+      <div class="aat-optie-tekst"><div class="aat-optie-naam">€800 of meer per maand</div><div class="aat-optie-desc">Premium aanwezigheid op alle kanalen inclusief magazine, dossier en branded content.</div></div>
       <div class="aat-optie-check"></div>
     </div>
   </div>
   <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(10)">← Terug</button>
-    <button class="aat-volgende" id="btn10" onclick="volgende(10)" disabled>Volgende →</button>
+    <button class="aat-terug" onclick="terug('Budget',4)">← Terug</button>
+    <button class="aat-volgende" id="btnBudget" onclick="berekenAdvies()" disabled>🎯 Bekijk mijn advies op maat</button>
   </div>
 </div>
 
-<!-- ══ VRAAG 11: Prioriteit ══ -->
-<div id="vraag11" class="aat-vraag">
-  <span class="aat-vraag-cat">Jouw prioriteit</span>
-  <span class="aat-vraag-nr">Vraag 11 van 11 — Laatste vraag!</span>
-  <div class="aat-vraag-titel">Wat is voor jou het meest waardevol in een samenwerking?</div>
-  <div class="aat-vraag-sub">De allerlaatste vraag. Jouw antwoord helpt ons om de juiste toon te zetten in ons advies aan jou.</div>
-  <div class="aat-opties cols2">
-    <div class="aat-optie" onclick="selecteer(this,'prioriteit','prijs')">
-      <div class="aat-optie-icoon-wrap">💰</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Beste prijs-kwaliteitverhouding</div><div class="aat-optie-desc">Zo veel mogelijk bereik en resultaat voor een scherpe prijs.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'prioriteit','bereik')">
-      <div class="aat-optie-icoon-wrap">📡</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Maximaal bereik</div><div class="aat-optie-desc">Zo veel mogelijk mensen zien mijn naam en aanbod.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'prioriteit','kwaliteit')">
-      <div class="aat-optie-icoon-wrap">💎</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Kwaliteit en exclusiviteit</div><div class="aat-optie-desc">Premium positionering in een vertrouwde en exclusieve omgeving.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'prioriteit','persoonlijk')">
-      <div class="aat-optie-icoon-wrap">🤝</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Persoonlijk contact en begeleiding</div><div class="aat-optie-desc">Een vaste contactpersoon die meedenkt, begeleidt en de branche kent.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(11)">← Terug</button>
-    <button class="aat-volgende" id="btn11" onclick="berekenAdvies()" disabled>🎯 Bekijk mijn advies op maat</button>
-  </div>
-</div>
-
-<!-- ══ RESULTATEN ══ -->
 <div id="resultaat" class="aat-resultaat"></div>
 
 </div>
@@ -686,7 +432,7 @@ html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: 
 const antwoorden = {};
 const multiSets = { cat: new Set(), media: new Set(), extra: new Set(), publicaties: new Set() };
 
-const TOTAAL_VRAGEN = 11;
+const TOTAAL_VRAGEN = 5;
 
 function start() {
   document.getElementById('welkom').style.display = 'none';
@@ -697,7 +443,8 @@ function start() {
 function toonVraag(nr) {
   document.querySelectorAll('.aat-vraag').forEach(v => v.classList.remove('actief'));
   document.getElementById('resultaat').classList.remove('actief');
-  const el = document.getElementById('vraag' + nr);
+  const id = typeof nr === 'string' && nr.startsWith('vraag') ? nr : (nr === 'Budget' ? 'vraagBudget' : 'vraag' + nr);
+  const el = document.getElementById(id);
   if (el) el.classList.add('actief');
   updateProgress(nr);
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -714,8 +461,9 @@ function selecteer(el, sleutel, waarde) {
   el.closest('.aat-opties').querySelectorAll('.aat-optie').forEach(o => o.classList.remove('geselecteerd'));
   el.classList.add('geselecteerd');
   antwoorden[sleutel] = waarde;
-  const nr = el.closest('.aat-vraag').id.replace('vraag','');
-  const btn = document.getElementById('btn' + nr);
+  const vraagId = el.closest('.aat-vraag').id;
+  const nr = vraagId.replace('vraag','');
+  const btn = document.getElementById('btn' + nr) || document.getElementById('btnBudget');
   if (btn) btn.disabled = false;
 }
 
@@ -742,9 +490,9 @@ function toggleMulti(el, waarde) {
   antwoorden[setKey] = Array.from(multiSets[setKey]);
 }
 
-function volgende(van) { toonVraag(van + 1); }
+function volgende(van, naar) { toonVraag(naar !== undefined ? naar : van + 1); }
 
-function terug(van) {
+function terug(van, naar) {
   if (van <= 1) {
     document.getElementById('progressWrap').style.display = 'none';
     document.getElementById('vraag1').classList.remove('actief');
