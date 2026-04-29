@@ -50,9 +50,10 @@ body {
 
 /* ── NAVIGATIE TABS ── */
 .rw-tabs { background:#fff; border:1px solid #e2d9e0; border-radius:14px; padding:6px; margin-bottom:14px; display:flex; gap:5px; flex-wrap:wrap; overflow-x:auto; }
-.rw-tab { flex:1; min-width:110px; padding:10px 14px; border:none; background:none; border-radius:9px; font-family:'Poppins',sans-serif; font-size:0.76rem; font-weight:600; color:#6b6570; cursor:pointer; transition:all 0.2s; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap; }
+.rw-tab { flex:1; min-width:110px; padding:10px 14px; border:2px solid #e2d9e0; background:#fff; border-radius:9px; font-family:'Poppins',sans-serif; font-size:0.76rem; font-weight:600; color:#4a1942; cursor:pointer; transition:all 0.2s; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap; }
+.rw-tab:hover { background:#faf7f2; border-color:#4a1942; color:#4a1942; }
 .rw-tab:hover { background:#faf7f2; color:#4a1942; }
-.rw-tab.actief { background:#4a1942; color:#fff; }
+.rw-tab.actief { background: #e8834a; border-color: #e8834a; color: #fff !important; }
 
 /* ── TAB INHOUD ── */
 .rw-tabinhoud { display:none; }
@@ -1316,6 +1317,50 @@ function toggleFaq(btn, i) {
 laadDagboek();
 laadZelfzorg();
 laadFaq();
+
+
+// ── AUTO HOOGTE VOOR IFRAME IN SOFFIE ──
+(function() {
+  function stuurHoogte() {
+    var hoogte = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+    window.parent.postMessage({ frameHeight: hoogte }, '*');
+  }
+
+  // Direct bij laden
+  stuurHoogte();
+
+  // Bij resize van venster
+  window.addEventListener('resize', function() {
+    setTimeout(stuurHoogte, 100);
+  });
+
+  // ResizeObserver: reageert op uitklappen, tabs wisselen, animaties
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function() {
+      stuurHoogte();
+    });
+    ro.observe(document.body);
+  }
+
+  // MutationObserver: reageert op DOM wijzigingen (classes, style, content)
+  if (window.MutationObserver) {
+    var mo = new MutationObserver(function() {
+      setTimeout(stuurHoogte, 50);
+    });
+    mo.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+})();
+
 </script>
 
 </body>
