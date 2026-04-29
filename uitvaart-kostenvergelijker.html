@@ -179,6 +179,23 @@
   .kv-banner { flex-direction: column; }
   .kv-instellingen { flex-direction: column; align-items: flex-start; }
 }
+
+/* ── CROSSLINK BLOK ── */
+.kv-crosslink {
+  background: #fff; border: 1px solid #e2d9e0; border-left: 5px solid #e8834a;
+  border-radius: 0 14px 14px 0; padding: 20px 24px; margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.kv-crosslink-tekst { flex: 1; }
+.kv-crosslink-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #e8834a; margin-bottom: 5px; display: block; }
+.kv-crosslink-titel { font-size: 0.96rem; font-weight: 900; color: #4a1942; margin-bottom: 4px; }
+.kv-crosslink-sub { font-size: 0.76rem; color: #6b6570; font-weight: 300; line-height: 1.65; }
+.kv-crosslink-knop { display: inline-flex; align-items: center; gap: 7px; background: #4a1942; color: #fff; border-radius: 10px; padding: 11px 20px; font-size: 0.78rem; font-weight: 800; text-decoration: none; flex-shrink: 0; transition: all 0.2s; white-space: nowrap; }
+.kv-crosslink-knop:hover { background: #6b3060; transform: translateY(-1px); }
+@media (max-width: 600px) {
+  .kv-crosslink { flex-direction: column; gap: 12px; padding: 16px 16px; }
+  .kv-crosslink-knop { width: 100%; text-align: center; justify-content: center; }
+}
 </style>
 
 <div class="kv">
@@ -597,6 +614,16 @@
       </tbody>
     </table>
   </div>
+</div>
+
+<!-- CROSSLINK UITVAARTVORMEN -->
+<div class="kv-crosslink">
+  <div class="kv-crosslink-tekst">
+    <span class="kv-crosslink-label">Weet je al welke uitvaartvorm je wilt?</span>
+    <div class="kv-crosslink-titel">Lees eerst ons complete overzicht van alle uitvaartvormen</div>
+    <div class="kv-crosslink-sub">Van traditionele begraving tot resomeren — met milieu-impact, statistieken en kosten per vorm uitgelegd. Zo maak je een weloverwogen keuze voordat je kosten vergelijkt.</div>
+  </div>
+  <a href="https://uitvaart-platform.nl/uitvaartvormen" class="kv-crosslink-knop">⚰️ Bekijk alle uitvaartvormen →</a>
 </div>
 
 <!-- BESPAARTIPS -->
