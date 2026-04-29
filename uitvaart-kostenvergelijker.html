@@ -217,18 +217,35 @@
 <div class="kv-instellingen">
   <span class="kv-inst-label">🗺️ Jouw regio:</span>
   <select class="kv-regio-select" id="regioSelect" onchange="updateRegio()">
-    <option value="landelijk">Nederland (landelijk gemiddelde)</option>
+    <option value="landelijk">🇳🇱 Nederland (landelijk gemiddelde)</option>
+    <optgroup label="── Grote steden ──">
     <option value="amsterdam">Amsterdam</option>
     <option value="rotterdam">Rotterdam</option>
     <option value="denhaag">Den Haag</option>
     <option value="utrecht">Utrecht</option>
-    <option value="eindhoven">Eindhoven / Brabant</option>
-    <option value="groningen">Groningen / Noord</option>
-    <option value="arnhem">Arnhem / Gelderland</option>
-    <option value="maastricht">Maastricht / Limburg</option>
-    <option value="zeeland">Zeeland / Zeeuws-Vlaanderen</option>
-    <option value="friesland">Friesland / Drenthe</option>
-    <option value="platteland">Platteland (overige)</option>
+    <option value="eindhoven">Eindhoven</option>
+    <option value="groningen_stad">Groningen (stad)</option>
+    <option value="tilburg">Tilburg</option>
+    <option value="almere">Almere</option>
+    <option value="breda">Breda</option>
+    <option value="nijmegen">Nijmegen</option>
+    <option value="enschede">Enschede</option>
+    <option value="haarlem">Haarlem</option>
+    </optgroup>
+    <optgroup label="── Provincies ──">
+    <option value="noordholland">Noord-Holland</option>
+    <option value="zuidholland">Zuid-Holland</option>
+    <option value="utrecht_prov">Utrecht (provincie)</option>
+    <option value="noordbrabant">Noord-Brabant</option>
+    <option value="gelderland">Gelderland</option>
+    <option value="overijssel">Overijssel</option>
+    <option value="limburg">Limburg</option>
+    <option value="friesland">Friesland</option>
+    <option value="groningen_prov">Groningen (provincie)</option>
+    <option value="drenthe">Drenthe</option>
+    <option value="flevoland">Flevoland</option>
+    <option value="zeeland">Zeeland</option>
+    </optgroup>
   </select>
   <div class="kv-inst-sep"></div>
   <span class="kv-regio-badge" id="regioBadge">📍 Landelijk gemiddelde</span>
@@ -657,18 +674,34 @@
 
 <script>
 const REGIO_DATA = {
-  landelijk:  { factor: 1.00, tekst: "Landelijk gemiddelde",   toelichting: "Prijzen gebaseerd op het Nederlandse landelijk gemiddelde 2024." },
-  amsterdam:  { factor: 1.38, tekst: "Amsterdam",              toelichting: "Amsterdam heeft de hoogste uitvaartkosten van Nederland door hoge grondprijzen en locatiekosten." },
-  rotterdam:  { factor: 1.15, tekst: "Rotterdam",              toelichting: "Rotterdam ligt 15% boven het landelijk gemiddelde, met name door hogere crematoriumtarieven." },
-  denhaag:    { factor: 1.21, tekst: "Den Haag",               toelichting: "Den Haag ligt 21% boven het landelijk gemiddelde vanwege hogere gemeentelijke begraafplaatsen." },
-  utrecht:    { factor: 1.11, tekst: "Utrecht",                toelichting: "Utrecht ligt 11% boven het landelijk gemiddelde." },
-  eindhoven:  { factor: 1.00, tekst: "Eindhoven / Brabant",    toelichting: "Eindhoven en Brabant liggen op het landelijk gemiddelde." },
-  groningen:  { factor: 0.90, tekst: "Groningen / Noord",      toelichting: "Noord-Nederland ligt 10% onder het landelijk gemiddelde — voordelig voor uitvaartkosten." },
-  arnhem:     { factor: 0.96, tekst: "Arnhem / Gelderland",    toelichting: "Gelderland ligt iets onder het landelijk gemiddelde." },
-  maastricht: { factor: 0.94, tekst: "Maastricht / Limburg",   toelichting: "Limburg ligt 6% onder het landelijk gemiddelde." },
-  zeeland:    { factor: 0.92, tekst: "Zeeland",                toelichting: "Zeeland heeft relatief lage uitvaartkosten vergeleken met het landelijk gemiddelde." },
-  friesland:  { factor: 0.87, tekst: "Friesland / Drenthe",    toelichting: "Friesland en Drenthe behoren tot de goedkoopste regio's van Nederland." },
-  platteland: { factor: 0.83, tekst: "Platteland",             toelichting: "Op het platteland zijn de uitvaartkosten gemiddeld 17% lager dan in de stad." }
+  // Landelijk
+  landelijk:      { factor: 1.00, tekst: "Landelijk gemiddelde",     toelichting: "Prijzen gebaseerd op het Nederlandse landelijk gemiddelde 2024. Bron: Nardus en BGNU." },
+  // Grote steden
+  amsterdam:      { factor: 1.38, tekst: "Amsterdam",                 toelichting: "Amsterdam heeft de hoogste uitvaartkosten van Nederland door hoge grondprijzen, grafrechten en locatiekosten. Tot 38% boven het landelijk gemiddelde." },
+  rotterdam:      { factor: 1.15, tekst: "Rotterdam",                  toelichting: "Rotterdam ligt circa 15% boven het landelijk gemiddelde, met name door hogere crematoriumtarieven en begraafplaatskosten." },
+  denhaag:        { factor: 1.21, tekst: "Den Haag",                  toelichting: "Den Haag ligt 21% boven het landelijk gemiddelde vanwege hogere gemeentelijke begraafplaatsen en Haagse locatiekosten." },
+  utrecht:        { factor: 1.11, tekst: "Utrecht",                    toelichting: "Utrecht ligt 11% boven het landelijk gemiddelde door de centrale ligging en hogere vraag naar uitvaartlocaties." },
+  eindhoven:      { factor: 1.02, tekst: "Eindhoven",                  toelichting: "Eindhoven ligt licht boven het landelijk gemiddelde. De stad groeit snel wat de vraag naar uitvaartlocaties beïnvloedt." },
+  groningen_stad: { factor: 0.92, tekst: "Groningen (stad)",           toelichting: "Groningen stad ligt 8% onder het landelijk gemiddelde. Relatief lagere crematoriumtarieven en begraafplaatskosten." },
+  tilburg:        { factor: 0.99, tekst: "Tilburg",                    toelichting: "Tilburg ligt vrijwel op het landelijk gemiddelde. Goede spreiding van uitvaartlocaties in de regio." },
+  almere:         { factor: 1.08, tekst: "Almere",                     toelichting: "Almere ligt 8% boven het landelijk gemiddelde. Beperkt aanbod van begraafplaatsen door de jonge stad." },
+  breda:          { factor: 0.97, tekst: "Breda",                      toelichting: "Breda ligt licht onder het landelijk gemiddelde met een goed aanbod aan uitvaartlocaties in de regio." },
+  nijmegen:       { factor: 0.95, tekst: "Nijmegen",                   toelichting: "Nijmegen ligt 5% onder het landelijk gemiddelde. De stad heeft meerdere crematoriums in de directe omgeving." },
+  enschede:       { factor: 0.91, tekst: "Enschede",                   toelichting: "Enschede en de Twentse regio liggen circa 9% onder het landelijk gemiddelde. Lagere locatiekosten in het oosten." },
+  haarlem:        { factor: 1.26, tekst: "Haarlem",                    toelichting: "Haarlem ligt 26% boven het landelijk gemiddelde door de nabijheid van Amsterdam en hoge grondprijzen in de regio." },
+  // Provincies
+  noordholland:   { factor: 1.28, tekst: "Noord-Holland",              toelichting: "Noord-Holland als provincie heeft de hoogste gemiddelde uitvaartkosten door Amsterdam, Haarlem en de Randstad. Circa 28% boven het landelijk gemiddelde." },
+  zuidholland:    { factor: 1.18, tekst: "Zuid-Holland",               toelichting: "Zuid-Holland ligt 18% boven het landelijk gemiddelde door Rotterdam, Den Haag en de Randstad." },
+  utrecht_prov:   { factor: 1.09, tekst: "Utrecht (provincie)",        toelichting: "De provincie Utrecht ligt 9% boven het landelijk gemiddelde. Hogere kosten in de stad, lager in de Utrechtse Heuvelrug regio." },
+  noordbrabant:   { factor: 0.99, tekst: "Noord-Brabant",              toelichting: "Noord-Brabant als provincie ligt vrijwel op het landelijk gemiddelde. Goede spreiding van uitvaartlocaties door de hele provincie." },
+  gelderland:     { factor: 0.96, tekst: "Gelderland",                 toelichting: "Gelderland ligt 4% onder het landelijk gemiddelde. De Achterhoek en Veluwe zijn relatief voordelig, de Nijmegen regio iets hoger." },
+  overijssel:     { factor: 0.91, tekst: "Overijssel",                 toelichting: "Overijssel ligt circa 9% onder het landelijk gemiddelde. Zowel Zwolle als Enschede en Deventer zijn relatief voordelig." },
+  limburg:        { factor: 0.93, tekst: "Limburg",                    toelichting: "Limburg ligt 7% onder het landelijk gemiddelde. Maastricht is iets duurder, de rest van de provincie voordelig." },
+  friesland:      { factor: 0.86, tekst: "Friesland",                  toelichting: "Friesland behoort tot de goedkoopste provincies van Nederland voor uitvaartkosten. Circa 14% onder het landelijk gemiddelde." },
+  groningen_prov: { factor: 0.88, tekst: "Groningen (provincie)",      toelichting: "Groningen provincie ligt 12% onder het landelijk gemiddelde. Lage grondprijzen en concurrerende uitvaarttarieven." },
+  drenthe:        { factor: 0.85, tekst: "Drenthe",                    toelichting: "Drenthe is de goedkoopste provincie voor uitvaartkosten. Circa 15% onder het landelijk gemiddelde door lage dichtheid en grondkosten." },
+  flevoland:      { factor: 1.06, tekst: "Flevoland",                  toelichting: "Flevoland ligt 6% boven het landelijk gemiddelde. Beperkt aantal begraafplaatsen in de jonge provincie verhoogt de kosten." },
+  zeeland:        { factor: 0.89, tekst: "Zeeland",                    toelichting: "Zeeland heeft relatief lage uitvaartkosten. Circa 11% onder het landelijk gemiddelde door lagere grond- en locatiekosten." }
 };
 
 const BASIS = {
