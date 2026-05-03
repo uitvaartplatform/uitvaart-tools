@@ -8,6 +8,7 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; }
+.um-wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
 
 @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(1.3); } }
 
@@ -379,10 +380,15 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
   .lp-cat-grid { grid-template-columns: 1fr; }
   .lp-paneel-body { padding: 14px; }
   .lp-optie { font-size: 0.78rem; }
+  .um-wrap { padding: 0 12px; }
+}
+@media (max-width: 600px) {
+  .um-wrap { padding: 0 16px; }
 }
 </style>
 </head>
 <body>
+<div class="um-wrap">
 
 <!-- INFO BANNER -->
 <div class="lp-infobanner">
@@ -1111,5 +1117,6 @@ gaNaar = function(id) {
 };
 </script>
 
+</div>
 </body>
 </html>
