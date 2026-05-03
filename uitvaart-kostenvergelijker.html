@@ -1,6 +1,6 @@
 <style>
 .kv * { font-family: 'Poppins', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
-.kv { background: #faf7f2; color: #1e1520; line-height: 1.6; }
+.kv { background: #faf7f2; color: #1e1520; line-height: 1.6; max-width: 960px; margin: 0 auto; padding: 0 24px; }
 
 /* ── INFO BANNER ── */
 .kv-banner {
@@ -178,6 +178,20 @@
   .kv-tips-grid { grid-template-columns: 1fr; }
   .kv-banner { flex-direction: column; }
   .kv-instellingen { flex-direction: column; align-items: flex-start; }
+  .kv-tabel-sectie { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .kv-regio-sectie { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .kv-tabel { min-width: 520px; }
+  .kv-tools { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .kv-tools-knoppen { flex-wrap: wrap; }
+  .kv { padding: 0 16px; }
+}
+@media (max-width: 380px) {
+  .kv { padding: 0 12px; }
+  .kv-banner { padding: 16px 16px; }
+  .kv-instellingen { padding: 14px 16px; }
+  .kv-tips { padding: 18px 16px; }
+  .kv-kaart-naam { font-size: 0.82rem; }
+  .kv-totaal-prijs { font-size: 1.6rem; }
 }
 
 /* ── CROSSLINK BLOK ── */
