@@ -1104,21 +1104,46 @@ window.lpBouwResultaat = function() {
 };
 
 // ── AUTOMATISCHE HOOGTE VOOR IFRAME IN SOFFIE ──
-function stuurHoogte() {
-  var hoogte = Math.max(
-    document.body.scrollHeight,
-    document.documentElement.scrollHeight
-  );
-  window.parent.postMessage({ frameHeight: hoogte }, '*');
-}
-stuurHoogte();
-window.addEventListener('resize', stuurHoogte);
-var _origGaNaar = gaNaar;
-gaNaar = function(id) {
-  _origGaNaar(id);
-  setTimeout(stuurHoogte, 150);
-  setTimeout(stuurHoogte, 500);
-};
+(function() {
+  function stuurHoogte() {
+    var hoogte = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    );
+    window.parent.postMessage({ frameHeight: hoogte }, '*');
+  }
+
+  // Direct bij laden
+  stuurHoogte();
+
+  // Bij resize
+  window.addEventListener('resize', function() {
+    setTimeout(stuurHoogte, 100);
+  });
+
+  // ResizeObserver: reageert op uitklappen, tabs wisselen, animaties
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function() {
+      stuurHoogte();
+    });
+    ro.observe(document.body);
+  }
+
+  // MutationObserver: reageert op DOM wijzigingen (stappen wisselen, klassen)
+  if (window.MutationObserver) {
+    var mo = new MutationObserver(function() {
+      setTimeout(stuurHoogte, 50);
+    });
+    mo.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+})();
 </script>
 
 </div>
