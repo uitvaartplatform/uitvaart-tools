@@ -1,6 +1,6 @@
 <style>
 .kv * { font-family: 'Poppins', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
-.kv { background: #faf7f2; color: #1e1520; line-height: 1.6; padding: 20px 24px; }
+.kv { background: #faf7f2; color: #1e1520; line-height: 1.6; padding: 20px 24px;  overflow-x: hidden; }
 
 /* ── INFO BANNER ── */
 .kv-banner {
@@ -186,6 +186,7 @@
   .kv { padding: 16px; }
 }
 @media (max-width: 380px) {
+  
   .kv { padding: 12px; }
   .kv-banner { padding: 16px 16px; }
   .kv-instellingen { padding: 14px 16px; }
@@ -205,8 +206,11 @@
 .kv-crosslink-titel { font-size: 0.96rem; font-weight: 900; color: #4a1942; margin-bottom: 4px; }
 .kv-crosslink-sub { font-size: 0.76rem; color: #6b6570; font-weight: 300; line-height: 1.65; }
 .kv-crosslink-knop { display: inline-flex; align-items: center; gap: 7px; background: #4a1942; color: #fff; border-radius: 10px; padding: 11px 20px; font-size: 0.78rem; font-weight: 800; text-decoration: none; flex-shrink: 0; transition: all 0.2s; white-space: nowrap; }
-.kv-crosslink-knop:hover { background: #6b3060; transform: translateY(-1px); }
+.kv-crosslink-knop:hover { background: #6b3060; transform: translateY(-1px); 
+  
+}
 @media (max-width: 600px) {
+  * { -webkit-box-sizing: border-box; box-sizing: border-box; }
   .kv-crosslink { flex-direction: column; gap: 12px; padding: 16px 16px; }
   .kv-crosslink-knop { width: 100%; text-align: center; justify-content: center; }
 }
@@ -514,7 +518,7 @@
     <span class="kv-tabel-header-sub">Alle factoren naast elkaar</span>
   </div>
   <div style="overflow-x:auto;">
-    <table class="kv-tabel">
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;"><table class="kv-tabel">
       <thead>
         <tr>
           <th>Factor</th>
@@ -610,7 +614,7 @@
           <td class="laagste check">1–2 dagen ✓</td>
         </tr>
       </tbody>
-    </table>
+    </table></div></div></div>
   </div>
 </div>
 
@@ -622,7 +626,7 @@
     <span class="kv-tabel-header-sub">Verschil kan oplopen tot € 3.000+</span>
   </div>
   <div style="overflow-x:auto;">
-    <table class="kv-tabel">
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;"><table class="kv-tabel">
       <thead>
         <tr>
           <th>Regio</th>
@@ -643,7 +647,7 @@
         <tr><td class="rij-naam">Friesland / Drenthe</td><td>€ 6.200</td><td>€ 1.050</td><td class="laagste">-13%</td></tr>
         <tr><td class="rij-naam">Platteland (overige)</td><td class="laagste">€ 5.900</td><td class="laagste">€ 950</td><td class="laagste">-17% ✓</td></tr>
       </tbody>
-    </table>
+    </table></div>
   </div>
 </div>
 
