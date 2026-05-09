@@ -74,7 +74,7 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 .lp-stap-lijn.klaar { background: #e8834a; }
 
 /* ── HOOFDLAYOUT ── */
-.lp-layout { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
+.lp-layout { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; overflow-x: hidden; }
 
 /* ── STAP PANEEL ── */
 .lp-paneel {
@@ -285,7 +285,7 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .lp-layout { grid-template-columns: 1fr; }
+  .lp-layout { grid-template-columns: 1fr; width: 100%; overflow-x: hidden; }
   .lp-zij { flex-direction: row; flex-wrap: wrap; }
   .lp-zij > * { flex: 1; min-width: 280px; }
   .lp-multi { grid-template-columns: 1fr 1fr; }
@@ -369,7 +369,8 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
   .lp-terug { font-size: 0.76rem; padding: 9px 16px; }
 
   /* Zijkolom */
-  .lp-zij { flex-direction: column; }
+  .lp-zij { flex-direction: column; padding: 0; width: 100%; max-width: 100%; }
+  .lp-zij > * { width: 100%; max-width: 100%; box-sizing: border-box; }
   .lp-zij-blok { padding: 14px 16px; border-radius: 10px; }
   .lp-zij-titel { font-size: 0.78rem; }
   .lp-zij-item { font-size: 0.74rem; }
@@ -389,6 +390,9 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 }
 @media (max-width: 600px) {
   .um-wrap { padding: 16px; }
+  .um-wrap > * { max-width: 100%; box-sizing: border-box; }
+  .lp-zij-samenvatting, .lp-zij-info, .lp-zij-reg { max-width: 100%; }
+  .lp-zij-header, .lp-zij-body { max-width: 100%; }
 }
 </style>
 </head>
