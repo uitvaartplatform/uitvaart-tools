@@ -309,15 +309,33 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
+  /* iPad staand (768px) en kleine tablets */
   .lp-layout { grid-template-columns: 1fr; width: 100%; overflow-x: hidden; }
-  .lp-zij { flex-direction: row; flex-wrap: wrap; }
-  .lp-zij > * { flex: 1; min-width: 280px; }
+  .lp-zij { flex-direction: row; flex-wrap: wrap; gap: 14px; }
+  .lp-zij > * { flex: 1; min-width: 260px; box-sizing: border-box; }
   .lp-multi { grid-template-columns: 1fr 1fr; }
   .lp-voortgang { padding: 14px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .lp-infobanner { padding: 24px 28px; }
+  .lp-infobanner { padding: 20px 24px; flex-wrap: wrap; }
   .lp-infobanner-rechts { width: 100%; }
   .lp-infobanner-stats { width: 100%; justify-content: stretch; }
   .lp-infobanner-stat { flex: 1; }
+  .lp-cat-grid { grid-template-columns: 1fr 1fr; }
+  .lp-welkom-grid { grid-template-columns: 1fr 1fr; max-width: 100%; }
+  .lp-opties.grid2 { grid-template-columns: 1fr 1fr; }
+  .lp-opties.grid3 { grid-template-columns: 1fr 1fr; }
+  .lp-paneel-body { padding: 20px; }
+  .lp-paneel-header { padding: 16px 20px; }
+  .lp-res-kaart { padding: 14px 16px; }
+  .lp-res-info { min-width: 0; }
+  .lp-zij-samenvatting, .lp-zij-info, .lp-zij-reg { width: 100%; box-sizing: border-box; }
+}
+
+/* iPad liggend (1024px) — subtiele aanpassingen */
+@media (min-width: 901px) and (max-width: 1024px) {
+  .lp-layout { grid-template-columns: 1fr 320px; gap: 16px; }
+  .lp-infobanner { padding: 20px 24px; }
+  .lp-cat-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .lp-paneel-body { padding: 20px 24px; }
 }
 
 /* ── MOBIEL (max 600px) ── */
