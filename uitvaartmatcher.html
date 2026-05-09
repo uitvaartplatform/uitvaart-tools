@@ -79,7 +79,7 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 /* ── STAP PANEEL ── */
 .lp-paneel {
   background: #fff; border: 1px solid #e2d9e0; border-radius: 16px;
-  overflow: hidden;
+  overflow: hidden; width: 100%; box-sizing: border-box;
 }
 .lp-paneel-header {
   background: #faf7f2; border-bottom: 1px solid #e2d9e0;
@@ -212,8 +212,8 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
 .lp-res-icoon { width: 52px; height: 52px; border-radius: 13px; background: #fff; border: 1px solid #e2d9e0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
 .lp-res-kaart.uitgelicht .lp-res-icoon { background: rgba(232,131,74,0.1); border-color: rgba(232,131,74,0.2); }
 .lp-res-info { flex: 1; min-width: 0; overflow: hidden; }
-.lp-res-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #e8834a; margin-bottom: 3px; }
-.lp-res-titel { font-size: 0.92rem; font-weight: 800; color: #4a1942; line-height: 1.3; margin-bottom: 3px; }
+.lp-res-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #e8834a; margin-bottom: 3px; word-break: break-word; }
+.lp-res-titel { font-size: 0.92rem; font-weight: 800; color: #4a1942; line-height: 1.3; margin-bottom: 3px; word-break: break-word; overflow-wrap: break-word; }
 .lp-res-desc { font-size: 0.76rem; color: #6b6570; font-weight: 300; line-height: 1.5; }
 .lp-res-pijl { font-size: 1.2rem; color: #4a1942; flex-shrink: 0; }
 
@@ -334,7 +334,7 @@ body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; 
   /* Welkomscherm */
   .lp-welkom h2 { font-size: 1.2rem; }
   .lp-welkom-sub { font-size: 0.78rem; }
-  .lp-welkom-grid { grid-template-columns: 1fr; gap: 8px; }
+  .lp-welkom-grid { grid-template-columns: 1fr; gap: 8px; width: 100%; max-width: 100%; }
   .lp-welkom-knop { padding: 14px; }
   .lp-welkom-knop-titel { font-size: 0.86rem; }
   .lp-welkom-knop-sub { font-size: 0.7rem; }
