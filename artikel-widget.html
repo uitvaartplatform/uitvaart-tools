@@ -517,12 +517,25 @@ const observer = new IntersectionObserver((entries) => {
 
 observer.observe(document.getElementById('kaarten'));
 
-// Auto-resize iframe hoogte
+// Auto-resize iframe hoogte — robuuste methode
 function stuurHoogte() {
-  const hoogte = document.body.scrollHeight;
-  window.parent.postMessage({ type: 'iframeHoogte', hoogte }, '*');
+  const hoogte = Math.max(
+    document.body.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.scrollHeight,
+    document.documentElement.offsetHeight
+  );
+  window.parent.postMessage({ type: 'iframeHoogte', hoogte: hoogte }, '*');
 }
-window.addEventListener('load', stuurHoogte);
+
+// Stuur hoogte na laden, na fonts geladen, en elke 500ms gedurende 3 seconden
+window.addEventListener('load', () => {
+  stuurHoogte();
+  setTimeout(stuurHoogte, 500);
+  setTimeout(stuurHoogte, 1000);
+  setTimeout(stuurHoogte, 2000);
+  setTimeout(stuurHoogte, 3000);
+});
 new ResizeObserver(stuurHoogte).observe(document.body);
 </script>
 </body>
