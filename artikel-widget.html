@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uitvaart-Platform.nl — Meer lezen</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paars: #4a1942;
+    --paars-licht: #6b3060;
+    --oranje: #e8834a;
+    --oranje-donker: #c8622a;
+    --creme: #faf7f2;
+    --rand: #e2d9e0;
+    --tekst: #1e1520;
+    --grijs: #6b6570;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: transparent;
+    color: var(--tekst);
+    overflow-x: hidden;
+  }
+
+  /* ── PARTICLE CANVAS ── */
+  #particles {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--paars) 0%, var(--paars-licht) 50%, #3a1535 100%);
+    border-radius: 20px;
+    padding: 40px 44px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,131,74,0.25) 0%, transparent 70%);
+    top: -80px; right: -60px;
+    animation: glowPulse 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(107,48,96,0.4) 0%, transparent 70%);
+    bottom: -60px; left: 40px;
+    animation: glowPulse 6s ease-in-out infinite reverse;
+    pointer-events: none;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.3); opacity: 1; }
+  }
+
+  .hero-inner { position: relative; z-index: 2; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(232,131,74,0.2);
+    border: 1px solid rgba(232,131,74,0.4);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--oranje);
+    margin-bottom: 14px;
+    animation: fadeInDown 0.6s ease both;
+  }
+
+  .hero h2 {
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 22px;
+    animation: fadeInUp 0.6s ease 0.1s both;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    animation: fadeInUp 0.6s ease 0.2s both;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 30px;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #fff;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-pill::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(232,131,74,0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .hero-pill:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(232,131,74,0.5);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+  .hero-pill:hover::before { opacity: 1; }
+  .hero-pill.cta {
+    background: var(--oranje);
+    border-color: var(--oranje);
+    font-weight: 700;
+  }
+  .hero-pill.cta:hover { background: var(--oranje-donker); border-color: var(--oranje-donker); }
+
+  /* ── KAARTEN GRID ── */
+  .kaarten-titel {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--grijs);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .kaarten-titel::after { content: ''; flex: 1; height: 1px; background: var(--rand); }
+
+  .kaarten-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .kaart {
+    background: #fff;
+    border: 1.5px solid var(--rand);
+    border-radius: 16px;
+    padding: 20px 18px;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .kaart.zichtbaar {
+    animation: kaartIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes kaartIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .kaart::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--paars), var(--oranje));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+  .kaart:hover {
+    border-color: var(--paars-licht);
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 12px 36px rgba(74,25,66,0.12);
+  }
+  .kaart:hover::before { transform: scaleX(1); }
+
+  .kaart-icon {
+    width: 42px; height: 42px;
+    background: var(--creme);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .kaart:hover .kaart-icon { transform: scale(1.15) rotate(-5deg); }
+
+  .kaart-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--oranje);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .kaart-titel {
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: var(--paars);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+  .kaart-desc {
+    font-size: 0.7rem;
+    color: var(--grijs);
+    font-weight: 300;
+    line-height: 1.65;
+  }
+  .kaart-pijl {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--oranje);
+    margin-top: 10px;
+    transition: gap 0.2s;
+  }
+  .kaart:hover .kaart-pijl { gap: 8px; }
+
+  /* ── TOOLS BLOK ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .tool {
+    border-radius: 14px;
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .tool::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .tool:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,0.2); }
+  .tool:hover::before { opacity: 1; }
+  .tool.mm { background: linear-gradient(135deg, var(--paars), var(--paars-licht)); }
+  .tool.gids { background: linear-gradient(135deg, #2a4a6b, #1a3a5b); }
+  .tool.kosten { background: linear-gradient(135deg, #5a2a0a, #3a1a05); }
+  .tool.rouw { background: linear-gradient(135deg, var(--paars-licht), #4a2040); }
+
+  .tool-tekst h4 {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .tool-tekst p {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+    line-height: 1.55;
+  }
+  .tool-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .tool:hover .tool-btn { background: rgba(255,255,255,0.25); }
+  .tool.mm .tool-btn { background: var(--oranje); border-color: var(--oranje); }
+  .tool.mm:hover .tool-btn { background: var(--oranje-donker); }
+
+  /* ── ANIMATIES ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .hero { padding: 28px 22px; }
+    .kaarten-grid { grid-template-columns: 1fr 1fr; }
+    .tools-grid { grid-template-columns: 1fr; }
+    .tool { grid-template-columns: 1fr; }
+    .tool-btn { width: fit-content; }
+  }
+  @media (max-width: 480px) {
+    .kaarten-grid { grid-template-columns: 1fr; }
+    .hero-pills { gap: 6px; }
+    .hero-pill { font-size: 0.7rem; padding: 7px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">✦ Uitvaart-Platform.nl</div>
+    <h2>Meer lezen over uitvaart,<br>rouw & nalatenschap?</h2>
+    <div class="hero-pills">
+      <a href="https://uitvaart-platform.nl/wat-regelen-na-overlijden-compleet-stappenplan" class="hero-pill" target="_blank">📋 Stappenplan</a>
+      <a href="https://uitvaart-platform.nl/uitvaartkosten" class="hero-pill" target="_blank">💶 Uitvaartkosten</a>
+      <a href="https://uitvaart-platform.nl/uitvaartvormen" class="hero-pill" target="_blank">⚰️ Uitvaartvormen</a>
+      <a href="https://uitvaart-platform.nl/rouwverwerking" class="hero-pill" target="_blank">💔 Rouwverwerking</a>
+      <a href="https://uitvaart-platform.nl/uitvaartverzekering" class="hero-pill" target="_blank">🛡️ Verzekering</a>
+      <a href="https://uitvaart-platform.nl/nalatenschap-erfrecht" class="hero-pill" target="_blank">⚖️ Nalatenschap</a>
+      <a href="https://uitvaart-platform.nl/woordenlijst" class="hero-pill" target="_blank">📖 Woordenlijst</a>
+      <a href="https://uitvaart-platform.nl/veelgestelde-vragen" class="hero-pill" target="_blank">❓ FAQ</a>
+      <a href="https://uitvaart-platform.nl/bedrijven" class="hero-pill cta" target="_blank">🔍 Zoek een specialist →</a>
+    </div>
+  </div>
+</div>
+
+<!-- KAARTEN -->
+<div class="kaarten-titel">Verdiep je verder</div>
+<div class="kaarten-grid" id="kaarten">
+
+  <a href="https://uitvaart-platform.nl/uitvaartkosten" class="kaart" target="_blank">
+    <div class="kaart-icon">💶</div>
+    <span class="kaart-label">Kosten</span>
+    <div class="kaart-titel">Wat kost een uitvaart?</div>
+    <p class="kaart-desc">Compleet overzicht van alle kosten per uitvaartvorm en regio.</p>
+    <div class="kaart-pijl">Lees meer <span>→</span></div>
+  </a>
+
+  <a href="https://uitvaart-platform.nl/uitvaartvormen" class="kaart" target="_blank">
+    <div class="kaart-icon">🕊️</div>
+    <span class="kaart-label">Keuzes</span>
+    <div class="kaart-titel">Uitvaartvormen</div>
+    <p class="kaart-desc">Van begraving tot resomeren — alle mogelijkheden uitgelegd.</p>
+    <div class="kaart-pijl">Lees meer <span>→</span></div>
+  </a>
+
+  <a href="https://uitvaart-platform.nl/rouwverwerking" class="kaart" target="_blank">
+    <div class="kaart-icon">💔</div>
+    <span class="kaart-label">Rouw</span>
+    <div class="kaart-titel">Rouwverwerking</div>
+    <p class="kaart-desc">Rouwfasen, modellen en wanneer je professionele hulp zoekt.</p>
+    <div class="kaart-pijl">Lees meer <span>→</span></div>
+  </a>
+
+  <a href="https://uitvaart-platform.nl/nalatenschap-erfrecht" class="kaart" target="_blank">
+    <div class="kaart-icon">⚖️</div>
+    <span class="kaart-label">Nalatenschap</span>
+    <div class="kaart-titel">Erfrecht & nalatenschap</div>
+    <p class="kaart-desc">Erfenis, testament en nabestaanden financieel — alles op een rij.</p>
+    <div class="kaart-pijl">Lees meer <span>→</span></div>
+  </a>
+
+  <a href="https://uitvaart-platform.nl/uitvaartverzekering" class="kaart" target="_blank">
+    <div class="kaart-icon">🛡️</div>
+    <span class="kaart-label">Verzekering</span>
+    <div class="kaart-titel">Uitvaartverzekering</div>
+    <p class="kaart-desc">DELA, Monuta, Yarden en meer — onafhankelijk vergeleken.</p>
+    <div class="kaart-pijl">Lees meer <span>→</span></div>
+  </a>
+
+  <a href="https://uitvaart-platform.nl/palliatieve-zorg" class="kaart" target="_blank">
+    <div class="kaart-icon">🏥</div>
+    <span class="kaart-label">Zorg</span>
+    <div class="kaart-titel">Palliatieve zorg & hospice</div>
+    <p class="kaart-desc">Wat is palliatieve zorg en wanneer kom je in aanmerking?</p>
+    <div class="kaart-pijl">Lees meer <span>→</span></div>
+  </a>
+
+</div>
+
+<!-- TOOLS -->
+<div class="tools-grid">
+  <a href="https://uitvaart-platform.nl/uitvaart-matchmaker" class="tool mm" target="_blank">
+    <div class="tool-tekst">
+      <h4>🤝 Uitvaart Matchmaker</h4>
+      <p>Vind in 3 stappen de juiste specialist bij jou in de buurt. Persoonlijk en gratis.</p>
+    </div>
+    <div class="tool-btn">Start →</div>
+  </a>
+  <a href="https://uitvaart-platform.nl/uitvaartkostencalculator" class="tool kosten" target="_blank">
+    <div class="tool-tekst">
+      <h4>🧮 Kostencalculator</h4>
+      <p>Bereken de kosten van een uitvaart. Met PDF-download en checklist.</p>
+    </div>
+    <div class="tool-btn">Bereken →</div>
+  </a>
+  <a href="https://uitvaart-platform.nl/bedrijven" class="tool gids" target="_blank">
+    <div class="tool-tekst">
+      <h4>🔍 Bedrijvengids</h4>
+      <p>500+ specialisten in 57+ categorieën. Vind de juiste professional.</p>
+    </div>
+    <div class="tool-btn">Zoek →</div>
+  </a>
+  <a href="https://uitvaart-platform.nl/rouwverwerking-interactief" class="tool rouw" target="_blank">
+    <div class="tool-tekst">
+      <h4>💻 Interactieve rouwpagina</h4>
+      <p>Emotie checker, rouwdagboek en rouwfasen interactief doorlopen.</p>
+    </div>
+    <div class="tool-btn">Open →</div>
+  </a>
+</div>
+
+<script>
+// Particle animatie in de hero
+const canvas = document.createElement('canvas');
+canvas.id = 'particles';
+canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;border-radius:20px;';
+document.querySelector('.hero').appendChild(canvas);
+
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  const hero = document.querySelector('.hero');
+  canvas.width = hero.offsetWidth;
+  canvas.height = hero.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.4;
+    this.speedY = -Math.random() * 0.6 - 0.2;
+    this.opacity = Math.random() * 0.4 + 0.1;
+    this.life = 0;
+    this.maxLife = Math.random() * 200 + 100;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.life++;
+    if (this.life > this.maxLife || this.y < 0) this.reset();
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.opacity * (1 - this.life / this.maxLife);
+    ctx.fillStyle = Math.random() > 0.7 ? '#e8834a' : '#ffffff';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < 40; i++) particles.push(new Particle());
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Scroll-triggered kaart animaties
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const kaarten = entry.target.querySelectorAll('.kaart');
+      kaarten.forEach((k, i) => {
+        setTimeout(() => k.classList.add('zichtbaar'), i * 80);
+      });
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+observer.observe(document.getElementById('kaarten'));
+
+// Auto-resize iframe hoogte
+function stuurHoogte() {
+  const hoogte = document.body.scrollHeight;
+  window.parent.postMessage({ type: 'iframeHoogte', hoogte }, '*');
+}
+window.addEventListener('load', stuurHoogte);
+new ResizeObserver(stuurHoogte).observe(document.body);
+</script>
+</body>
+</html>
