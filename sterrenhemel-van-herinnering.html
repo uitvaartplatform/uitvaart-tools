@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>De Sterrenhemel van Herinnering — Uitvaart-Platform.nl</title>
+<meta name="description" content="Een persoonlijke sterrenhemel waarin je dierbaren als sterren blijven leven. Plaats hun naam, hun verhaal en een herinnering. Volledig privé, alleen in jouw browser bewaard.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  /* Huisstijl */
+  --bg-light:    #ffffff;
+  --bg-cream:    #faf7f2;
+  --bg-elev:     #f4ecec;
+  --purple-100:  #faf7f2;
+  --purple-300:  #c8b3c4;
+  --purple-500:  #6b3060;
+  --purple-700:  #4a1942;
+  --purple-900:  #2a0d24;
+  --purple-deep: #1a0617;
+  --orange:      #e8834a;
+  --orange-deep: #c8622a;
+  --orange-light:#f5a87a;
+  --text:        #1e1520;
+  --text-mid:    #4a1942;
+  --text-dim:    #6b6570;
+  --text-faded:  #8a8590;
+  --line:        #e2d9e0;
+  --shadow-sm:   0 2px 8px rgba(74,25,66,0.08);
+  --shadow:      0 8px 28px rgba(74,25,66,0.14);
+  --shadow-lg:   0 24px 64px rgba(74,25,66,0.20);
+  --font:        'Poppins', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  color: var(--text);
+  overflow: hidden;
+  background: #0a0410;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* ═══════════════════════════════════════════
+   CANVAS — de sterrenhemel zelf
+═══════════════════════════════════════════ */
+#sky {
+  position: fixed;
+  inset: 0;
+  display: block;
+  cursor: crosshair;
+  z-index: 1;
+}
+
+.sky-hint {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(232, 209, 215, 0.55);
+  font-size: 0.78rem;
+  font-weight: 300;
+  font-style: italic;
+  z-index: 5;
+  letter-spacing: 0.06em;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  animation: hintFade 2s ease 1.5s forwards;
+}
+@keyframes hintFade {
+  to { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════
+   HEADER — lichte huisstijl over de hemel
+═══════════════════════════════════════════ */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 22px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+.brand-mark {
+  width: 38px; height: 38px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--purple-700) 0%, var(--purple-500) 100%);
+  display: grid; place-items: center;
+  font-size: 1rem; font-weight: 800;
+  color: white;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(74,25,66,0.3);
+  letter-spacing: -0.02em;
+}
+.brand-mark::after {
+  content: ''; position: absolute; inset: -3px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--orange) 0%, transparent 70%);
+  z-index: -1; opacity: 0.45;
+  filter: blur(7px);
+}
+.brand-text { line-height: 1.15; }
+.brand-name { font-size: 0.92rem; font-weight: 700; color: var(--text-mid); letter-spacing: -0.01em; }
+.brand-sub { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: var(--orange); margin-top: 2px; }
+
+.header-center {
+  text-align: center;
+  pointer-events: none;
+}
+.header-eyebrow {
+  font-size: 0.56rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 3px;
+}
+.header-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-mid);
+  letter-spacing: -0.01em;
+}
+.header-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--orange-deep);
+}
+
+.header-actions {
+  display: flex; gap: 8px;
+}
+.icon-btn {
+  width: 38px; height: 38px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--text-mid);
+  cursor: pointer;
+  display: grid; place-items: center;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.22s ease;
+  position: relative;
+}
+.icon-btn:hover {
+  border-color: var(--orange);
+  color: var(--orange-deep);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.icon-btn .count {
+  position: absolute;
+  top: -4px; right: -4px;
+  background: var(--orange);
+  color: white;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+  border: 2px solid white;
+}
+
+/* ═══════════════════════════════════════════
+   FLOATING ACTION BUTTON
+═══════════════════════════════════════════ */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 40;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 24px;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 12px 32px rgba(232, 131, 74, 0.5), 0 0 0 1px rgba(232,131,74,0.3);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.fab:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 18px 40px rgba(232, 131, 74, 0.6);
+}
+.fab-icon {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: grid; place-items: center;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+/* ═══════════════════════════════════════════
+   MODALS — algemene styling
+═══════════════════════════════════════════ */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 6, 23, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: bgFade 0.3s ease;
+}
+.modal-bg.show { display: flex; }
+@keyframes bgFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 460px;
+  width: 100%;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--line);
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal::-webkit-scrollbar { width: 6px; }
+.modal::-webkit-scrollbar-thumb { background: rgba(74,25,66,0.2); border-radius: 3px; }
+
+.modal-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg-cream);
+  border: 1px solid var(--line);
+  color: var(--text-mid);
+  cursor: pointer;
+  display: grid; place-items: center;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.22s ease;
+}
+.modal-close:hover {
+  background: var(--orange);
+  color: white;
+  border-color: var(--orange);
+  transform: rotate(90deg);
+}
+
+.modal-eyebrow {
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-mid);
+  line-height: 1.2;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.modal-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--orange-deep);
+}
+.modal-intro {
+  font-size: 0.86rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 22px;
+  font-weight: 400;
+}
+
+/* Form */
+.form-row { margin-bottom: 16px; }
+.form-row.duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.form-label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-mid);
+  margin-bottom: 6px;
+}
+.form-label .optional {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  color: var(--text-faded);
+  font-size: 0.7rem;
+  margin-left: 6px;
+}
+.form-input,
+.form-textarea {
+  width: 100%;
+  background: var(--bg-cream);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.86rem;
+  outline: none;
+  transition: all 0.22s ease;
+  resize: none;
+}
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--orange);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(232,131,74,0.12);
+}
+.form-textarea {
+  min-height: 80px;
+  font-family: var(--font);
+  line-height: 1.6;
+}
+.form-counter {
+  font-size: 0.68rem;
+  color: var(--text-faded);
+  text-align: right;
+  margin-top: 4px;
+}
+
+.color-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.color-swatch {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px var(--line);
+  transition: all 0.22s ease;
+  position: relative;
+}
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch.selected {
+  box-shadow: 0 0 0 2px var(--orange-deep);
+  transform: scale(1.1);
+}
+.color-swatch.selected::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.btn {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--text-mid);
+  padding: 11px 20px;
+  font-family: var(--font);
+  font-size: 0.84rem;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  flex: 1;
+}
+.btn:hover {
+  border-color: var(--orange);
+  color: var(--orange-deep);
+  transform: translateY(-1px);
+}
+.btn.primary {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  border-color: transparent;
+  color: white;
+}
+.btn.primary:hover {
+  color: white;
+  box-shadow: 0 8px 22px rgba(232, 131, 74, 0.4);
+}
+.btn.danger {
+  border-color: rgba(180, 30, 30, 0.3);
+  color: rgb(180, 30, 30);
+  flex: 0;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+.btn.danger:hover {
+  background: rgba(180, 30, 30, 0.1);
+  border-color: rgb(180, 30, 30);
+}
+
+/* ═══════════════════════════════════════════
+   STER BEKIJKEN modal — speciaal voor herinnering
+═══════════════════════════════════════════ */
+.star-view {
+  text-align: center;
+  padding: 8px 4px 0;
+}
+.star-view-orb {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  position: relative;
+  background: currentColor;
+  box-shadow: 0 0 0 8px rgba(255,255,255,0.4), 0 0 30px 10px currentColor;
+  animation: orbGlow 3s ease-in-out infinite alternate;
+}
+.star-view-orb::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: white;
+  opacity: 0.7;
+  filter: blur(2px);
+}
+@keyframes orbGlow {
+  from { box-shadow: 0 0 0 8px rgba(255,255,255,0.3), 0 0 30px 8px currentColor; }
+  to { box-shadow: 0 0 0 8px rgba(255,255,255,0.5), 0 0 40px 14px currentColor; }
+}
+.star-view-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-mid);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.star-view-dates {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+.star-view-memory {
+  background: var(--bg-cream);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 18px;
+  position: relative;
+}
+.star-view-memory::before {
+  content: '"';
+  position: absolute;
+  top: -10px; left: 16px;
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--orange);
+  font-weight: 900;
+  font-family: Georgia, serif;
+  opacity: 0.6;
+}
+.star-view-memory-text {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.75;
+  font-style: italic;
+  font-weight: 300;
+  position: relative;
+}
+.star-view-meta {
+  font-size: 0.7rem;
+  color: var(--text-faded);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+/* Special: today is special day */
+.day-special {
+  background: linear-gradient(135deg, rgba(232,131,74,0.1) 0%, rgba(232,131,74,0.04) 100%);
+  border: 1px solid rgba(232,131,74,0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.day-special-icon {
+  font-size: 1.4rem;
+}
+.day-special-text {
+  font-size: 0.78rem;
+  color: var(--orange-deep);
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════
+   STERREN LIJST modal
+═══════════════════════════════════════════ */
+.stars-list { max-height: 50vh; overflow-y: auto; margin-top: 8px; padding-right: 4px; }
+.stars-list::-webkit-scrollbar { width: 6px; }
+.stars-list::-webkit-scrollbar-thumb { background: rgba(74,25,66,0.18); border-radius: 3px; }
+
+.stars-list-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  margin-bottom: 4px;
+}
+.stars-list-item:hover {
+  background: var(--bg-cream);
+  border-color: var(--line);
+}
+.stars-list-orb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px white, 0 0 14px currentColor;
+  background: currentColor;
+}
+.stars-list-text { flex: 1; }
+.stars-list-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-mid);
+  line-height: 1.2;
+  margin-bottom: 1px;
+}
+.stars-list-dates {
+  font-size: 0.7rem;
+  color: var(--text-faded);
+}
+.stars-list-arr {
+  color: var(--text-faded);
+  font-size: 0.9rem;
+}
+.stars-list-empty {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--text-faded);
+  font-size: 0.88rem;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════
+   WELKOMSTOVERLAY
+═══════════════════════════════════════════ */
+.welcome { z-index: 200; }
+.welcome .modal { max-width: 500px; text-align: center; }
+.welcome-stars {
+  height: 60px;
+  position: relative;
+  margin: 0 auto 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+.welcome-star {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 12px var(--orange-light);
+  animation: starTwinkle 1.8s ease-in-out infinite;
+}
+.welcome-star:nth-child(2) {
+  background: var(--orange-light);
+  width: 14px; height: 14px;
+  box-shadow: 0 0 22px var(--orange-light);
+  animation-delay: 0.3s;
+}
+.welcome-star:nth-child(3) { animation-delay: 0.6s; }
+.welcome-star:nth-child(4) { animation-delay: 0.9s; background: var(--purple-300); box-shadow: 0 0 14px var(--purple-300); }
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Privacy notice */
+.privacy {
+  background: var(--bg-cream);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  margin-bottom: 22px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+}
+.privacy-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.privacy-text {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+.privacy-text strong { color: var(--text-mid); font-weight: 700; }
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  top: 84px; left: 50%;
+  transform: translateX(-50%) translateY(-12px);
+  background: white;
+  border: 1px solid var(--orange);
+  color: var(--text-mid);
+  padding: 11px 22px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 1000;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Tooltip op canvas */
+.star-tooltip {
+  position: fixed;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-mid);
+  pointer-events: none;
+  z-index: 30;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+  white-space: nowrap;
+}
+.star-tooltip.show { opacity: 1; }
+
+/* Mobile */
+@media (max-width: 600px) {
+  .header { padding: 10px 14px; gap: 10px; }
+  .header-center { display: none; }
+  .brand-name { font-size: 0.85rem; }
+  .brand-sub { font-size: 0.52rem; }
+  .icon-btn { width: 36px; height: 36px; font-size: 0.92rem; }
+  .fab { bottom: 16px; right: 16px; padding: 12px 20px; font-size: 0.8rem; }
+  .modal { padding: 24px 22px; max-width: 100%; }
+  .modal-title { font-size: 1.3rem; }
+  .sky-hint { bottom: 80px; font-size: 0.72rem; padding: 0 20px; }
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+
+<div class="sky-hint">Klik ergens op de hemel om een ster te plaatsen voor wie je mist.</div>
+
+<!-- Header -->
+<header class="header">
+  <a class="brand" href="https://uitvaart-platform.nl" target="_blank" rel="noopener">
+    <div class="brand-mark">UP</div>
+    <div class="brand-text">
+      <div class="brand-name">Uitvaart-Platform.nl</div>
+      <div class="brand-sub">Sterrenhemel</div>
+    </div>
+  </a>
+  <div class="header-center">
+    <div class="header-eyebrow">Een plek voor herinnering</div>
+    <div class="header-title">De Sterrenhemel <em>van herinnering</em></div>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" onclick="openStarsList()" title="Bekijk jouw sterren">
+      ☰<span class="count" id="header-count" style="display:none;">0</span>
+    </button>
+    <button class="icon-btn" onclick="openWelcome()" title="Hoe werkt dit?">?</button>
+  </div>
+</header>
+
+<!-- Tooltip voor hover -->
+<div class="star-tooltip" id="tooltip"></div>
+
+<!-- FAB -->
+<button class="fab" onclick="openAddStar()">
+  <span class="fab-icon">+</span>
+  <span>Plaats een ster</span>
+</button>
+
+<!-- WELKOMSTOVERLAY -->
+<div class="modal-bg welcome" id="welcome">
+  <div class="modal">
+    <div class="welcome-stars">
+      <div class="welcome-star"></div>
+      <div class="welcome-star"></div>
+      <div class="welcome-star"></div>
+      <div class="welcome-star"></div>
+    </div>
+    <div class="modal-eyebrow" style="text-align:center;">Een rustige plek voor herinnering</div>
+    <h1 class="modal-title" style="text-align:center;">De Sterrenhemel <em>van herinnering</em></h1>
+    <p class="modal-intro" style="text-align:center;">
+      Een plek waar je dierbaren als sterren kunnen blijven leven. Geef elke ster een naam, een herinnering, en kies een kleur. Op verjaardagen en sterfdagen lichten ze extra fel op. Een zachte ruimte om naar terug te keren, wanneer je dat wil.
+    </p>
+    <div class="privacy">
+      <div class="privacy-icon">🔒</div>
+      <div class="privacy-text">
+        <strong>Volledig privé.</strong> Jouw sterren worden alleen in deze browser bewaard. Niemand anders kan ze zien.
+      </div>
+    </div>
+    <div class="form-actions" style="margin-top:0; padding-top:0; border:none;">
+      <button class="btn primary" onclick="closeWelcome()">Begin met plaatsen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOEVOEGEN modal -->
+<div class="modal-bg" id="add-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAddStar()">✕</button>
+    <div class="modal-eyebrow">Nieuwe ster</div>
+    <h2 class="modal-title">Plaats een <em>ster</em></h2>
+    <p class="modal-intro">Voor wie wil je een plek maken aan de hemel?</p>
+
+    <div class="form-row">
+      <label class="form-label">Naam</label>
+      <input type="text" class="form-input" id="f-name" placeholder="Bijvoorbeeld: Mama, Opa Jan, Lily…" maxlength="60">
+    </div>
+
+    <div class="form-row duo">
+      <div>
+        <label class="form-label">Geboren <span class="optional">(optioneel)</span></label>
+        <input type="date" class="form-input" id="f-born">
+      </div>
+      <div>
+        <label class="form-label">Overleden <span class="optional">(optioneel)</span></label>
+        <input type="date" class="form-input" id="f-died">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Herinnering <span class="optional">(optioneel)</span></label>
+      <textarea class="form-textarea" id="f-memory" placeholder="Een korte herinnering, een gevoel, een eigenschap, een uitspraak…" maxlength="280"></textarea>
+      <div class="form-counter"><span id="f-counter">0</span> / 280</div>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Kleur</label>
+      <div class="color-picker" id="color-picker">
+        <div class="color-swatch selected" data-color="#fff5e6" style="background:#fff5e6;"></div>
+        <div class="color-swatch" data-color="#ffd9a8" style="background:#ffd9a8;"></div>
+        <div class="color-swatch" data-color="#f5a87a" style="background:#f5a87a;"></div>
+        <div class="color-swatch" data-color="#e8b3c8" style="background:#e8b3c8;"></div>
+        <div class="color-swatch" data-color="#c8b3e8" style="background:#c8b3e8;"></div>
+        <div class="color-swatch" data-color="#a8c8e8" style="background:#a8c8e8;"></div>
+        <div class="color-swatch" data-color="#a8e8c8" style="background:#a8e8c8;"></div>
+        <div class="color-swatch" data-color="#e8e8a8" style="background:#e8e8a8;"></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn" onclick="closeAddStar()">Annuleren</button>
+      <button class="btn primary" onclick="saveStar()">Plaats de ster ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- STER BEKIJKEN modal -->
+<div class="modal-bg" id="view-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeViewStar()">✕</button>
+    <div class="star-view">
+      <div class="star-view-orb" id="v-orb"></div>
+      <div class="star-view-name" id="v-name">—</div>
+      <div class="star-view-dates" id="v-dates"></div>
+      <div id="v-special" style="display:none;"></div>
+      <div class="star-view-memory" id="v-memory-wrap" style="display:none;">
+        <div class="star-view-memory-text" id="v-memory">—</div>
+      </div>
+      <div class="star-view-meta" id="v-meta"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn danger" onclick="removeStar()" title="Verwijderen">✕</button>
+      <button class="btn" onclick="editStar()">Bewerken</button>
+      <button class="btn primary" onclick="closeViewStar()">Sluiten</button>
+    </div>
+  </div>
+</div>
+
+<!-- STERREN LIJST modal -->
+<div class="modal-bg" id="list-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeStarsList()">✕</button>
+    <div class="modal-eyebrow">Jouw sterrenhemel</div>
+    <h2 class="modal-title">Alle <em>sterren</em></h2>
+    <p class="modal-intro" id="list-intro">Klik op een ster om de herinnering opnieuw te zien.</p>
+    <div class="stars-list" id="stars-list"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   STATE & STORAGE
+═══════════════════════════════════════════════════════ */
+let stars = JSON.parse(localStorage.getItem('sterrenhemel-v1') || '[]');
+let backgroundStars = [];
+let shootingStars = [];
+let nebulae = [];
+let canvas, ctx, W, H, dpr;
+let mouseX = 0, mouseY = 0, parallaxX = 0, parallaxY = 0;
+let pendingPosition = null;
+let editingStarId = null;
+let viewingStar = null;
+let selectedColor = '#fff5e6';
+let hoveredStar = null;
+
+const STORAGE_KEY = 'sterrenhemel-v1';
+const WELCOME_KEY = 'sterrenhemel-welcome-v1';
+
+/* ═══════════════════════════════════════════════════════
+   CANVAS INIT
+═══════════════════════════════════════════════════════ */
+function initCanvas() {
+  canvas = document.getElementById('sky');
+  ctx = canvas.getContext('2d');
+  resize();
+  window.addEventListener('resize', resize);
+
+  generateBackground();
+  generateNebulae();
+
+  canvas.addEventListener('mousemove', onMouseMove);
+  canvas.addEventListener('click', onCanvasClick);
+  canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+
+  requestAnimationFrame(animate);
+}
+
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+
+  // herpositioneer sterren
+  stars.forEach(s => {
+    if (s.relX === undefined) {
+      s.relX = s.x / W;
+      s.relY = s.y / H;
+    }
+  });
+}
+
+function generateBackground() {
+  const density = Math.min(W * H / 1200, 700);
+  backgroundStars = [];
+  for (let i = 0; i < density; i++) {
+    backgroundStars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.3,
+      baseAlpha: Math.random() * 0.6 + 0.2,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+      twinkleOffset: Math.random() * Math.PI * 2,
+      hue: Math.random() < 0.92 ? 'white' : (Math.random() < 0.5 ? 'warm' : 'cool')
+    });
+  }
+}
+
+function generateNebulae() {
+  nebulae = [];
+  const count = 3;
+  for (let i = 0; i < count; i++) {
+    nebulae.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: 200 + Math.random() * 300,
+      hue: i === 0 ? [74, 25, 66] : i === 1 ? [107, 48, 96] : [42, 13, 36],
+      alpha: 0.04 + Math.random() * 0.06,
+      vx: (Math.random() - 0.5) * 0.05,
+      vy: (Math.random() - 0.5) * 0.05
+    });
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATION LOOP
+═══════════════════════════════════════════════════════ */
+let frame = 0;
+function animate() {
+  frame++;
+
+  // Update parallax
+  parallaxX += (mouseX - parallaxX) * 0.04;
+  parallaxY += (mouseY - parallaxY) * 0.04;
+
+  // Clear
+  drawBackground();
+  drawNebulae();
+  drawShootingStars();
+  drawBackgroundStars();
+  drawPersonalStars();
+
+  // Occasionally spawn a shooting star
+  if (Math.random() < 0.003) spawnShootingStar();
+
+  requestAnimationFrame(animate);
+}
+
+function drawBackground() {
+  // Deep purple gradient
+  const g = ctx.createRadialGradient(W/2, H*0.4, 0, W/2, H*0.5, Math.max(W, H));
+  g.addColorStop(0, '#2a0d24');
+  g.addColorStop(0.4, '#1a0617');
+  g.addColorStop(1, '#0a0410');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+}
+
+function drawNebulae() {
+  nebulae.forEach(n => {
+    n.x += n.vx;
+    n.y += n.vy;
+    if (n.x < -n.r) n.x = W + n.r;
+    if (n.x > W + n.r) n.x = -n.r;
+    if (n.y < -n.r) n.y = H + n.r;
+    if (n.y > H + n.r) n.y = -n.r;
+
+    const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+    g.addColorStop(0, `rgba(${n.hue[0]}, ${n.hue[1]}, ${n.hue[2]}, ${n.alpha})`);
+    g.addColorStop(1, `rgba(${n.hue[0]}, ${n.hue[1]}, ${n.hue[2]}, 0)`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  });
+}
+
+function drawBackgroundStars() {
+  const px = parallaxX * 0.015;
+  const py = parallaxY * 0.015;
+  backgroundStars.forEach(s => {
+    const t = frame * s.twinkleSpeed + s.twinkleOffset;
+    const alpha = s.baseAlpha + Math.sin(t) * 0.3;
+    const x = s.x - px;
+    const y = s.y - py;
+
+    let color;
+    if (s.hue === 'warm') color = `rgba(255, 220, 180, ${alpha})`;
+    else if (s.hue === 'cool') color = `rgba(200, 220, 255, ${alpha})`;
+    else color = `rgba(255, 255, 255, ${alpha})`;
+
+    ctx.beginPath();
+    ctx.arc(x, y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    // glow voor grotere achtergrond sterren
+    if (s.r > 1) {
+      ctx.beginPath();
+      ctx.arc(x, y, s.r * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = color.replace(/[\d.]+\)$/, (alpha * 0.2) + ')');
+      ctx.fill();
+    }
+  });
+}
+
+function drawPersonalStars() {
+  const px = parallaxX * 0.03;
+  const py = parallaxY * 0.03;
+  hoveredStar = null;
+  const now = new Date();
+  const todayKey = `${now.getMonth() + 1}-${now.getDate()}`;
+
+  stars.forEach(s => {
+    const x = (s.relX !== undefined ? s.relX * W : s.x) - px;
+    const y = (s.relY !== undefined ? s.relY * H : s.y) - py;
+    s._x = x; s._y = y; // bewaar voor click detection
+
+    // Check if today is special
+    let isSpecial = false;
+    if (s.born) {
+      const b = new Date(s.born);
+      if (`${b.getMonth() + 1}-${b.getDate()}` === todayKey) isSpecial = true;
+    }
+    if (s.died) {
+      const d = new Date(s.died);
+      if (`${d.getMonth() + 1}-${d.getDate()}` === todayKey) isSpecial = true;
+    }
+    s._isSpecial = isSpecial;
+
+    // Pulse
+    const pulseSpeed = isSpecial ? 0.04 : 0.015;
+    const pulseAmt = isSpecial ? 0.3 : 0.15;
+    const t = frame * pulseSpeed + (s.seed || 0);
+    const pulse = 1 + Math.sin(t) * pulseAmt;
+    const baseR = isSpecial ? 5.5 : 4.5;
+    const r = baseR * pulse;
+
+    // Detect hover
+    const dx = mouseX - x, dy = mouseY - y;
+    const isHovered = Math.sqrt(dx * dx + dy * dy) < 20;
+    if (isHovered) hoveredStar = s;
+
+    // Far glow
+    const glowR = r * (isHovered ? 10 : (isSpecial ? 8 : 6));
+    const farG = ctx.createRadialGradient(x, y, 0, x, y, glowR);
+    farG.addColorStop(0, hexToRgba(s.color, 0.35));
+    farG.addColorStop(0.5, hexToRgba(s.color, 0.1));
+    farG.addColorStop(1, hexToRgba(s.color, 0));
+    ctx.fillStyle = farG;
+    ctx.fillRect(x - glowR, y - glowR, glowR * 2, glowR * 2);
+
+    // Star core
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = s.color;
+    ctx.fill();
+
+    // White hot center
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.4, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+    ctx.fill();
+
+    // Cross shimmer (4-point star effect) on special days
+    if (isSpecial || isHovered) {
+      ctx.save();
+      ctx.strokeStyle = hexToRgba(s.color, 0.6);
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      const len = r * 4;
+      ctx.moveTo(x - len, y); ctx.lineTo(x + len, y);
+      ctx.moveTo(x, y - len); ctx.lineTo(x, y + len);
+      ctx.stroke();
+      ctx.restore();
+    }
+  });
+
+  // Hover tooltip
+  const tooltip = document.getElementById('tooltip');
+  if (hoveredStar) {
+    tooltip.textContent = hoveredStar.name + (hoveredStar._isSpecial ? ' ✦' : '');
+    tooltip.style.left = mouseX + 'px';
+    tooltip.style.top = mouseY + 'px';
+    tooltip.classList.add('show');
+    canvas.style.cursor = 'pointer';
+  } else {
+    tooltip.classList.remove('show');
+    canvas.style.cursor = 'crosshair';
+  }
+}
+
+function spawnShootingStar() {
+  if (shootingStars.length > 2) return;
+  shootingStars.push({
+    x: Math.random() * W,
+    y: Math.random() * H * 0.4,
+    vx: 4 + Math.random() * 3,
+    vy: 2 + Math.random() * 2,
+    life: 0,
+    maxLife: 80 + Math.random() * 40,
+    length: 80 + Math.random() * 60
+  });
+}
+
+function drawShootingStars() {
+  for (let i = shootingStars.length - 1; i >= 0; i--) {
+    const s = shootingStars[i];
+    s.x += s.vx;
+    s.y += s.vy;
+    s.life++;
+
+    const alpha = Math.min(1, s.life / 10) * Math.max(0, 1 - s.life / s.maxLife);
+
+    const g = ctx.createLinearGradient(s.x, s.y, s.x - s.vx * 10, s.y - s.vy * 10);
+    g.addColorStop(0, `rgba(255, 245, 220, ${alpha})`);
+    g.addColorStop(1, `rgba(255, 245, 220, 0)`);
+    ctx.strokeStyle = g;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y);
+    ctx.lineTo(s.x - s.vx * 10, s.y - s.vy * 10);
+    ctx.stroke();
+
+    if (s.life >= s.maxLife) shootingStars.splice(i, 1);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   INPUT
+═══════════════════════════════════════════════════════ */
+function onMouseMove(e) {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+}
+
+function onCanvasClick(e) {
+  if (hoveredStar) {
+    openViewStar(hoveredStar);
+    return;
+  }
+  pendingPosition = { x: e.clientX / W, y: e.clientY / H };
+  openAddStar();
+}
+
+function onTouchStart(e) {
+  const touch = e.touches[0];
+  mouseX = touch.clientX;
+  mouseY = touch.clientY;
+  // Bepaal hover
+  let foundStar = null;
+  stars.forEach(s => {
+    const dx = touch.clientX - s._x;
+    const dy = touch.clientY - s._y;
+    if (Math.sqrt(dx * dx + dy * dy) < 30) foundStar = s;
+  });
+  if (foundStar) {
+    openViewStar(foundStar);
+  } else {
+    pendingPosition = { x: touch.clientX / W, y: touch.clientY / H };
+    openAddStar();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODALS
+═══════════════════════════════════════════════════════ */
+function openAddStar() {
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-born').value = '';
+  document.getElementById('f-died').value = '';
+  document.getElementById('f-memory').value = '';
+  document.getElementById('f-counter').textContent = '0';
+  selectedColor = '#fff5e6';
+  refreshColorPicker();
+  editingStarId = null;
+  document.querySelector('#add-modal .modal-title').innerHTML = 'Plaats een <em>ster</em>';
+  document.getElementById('add-modal').classList.add('show');
+  setTimeout(() => document.getElementById('f-name').focus(), 100);
+}
+function closeAddStar() {
+  document.getElementById('add-modal').classList.remove('show');
+  pendingPosition = null;
+  editingStarId = null;
+}
+
+function saveStar() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { toast('Geef de ster een naam'); return; }
+  const born = document.getElementById('f-born').value;
+  const died = document.getElementById('f-died').value;
+  const memory = document.getElementById('f-memory').value.trim();
+
+  if (editingStarId !== null) {
+    // edit
+    const s = stars.find(x => x.id === editingStarId);
+    if (s) {
+      s.name = name;
+      s.born = born;
+      s.died = died;
+      s.memory = memory;
+      s.color = selectedColor;
+    }
+    toast('Ster bijgewerkt');
+  } else {
+    // new
+    let relX, relY;
+    if (pendingPosition) {
+      relX = pendingPosition.x;
+      relY = pendingPosition.y;
+    } else {
+      // Random pos in midden 70% van scherm
+      relX = 0.15 + Math.random() * 0.7;
+      relY = 0.15 + Math.random() * 0.7;
+    }
+    stars.push({
+      id: Date.now() + Math.random(),
+      name, born, died, memory,
+      color: selectedColor,
+      relX, relY,
+      seed: Math.random() * Math.PI * 2,
+      createdAt: new Date().toISOString()
+    });
+    toast(`Een ster voor ${name} ✦`);
+  }
+
+  save();
+  closeAddStar();
+  updateHeaderCount();
+}
+
+function openViewStar(s) {
+  viewingStar = s;
+  document.getElementById('v-name').textContent = s.name;
+  document.getElementById('v-orb').style.color = s.color;
+  document.getElementById('v-orb').style.background = s.color;
+
+  // Dates
+  const dates = [];
+  if (s.born) dates.push(formatDate(s.born));
+  if (s.died) dates.push(formatDate(s.died));
+  document.getElementById('v-dates').textContent = dates.length ? dates.join('  —  ') : '';
+  document.getElementById('v-dates').style.display = dates.length ? 'block' : 'none';
+
+  // Special
+  const specialEl = document.getElementById('v-special');
+  if (s._isSpecial) {
+    let label = 'Vandaag';
+    const now = new Date();
+    const todayKey = `${now.getMonth() + 1}-${now.getDate()}`;
+    if (s.born && (new Date(s.born).getMonth() + 1) + '-' + (new Date(s.born).getDate()) === todayKey) label = 'Vandaag is hun verjaardag';
+    if (s.died && (new Date(s.died).getMonth() + 1) + '-' + (new Date(s.died).getDate()) === todayKey) label = 'Vandaag is hun sterfdag';
+    specialEl.innerHTML = `<div class="day-special"><div class="day-special-icon">✦</div><div class="day-special-text">${label}. De ster brandt vandaag extra fel.</div></div>`;
+    specialEl.style.display = 'block';
+  } else {
+    specialEl.style.display = 'none';
+  }
+
+  // Memory
+  if (s.memory) {
+    document.getElementById('v-memory-wrap').style.display = 'block';
+    document.getElementById('v-memory').textContent = s.memory;
+  } else {
+    document.getElementById('v-memory-wrap').style.display = 'none';
+  }
+
+  // Meta
+  const created = new Date(s.createdAt);
+  document.getElementById('v-meta').textContent = `Geplaatst op ${formatDate(s.createdAt)}`;
+
+  document.getElementById('view-modal').classList.add('show');
+}
+function closeViewStar() {
+  document.getElementById('view-modal').classList.remove('show');
+  viewingStar = null;
+}
+
+function editStar() {
+  if (!viewingStar) return;
+  const s = viewingStar;
+  closeViewStar();
+  document.getElementById('f-name').value = s.name;
+  document.getElementById('f-born').value = s.born || '';
+  document.getElementById('f-died').value = s.died || '';
+  document.getElementById('f-memory').value = s.memory || '';
+  document.getElementById('f-counter').textContent = (s.memory || '').length;
+  selectedColor = s.color;
+  refreshColorPicker();
+  editingStarId = s.id;
+  document.querySelector('#add-modal .modal-title').innerHTML = 'Bewerk de <em>ster</em>';
+  document.getElementById('add-modal').classList.add('show');
+}
+
+function removeStar() {
+  if (!viewingStar) return;
+  if (!confirm(`De ster van ${viewingStar.name} verwijderen?`)) return;
+  stars = stars.filter(s => s.id !== viewingStar.id);
+  save();
+  closeViewStar();
+  updateHeaderCount();
+  toast('Ster verwijderd');
+}
+
+function openStarsList() {
+  const container = document.getElementById('stars-list');
+  container.innerHTML = '';
+  if (stars.length === 0) {
+    container.innerHTML = '<div class="stars-list-empty">Nog geen sterren. Klik ergens op de hemel om de eerste te plaatsen.</div>';
+  } else {
+    const sorted = [...stars].sort((a, b) => a.name.localeCompare(b.name, 'nl'));
+    sorted.forEach(s => {
+      const dates = [];
+      if (s.born) dates.push(formatDate(s.born));
+      if (s.died) dates.push(formatDate(s.died));
+      const el = document.createElement('div');
+      el.className = 'stars-list-item';
+      el.innerHTML = `
+        <div class="stars-list-orb" style="color:${s.color}; background:${s.color};"></div>
+        <div class="stars-list-text">
+          <div class="stars-list-name">${escapeHtml(s.name)}${s._isSpecial ? ' ✦' : ''}</div>
+          <div class="stars-list-dates">${dates.join('  —  ') || '—'}</div>
+        </div>
+        <div class="stars-list-arr">→</div>
+      `;
+      el.addEventListener('click', () => {
+        closeStarsList();
+        openViewStar(s);
+      });
+      container.appendChild(el);
+    });
+  }
+  document.getElementById('list-intro').textContent =
+    stars.length === 0 ? 'Je sterrenhemel is nog leeg.' :
+    `Jouw sterrenhemel telt ${stars.length} ster${stars.length === 1 ? '' : ''}.`;
+  document.getElementById('list-modal').classList.add('show');
+}
+function closeStarsList() {
+  document.getElementById('list-modal').classList.remove('show');
+}
+
+function openWelcome() {
+  document.getElementById('welcome').classList.add('show');
+}
+function closeWelcome() {
+  document.getElementById('welcome').classList.remove('show');
+  localStorage.setItem(WELCOME_KEY, '1');
+}
+
+/* ═══════════════════════════════════════════════════════
+   COLOR PICKER
+═══════════════════════════════════════════════════════ */
+function bindColorPicker() {
+  document.querySelectorAll('.color-swatch').forEach(el => {
+    el.addEventListener('click', () => {
+      selectedColor = el.dataset.color;
+      refreshColorPicker();
+    });
+  });
+}
+function refreshColorPicker() {
+  document.querySelectorAll('.color-swatch').forEach(el => {
+    el.classList.toggle('selected', el.dataset.color === selectedColor);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════ */
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const m = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(stars));
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function updateHeaderCount() {
+  const el = document.getElementById('header-count');
+  if (stars.length > 0) {
+    el.textContent = stars.length;
+    el.style.display = 'inline-block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  initCanvas();
+  bindColorPicker();
+  updateHeaderCount();
+
+  // Character counter
+  document.getElementById('f-memory').addEventListener('input', e => {
+    document.getElementById('f-counter').textContent = e.target.value.length;
+  });
+
+  // Welcome bij eerste bezoek
+  if (!localStorage.getItem(WELCOME_KEY)) {
+    document.getElementById('welcome').classList.add('show');
+  }
+
+  // ESC sluit modals
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeAddStar();
+      closeViewStar();
+      closeStarsList();
+      if (localStorage.getItem(WELCOME_KEY)) document.getElementById('welcome').classList.remove('show');
+    }
+  });
+
+  // Klik buiten modal sluit modal
+  document.querySelectorAll('.modal-bg').forEach(bg => {
+    bg.addEventListener('click', e => {
+      if (e.target === bg) {
+        if (bg.id === 'add-modal') closeAddStar();
+        else if (bg.id === 'view-modal') closeViewStar();
+        else if (bg.id === 'list-modal') closeStarsList();
+        else if (bg.id === 'welcome' && localStorage.getItem(WELCOME_KEY)) bg.classList.remove('show');
+      }
+    });
+  });
+});
+
+</script>
+</body>
+</html>
