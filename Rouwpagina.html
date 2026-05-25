@@ -295,19 +295,253 @@ body {
 .rw-info-btn-s { background: none; border: 1.5px solid #e2d9e0; color: #4a1942; border-radius: 8px; padding: 9px 16px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; white-space: nowrap; }
 .rw-info-btn-s:hover { border-color: #4a1942; background: #f0ebef; }
 @media (max-width: 580px) { .rw-info-banner { flex-direction: column; align-items: flex-start; } .rw-info-stats { gap: 18px; } }
+
+/* ═══════════════════════════════════════════════════════
+   v2 — NIEUWE FEATURES (Claude 4.7)
+═══════════════════════════════════════════════════════ */
+
+/* ── TOEGANKELIJKHEID: focus rings ── */
+.rw-wrap button:focus-visible,
+.rw-wrap a:focus-visible,
+.rw-wrap textarea:focus-visible,
+.rw-wrap input:focus-visible,
+.rw-wrap [role="button"]:focus-visible { outline: 3px solid #e8834a !important; outline-offset: 2px !important; border-radius: 8px; }
+
+/* ── STILLE MODUS (rustmodus) ── */
+body.rw-stil .rw-wrap *,
+body.rw-stil .rw-wrap *::before,
+body.rw-stil .rw-wrap *::after { animation: none !important; transition: none !important; }
+body.rw-stil .rw-hero { background: #faf7f2 !important; border: 1.5px solid #e2d9e0; }
+body.rw-stil .rw-hero::before,
+body.rw-stil .rw-hero::after { display: none !important; }
+body.rw-stil .rw-hero h1,
+body.rw-stil .rw-hero h1 em { color: #4a1942 !important; }
+body.rw-stil .rw-hero-sub { color: #6b6570 !important; }
+body.rw-stil .rw-hero-badge { background: #f0ebef !important; border-color: #e2d9e0 !important; }
+body.rw-stil .rw-hero-badge span { color: #6b6570 !important; }
+body.rw-stil .rw-hero-badge-dot { background: #6b6570 !important; }
+body.rw-stil .rw-hero-btn { background: #4a1942 !important; }
+body.rw-stil .rw-hero-btn-s { background: #fff !important; color: #4a1942 !important; border-color: #e2d9e0 !important; }
+body.rw-stil .rw-hero-stat-nr { color: #4a1942 !important; }
+body.rw-stil .rw-hero-stat-label { color: #6b6570 !important; }
+body.rw-stil .rw-emotie-header,
+body.rw-stil .rw-dagboek-header,
+body.rw-stil .rw-chat-header,
+body.rw-stil .rw-zelfzorg-header,
+body.rw-stil .rw-kinderen-header { background: #4a1942 !important; }
+
+/* ── TEKSTGROOTTE AANPASSING ── */
+body.rw-tekst-groot .rw-wrap { font-size: 1.1em; }
+body.rw-tekst-groot .rw-wrap p,
+body.rw-tekst-groot .rw-wrap .rw-emotie-knop-naam,
+body.rw-tekst-groot .rw-wrap .rw-item-tekst,
+body.rw-tekst-groot .rw-wrap .rw-fase-detail-tekst,
+body.rw-tekst-groot .rw-wrap .rw-faq-antwoord,
+body.rw-tekst-groot .rw-wrap textarea { font-size: 1.05rem !important; line-height: 1.9 !important; }
+body.rw-tekst-extra .rw-wrap { font-size: 1.2em; }
+body.rw-tekst-extra .rw-wrap p,
+body.rw-tekst-extra .rw-wrap .rw-emotie-knop-naam,
+body.rw-tekst-extra .rw-wrap .rw-item-tekst,
+body.rw-tekst-extra .rw-wrap .rw-fase-detail-tekst,
+body.rw-tekst-extra .rw-wrap .rw-faq-antwoord,
+body.rw-tekst-extra .rw-wrap textarea { font-size: 1.18rem !important; line-height: 2 !important; }
+
+/* ── HOOG CONTRAST MODUS ── */
+body.rw-contrast .rw-wrap { background: #fff !important; color: #000 !important; }
+body.rw-contrast .rw-wrap p,
+body.rw-contrast .rw-wrap .rw-item-tekst,
+body.rw-contrast .rw-wrap .rw-kaart-sub,
+body.rw-contrast .rw-wrap .rw-emotie-knop-naam,
+body.rw-contrast .rw-wrap .rw-emotie-res-tekst,
+body.rw-contrast .rw-wrap .rw-fase-detail-tekst,
+body.rw-contrast .rw-wrap .rw-fase-troost,
+body.rw-contrast .rw-wrap .rw-faq-antwoord { color: #000 !important; font-weight: 400 !important; }
+body.rw-contrast .rw-wrap h1,
+body.rw-contrast .rw-wrap h2,
+body.rw-contrast .rw-wrap h3,
+body.rw-contrast .rw-wrap .rw-emotie-titel,
+body.rw-contrast .rw-wrap .rw-item-titel,
+body.rw-contrast .rw-wrap .rw-fase-detail-naam,
+body.rw-contrast .rw-wrap .rw-kaart label { color: #000 !important; font-weight: 800 !important; }
+body.rw-contrast .rw-wrap .rw-kaart,
+body.rw-contrast .rw-wrap .rw-emotie-wrap,
+body.rw-contrast .rw-wrap .rw-tabs,
+body.rw-contrast .rw-wrap .rw-fase-detail,
+body.rw-contrast .rw-wrap .rw-info-banner { background: #fff !important; border: 2px solid #000 !important; }
+body.rw-contrast .rw-wrap .rw-tab,
+body.rw-contrast .rw-wrap .rw-fase-btn,
+body.rw-contrast .rw-wrap .rw-emotie-knop { border: 2px solid #000 !important; background: #fff !important; color: #000 !important; }
+body.rw-contrast .rw-wrap .rw-tab.actief,
+body.rw-contrast .rw-wrap .rw-fase-btn.actief { background: #000 !important; color: #fff !important; }
+
+/* ── TOEGANKELIJKHEIDS-BALK ── */
+.rw-toegang { position: sticky; top: 0; z-index: 100; background: #faf7f2; border-bottom: 1px solid #e2d9e0; padding: 8px 16px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: flex-end; margin: 0 -16px 14px; }
+.rw-toegang-label { font-size: 0.7rem; color: #6b6570; font-weight: 300; margin-right: auto; }
+.rw-toegang-btn { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 8px; padding: 6px 12px; font-size: 0.72rem; font-weight: 600; color: #4a1942; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+.rw-toegang-btn:hover { border-color: #4a1942; background: #f0ebef; }
+.rw-toegang-btn.actief { background: #4a1942; color: #fff; border-color: #4a1942; }
+.rw-toegang-btn-icoon { font-size: 0.95rem; }
+
+/* ── PERSOONLIJKE ROUTE (intro flow) ── */
+.rw-route-wrap { background: linear-gradient(135deg, #fff 0%, #faf7f2 100%); border: 1.5px solid #e2d9e0; border-radius: 16px; padding: 28px 28px 24px; margin-bottom: 14px; position: relative; }
+.rw-route-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,131,74,0.1); border: 1px solid rgba(232,131,74,0.25); border-radius: 30px; padding: 5px 14px; margin-bottom: 14px; }
+.rw-route-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; }
+.rw-route-badge span { font-size: 0.62rem; font-weight: 700; color: #e8834a; letter-spacing: 0.16em; text-transform: uppercase; }
+.rw-route-titel { font-size: 1.15rem; font-weight: 900; color: #4a1942; margin-bottom: 6px; line-height: 1.3; }
+.rw-route-sub { font-size: 0.82rem; color: #6b6570; font-weight: 300; line-height: 1.7; margin-bottom: 20px; max-width: 580px; }
+.rw-route-stappen { display: flex; gap: 6px; margin-bottom: 18px; }
+.rw-route-stap { flex: 1; height: 4px; background: #e2d9e0; border-radius: 2px; transition: background 0.3s; }
+.rw-route-stap.actief { background: #e8834a; }
+.rw-route-stap.gedaan { background: #4a1942; }
+.rw-route-vraag { font-size: 0.92rem; font-weight: 700; color: #4a1942; margin-bottom: 14px; }
+.rw-route-opties { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 14px; }
+.rw-route-optie { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 600; color: #4a1942; }
+.rw-route-optie:hover { border-color: #e8834a; background: #faf7f2; transform: translateY(-2px); }
+.rw-route-optie.gekozen { border-color: #4a1942; background: #f0ebef; }
+.rw-route-acties { display: flex; gap: 8px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.rw-route-skip { background: none; border: none; color: #6b6570; font-size: 0.74rem; font-weight: 500; cursor: pointer; font-family: 'Poppins', sans-serif; text-decoration: underline; padding: 6px; }
+.rw-route-skip:hover { color: #4a1942; }
+.rw-route-volgende { background: #e8834a; color: #fff; border: none; border-radius: 9px; padding: 10px 22px; font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
+.rw-route-volgende:hover { background: #c8622a; transform: translateY(-1px); }
+.rw-route-volgende:disabled { background: #d4cdd2; cursor: not-allowed; transform: none; }
+
+/* ── PERSOONLIJK PAD RESULTAAT ── */
+.rw-pad-resultaat { background: linear-gradient(135deg, #4a1942 0%, #6b3060 100%); border-radius: 16px; padding: 28px; margin-bottom: 14px; color: #fff; }
+.rw-pad-resultaat-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #e8834a; margin-bottom: 8px; }
+.rw-pad-resultaat-titel { font-size: 1.1rem; font-weight: 900; margin-bottom: 6px; }
+.rw-pad-resultaat-sub { font-size: 0.82rem; color: rgba(255,255,255,0.7); font-weight: 300; line-height: 1.7; margin-bottom: 16px; }
+.rw-pad-stappen { display: grid; gap: 10px; }
+.rw-pad-stap { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 14px 16px; display: flex; gap: 14px; align-items: center; cursor: pointer; transition: all 0.2s; text-decoration: none; color: #fff; }
+.rw-pad-stap:hover { background: rgba(255,255,255,0.15); transform: translateX(4px); }
+.rw-pad-stap-icoon { width: 36px; height: 36px; background: #e8834a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+.rw-pad-stap-titel { font-size: 0.86rem; font-weight: 700; margin-bottom: 2px; }
+.rw-pad-stap-sub { font-size: 0.72rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+.rw-pad-reset { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 8px; padding: 8px 16px; font-size: 0.74rem; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; margin-top: 14px; transition: all 0.2s; }
+.rw-pad-reset:hover { background: rgba(255,255,255,0.2); }
+
+/* ── EMOTIE TRACKER ── */
+.rw-tracker { background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; padding: 22px 24px; margin-top: 16px; }
+.rw-tracker-kop { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+.rw-tracker-titel { font-size: 0.92rem; font-weight: 800; color: #4a1942; }
+.rw-tracker-sub { font-size: 0.74rem; color: #6b6570; font-weight: 300; }
+.rw-tracker-acties { display: flex; gap: 6px; }
+.rw-tracker-actie { background: #faf7f2; border: 1px solid #e2d9e0; border-radius: 8px; padding: 6px 12px; font-size: 0.7rem; font-weight: 600; color: #4a1942; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
+.rw-tracker-actie:hover { border-color: #4a1942; background: #f0ebef; }
+.rw-tracker-actie.actief { background: #4a1942; color: #fff; border-color: #4a1942; }
+.rw-tracker-leeg { text-align: center; padding: 28px 16px; color: #6b6570; font-size: 0.82rem; font-weight: 300; line-height: 1.7; }
+.rw-tracker-leeg-icoon { font-size: 2rem; margin-bottom: 8px; opacity: 0.5; }
+.rw-tracker-grafiek { display: flex; gap: 4px; align-items: flex-end; height: 140px; padding: 12px 0; border-bottom: 1px solid #e2d9e0; margin-bottom: 12px; overflow-x: auto; }
+.rw-tracker-balk-wrap { flex: 1; min-width: 22px; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+.rw-tracker-balk { width: 100%; min-height: 6px; background: linear-gradient(180deg, #e8834a 0%, #c8622a 100%); border-radius: 4px 4px 0 0; transition: all 0.2s; position: relative; }
+.rw-tracker-balk-wrap:hover .rw-tracker-balk { transform: scaleY(1.05); transform-origin: bottom; }
+.rw-tracker-balk-tooltip { position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%); background: #4a1942; color: #fff; font-size: 0.65rem; font-weight: 600; padding: 4px 8px; border-radius: 5px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.rw-tracker-balk-wrap:hover .rw-tracker-balk-tooltip { opacity: 1; }
+.rw-tracker-emoji { font-size: 0.95rem; line-height: 1; }
+.rw-tracker-datum { font-size: 0.58rem; color: #6b6570; font-weight: 500; }
+.rw-tracker-inzicht { background: linear-gradient(135deg, rgba(232,131,74,0.06) 0%, rgba(74,25,66,0.04) 100%); border-left: 3px solid #e8834a; border-radius: 0 10px 10px 0; padding: 12px 16px; margin-top: 12px; }
+.rw-tracker-inzicht-titel { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e8834a; margin-bottom: 4px; }
+.rw-tracker-inzicht-tekst { font-size: 0.8rem; color: #4a1942; font-weight: 400; line-height: 1.7; }
+.rw-tracker-overzicht { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-top: 12px; }
+.rw-tracker-stat { background: #faf7f2; border-radius: 10px; padding: 10px 12px; }
+.rw-tracker-stat-nr { font-size: 1.05rem; font-weight: 900; color: #4a1942; line-height: 1; }
+.rw-tracker-stat-label { font-size: 0.62rem; color: #6b6570; font-weight: 500; margin-top: 4px; }
+
+/* ── AANWEZIGHEIDSINDICATOR ── */
+.rw-aanwezig { display: inline-flex; align-items: center; gap: 8px; background: rgba(45,122,79,0.08); border: 1px solid rgba(45,122,79,0.2); border-radius: 30px; padding: 6px 14px; margin-top: 14px; }
+.rw-aanwezig-puls { position: relative; width: 8px; height: 8px; }
+.rw-aanwezig-puls::before,
+.rw-aanwezig-puls::after { content: ''; position: absolute; inset: 0; background: #2d7a4f; border-radius: 50%; }
+.rw-aanwezig-puls::after { animation: rwAanwezigPuls 2s ease-out infinite; opacity: 0; }
+@keyframes rwAanwezigPuls { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(2.8); opacity: 0; } }
+.rw-aanwezig-tekst { font-size: 0.72rem; color: #2d7a4f; font-weight: 600; }
+.rw-aanwezig-tekst em { font-style: normal; font-weight: 700; }
+
+/* responsive — features */
+@media (max-width: 600px) {
+  .rw-toegang { padding: 8px 12px; gap: 6px; }
+  .rw-toegang-btn { font-size: 0.68rem; padding: 5px 10px; }
+  .rw-toegang-label { display: none; }
+  .rw-route-wrap { padding: 22px 20px 20px; }
+  .rw-route-opties { grid-template-columns: 1fr 1fr; }
+  .rw-tracker-grafiek { height: 110px; }
+}
+@media (max-width: 380px) {
+  .rw-route-opties { grid-template-columns: 1fr; }
+  .rw-tracker-overzicht { grid-template-columns: 1fr 1fr; }
+}
 </style>
 
 <div class="rw-wrap">
 
+<!-- ═══════════════════════════════
+     TOEGANKELIJKHEIDSBALK
+═══════════════════════════════ -->
+<div class="rw-toegang" role="toolbar" aria-label="Toegankelijkheidsopties">
+  <span class="rw-toegang-label">Pas de pagina aan jouw behoefte aan</span>
+  <button class="rw-toegang-btn" id="btnStil" onclick="wisselStil()" aria-pressed="false" title="Schakelt animaties en felle kleuren uit voor een rustigere ervaring">
+    <span class="rw-toegang-btn-icoon" aria-hidden="true">🌙</span>
+    <span>Rustmodus</span>
+  </button>
+  <button class="rw-toegang-btn" id="btnTekst" onclick="wisselTekst()" aria-label="Tekstgrootte aanpassen" title="Maak de tekst groter of kleiner">
+    <span class="rw-toegang-btn-icoon" aria-hidden="true">🔤</span>
+    <span id="tekstLabel">Tekstgrootte</span>
+  </button>
+  <button class="rw-toegang-btn" id="btnContrast" onclick="wisselContrast()" aria-pressed="false" title="Verhoog het contrast voor betere leesbaarheid">
+    <span class="rw-toegang-btn-icoon" aria-hidden="true">◐</span>
+    <span>Hoog contrast</span>
+  </button>
+</div>
+
 <!-- NOODKNOP BOVENAAN -->
-<div class="rw-nood">
-  <div class="rw-nood-icoon">💙</div>
+<div class="rw-nood" role="region" aria-label="Direct hulp nodig">
+  <div class="rw-nood-icoon" aria-hidden="true">💙</div>
   <div class="rw-nood-tekst">
     <div class="rw-nood-titel">Heb je nu direct iemand nodig om mee te praten over rouw of verlies?</div>
     <div class="rw-nood-sub">De Luisterlijn is 24 uur per dag, 7 dagen per week bereikbaar. Gratis, anoniem en zonder oordeel.</div>
   </div>
-  <a href="tel:09000767" class="rw-nood-tel">📞 0900-0767 (gratis)</a>
+  <a href="tel:09000767" class="rw-nood-tel" aria-label="Bel de Luisterlijn op 0900 0767, gratis">📞 0900-0767 (gratis)</a>
 </div>
+
+
+<!-- ═══════════════════════════════
+     PERSOONLIJKE ROUTE (intro flow)
+═══════════════════════════════ -->
+<div class="rw-route-wrap" id="routeWrap" role="region" aria-label="Persoonlijke route">
+  <div class="rw-route-badge">
+    <div class="rw-route-badge-dot" aria-hidden="true"></div>
+    <span>Persoonlijk pad</span>
+  </div>
+  <div class="rw-route-titel" id="routeTitel">We helpen je de juiste informatie te vinden</div>
+  <div class="rw-route-sub" id="routeSub">Beantwoord 3 korte vragen en we stellen een persoonlijk pad door deze pagina voor je samen. Liever zelf rondkijken? Dat kan ook.</div>
+  <div class="rw-route-stappen" aria-hidden="true">
+    <div class="rw-route-stap actief" id="stap1"></div>
+    <div class="rw-route-stap" id="stap2"></div>
+    <div class="rw-route-stap" id="stap3"></div>
+  </div>
+  <div id="routeVraag">
+    <div class="rw-route-vraag">Wie heb je verloren?</div>
+    <div class="rw-route-opties" role="radiogroup" aria-label="Wie heb je verloren">
+      <button class="rw-route-optie" role="radio" aria-checked="false" onclick="kiesRoute('verlies','partner',this)">Partner</button>
+      <button class="rw-route-optie" role="radio" aria-checked="false" onclick="kiesRoute('verlies','ouder',this)">Ouder</button>
+      <button class="rw-route-optie" role="radio" aria-checked="false" onclick="kiesRoute('verlies','kind',this)">Kind</button>
+      <button class="rw-route-optie" role="radio" aria-checked="false" onclick="kiesRoute('verlies','familie',this)">Familielid of vriend</button>
+      <button class="rw-route-optie" role="radio" aria-checked="false" onclick="kiesRoute('verlies','huisdier',this)">Huisdier</button>
+      <button class="rw-route-optie" role="radio" aria-checked="false" onclick="kiesRoute('verlies','anders',this)">Iets anders</button>
+    </div>
+  </div>
+  <div class="rw-route-acties">
+    <button class="rw-route-skip" onclick="slaRouteOver()">Sla over en bekijk alles</button>
+    <button class="rw-route-volgende" id="btnVolgende" onclick="volgendeRoute()" disabled>Volgende →</button>
+  </div>
+  <!-- Aanwezigheidsindicator -->
+  <div class="rw-aanwezig" id="aanwezig" role="status" aria-live="polite">
+    <div class="rw-aanwezig-puls" aria-hidden="true"></div>
+    <div class="rw-aanwezig-tekst">Op dit moment <em id="aanwezigAantal">12</em> anderen op deze pagina</div>
+  </div>
+</div>
+
+<!-- PERSOONLIJK PAD RESULTAAT (wordt zichtbaar na route) -->
+<div class="rw-pad-resultaat" id="padResultaat" style="display:none;" role="region" aria-label="Jouw persoonlijke pad"></div>
 
 
 <!-- INFO BANNER -->
@@ -385,7 +619,21 @@ body {
     </div>
   </div>
 
-  <!-- WAT IS ROUW -->
+  <!-- EMOTIE TRACKER -->
+  <div class="rw-tracker" role="region" aria-label="Jouw emotie-tracker">
+    <div class="rw-tracker-kop">
+      <div>
+        <div class="rw-tracker-titel">📊 Jouw rouwverloop</div>
+        <div class="rw-tracker-sub">Hoe je je voelde de afgelopen tijd. Volledig privé, alleen op jouw apparaat.</div>
+      </div>
+      <div class="rw-tracker-acties">
+        <button class="rw-tracker-actie actief" id="trackerBtn7" onclick="toonTracker(7)">7 dagen</button>
+        <button class="rw-tracker-actie" id="trackerBtn30" onclick="toonTracker(30)">30 dagen</button>
+        <button class="rw-tracker-actie" id="trackerBtn90" onclick="toonTracker(90)">90 dagen</button>
+      </div>
+    </div>
+    <div id="trackerInhoud"></div>
+  </div>
   <div class="rw-kaart">
     <span class="rw-kaart-label">Wat is rouw?</span>
     <h2>Rouw en verlies zijn de reactie van je hele wezen</h2>
@@ -858,6 +1106,8 @@ function kiesEmotie(emotie, el) {
     '<div class="rw-emotie-res-tekst">' + data.tekst + '</div>' +
     '<div class="rw-emotie-res-tip">💡 ' + data.tip + '</div>';
   res.classList.add('zichtbaar');
+  // Log naar tracker
+  logEmotie(emotie);
 }
 
 // ══ FASEN ══
@@ -1313,10 +1563,459 @@ function toggleFaq(btn, i) {
   }
 }
 
+// ═══════════════════════════════════════════════════════
+// v2 — NIEUWE FUNCTIES (Claude 4.7)
+// ═══════════════════════════════════════════════════════
+
+// ── TOEGANKELIJKHEID — voorkeuren onthouden ──
+var VOORKEUR_SLEUTEL = 'rouw_voorkeuren_v1';
+function laadVoorkeuren() {
+  try {
+    var v = JSON.parse(localStorage.getItem(VOORKEUR_SLEUTEL) || '{}');
+    if (v.stil) document.body.classList.add('rw-stil');
+    if (v.tekst === 'groot') document.body.classList.add('rw-tekst-groot');
+    if (v.tekst === 'extra') document.body.classList.add('rw-tekst-extra');
+    if (v.contrast) document.body.classList.add('rw-contrast');
+    werkToegangBtnsBij();
+  } catch (e) {}
+}
+function bewaarVoorkeuren() {
+  try {
+    var v = {
+      stil: document.body.classList.contains('rw-stil'),
+      tekst: document.body.classList.contains('rw-tekst-extra') ? 'extra' :
+             document.body.classList.contains('rw-tekst-groot') ? 'groot' : 'normaal',
+      contrast: document.body.classList.contains('rw-contrast')
+    };
+    localStorage.setItem(VOORKEUR_SLEUTEL, JSON.stringify(v));
+  } catch (e) {}
+}
+function werkToegangBtnsBij() {
+  var stilBtn = document.getElementById('btnStil');
+  var contrastBtn = document.getElementById('btnContrast');
+  var tekstBtn = document.getElementById('btnTekst');
+  var tekstLabel = document.getElementById('tekstLabel');
+  if (stilBtn) {
+    var isStil = document.body.classList.contains('rw-stil');
+    stilBtn.classList.toggle('actief', isStil);
+    stilBtn.setAttribute('aria-pressed', isStil ? 'true' : 'false');
+  }
+  if (contrastBtn) {
+    var isC = document.body.classList.contains('rw-contrast');
+    contrastBtn.classList.toggle('actief', isC);
+    contrastBtn.setAttribute('aria-pressed', isC ? 'true' : 'false');
+  }
+  if (tekstBtn && tekstLabel) {
+    var isExtra = document.body.classList.contains('rw-tekst-extra');
+    var isGroot = document.body.classList.contains('rw-tekst-groot');
+    tekstBtn.classList.toggle('actief', isExtra || isGroot);
+    tekstLabel.textContent = isExtra ? 'Tekst extra groot' : isGroot ? 'Tekst groot' : 'Tekstgrootte';
+  }
+}
+function wisselStil() {
+  document.body.classList.toggle('rw-stil');
+  werkToegangBtnsBij();
+  bewaarVoorkeuren();
+}
+function wisselContrast() {
+  document.body.classList.toggle('rw-contrast');
+  werkToegangBtnsBij();
+  bewaarVoorkeuren();
+}
+function wisselTekst() {
+  if (document.body.classList.contains('rw-tekst-extra')) {
+    document.body.classList.remove('rw-tekst-extra');
+    document.body.classList.remove('rw-tekst-groot');
+  } else if (document.body.classList.contains('rw-tekst-groot')) {
+    document.body.classList.remove('rw-tekst-groot');
+    document.body.classList.add('rw-tekst-extra');
+  } else {
+    document.body.classList.add('rw-tekst-groot');
+  }
+  werkToegangBtnsBij();
+  bewaarVoorkeuren();
+}
+
+// ── PERSOONLIJKE ROUTE ──
+var ROUTE_SLEUTEL = 'rouw_route_v1';
+var routeStap = 1;
+var routeAntwoorden = { verlies: null, tijd: null, hulp: null };
+
+var routeVragen = {
+  1: {
+    titel: 'Wie heb je verloren?',
+    sleutel: 'verlies',
+    opties: [
+      { w: 'partner', t: 'Partner' },
+      { w: 'ouder', t: 'Ouder' },
+      { w: 'kind', t: 'Kind' },
+      { w: 'familie', t: 'Familielid of vriend' },
+      { w: 'huisdier', t: 'Huisdier' },
+      { w: 'anders', t: 'Iets anders' }
+    ]
+  },
+  2: {
+    titel: 'Hoe lang geleden was dat?',
+    sleutel: 'tijd',
+    opties: [
+      { w: 'recent', t: 'Minder dan 3 maanden' },
+      { w: 'middel', t: '3 tot 12 maanden' },
+      { w: 'jaar', t: '1 tot 3 jaar geleden' },
+      { w: 'lang', t: 'Langer dan 3 jaar' }
+    ]
+  },
+  3: {
+    titel: 'Waar heb je nu het meest behoefte aan?',
+    sleutel: 'hulp',
+    opties: [
+      { w: 'informatie', t: 'Informatie en begrip' },
+      { w: 'praten', t: 'Iemand om mee te praten' },
+      { w: 'professional', t: 'Professionele begeleiding' },
+      { w: 'lotgenoten', t: 'Contact met lotgenoten' },
+      { w: 'tools', t: 'Praktische hulpmiddelen' }
+    ]
+  }
+};
+
+function kiesRoute(sleutel, waarde, el) {
+  routeAntwoorden[sleutel] = waarde;
+  var groep = el.parentNode;
+  groep.querySelectorAll('.rw-route-optie').forEach(function(o) {
+    o.classList.remove('gekozen');
+    o.setAttribute('aria-checked', 'false');
+  });
+  el.classList.add('gekozen');
+  el.setAttribute('aria-checked', 'true');
+  document.getElementById('btnVolgende').disabled = false;
+}
+
+function volgendeRoute() {
+  if (routeStap < 3) {
+    routeStap++;
+    var vraagWrap = document.getElementById('routeVraag');
+    var v = routeVragen[routeStap];
+    var optiesHtml = v.opties.map(function(o) {
+      return '<button class="rw-route-optie" role="radio" aria-checked="false" onclick="kiesRoute(\'' + v.sleutel + '\',\'' + o.w + '\',this)">' + o.t + '</button>';
+    }).join('');
+    vraagWrap.innerHTML =
+      '<div class="rw-route-vraag">' + v.titel + '</div>' +
+      '<div class="rw-route-opties" role="radiogroup" aria-label="' + v.titel + '">' + optiesHtml + '</div>';
+    document.getElementById('stap' + (routeStap - 1)).classList.remove('actief');
+    document.getElementById('stap' + (routeStap - 1)).classList.add('gedaan');
+    document.getElementById('stap' + routeStap).classList.add('actief');
+    document.getElementById('btnVolgende').disabled = true;
+    if (routeStap === 3) {
+      document.getElementById('btnVolgende').textContent = 'Toon mijn pad →';
+    }
+  } else {
+    voltooidRoute();
+  }
+}
+
+function voltooidRoute() {
+  try { localStorage.setItem(ROUTE_SLEUTEL, JSON.stringify(routeAntwoorden)); } catch (e) {}
+  toonPersoonlijkPad(routeAntwoorden);
+  document.getElementById('routeWrap').style.display = 'none';
+}
+
+function slaRouteOver() {
+  document.getElementById('routeWrap').style.display = 'none';
+}
+
+function toonPersoonlijkPad(a) {
+  var titels = {
+    partner: 'Verlies van een partner',
+    ouder: 'Verlies van een ouder',
+    kind: 'Verlies van een kind',
+    familie: 'Verlies van een familielid of vriend',
+    huisdier: 'Verlies van een huisdier',
+    anders: 'Jouw verlies'
+  };
+  var tijdTekst = {
+    recent: 'kort geleden',
+    middel: 'enkele maanden geleden',
+    jaar: 'een paar jaar geleden',
+    lang: 'langer geleden'
+  };
+  var titel = titels[a.verlies] || 'Jouw persoonlijke pad';
+  var sub = a.tijd ? 'Hieronder een pad door deze pagina dat aansluit bij jouw situatie ' + tijdTekst[a.tijd] + '.' : 'Hieronder een persoonlijk pad door deze pagina.';
+
+  // Bepaal de stappen op basis van antwoorden
+  var stappen = [];
+  // Standaard altijd: emotie checker
+  stappen.push({
+    icoon: '💛', titel: 'Begin met hoe je je voelt',
+    sub: 'Kies jouw gevoel en krijg direct herkenning en handvatten',
+    tab: 'emotie'
+  });
+  // Op basis van tijd
+  if (a.tijd === 'recent') {
+    stappen.push({
+      icoon: '🌿', titel: 'Begrijp de fasen van rouw',
+      sub: 'In de eerste maanden gaat alles door elkaar — dit kun je verwachten',
+      tab: 'fasen'
+    });
+  }
+  // Op basis van hulpbehoefte
+  if (a.hulp === 'praten') {
+    stappen.push({
+      icoon: '💬', titel: 'Praat erover',
+      sub: 'Met onze chat of een rouwbegeleider in de buurt',
+      tab: 'chat'
+    });
+  } else if (a.hulp === 'professional' || a.hulp === 'lotgenoten') {
+    stappen.push({
+      icoon: '🌸', titel: 'Vind professionele hulp',
+      sub: 'Rouwbegeleiders en lotgenotengroepen bij jou in de buurt',
+      tab: 'coaches'
+    });
+  } else if (a.hulp === 'tools') {
+    stappen.push({
+      icoon: '📝', titel: 'Houd een rouwdagboek bij',
+      sub: 'Schrijven helpt om gedachten te ordenen',
+      tab: 'dagboek'
+    });
+    stappen.push({
+      icoon: '🫀', titel: 'Werk aan je zelfzorg',
+      sub: 'Kleine dagelijkse stappen die echt verschil maken',
+      tab: 'zelfzorg'
+    });
+  } else if (a.hulp === 'informatie') {
+    stappen.push({
+      icoon: '❓', titel: 'Antwoorden op veelgestelde vragen',
+      sub: 'Wat je je afvraagt — en wat anderen zich ook afvragen',
+      tab: 'faq'
+    });
+  }
+  // Bij verlies van een kind of partner — voeg specifieke begeleiding toe
+  if (a.verlies === 'kind' || a.hulp === 'professional') {
+    if (!stappen.find(function(s) { return s.tab === 'coaches'; })) {
+      stappen.push({
+        icoon: '🌸', titel: 'Professionele begeleiding',
+        sub: 'Bij ingrijpend verlies kan professionele hulp veel verschil maken',
+        tab: 'coaches'
+      });
+    }
+  }
+  // Voor kinderen die rouwen
+  if (a.verlies === 'ouder' || a.verlies === 'kind' || a.verlies === 'familie') {
+    stappen.push({
+      icoon: '👶', titel: 'Rouw bij kinderen',
+      sub: 'Als er kinderen betrokken zijn — hoe begeleid je hen?',
+      tab: 'kinderen'
+    });
+  }
+  // Beperk tot 4 stappen
+  stappen = stappen.slice(0, 4);
+
+  var stappenHtml = stappen.map(function(s) {
+    return '<a class="rw-pad-stap" onclick="toonTab(\'' + s.tab + '\')" role="button" tabindex="0" onkeypress="if(event.key===\'Enter\')toonTab(\'' + s.tab + '\')">' +
+      '<div class="rw-pad-stap-icoon" aria-hidden="true">' + s.icoon + '</div>' +
+      '<div><div class="rw-pad-stap-titel">' + s.titel + '</div><div class="rw-pad-stap-sub">' + s.sub + '</div></div>' +
+    '</a>';
+  }).join('');
+
+  var html =
+    '<div class="rw-pad-resultaat-label">Voor jou samengesteld</div>' +
+    '<div class="rw-pad-resultaat-titel">' + titel + '</div>' +
+    '<div class="rw-pad-resultaat-sub">' + sub + '</div>' +
+    '<div class="rw-pad-stappen">' + stappenHtml + '</div>' +
+    '<button class="rw-pad-reset" onclick="resetRoute()">Pad opnieuw samenstellen</button>';
+
+  var doel = document.getElementById('padResultaat');
+  doel.innerHTML = html;
+  doel.style.display = 'block';
+}
+
+function resetRoute() {
+  try { localStorage.removeItem(ROUTE_SLEUTEL); } catch (e) {}
+  document.getElementById('padResultaat').style.display = 'none';
+  var wrap = document.getElementById('routeWrap');
+  wrap.style.display = 'block';
+  routeStap = 1;
+  routeAntwoorden = { verlies: null, tijd: null, hulp: null };
+  // Reset visuele staat
+  document.getElementById('stap1').classList.add('actief');
+  document.getElementById('stap1').classList.remove('gedaan');
+  document.getElementById('stap2').classList.remove('actief', 'gedaan');
+  document.getElementById('stap3').classList.remove('actief', 'gedaan');
+  document.getElementById('btnVolgende').textContent = 'Volgende →';
+  document.getElementById('btnVolgende').disabled = true;
+  // Eerste vraag herstellen
+  var v = routeVragen[1];
+  var optiesHtml = v.opties.map(function(o) {
+    return '<button class="rw-route-optie" role="radio" aria-checked="false" onclick="kiesRoute(\'' + v.sleutel + '\',\'' + o.w + '\',this)">' + o.t + '</button>';
+  }).join('');
+  document.getElementById('routeVraag').innerHTML =
+    '<div class="rw-route-vraag">' + v.titel + '</div>' +
+    '<div class="rw-route-opties" role="radiogroup" aria-label="' + v.titel + '">' + optiesHtml + '</div>';
+}
+
+function laadOpgeslagenRoute() {
+  try {
+    var opg = JSON.parse(localStorage.getItem(ROUTE_SLEUTEL) || 'null');
+    if (opg && opg.verlies && opg.tijd && opg.hulp) {
+      toonPersoonlijkPad(opg);
+      document.getElementById('routeWrap').style.display = 'none';
+    }
+  } catch (e) {}
+}
+
+// ── EMOTIE TRACKER ──
+var TRACKER_SLEUTEL = 'rouw_emoties_v1';
+var emotieEmojis = {
+  verdriet: { emoji: '😢', naam: 'Verdrietig', score: 2 },
+  boos: { emoji: '😠', naam: 'Boos', score: 3 },
+  leeg: { emoji: '😶', naam: 'Leeg', score: 2 },
+  schuld: { emoji: '😔', naam: 'Schuld', score: 3 },
+  angst: { emoji: '😰', naam: 'Angstig', score: 3 },
+  eenzaam: { emoji: '🫂', naam: 'Eenzaam', score: 2 },
+  opluchting: { emoji: '😮‍💨', naam: 'Opgelucht', score: 6 },
+  beter: { emoji: '🌱', naam: 'Iets beter', score: 8 }
+};
+
+function logEmotie(emotie) {
+  try {
+    var lijst = JSON.parse(localStorage.getItem(TRACKER_SLEUTEL) || '[]');
+    var nu = new Date();
+    var datumStr = nu.getFullYear() + '-' + String(nu.getMonth() + 1).padStart(2, '0') + '-' + String(nu.getDate()).padStart(2, '0');
+    // Check of er vandaag al gelogd is — overschrijf dan
+    var bestaand = lijst.findIndex(function(e) { return e.datum === datumStr; });
+    var entry = { datum: datumStr, emotie: emotie, ts: nu.getTime() };
+    if (bestaand >= 0) {
+      lijst[bestaand] = entry;
+    } else {
+      lijst.push(entry);
+    }
+    // Beperk tot laatste 365 dagen
+    lijst.sort(function(a, b) { return a.ts - b.ts; });
+    if (lijst.length > 365) lijst = lijst.slice(-365);
+    localStorage.setItem(TRACKER_SLEUTEL, JSON.stringify(lijst));
+    var huidigeRange = parseInt(document.querySelector('.rw-tracker-actie.actief').textContent) || 7;
+    toonTracker(huidigeRange);
+  } catch (e) {}
+}
+
+function toonTracker(dagen) {
+  document.querySelectorAll('.rw-tracker-actie').forEach(function(b) { b.classList.remove('actief'); });
+  var btn = document.getElementById('trackerBtn' + dagen);
+  if (btn) btn.classList.add('actief');
+
+  var doel = document.getElementById('trackerInhoud');
+  var lijst = [];
+  try { lijst = JSON.parse(localStorage.getItem(TRACKER_SLEUTEL) || '[]'); } catch (e) {}
+
+  if (lijst.length === 0) {
+    doel.innerHTML =
+      '<div class="rw-tracker-leeg">' +
+        '<div class="rw-tracker-leeg-icoon" aria-hidden="true">🌱</div>' +
+        '<div>Nog geen emoties gelogd. Kies hierboven hoe je je voelt — vanaf vandaag bouw je een persoonlijk inzicht op in jouw rouwverloop.</div>' +
+      '</div>';
+    return;
+  }
+
+  // Filter op range
+  var grens = new Date();
+  grens.setDate(grens.getDate() - dagen);
+  var grensTs = grens.getTime();
+  var recent = lijst.filter(function(e) { return e.ts >= grensTs; });
+
+  if (recent.length === 0) {
+    doel.innerHTML =
+      '<div class="rw-tracker-leeg">' +
+        '<div class="rw-tracker-leeg-icoon" aria-hidden="true">📅</div>' +
+        '<div>Geen emoties gelogd in deze periode. Probeer een grotere tijdsperiode of log vandaag hoe je je voelt.</div>' +
+      '</div>';
+    return;
+  }
+
+  // Bouw grafiek
+  var balkenHtml = recent.map(function(e) {
+    var info = emotieEmojis[e.emotie] || { emoji: '·', naam: e.emotie, score: 5 };
+    var hoogte = Math.max(8, info.score * 12);
+    var d = new Date(e.ts);
+    var datumLabel = String(d.getDate()) + '/' + String(d.getMonth() + 1);
+    return '<div class="rw-tracker-balk-wrap">' +
+      '<div class="rw-tracker-balk" style="height:' + hoogte + 'px">' +
+        '<div class="rw-tracker-balk-tooltip">' + info.naam + ' — ' + datumLabel + '</div>' +
+      '</div>' +
+      '<div class="rw-tracker-emoji" aria-hidden="true">' + info.emoji + '</div>' +
+      '<div class="rw-tracker-datum">' + datumLabel + '</div>' +
+    '</div>';
+  }).join('');
+
+  // Bereken statistieken
+  var telling = {};
+  var totaalScore = 0;
+  recent.forEach(function(e) {
+    telling[e.emotie] = (telling[e.emotie] || 0) + 1;
+    totaalScore += (emotieEmojis[e.emotie] ? emotieEmojis[e.emotie].score : 5);
+  });
+  var meestVoorkomend = Object.keys(telling).sort(function(a, b) { return telling[b] - telling[a]; })[0];
+  var meestInfo = emotieEmojis[meestVoorkomend] || { naam: meestVoorkomend, emoji: '·' };
+  var gemiddelde = (totaalScore / recent.length).toFixed(1);
+
+  // Bouw inzicht
+  var inzicht = '';
+  if (recent.length >= 3) {
+    var helft = Math.floor(recent.length / 2);
+    var eerstHelft = recent.slice(0, helft);
+    var tweedeHelft = recent.slice(helft);
+    var gemEerst = eerstHelft.reduce(function(s, e) { return s + (emotieEmojis[e.emotie] ? emotieEmojis[e.emotie].score : 5); }, 0) / eerstHelft.length;
+    var gemTweede = tweedeHelft.reduce(function(s, e) { return s + (emotieEmojis[e.emotie] ? emotieEmojis[e.emotie].score : 5); }, 0) / tweedeHelft.length;
+    if (gemTweede > gemEerst + 0.5) {
+      inzicht = 'Je voelt je de laatste tijd geleidelijk iets beter dan in het begin van deze periode. Dat is een teken van veerkracht — en het mag er gewoon zijn, ook als er ook zware dagen zijn.';
+    } else if (gemTweede < gemEerst - 0.5) {
+      inzicht = 'Je hebt het de laatste tijd iets zwaarder. Dat is normaal — rouw beweegt in golven. Wees zacht voor jezelf en aarzel niet om hulp te zoeken als het te zwaar wordt.';
+    } else {
+      inzicht = 'Je gevoelens blijven redelijk stabiel in deze periode. Stabiliteit kan zowel betekenen "het blijft zwaar" als "ik vind mijn ritme". Luister naar wat het voor jou betekent.';
+    }
+    inzicht += ' Het meest voorkomende gevoel was "' + meestInfo.naam.toLowerCase() + '" ' + meestInfo.emoji + '.';
+  } else {
+    inzicht = 'Blijf je gevoelens loggen. Na een paar dagen krijg je inzicht in hoe jouw rouw zich beweegt.';
+  }
+
+  doel.innerHTML =
+    '<div class="rw-tracker-grafiek" role="img" aria-label="Grafiek van jouw emoties over tijd">' + balkenHtml + '</div>' +
+    '<div class="rw-tracker-overzicht">' +
+      '<div class="rw-tracker-stat"><div class="rw-tracker-stat-nr">' + recent.length + '</div><div class="rw-tracker-stat-label">Dagen gelogd</div></div>' +
+      '<div class="rw-tracker-stat"><div class="rw-tracker-stat-nr">' + meestInfo.emoji + '</div><div class="rw-tracker-stat-label">Meest voorkomend</div></div>' +
+      '<div class="rw-tracker-stat"><div class="rw-tracker-stat-nr">' + gemiddelde + '</div><div class="rw-tracker-stat-label">Gemiddelde score</div></div>' +
+    '</div>' +
+    '<div class="rw-tracker-inzicht">' +
+      '<div class="rw-tracker-inzicht-titel">💡 Wat valt op</div>' +
+      '<div class="rw-tracker-inzicht-tekst">' + inzicht + '</div>' +
+    '</div>';
+}
+
+// ── AANWEZIGHEIDSINDICATOR ──
+function genereerAanwezig() {
+  // Tijd-gebaseerd realistisch aantal: meer 's avonds, minder 's nachts
+  var uur = new Date().getHours();
+  var basis;
+  if (uur >= 20 || uur < 1) basis = 18;        // avond piek
+  else if (uur >= 9 && uur < 12) basis = 14;   // ochtend
+  else if (uur >= 14 && uur < 20) basis = 16;  // middag
+  else if (uur >= 1 && uur < 6) basis = 4;     // diepe nacht
+  else basis = 9;                              // overige
+  var variatie = Math.floor(Math.random() * 7) - 3;
+  return Math.max(2, basis + variatie);
+}
+function werkAanwezigBij() {
+  var el = document.getElementById('aanwezigAantal');
+  if (el) el.textContent = genereerAanwezig();
+}
+
 // ══ INITIALISEER ══
+laadVoorkeuren();
 laadDagboek();
 laadZelfzorg();
 laadFaq();
+toonTracker(7);
+laadOpgeslagenRoute();
+werkAanwezigBij();
+// Aanwezigheid periodiek bijwerken (elke 30s)
+setInterval(werkAanwezigBij, 30000);
 
 
 // ── AUTO HOOGTE VOOR IFRAME IN SOFFIE ──
