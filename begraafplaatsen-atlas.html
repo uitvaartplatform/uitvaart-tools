@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Begraafplaatsen Atlas Nederland — Uitvaart-Platform.nl</title>
+<meta name="description" content="Interactieve atlas van alle bijzondere begraafplaatsen in Nederland. Ontdek natuurbegraafplaatsen, historische, joodse, islamitische, militaire en kerkelijke begraafplaatsen op één plek.">
+
+<!-- Font: Poppins (huisstijl Uitvaart-Platform.nl) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500&display=swap" rel="stylesheet">
+
+<!-- Leaflet kaart -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+
+<style>
+:root {
+  /* Lichte huisstijl Uitvaart-Platform.nl */
+  --bg-page: #faf7f2;        /* cream achtergrond */
+  --bg-card: #ffffff;        /* wit voor cards/panelen */
+  --bg-elev: #fdfbf7;        /* iets warmer wit voor lichte elevatie */
+  --bg-soft: #f5f0e8;        /* zachte hover/active state */
+
+  --purple-100: #f5ecf2;     /* zeer licht paars (hover tints) */
+  --purple-300: #c8a5c0;     /* licht paars */
+  --purple-500: #6b3060;     /* medium paars */
+  --purple-700: #4a1942;     /* huisstijl paars (primair) */
+  --purple-900: #2a0d24;     /* diep paars */
+
+  --orange: #e8834a;         /* huisstijl oranje */
+  --orange-deep: #c8622a;
+  --orange-light: #f5a87a;
+  --orange-soft: #fdf1e9;    /* zacht oranje tint voor backgrounds */
+
+  --text-strong: #2a0d24;    /* primaire donkere tekst (donkerpaars) */
+  --text-body: #3d2538;      /* body tekst */
+  --text-muted: #7a6571;     /* gedempte tekst */
+  --text-faint: #a89aa3;     /* zeer zachte tekst */
+
+  --cream: #faf7f2;          /* compatibiliteit: cream alias */
+  --cream-dim: #6b5b65;      /* compatibiliteit (was donker-stijl tekst, nu medium) */
+  --cream-faded: #8a7f86;    /* compatibiliteit */
+
+  --line: rgba(74, 25, 66, 0.10);      /* lichte paarse rand */
+  --line-strong: rgba(74, 25, 66, 0.20);
+  --line-orange: rgba(232, 131, 74, 0.22);
+
+  --shadow-sm: 0 1px 3px rgba(74, 25, 66, 0.06), 0 1px 2px rgba(74, 25, 66, 0.04);
+  --shadow-md: 0 4px 12px rgba(74, 25, 66, 0.08), 0 2px 4px rgba(74, 25, 66, 0.04);
+  --shadow-lg: 0 12px 32px rgba(74, 25, 66, 0.10), 0 4px 8px rgba(74, 25, 66, 0.04);
+
+  --font-display: 'Poppins', system-ui, sans-serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-body);
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   ACHTERGROND — zachte cream met subtiele warmte
+═══════════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(232, 131, 74, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 45% at 80% 80%, rgba(74, 25, 66, 0.04) 0%, transparent 60%);
+  z-index: 0; pointer-events: none;
+}
+
+/* Grain texture overlay — heel subtiel */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.4'/></svg>");
+  opacity: 0.025;
+  z-index: 1; pointer-events: none;
+}
+
+.app {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════ */
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 32px;
+  padding: 18px 32px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid var(--line);
+  position: relative; z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand {
+  display: flex; align-items: center; gap: 14px;
+  text-decoration: none; color: inherit;
+}
+.brand-mark {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--purple-700) 0%, var(--purple-500) 100%);
+  display: grid; place-items: center;
+  font-family: var(--font-display);
+  font-size: 1.05rem; font-weight: 800;
+  color: #ffffff;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(74,25,66,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+  letter-spacing: -0.02em;
+}
+.brand-mark::after {
+  content: ''; position: absolute; inset: -2px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--orange) 0%, transparent 70%);
+  z-index: -1; opacity: 0.4;
+  filter: blur(8px);
+}
+.brand-text {
+  display: flex; flex-direction: column; line-height: 1.1;
+}
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-strong);
+}
+.brand-sub {
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--orange);
+  margin-top: 2px;
+}
+
+/* Header title — sereen editorial */
+.header-title {
+  text-align: center;
+  font-family: var(--font-display);
+}
+.header-title .eyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--orange);
+  margin-bottom: 4px;
+  font-family: var(--font-body);
+}
+.header-title h1 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-strong);
+}
+.header-title h1 em {
+  font-style: italic;
+  font-weight: 500;
+  background: linear-gradient(90deg, var(--orange-deep) 0%, var(--orange) 50%, var(--orange-deep) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 5s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 200% center; }
+}
+
+.header-stats {
+  display: flex; gap: 28px; align-items: center;
+}
+.hstat {
+  text-align: right;
+}
+.hstat-n {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--purple-700);
+  line-height: 1;
+  font-feature-settings: 'tnum';
+  letter-spacing: -0.02em;
+}
+.hstat-l {
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════ */
+.main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   FILTER SIDEBAR
+═══════════════════════════════════════════ */
+.filters {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  border-right: 1px solid var(--line);
+  padding: 24px 22px;
+  overflow-y: auto;
+  position: relative; z-index: 50;
+}
+.filters::-webkit-scrollbar { width: 6px; }
+.filters::-webkit-scrollbar-track { background: transparent; }
+.filters::-webkit-scrollbar-thumb { background: rgba(74,25,66,0.18); border-radius: 3px; }
+
+.filter-intro {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  line-height: 1.3;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.filter-intro-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 22px;
+  font-weight: 400;
+}
+
+.filter-search {
+  position: relative;
+  margin-bottom: 22px;
+}
+.filter-search input {
+  width: 100%;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px 10px 36px;
+  color: var(--text-strong);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+.filter-search input::placeholder {
+  color: var(--text-faint);
+}
+.filter-search input:focus {
+  border-color: var(--orange);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(232,131,74,0.12);
+}
+.filter-search::before {
+  content: '⌕';
+  position: absolute;
+  left: 12px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--orange);
+  font-size: 1rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.filter-section {
+  margin-bottom: 26px;
+}
+.filter-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.filter-label-line {
+  flex: 1; height: 1px;
+  background: var(--line);
+  margin-left: 12px;
+}
+
+.filter-chip {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+.filter-chip:hover {
+  border-color: var(--line-strong);
+  background: var(--bg-soft);
+  transform: translateX(2px);
+}
+.filter-chip.active {
+  background: var(--orange-soft);
+  border-color: var(--orange);
+}
+.filter-chip-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(74,25,66,0.06);
+}
+.filter-chip-name {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-body);
+  flex: 1;
+}
+.filter-chip.active .filter-chip-name { color: var(--text-strong); font-weight: 600; }
+.filter-chip-count {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-feature-settings: 'tnum';
+}
+
+.filter-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+.btn {
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 9px 12px;
+  color: var(--text-strong);
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn:hover {
+  border-color: var(--orange);
+  background: var(--orange-soft);
+  color: var(--orange-deep);
+  transform: translateY(-1px);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  border-color: transparent;
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange) 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(232,131,74,0.32);
+}
+
+/* ═══════════════════════════════════════════
+   MAP
+═══════════════════════════════════════════ */
+.map-wrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-page);
+}
+#map {
+  width: 100%; height: 100%;
+  background: var(--bg-page);
+}
+
+/* Map tiles natuurlijk laten — geen donkere filter meer */
+
+/* Custom markers — elegant glowing dots */
+.cm-marker {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 6px rgba(74, 25, 66, 0.25), 0 0 0 2px rgba(255,255,255,0.95);
+}
+.cm-marker::before {
+  content: '';
+  position: absolute; inset: -6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.22;
+  filter: blur(3px);
+  animation: pulseDot 2.6s ease-in-out infinite;
+}
+.cm-marker::after {
+  content: '';
+  position: absolute; inset: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+}
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 0.22; }
+  50% { transform: scale(1.4); opacity: 0.08; }
+}
+.cm-marker:hover {
+  transform: scale(1.4);
+}
+.cm-marker:hover::before {
+  animation-duration: 1s;
+}
+
+/* Cluster styling — licht thema */
+.marker-cluster {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(232,131,74,0.6);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7), 0 6px 20px rgba(74,25,66,0.18);
+}
+.marker-cluster div {
+  background: linear-gradient(135deg, var(--purple-700), var(--purple-500)) !important;
+  color: #ffffff !important;
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  margin: 5px !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+}
+.marker-cluster span {
+  line-height: 30px !important;
+}
+
+/* Leaflet popup styling — wit met donkere tekst */
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: var(--text-body) !important;
+  border: 1px solid var(--line);
+  border-radius: 14px !important;
+  padding: 0 !important;
+  box-shadow: 0 20px 50px rgba(74, 25, 66, 0.18) !important;
+}
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 16px 18px !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.78rem !important;
+  line-height: 1.5 !important;
+  width: 240px !important;
+}
+.leaflet-popup-tip {
+  background: #ffffff !important;
+  border: 1px solid var(--line) !important;
+}
+.leaflet-popup-close-button {
+  color: var(--text-muted) !important;
+  padding: 6px !important;
+}
+.popup-eyebrow {
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.popup-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  line-height: 1.2;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+.popup-place {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.popup-desc {
+  font-size: 0.74rem;
+  color: var(--text-body);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.popup-btn {
+  display: inline-block;
+  background: var(--orange);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.popup-btn:hover { background: var(--orange-deep); color: #ffffff; }
+
+/* Map controls — herstyle Leaflet controls in licht thema */
+.leaflet-control-zoom {
+  border: none !important;
+  margin-top: 16px !important;
+  margin-right: 16px !important;
+}
+.leaflet-control-zoom a {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  color: var(--text-strong) !important;
+  border: 1px solid var(--line) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 400 !important;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+.leaflet-control-zoom a:hover {
+  background: var(--orange-soft) !important;
+  color: var(--orange-deep) !important;
+  border-color: var(--orange) !important;
+}
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: var(--text-muted) !important;
+  font-size: 0.62rem !important;
+  border-radius: 6px 0 0 0;
+  padding: 3px 8px !important;
+}
+.leaflet-control-attribution a {
+  color: var(--orange-deep) !important;
+}
+
+/* ═══════════════════════════════════════════
+   DETAIL PANEL (slide-in van rechts)
+═══════════════════════════════════════════ */
+.detail-panel {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 440px;
+  background: #ffffff;
+  border-left: 1px solid var(--line);
+  transform: translateX(100%);
+  transition: transform 0.45s cubic-bezier(0.32, 0.72, 0.32, 1);
+  overflow-y: auto;
+  z-index: 60;
+  box-shadow: -20px 0 60px rgba(74, 25, 66, 0.12);
+}
+.detail-panel.open { transform: translateX(0); }
+.detail-panel::-webkit-scrollbar { width: 6px; }
+.detail-panel::-webkit-scrollbar-track { background: transparent; }
+.detail-panel::-webkit-scrollbar-thumb { background: rgba(74,25,66,0.18); border-radius: 3px; }
+
+.detail-hero {
+  height: 200px;
+  background: linear-gradient(135deg, var(--purple-900) 0%, var(--purple-700) 50%, var(--purple-500) 100%);
+  position: relative;
+  display: flex; align-items: flex-end;
+  padding: 24px;
+  overflow: hidden;
+}
+.detail-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 20%, rgba(232,131,74,0.32) 0%, transparent 60%);
+}
+.detail-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><path d='M50 10 L55 35 L80 35 L60 50 L68 75 L50 60 L32 75 L40 50 L20 35 L45 35 Z' fill='rgba(255,255,255,0.05)'/></svg>");
+  background-size: 240px;
+  background-position: right -40px top -40px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.detail-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: var(--text-strong);
+  cursor: pointer;
+  display: grid; place-items: center;
+  font-size: 1.1rem; line-height: 1;
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+.detail-close:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+.detail-fav {
+  position: absolute;
+  top: 14px; right: 56px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: var(--text-strong);
+  cursor: pointer;
+  display: grid; place-items: center;
+  font-size: 0.95rem; line-height: 1;
+  transition: all 0.25s ease;
+  z-index: 5;
+}
+.detail-fav:hover { border-color: var(--orange); color: var(--orange-deep); transform: scale(1.1); }
+.detail-fav.active { color: var(--orange-deep); border-color: var(--orange); background: var(--orange-soft); }
+.detail-fav.active::after {
+  content: '';
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--orange);
+  animation: heartBurst 0.6s ease-out;
+}
+@keyframes heartBurst {
+  from { transform: scale(0.8); opacity: 0.8; }
+  to { transform: scale(1.8); opacity: 0; }
+}
+
+.detail-hero-content {
+  position: relative; z-index: 2;
+}
+.detail-eyebrow {
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--orange-light);
+  margin-bottom: 8px;
+}
+.detail-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+.detail-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: rgba(255,255,255,0.82);
+}
+
+.detail-body {
+  padding: 24px;
+  background: #ffffff;
+}
+.detail-place {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 8px;
+}
+.detail-place::before {
+  content: '◉';
+  color: var(--orange);
+  font-size: 0.7rem;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.detail-meta-item {
+  background: var(--orange-soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.detail-meta-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.detail-meta-value {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-strong);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.detail-section {
+  margin-bottom: 22px;
+}
+.detail-section-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 10px;
+  font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+}
+.detail-section-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--line);
+}
+.detail-section-text {
+  font-size: 0.85rem;
+  color: var(--text-body);
+  line-height: 1.75;
+  font-weight: 400;
+}
+.detail-section-text em {
+  font-style: italic;
+  color: var(--text-strong);
+}
+
+.detail-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.detail-tag {
+  background: var(--orange-soft);
+  border: 1px solid var(--line-orange);
+  color: var(--orange-deep);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 5px 11px;
+  border-radius: 20px;
+}
+
+.detail-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.detail-cta-main {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: #ffffff;
+  text-decoration: none;
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+.detail-cta-main:hover {
+  box-shadow: 0 8px 24px rgba(232,131,74,0.32);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+.detail-cta-sec {
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  color: var(--text-strong);
+  text-decoration: none;
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+.detail-cta-sec:hover {
+  border-color: var(--orange);
+  color: var(--orange-deep);
+  background: var(--orange-soft);
+}
+
+/* ═══════════════════════════════════════════
+   FLOATING UI (overlays op kaart)
+═══════════════════════════════════════════ */
+.map-overlays {
+  position: absolute;
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* Random/Surprise me knop */
+.surprise {
+  position: absolute;
+  bottom: 24px; left: 24px;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 18px;
+  color: var(--text-strong);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  transition: all 0.25s ease;
+  z-index: 50;
+  box-shadow: var(--shadow-md);
+}
+.surprise:hover {
+  border-color: var(--orange);
+  background: var(--orange-soft);
+  color: var(--orange-deep);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.surprise-icon {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  display: grid; place-items: center;
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+/* Locatie-knop */
+.locate {
+  position: absolute;
+  bottom: 24px;
+  left: 200px;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 18px;
+  color: var(--text-strong);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  transition: all 0.25s ease;
+  z-index: 50;
+  box-shadow: var(--shadow-md);
+}
+.locate:hover {
+  border-color: var(--orange);
+  background: var(--orange-soft);
+  color: var(--orange-deep);
+  transform: translateY(-2px);
+}
+
+/* Legend */
+.legend {
+  position: absolute;
+  bottom: 24px; right: 24px;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  z-index: 50;
+  min-width: 200px;
+  box-shadow: var(--shadow-md);
+}
+.legend-title {
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+.legend-items {
+  display: grid;
+  gap: 7px;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.72rem;
+  color: var(--text-body);
+}
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(74,25,66,0.06);
+}
+
+/* List view drawer */
+.listview {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 480px;
+  background: #ffffff;
+  border-left: 1px solid var(--line);
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0.32, 1);
+  overflow-y: auto;
+  z-index: 70;
+  padding: 24px;
+  box-shadow: -20px 0 60px rgba(74, 25, 66, 0.12);
+}
+.listview.open { transform: translateX(0); }
+.listview-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.listview-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-strong);
+  letter-spacing: -0.02em;
+}
+.listview-title em { font-style: italic; font-weight: 500; color: var(--orange-deep); }
+
+.listview-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  margin-bottom: 6px;
+}
+.listview-item:hover {
+  background: var(--orange-soft);
+  border-color: var(--line-orange);
+}
+.listview-item-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.listview-item-text {
+  display: flex; flex-direction: column;
+}
+.listview-item-name {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.listview-item-place {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.listview-item-arr {
+  color: var(--text-faint);
+  font-size: 0.9rem;
+}
+.listview-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+/* Welkomstoverlay bij eerste bezoek */
+.welcome {
+  position: fixed; inset: 0;
+  background: rgba(250, 247, 242, 0.88);
+  backdrop-filter: blur(20px);
+  display: grid; place-items: center;
+  z-index: 200;
+  animation: fadeIn 0.5s ease;
+}
+.welcome.hidden { display: none; }
+.welcome-card {
+  max-width: 520px;
+  padding: 44px 40px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(74, 25, 66, 0.15);
+}
+.welcome-eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--orange);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.welcome-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text-strong);
+  margin-bottom: 14px;
+  letter-spacing: -0.02em;
+}
+.welcome-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--orange-deep);
+}
+.welcome-text {
+  font-size: 0.92rem;
+  color: var(--text-body);
+  line-height: 1.7;
+  margin-bottom: 26px;
+  font-weight: 400;
+}
+.welcome-btn {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: #ffffff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 11px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.welcome-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(232,131,74,0.32);
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .header { grid-template-columns: auto 1fr; gap: 12px; padding: 12px 16px; }
+  .header-title { display: none; }
+  .header-stats { gap: 14px; }
+  .hstat-n { font-size: 1.1rem; }
+  .hstat-l { font-size: 0.55rem; letter-spacing: 0.14em; }
+  .main { grid-template-columns: 1fr; }
+  .filters {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 300px;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    z-index: 80;
+  }
+  .filters.open { transform: translateX(0); }
+  .detail-panel { width: 100%; }
+  .listview { width: 100%; }
+  .legend { display: none; }
+  .surprise, .locate { bottom: 16px; padding: 10px 14px; font-size: 0.72rem; }
+  .locate { left: auto; right: 16px; }
+  .surprise { left: 16px; }
+  .filters-toggle {
+    display: flex !important;
+  }
+}
+
+.filters-toggle {
+  display: none;
+  position: absolute;
+  top: 16px; left: 16px;
+  z-index: 75;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text-strong);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center; gap: 8px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Loading state */
+.loader {
+  position: fixed; inset: 0;
+  background: var(--bg-page);
+  display: grid; place-items: center;
+  z-index: 300;
+}
+.loader-spin {
+  width: 60px; height: 60px;
+  border: 2px solid var(--line);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Toast notifications */
+.toast {
+  position: fixed;
+  top: 88px; left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: #ffffff;
+  border: 1px solid var(--orange);
+  color: var(--text-strong);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 1000;
+  box-shadow: 0 10px 32px rgba(74, 25, 66, 0.15);
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-spin"></div>
+</div>
+
+<!-- Welkomstoverlay -->
+<div class="welcome" id="welcome">
+  <div class="welcome-card">
+    <div class="welcome-eyebrow">Een uitvaartplatform.nl creatie</div>
+    <h1 class="welcome-title">Begraafplaatsen <em>Atlas</em></h1>
+    <p class="welcome-text">
+      Ontdek de bijzondere rustplaatsen van Nederland. Van eeuwenoude joodse begraafplaatsen tot natuurbegraafplaatsen waar het bos langzaam terugkomt. Filter op type, plaats of jaar, en duik in de geschiedenis van elke plek.
+    </p>
+    <button class="welcome-btn" onclick="closeWelcome()">Verken de atlas →</button>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <a class="brand" href="https://uitvaart-platform.nl" target="_blank" rel="noopener">
+      <div class="brand-mark">UP</div>
+      <div class="brand-text">
+        <div class="brand-name">Uitvaart-Platform.nl</div>
+        <div class="brand-sub">Begraafplaatsen Atlas</div>
+      </div>
+    </a>
+    <div class="header-title">
+      <div class="eyebrow">Een interactieve verkenning</div>
+      <h1>Alle bijzondere <em>rustplaatsen</em> van Nederland</h1>
+    </div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="hstat-n" id="stat-total">0</div>
+        <div class="hstat-l">In atlas</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n" id="stat-shown">0</div>
+        <div class="hstat-l">Zichtbaar</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n" id="stat-fav">0</div>
+        <div class="hstat-l">Bewaard</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- Filters sidebar -->
+    <aside class="filters" id="filters">
+      <div class="filter-intro">Verken Nederland.</div>
+      <div class="filter-intro-sub">Filter de atlas op type, zoek op naam of plaats, of laat je verrassen.</div>
+
+      <div class="filter-search">
+        <input type="text" id="search" placeholder="Zoek op naam of plaats…" autocomplete="off">
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-label">Type begraafplaats <span class="filter-label-line"></span></div>
+        <div id="filter-types"></div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-label">Snel filter <span class="filter-label-line"></span></div>
+        <div class="filter-actions">
+          <button class="btn" onclick="filterFavs()">♥ Bewaard</button>
+          <button class="btn" onclick="filterHistoric()">⌛ Historisch</button>
+          <button class="btn" onclick="filterNature()">🌿 Natuur</button>
+          <button class="btn" onclick="openListView()">☰ Lijstweergave</button>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-label">Acties <span class="filter-label-line"></span></div>
+        <div class="filter-actions">
+          <button class="btn" onclick="resetFilters()">↺ Reset</button>
+          <button class="btn btn-primary" onclick="fitAll()">⛶ Toon alles</button>
+        </div>
+      </div>
+
+      <div style="margin-top:32px; padding-top:22px; border-top:1px solid var(--line); font-size:0.7rem; color:var(--text-muted); line-height:1.7;">
+        Deze atlas toont een selectie van bijzondere Nederlandse begraafplaatsen. Heb je een aanvulling of correctie?
+        <a href="https://uitvaart-platform.nl/contact" target="_blank" rel="noopener" style="color:var(--orange-deep); text-decoration:none; font-weight:600;">Laat het ons weten →</a>
+      </div>
+    </aside>
+
+    <!-- Map -->
+    <div class="map-wrap">
+      <button class="filters-toggle" onclick="toggleFilters()">☰ Filters</button>
+      <div id="map"></div>
+
+      <!-- Floating UI -->
+      <button class="surprise" onclick="surpriseMe()">
+        <span class="surprise-icon">✦</span>
+        <span>Verras me</span>
+      </button>
+
+      <button class="locate" onclick="findNearest()">
+        <span class="surprise-icon" style="background:linear-gradient(135deg, var(--purple-500), var(--purple-700));">◉</span>
+        <span>In mijn buurt</span>
+      </button>
+
+      <div class="legend">
+        <div class="legend-title">Legenda</div>
+        <div class="legend-items" id="legend-items"></div>
+      </div>
+    </div>
+
+    <!-- Detail panel -->
+    <aside class="detail-panel" id="detail-panel">
+      <div class="detail-hero">
+        <button class="detail-close" onclick="closeDetail()">✕</button>
+        <button class="detail-fav" id="detail-fav" onclick="toggleFav()">♡</button>
+        <div class="detail-hero-content">
+          <div class="detail-eyebrow" id="detail-eyebrow">—</div>
+          <h2 class="detail-title" id="detail-title">—</h2>
+        </div>
+      </div>
+      <div class="detail-body">
+        <div class="detail-place" id="detail-place">—</div>
+
+        <div class="detail-meta">
+          <div class="detail-meta-item">
+            <div class="detail-meta-label">Gesticht</div>
+            <div class="detail-meta-value" id="detail-founded">—</div>
+          </div>
+          <div class="detail-meta-item">
+            <div class="detail-meta-label">Omvang</div>
+            <div class="detail-meta-value" id="detail-size">—</div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section-label">Over deze plek</div>
+          <div class="detail-section-text" id="detail-desc">—</div>
+        </div>
+
+        <div class="detail-section" id="detail-famous-wrap" style="display:none;">
+          <div class="detail-section-label">Bekende rustplaatsen</div>
+          <div class="detail-section-text" id="detail-famous">—</div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section-label">Kenmerken</div>
+          <div class="detail-tags" id="detail-tags"></div>
+        </div>
+
+        <div class="detail-cta">
+          <a href="#" class="detail-cta-main" id="detail-google" target="_blank" rel="noopener">Bekijk op Google Maps →</a>
+          <a href="https://uitvaart-platform.nl/bedrijven/c/uitvaartondernemingen" class="detail-cta-sec" target="_blank" rel="noopener">Vind specialist</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- List view -->
+    <aside class="listview" id="listview">
+      <div class="listview-header">
+        <div class="listview-title">Alle <em>begraafplaatsen</em></div>
+        <button class="detail-close" onclick="closeListView()" style="position:static;">✕</button>
+      </div>
+      <div id="listview-items"></div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Leaflet & MarkerCluster -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATA — Nederlandse begraafplaatsen
+   Selectie van bijzondere, historische en natuurbegraafplaatsen
+   Coördinaten zijn benaderingen; data is ter illustratie
+═══════════════════════════════════════════════════════ */
+
+const TYPES = {
+  algemeen:    { label: 'Algemeen / Historisch', color: '#c47d8f', icon: '⌛' },
+  natuur:      { label: 'Natuurbegraafplaats',    color: '#7ba572', icon: '🌿' },
+  joods:       { label: 'Joods',                  color: '#5e8db5', icon: '✡︎' },
+  islamitisch: { label: 'Islamitisch',            color: '#6ba89e', icon: '☪︎' },
+  katholiek:   { label: 'Katholiek / Kerkelijk',  color: '#b89968', icon: '✟'  },
+  militair:    { label: 'Militair / Ereveld',     color: '#9c7d52', icon: '★'  },
+  bos:         { label: 'Bos / Park',             color: '#8a9c5d', icon: '❋'  },
+  bijzonder:   { label: 'Bijzonder',              color: '#e8834a', icon: '✦'  }
+};
+
+const BEGRAAFPLAATSEN = [
+  // ═══════ HISTORISCH / ALGEMEEN ═══════
+  {
+    name: 'Begraafplaats & Crematorium Westerveld',
+    place: 'Driehuis',
+    lat: 52.4540, lng: 4.6362,
+    type: 'algemeen',
+    founded: 1888,
+    size: '24 ha',
+    desc: 'Het allereerste crematorium van Nederland. Westerveld werd in 1914 het eerste crematorium dat in Nederland werd gebouwd. De aanleg in Engelse landschapsstijl maakt het tot een wandelmonument met monumentale gebouwen en uitgestrekte lanen.',
+    famous: 'Joop den Uyl (oud-premier), Cornelis Lely (waterstaatkundige), Sylvia Kristel (actrice).',
+    tags: ['Crematorium', 'Engelse landschapsstijl', 'Monumentaal', 'Rijksmonument']
+  },
+  {
+    name: 'De Nieuwe Ooster',
+    place: 'Amsterdam',
+    lat: 52.3499, lng: 4.9425,
+    type: 'algemeen',
+    founded: 1894,
+    size: '33 ha',
+    desc: 'De grootste begraafplaats van Nederland en een van de grootste van Europa. Ontworpen door Leonard Springer in landschapsstijl met monumentale lanen, vijvers en een eigen crematorium. Een wandeling waard.',
+    famous: 'Theo van Gogh (filmmaker), Yvonne Keuls (auteur), Annie M.G. Schmidt (schrijfster).',
+    tags: ['Grootste van NL', 'Landschapspark', 'Crematorium', 'Monument']
+  },
+  {
+    name: 'Zorgvlied',
+    place: 'Amsterdam',
+    lat: 52.3358, lng: 4.8966,
+    type: 'algemeen',
+    founded: 1870,
+    size: '11 ha',
+    desc: 'De begraafplaats van het Amsterdamse culturele leven. Aan de Amstel gelegen, geliefd om de romantische sfeer en de vele monumenten van bekende Nederlanders.',
+    famous: 'André Hazes (zanger), Manfred Langer (iT-eigenaar), Ramses Shaffy (chansonnier), Willem Duys (presentator).',
+    tags: ['Romantisch', 'Aan de Amstel', 'Culturele iconen', 'Veel BN\'ers']
+  },
+  {
+    name: 'Oud Eik en Duinen',
+    place: 'Den Haag',
+    lat: 52.0888, lng: 4.2604,
+    type: 'algemeen',
+    founded: 1247,
+    size: '7 ha',
+    desc: 'Een van de oudste begraafplaatsen van Nederland, ontstaan rond een 13e-eeuwse kapel die nog steeds te bezichtigen is. Florence Nightingale van de Nederlandse poëzie ligt hier begraven.',
+    famous: 'Louis Couperus (schrijver), Maurits Cornelis Escher (kunstenaar), Multatuli (schrijver).',
+    tags: ['13e-eeuwse kapel', 'Historisch', 'Schrijvers', 'Monumentaal']
+  },
+  {
+    name: 'Begraafplaats Crooswijk',
+    place: 'Rotterdam',
+    lat: 51.9314, lng: 4.4985,
+    type: 'algemeen',
+    founded: 1828,
+    size: '17 ha',
+    desc: 'De grote algemene begraafplaats van Rotterdam, een lommerrijk gebied met monumentale graven uit de 19e eeuw. Belangrijk monument van Rotterdamse geschiedenis.',
+    famous: 'Lucas Bols (jeneverstoker), Wim Sonneveld (cabaretier).',
+    tags: ['19e-eeuws', 'Monumentaal', 'Rotterdamse historie', 'Lommerrijk']
+  },
+  {
+    name: 'Begraafplaats Tongerseweg',
+    place: 'Maastricht',
+    lat: 50.8454, lng: 5.6722,
+    type: 'algemeen',
+    founded: 1812,
+    size: '21 ha',
+    desc: 'De oudste algemene begraafplaats van Maastricht, in opdracht van Napoleon aangelegd. Een bijzondere mengeling van katholieke, joodse en militaire graven.',
+    famous: 'André Rieu (sr., dirigent en vader van), Charles Eyck (kunstenaar).',
+    tags: ['Napoleontisch', 'Multi-confessioneel', 'Limburg', 'Monumentaal']
+  },
+  {
+    name: 'Soestbergen',
+    place: 'Utrecht',
+    lat: 52.0823, lng: 5.1428,
+    type: 'algemeen',
+    founded: 1830,
+    size: '6 ha',
+    desc: 'Een vroeg-19e-eeuwse begraafplaats in landschapsstijl, ontworpen door Jan David Zocher. Een prachtig voorbeeld van neo-classicistische rouwarchitectuur met monumentale grafmonumenten.',
+    famous: 'Onbekend, maar de plek zelf is een rijksmonument.',
+    tags: ['Zocher', 'Landschapsstijl', 'Rijksmonument', 'Klassiek']
+  },
+  {
+    name: 'Daalseweg',
+    place: 'Nijmegen',
+    lat: 51.8378, lng: 5.8722,
+    type: 'algemeen',
+    founded: 1885,
+    size: '10 ha',
+    desc: 'De grootste begraafplaats van Nijmegen, gelegen op de Heuvel. Bekend om de monumentale ingang en de vele oorlogsgraven uit de Tweede Wereldoorlog.',
+    famous: 'Verschillende oorlogsslachtoffers en lokale prominenten.',
+    tags: ['Op de heuvel', 'Oorlogsgraven', 'Monumentaal']
+  },
+  {
+    name: 'Esserveld',
+    place: 'Groningen',
+    lat: 53.2087, lng: 6.5764,
+    type: 'algemeen',
+    founded: 1827,
+    size: '8 ha',
+    desc: 'Een lommerrijke begraafplaats aan de zuidkant van Groningen, met monumentale grafmonumenten van Groningse families uit de 19e eeuw. Een rustige wandelplek.',
+    famous: 'Diverse Groninger notabelen.',
+    tags: ['Lommerrijk', 'Groningse historie', '19e-eeuws']
+  },
+  {
+    name: 'Bergklooster',
+    place: 'Zwolle',
+    lat: 52.5328, lng: 6.0995,
+    type: 'algemeen',
+    founded: 1819,
+    size: '5 ha',
+    desc: 'Een van de oudste begraafplaatsen van Zwolle, gelegen op een terrein dat ooit een klooster was. Bekend om de oude bomen, mossen en bijzondere flora.',
+    famous: 'Zwolse families uit de 19e eeuw.',
+    tags: ['Klooster-locatie', 'Oude bomen', 'Biodiversiteit']
+  },
+  {
+    name: 'Rusthof',
+    place: 'Leusden',
+    lat: 52.1378, lng: 5.4322,
+    type: 'algemeen',
+    founded: 1933,
+    size: '37 ha',
+    desc: 'Een van de grootste begraafplaatsen van Nederland, met een uitgestrekt park, vele themavakken (kinderen, zelfdoding, militaire graven) en een groot crematorium.',
+    famous: 'Verschillende lokale en regionale prominenten.',
+    tags: ['Grote ondergrond', 'Themavakken', 'Crematorium', 'Park']
+  },
+
+  // ═══════ NATUURBEGRAAFPLAATSEN ═══════
+  {
+    name: 'Natuurbegraafplaats Heidehof',
+    place: 'Ugchelen (Apeldoorn)',
+    lat: 52.1697, lng: 5.9248,
+    type: 'natuur',
+    founded: 2010,
+    size: '30 ha',
+    desc: 'Een van de eerste natuurbegraafplaatsen van Nederland, midden op de Veluwse heide. Graven liggen tussen heide en grove dennen; het terrein blijft eeuwig natuur. Geen grafstenen — alleen kleine houten markers.',
+    tags: ['Veluwe', 'Heide', 'Eeuwige natuur', 'Eerste in NL']
+  },
+  {
+    name: 'Natuurbegraafplaats Bergerbos',
+    place: 'Bergen NH',
+    lat: 52.6478, lng: 4.7012,
+    type: 'natuur',
+    founded: 2011,
+    size: '23 ha',
+    desc: 'Onder de eeuwenoude eiken en beuken van het Bergerbos. Een plek waar de natuur en herinnering samenkomen, vlak bij de Noordzee.',
+    tags: ['Oud bos', 'Eiken & beuken', 'Vlak bij zee']
+  },
+  {
+    name: 'Natuurbegraafplaats Hillig Meer',
+    place: 'Eext (Drenthe)',
+    lat: 53.0036, lng: 6.7297,
+    type: 'natuur',
+    founded: 2014,
+    size: '20 ha',
+    desc: 'Aan de rand van het Hunzedal in Drenthe, omringd door eikenbossen en hunebedden. Een plek met diep verleden — al sinds de prehistorie een spirituele locatie.',
+    tags: ['Hunebed-omgeving', 'Drents landschap', 'Prehistorisch gebied']
+  },
+  {
+    name: 'Natuurbegraafplaats Schoorlse Duinen',
+    place: 'Schoorl',
+    lat: 52.7038, lng: 4.6735,
+    type: 'natuur',
+    founded: 2016,
+    size: '14 ha',
+    desc: 'Tussen de duinen en het bos van Schoorl, het hoogste duingebied van Nederland. Wind door de dennen en het ruisen van de zee op de achtergrond.',
+    tags: ['Duinen', 'Dennenbos', 'Hoogste duinen NL']
+  },
+  {
+    name: 'Natuurbegraafplaats De Hoevens',
+    place: 'Alphen (NB)',
+    lat: 51.4795, lng: 4.9532,
+    type: 'natuur',
+    founded: 2015,
+    size: '13 ha',
+    desc: 'Een bosbegraafplaats in Brabant met dennen, eiken en open heidevelden. De graven blijven 100 jaar gegarandeerd onaangetast — daarna keert alles terug naar de natuur.',
+    tags: ['Brabantse bossen', 'Heide', '100 jaar gegarandeerd']
+  },
+  {
+    name: 'Natuurbegraafplaats Maashorst',
+    place: 'Nistelrode',
+    lat: 51.7164, lng: 5.5832,
+    type: 'natuur',
+    founded: 2013,
+    size: '10 ha',
+    desc: 'Onderdeel van Nationaal Park De Maashorst, het grootste aaneengesloten natuurgebied van Brabant. Wandelende wisenten en taurussen lopen in de buurt.',
+    tags: ['Nationaal park', 'Wisenten in de buurt', 'Brabantse natuur']
+  },
+  {
+    name: 'Natuurbegraafplaats Heidepol',
+    place: 'Arnhem',
+    lat: 52.0341, lng: 5.8064,
+    type: 'natuur',
+    founded: 2012,
+    size: '12 ha',
+    desc: 'Aan de rand van Park De Hoge Veluwe, een natuurbegraafplaats met heide, bos en zandverstuivingen. Een plek waar wandelaars vaak rusten.',
+    tags: ['Veluwe-rand', 'Heide & bos', 'Zandverstuivingen']
+  },
+  {
+    name: 'Natuurbegraafplaats Reiderwolde',
+    place: 'Beerta (Groningen)',
+    lat: 53.1797, lng: 7.1106,
+    type: 'natuur',
+    founded: 2018,
+    size: '8 ha',
+    desc: 'In het noordoosten van Groningen, een jonge natuurbegraafplaats die het verloren bos van Reiderwolde laat terugkeren. Aanplant van inheemse bomen rondom elk graf.',
+    tags: ['Jong bos', 'Bos herstel', 'Groningen']
+  },
+  {
+    name: 'Natuurbegraafplaats Weverslo',
+    place: 'Heijen (Limburg)',
+    lat: 51.7286, lng: 5.9789,
+    type: 'natuur',
+    founded: 2009,
+    size: '15 ha',
+    desc: 'In de Maasduinen — een Limburgs natuurpark met dennenbossen en zandgronden. Een rustige plek waar de natuur zich vrijwel onaangetast ontwikkelt.',
+    tags: ['Maasduinen', 'Limburg', 'Dennenbossen']
+  },
+  {
+    name: 'Natuurbegraafplaats Mookerheide',
+    place: 'Mook',
+    lat: 51.7556, lng: 5.8989,
+    type: 'natuur',
+    founded: 2017,
+    size: '9 ha',
+    desc: 'Op de Mookerheide, een gebied vol heidevelden en bossen. Een plek met militaire geschiedenis (Slag bij Mookerheide, 1574) maar nu een oase van rust.',
+    tags: ['Mookerheide', 'Historische grond', 'Limburg']
+  },
+  {
+    name: 'Natuurbegraafplaats Geestmerloo',
+    place: 'Heiloo',
+    lat: 52.6028, lng: 4.7059,
+    type: 'natuur',
+    founded: 2019,
+    size: '7 ha',
+    desc: 'In het bosgebied tussen Heiloo en Alkmaar. Een nieuwere natuurbegraafplaats die de polder en het bos verbindt.',
+    tags: ['Noord-Holland', 'Bos & polder', 'Recent']
+  },
+
+  // ═══════ JOODSE BEGRAAFPLAATSEN ═══════
+  {
+    name: 'Joodse Begraafplaats Muiderberg',
+    place: 'Muiderberg',
+    lat: 52.3279, lng: 5.0656,
+    type: 'joods',
+    founded: 1642,
+    size: '12 ha',
+    desc: 'De grootste joodse begraafplaats van Nederland. Sinds 1642 onafgebroken in gebruik, met meer dan 40.000 graven. Bijna alle joodse Amsterdammers werden hier vroeger begraven omdat begraven in Amsterdam zelf verboden was.',
+    famous: 'Veel rabbijnen, geleerden en slachtoffers van de Shoah.',
+    tags: ['Grootste joodse NL', 'Sinds 17e eeuw', 'Sjoa-gedenkmonument']
+  },
+  {
+    name: 'Beth Haim (Huis van het Leven)',
+    place: 'Ouderkerk aan de Amstel',
+    lat: 52.2957, lng: 4.9101,
+    type: 'joods',
+    founded: 1614,
+    size: '4 ha',
+    desc: 'De oudste joodse begraafplaats van Nederland. Door Rembrandt geschilderd in zijn "Joodse Begraafplaats" (1654). Bijna 30.000 Portugees-joodse graven liggen hier, soms half in de aarde gezakt door de moerasgrond.',
+    famous: 'Spinoza\'s familie (de filosoof zelf ligt elders), vele rabbijnen, Hugo Grotius (correspondent).',
+    tags: ['Oudste joodse NL', 'Rembrandt-onderwerp', 'Portugees-joods', 'Rijksmonument']
+  },
+  {
+    name: 'Joodse Begraafplaats Zeeburg',
+    place: 'Amsterdam',
+    lat: 52.3725, lng: 4.9659,
+    type: 'joods',
+    founded: 1714,
+    size: '2 ha',
+    desc: 'Vroeger de grote begraafplaats voor de armere Asjkenazische joden van Amsterdam. Vlakbij het Flevopark, lange tijd verwaarloosd, maar nu zorgvuldig hersteld.',
+    tags: ['Asjkenazisch', 'Hersteld monument', 'Amsterdam-Oost']
+  },
+  {
+    name: 'Joodse Begraafplaats Diemen',
+    place: 'Diemen',
+    lat: 52.3393, lng: 4.9669,
+    type: 'joods',
+    founded: 1916,
+    size: '7 ha',
+    desc: 'Een van de actieve joodse begraafplaatsen in de regio Amsterdam. Bevat het monument voor de in 1943-1944 weggevoerde joden uit Nederland.',
+    tags: ['Sjoa-monument', 'Actief in gebruik', 'Diemen']
+  },
+
+  // ═══════ ISLAMITISCHE BEGRAAFPLAATSEN ═══════
+  {
+    name: 'Islamitische Begraafplaats Almere',
+    place: 'Almere',
+    lat: 52.3725, lng: 5.2531,
+    type: 'islamitisch',
+    founded: 2007,
+    size: '4 ha',
+    desc: 'Een van de grootste islamitische begraafplaatsen van Nederland. Speciaal ingericht volgens islamitische tradities, met graven gericht naar Mekka en eeuwige grafrust.',
+    tags: ['Gericht naar Mekka', 'Eeuwige grafrust', 'Modern']
+  },
+  {
+    name: 'Islamitische Begraafplaats Nuenen',
+    place: 'Nuenen',
+    lat: 51.4733, lng: 5.5489,
+    type: 'islamitisch',
+    founded: 2014,
+    size: '3 ha',
+    desc: 'Een rustige islamitische begraafplaats in Brabant, opgericht door de moslimgemeenschap van Eindhoven en omstreken. Tot 24 uur na overlijden begraven mogelijk.',
+    tags: ['Brabant', '24-uurs procedure', 'Islamitisch']
+  },
+
+  // ═══════ KATHOLIEKE BEGRAAFPLAATSEN ═══════
+  {
+    name: 'Heilig Land Stichting (Cenakel)',
+    place: 'Groesbeek',
+    lat: 51.8186, lng: 5.9047,
+    type: 'katholiek',
+    founded: 1915,
+    size: '10 ha',
+    desc: 'Een unieke katholieke begraafplaats bij het Bijbels Museum Orientalis. Aangelegd om het Heilige Land na te bootsen, met paden die de "weg naar Jeruzalem" symboliseren.',
+    tags: ['Bijbels Museum', 'Heilige Land thema', 'Uniek concept']
+  },
+  {
+    name: 'Sint Barbara',
+    place: 'Utrecht',
+    lat: 52.0917, lng: 5.0997,
+    type: 'katholiek',
+    founded: 1828,
+    size: '5 ha',
+    desc: 'De oudste katholieke begraafplaats van Utrecht, met monumentale grafmonumenten en familiekapellen uit de 19e en vroege 20e eeuw.',
+    tags: ['Oudste rk Utrecht', 'Familiekapellen', '19e-eeuws']
+  },
+
+  // ═══════ MILITAIRE BEGRAAFPLAATSEN ═══════
+  {
+    name: 'Amerikaanse Begraafplaats Margraten',
+    place: 'Margraten',
+    lat: 50.8270, lng: 5.8158,
+    type: 'militair',
+    founded: 1944,
+    size: '26 ha',
+    desc: '8.301 Amerikaanse gevallenen van de Tweede Wereldoorlog liggen hier begraven, op de enige Amerikaanse oorlogsbegraafplaats in Nederland. Adoptieprogramma sinds 1945 — elk graf heeft een Nederlandse "adoptant".',
+    famous: 'Amerikaanse soldaten gevallen bij de bevrijding van Nederland.',
+    tags: ['Tweede Wereldoorlog', 'Adoptieprogramma', '8.301 graven', 'Nederlands-Amerikaans symbool']
+  },
+  {
+    name: 'Ereveld Loenen',
+    place: 'Loenen',
+    lat: 52.1219, lng: 6.0294,
+    type: 'militair',
+    founded: 1949,
+    size: '15 ha',
+    desc: 'Het Nederlandse nationale ereveld. Hier liggen meer dan 4.000 Nederlanders die in oorlogen of verzet zijn omgekomen, van WO II tot militaire missies in Afghanistan.',
+    famous: 'Hannie Schaft (verzetsstrijdster), vele verzetshelden en militairen.',
+    tags: ['Nationaal ereveld', '4.000+ graven', 'Verzet & oorlog']
+  },
+  {
+    name: 'Canadese Oorlogsbegraafplaats Holten',
+    place: 'Holten',
+    lat: 52.2772, lng: 6.4533,
+    type: 'militair',
+    founded: 1945,
+    size: '4 ha',
+    desc: '1.394 Canadese soldaten die vielen bij de bevrijding van Noord-Nederland in 1945. Op de Holterberg, met uitzicht over Sallandse landschap.',
+    tags: ['Canadese gevallenen', 'Bevrijding Noord-NL', 'Holterberg']
+  },
+  {
+    name: 'Duitse Begraafplaats Ysselsteyn',
+    place: 'Ysselsteyn',
+    lat: 51.5169, lng: 5.9272,
+    type: 'militair',
+    founded: 1946,
+    size: '28 ha',
+    desc: 'De grootste Duitse oorlogsbegraafplaats ter wereld. Meer dan 31.000 Duitse soldaten en burgers uit WO II liggen hier begraven. Een plek van bezinning over de gevolgen van oorlog.',
+    tags: ['Grootste Duitse ter wereld', '31.000+ graven', 'Bezinning']
+  },
+  {
+    name: 'Militair Ereveld Grebbeberg',
+    place: 'Rhenen',
+    lat: 51.9579, lng: 5.5944,
+    type: 'militair',
+    founded: 1946,
+    size: '4 ha',
+    desc: 'Het oudste militaire ereveld van Nederland, op de plek van de Slag om de Grebbeberg (mei 1940). 426 Nederlandse militairen die vielen tijdens de eerste oorlogsdagen.',
+    tags: ['Slag om Grebbeberg', 'Mei 1940', 'Oudste ereveld']
+  },
+
+  // ═══════ BOS / PARK ═══════
+  {
+    name: 'Park Vredenhof',
+    place: 'Amsterdam',
+    lat: 52.3917, lng: 4.8189,
+    type: 'bos',
+    founded: 1893,
+    size: '6 ha',
+    desc: 'Een parkachtige begraafplaats in Amsterdam-West, met monumentale bomen en een vijver. Onderdeel van het bredere Vredenhof-complex met algemene en katholieke afdelingen.',
+    tags: ['Park-achtig', 'Vijver', 'Monumentale bomen']
+  },
+  {
+    name: 'Den en Rust',
+    place: 'Bilthoven',
+    lat: 52.1414, lng: 5.1936,
+    type: 'bos',
+    founded: 1925,
+    size: '14 ha',
+    desc: 'Een uitgestrekte bosrijke begraafplaats in Het Gooi, met dennen, eiken en open heidevelden. Architectonisch ontworpen in landschapsstijl door tuinarchitect Springer.',
+    tags: ['Bosrijk', 'Het Gooi', 'Springer-ontwerp']
+  },
+  {
+    name: 'Vredenhof Hilversum',
+    place: 'Hilversum',
+    lat: 52.2236, lng: 5.1764,
+    type: 'bos',
+    founded: 1907,
+    size: '8 ha',
+    desc: 'Een uitgestrekte parkbegraafplaats in Het Gooi, met grote bossen en open velden. Veel Hilversumse omroepmensen liggen hier.',
+    famous: 'Wim Kan (cabaretier), Mies Bouwman (presentatrice).',
+    tags: ['Park', 'Gooi', 'Omroepwereld']
+  },
+
+  // ═══════ BIJZONDER ═══════
+  {
+    name: 'Crematorium Daelwijck',
+    place: 'Utrecht',
+    lat: 52.1119, lng: 5.0664,
+    type: 'bijzonder',
+    founded: 1959,
+    size: '20 ha',
+    desc: 'Een modernistisch crematorium-park in Utrecht, ontworpen door Aldo van Eyck-volger. Een markant voorbeeld van naoorlogse rouwarchitectuur.',
+    tags: ['Modernistisch', 'Architectonisch', 'Naoorlogs']
+  },
+  {
+    name: 'Strooiweide Schiphol',
+    place: 'Haarlemmermeer',
+    lat: 52.3050, lng: 4.7683,
+    type: 'bijzonder',
+    founded: 1985,
+    size: '3 ha',
+    desc: 'Een uitgestrekte asverstrooiingsplek nabij Schiphol — populair bij families met internationale roots. As wordt verstrooid op een open veld omringd door rietkragen.',
+    tags: ['Asverstrooiing', 'Open veld', 'Internationaal']
+  },
+  {
+    name: 'Zeebestemming Noordzee',
+    place: 'Scheveningen / Noordzee',
+    lat: 52.1100, lng: 4.2400,
+    type: 'bijzonder',
+    founded: 1900,
+    size: '∞',
+    desc: 'Niet één plek maar het gehele Noordzee-gebied buiten de twaalfmijlszone. Hier worden asverstrooiingen op zee gedaan vanaf schepen, een populaire keuze voor zeelieden en oude IJmuidense vissersfamilies.',
+    tags: ['Op zee', 'Geen grenzen', 'Zeelieden', 'IJmuiden']
+  },
+  {
+    name: 'Begraafplaats Sint Petrus\' Banden',
+    place: 'Venray',
+    lat: 51.5269, lng: 5.9742,
+    type: 'katholiek',
+    founded: 1854,
+    size: '4 ha',
+    desc: 'Een Brabants-Limburgse katholieke begraafplaats met monumentale calvarieberg. Bijzonder vanwege de eeuwen-oude lindebomen die de paden begeleiden.',
+    tags: ['Calvarieberg', 'Limburg', 'Lindebomen']
+  },
+  {
+    name: 'Begraafplaats Buitenveldert',
+    place: 'Amsterdam',
+    lat: 52.3325, lng: 4.8775,
+    type: 'algemeen',
+    founded: 1957,
+    size: '17 ha',
+    desc: 'Een grote, moderne begraafplaats in zuidelijk Amsterdam, ontworpen met aandacht voor multiculturele uitvaartrituelen. Bevat aparte vakken voor verschillende religies.',
+    tags: ['Modern', 'Multi-religieus', 'Amsterdam-Zuid']
+  },
+  {
+    name: 'Begraafplaats Sint Laurentius',
+    place: 'Rotterdam (Kralingen)',
+    lat: 51.9214, lng: 4.5117,
+    type: 'katholiek',
+    founded: 1869,
+    size: '5 ha',
+    desc: 'De oudste katholieke begraafplaats van Rotterdam, met monumentale familiegraven van Rotterdamse katholieke families. Mooi gelegen aan de Kralingse Plas.',
+    tags: ['Oudste rk Rotterdam', 'Kralingse Plas', '19e-eeuws']
+  },
+  {
+    name: 'Nieuwe Algemene Begraafplaats',
+    place: 'Wassenaar',
+    lat: 52.1428, lng: 4.3989,
+    type: 'algemeen',
+    founded: 1932,
+    size: '7 ha',
+    desc: 'Een fraaie parkbegraafplaats in Wassenaar, met monumentale grafmonumenten van Haagse en Wassenaarse families. Veel diplomatieke en koninklijke connecties.',
+    tags: ['Wassenaar', 'Diplomatiek', 'Koninklijke connecties']
+  },
+  {
+    name: 'Begraafplaats Frieswijk',
+    place: 'Schalkhaar (Deventer)',
+    lat: 52.2728, lng: 6.2025,
+    type: 'algemeen',
+    founded: 1855,
+    size: '6 ha',
+    desc: 'Een rustige begraafplaats aan de rand van Deventer, in een omgeving van oude landgoederen en bossen. Veel oude grafmonumenten in bostuinstijl.',
+    tags: ['Landgoed-omgeving', 'Bostuin', 'Deventer']
+  },
+  {
+    name: 'Begraafplaats De Boskamp',
+    place: 'Assen',
+    lat: 52.9933, lng: 6.5717,
+    type: 'algemeen',
+    founded: 1832,
+    size: '7 ha',
+    desc: 'De oudste begraafplaats van Assen, omringd door bos. Bevat monumenten uit de 19e eeuw en is een belangrijk historisch monument van Drenthe.',
+    tags: ['Drents historisch', 'Bos-omringd', '19e-eeuws']
+  },
+  {
+    name: 'Begraafplaats Iepenhof',
+    place: 'Dordrecht',
+    lat: 51.7847, lng: 4.6592,
+    type: 'algemeen',
+    founded: 1828,
+    size: '5 ha',
+    desc: 'De oudste begraafplaats van Dordrecht, beroemd om de monumentale iepenlaan. Een gesloten begraafplaats, maar nog steeds te bezoeken als wandelmonument.',
+    tags: ['Iepenlaan', 'Gesloten', 'Wandelmonument']
+  },
+  {
+    name: 'Begraafplaats Moscowa',
+    place: 'Arnhem',
+    lat: 52.0089, lng: 5.9117,
+    type: 'algemeen',
+    founded: 1872,
+    size: '12 ha',
+    desc: 'Een lommerrijke begraafplaats aan de rand van Arnhem, met grote vijvers, monumentale bomen en een schitterende rotonde met grafmonumenten. Veel oorlogsslachtoffers uit Slag om Arnhem.',
+    tags: ['Slag om Arnhem', 'Vijvers', 'Rotonde-aanleg']
+  },
+  {
+    name: 'Natuurbegraafplaats Vlek 14',
+    place: 'Lelystad',
+    lat: 52.5114, lng: 5.5236,
+    type: 'natuur',
+    founded: 2020,
+    size: '6 ha',
+    desc: 'Een jonge natuurbegraafplaats in een nieuw aangelegd bos in Flevoland — de "natuur" hier is bewust geplant. Een symbool van regeneratie op de zeebodem.',
+    tags: ['Flevoland', 'Aangelegd bos', 'Op zeebodem']
+  },
+  {
+    name: 'Tolhuispark',
+    place: 'Tilburg',
+    lat: 51.5689, lng: 5.0758,
+    type: 'bos',
+    founded: 1925,
+    size: '11 ha',
+    desc: 'Een parkbegraafplaats in Tilburg, ontworpen als landschapspark met vijvers en monumentale eiken. Veel kunstwerken op het terrein.',
+    tags: ['Landschapspark', 'Kunstwerken', 'Tilburg']
+  }
+];
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+let map;
+let markerCluster;
+let markers = {};
+let activeFilters = new Set(Object.keys(TYPES));
+let searchQuery = '';
+let favorites = JSON.parse(localStorage.getItem('atlas-favs') || '[]');
+let currentDetail = null;
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
+
+  // Defensieve check: is Leaflet wel geladen?
+  if (typeof L === 'undefined') {
+    document.getElementById('map').innerHTML = '<div style="padding:40px; text-align:center; color:#4a1942; font-family:Poppins, sans-serif;"><strong>Kaart kon niet laden.</strong><br><br>De Leaflet kaartbibliotheek is niet beschikbaar. Controleer of externe scripts toegestaan zijn en herlaad de pagina.</div>';
+    return;
+  }
+
+  initMap();
+  renderFilters();
+  renderLegend();
+  renderMarkers();
+  bindSearch();
+  updateStats();
+});
+
+function initMap() {
+  map = L.map('map', {
+    zoomControl: true,
+    attributionControl: true,
+    minZoom: 7,
+    maxZoom: 18,
+    maxBounds: [[50.5, 2.8], [54.0, 7.5]],
+    maxBoundsViscosity: 0.8
+  }).setView([52.2, 5.3], 7.5);
+
+  // CartoDB Voyager tiles — neutraal en mooi
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://uitvaart-platform.nl">Uitvaart-Platform.nl</a> · Kaart: OpenStreetMap, CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  markerCluster = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    maxClusterRadius: 50,
+    iconCreateFunction: cluster => {
+      const count = cluster.getChildCount();
+      return L.divIcon({
+        html: `<div><span>${count}</span></div>`,
+        className: 'marker-cluster marker-cluster-medium',
+        iconSize: L.point(40, 40)
+      });
+    }
+  });
+  map.addLayer(markerCluster);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MARKERS
+═══════════════════════════════════════════════════════ */
+function renderMarkers() {
+  markerCluster.clearLayers();
+  markers = {};
+
+  const filtered = BEGRAAFPLAATSEN.filter(b => {
+    if (!activeFilters.has(b.type)) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      return b.name.toLowerCase().includes(q) || b.place.toLowerCase().includes(q);
+    }
+    return true;
+  });
+
+  filtered.forEach((b, i) => {
+    const color = TYPES[b.type].color;
+    const icon = L.divIcon({
+      html: `<div class="cm-marker" style="background:${color}; color:${color};"></div>`,
+      className: 'cm-marker-wrap',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+    const marker = L.marker([b.lat, b.lng], { icon, title: b.name });
+    marker.bindPopup(buildPopup(b), { maxWidth: 280, minWidth: 240, offset: [0, -8] });
+    marker.on('click', () => openDetail(b));
+    markers[b.name] = marker;
+    markerCluster.addLayer(marker);
+  });
+
+  document.getElementById('stat-shown').textContent = filtered.length;
+}
+
+function buildPopup(b) {
+  const t = TYPES[b.type];
+  return `
+    <div class="popup-eyebrow" style="color:${t.color};">${t.icon} ${t.label}</div>
+    <div class="popup-title">${b.name}</div>
+    <div class="popup-place">${b.place}</div>
+    <div class="popup-desc">${b.desc.substring(0, 110)}…</div>
+    <a class="popup-btn" onclick="openDetail(BEGRAAFPLAATSEN.find(x=>x.name==='${b.name.replace(/'/g,"\\'")}')); return false;">Meer info →</a>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FILTERS
+═══════════════════════════════════════════════════════ */
+function renderFilters() {
+  const container = document.getElementById('filter-types');
+  container.innerHTML = '';
+  Object.entries(TYPES).forEach(([key, type]) => {
+    const count = BEGRAAFPLAATSEN.filter(b => b.type === key).length;
+    if (count === 0) return;
+    const el = document.createElement('div');
+    el.className = 'filter-chip active';
+    el.dataset.type = key;
+    el.innerHTML = `
+      <div class="filter-chip-dot" style="background:${type.color};"></div>
+      <div class="filter-chip-name">${type.label}</div>
+      <div class="filter-chip-count">${count}</div>
+    `;
+    el.addEventListener('click', () => {
+      el.classList.toggle('active');
+      if (activeFilters.has(key)) activeFilters.delete(key);
+      else activeFilters.add(key);
+      renderMarkers();
+    });
+    container.appendChild(el);
+  });
+}
+
+function renderLegend() {
+  const container = document.getElementById('legend-items');
+  container.innerHTML = '';
+  Object.entries(TYPES).forEach(([key, type]) => {
+    const count = BEGRAAFPLAATSEN.filter(b => b.type === key).length;
+    if (count === 0) return;
+    const el = document.createElement('div');
+    el.className = 'legend-item';
+    el.innerHTML = `
+      <div class="legend-dot" style="background:${type.color};"></div>
+      <div>${type.label}</div>
+    `;
+    container.appendChild(el);
+  });
+}
+
+function bindSearch() {
+  const input = document.getElementById('search');
+  let debounce;
+  input.addEventListener('input', () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => {
+      searchQuery = input.value.trim();
+      renderMarkers();
+    }, 200);
+  });
+}
+
+function resetFilters() {
+  activeFilters = new Set(Object.keys(TYPES));
+  searchQuery = '';
+  document.getElementById('search').value = '';
+  document.querySelectorAll('.filter-chip').forEach(el => el.classList.add('active'));
+  renderMarkers();
+  fitAll();
+  toast('Filters teruggezet');
+}
+
+function fitAll() {
+  if (markerCluster.getLayers().length > 0) {
+    map.fitBounds(markerCluster.getBounds(), { padding: [60, 60] });
+  }
+}
+
+function filterFavs() {
+  if (favorites.length === 0) {
+    toast('Je hebt nog geen begraafplaatsen bewaard');
+    return;
+  }
+  searchQuery = '';
+  document.getElementById('search').value = '';
+  renderMarkersByList(BEGRAAFPLAATSEN.filter(b => favorites.includes(b.name)));
+  toast(`${favorites.length} bewaard${favorites.length === 1 ? 'e' : 'e'} begraafplaats${favorites.length === 1 ? '' : 'en'}`);
+}
+function filterHistoric() {
+  searchQuery = '';
+  document.getElementById('search').value = '';
+  renderMarkersByList(BEGRAAFPLAATSEN.filter(b => b.founded && b.founded < 1900));
+  toast('Begraafplaatsen gesticht vóór 1900');
+}
+function filterNature() {
+  activeFilters = new Set(['natuur']);
+  document.querySelectorAll('.filter-chip').forEach(el => {
+    el.classList.toggle('active', el.dataset.type === 'natuur');
+  });
+  renderMarkers();
+  fitAll();
+  toast('Natuurbegraafplaatsen');
+}
+
+function renderMarkersByList(list) {
+  markerCluster.clearLayers();
+  list.forEach(b => {
+    const color = TYPES[b.type].color;
+    const icon = L.divIcon({
+      html: `<div class="cm-marker" style="background:${color}; color:${color};"></div>`,
+      className: 'cm-marker-wrap',
+      iconSize: [18, 18], iconAnchor: [9, 9]
+    });
+    const marker = L.marker([b.lat, b.lng], { icon, title: b.name });
+    marker.bindPopup(buildPopup(b));
+    marker.on('click', () => openDetail(b));
+    markerCluster.addLayer(marker);
+  });
+  document.getElementById('stat-shown').textContent = list.length;
+  if (list.length > 0) map.fitBounds(markerCluster.getBounds(), { padding: [60, 60] });
+}
+
+/* ═══════════════════════════════════════════════════════
+   DETAIL PANEL
+═══════════════════════════════════════════════════════ */
+function openDetail(b) {
+  currentDetail = b;
+  const t = TYPES[b.type];
+  document.getElementById('detail-eyebrow').textContent = `${t.icon} ${t.label}`;
+  document.getElementById('detail-eyebrow').style.color = t.color;
+  document.getElementById('detail-title').textContent = b.name;
+  document.getElementById('detail-place').textContent = b.place;
+  document.getElementById('detail-founded').textContent = b.founded || '—';
+  document.getElementById('detail-size').textContent = b.size || '—';
+  document.getElementById('detail-desc').textContent = b.desc;
+
+  if (b.famous) {
+    document.getElementById('detail-famous-wrap').style.display = 'block';
+    document.getElementById('detail-famous').textContent = b.famous;
+  } else {
+    document.getElementById('detail-famous-wrap').style.display = 'none';
+  }
+
+  const tagsEl = document.getElementById('detail-tags');
+  tagsEl.innerHTML = '';
+  (b.tags || []).forEach(tag => {
+    const span = document.createElement('span');
+    span.className = 'detail-tag';
+    span.textContent = tag;
+    tagsEl.appendChild(span);
+  });
+
+  document.getElementById('detail-google').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ' ' + b.place)}`;
+
+  const favBtn = document.getElementById('detail-fav');
+  if (favorites.includes(b.name)) {
+    favBtn.classList.add('active');
+    favBtn.textContent = '♥';
+  } else {
+    favBtn.classList.remove('active');
+    favBtn.textContent = '♡';
+  }
+
+  // Update hero gradient based on type
+  const hero = document.querySelector('.detail-hero');
+  hero.style.background = `linear-gradient(135deg, var(--purple-900) 0%, ${t.color} 50%, var(--purple-500) 100%)`;
+
+  document.getElementById('detail-panel').classList.add('open');
+  map.flyTo([b.lat, b.lng], 13, { duration: 1.2 });
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+  currentDetail = null;
+}
+
+function toggleFav() {
+  if (!currentDetail) return;
+  const idx = favorites.indexOf(currentDetail.name);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+    toast('Verwijderd uit bewaard');
+  } else {
+    favorites.push(currentDetail.name);
+    toast('Bewaard ♥');
+  }
+  localStorage.setItem('atlas-favs', JSON.stringify(favorites));
+  const favBtn = document.getElementById('detail-fav');
+  if (favorites.includes(currentDetail.name)) {
+    favBtn.classList.add('active');
+    favBtn.textContent = '♥';
+  } else {
+    favBtn.classList.remove('active');
+    favBtn.textContent = '♡';
+  }
+  updateStats();
+}
+
+/* ═══════════════════════════════════════════════════════
+   LIST VIEW
+═══════════════════════════════════════════════════════ */
+function openListView() {
+  const container = document.getElementById('listview-items');
+  container.innerHTML = '';
+  const visible = BEGRAAFPLAATSEN.filter(b => activeFilters.has(b.type)).sort((a, b) => a.name.localeCompare(b.name, 'nl'));
+  if (visible.length === 0) {
+    container.innerHTML = '<div class="listview-empty">Geen begraafplaatsen passen bij je filter.</div>';
+  }
+  visible.forEach(b => {
+    const t = TYPES[b.type];
+    const el = document.createElement('div');
+    el.className = 'listview-item';
+    el.innerHTML = `
+      <div class="listview-item-dot" style="background:${t.color};"></div>
+      <div class="listview-item-text">
+        <div class="listview-item-name">${b.name}</div>
+        <div class="listview-item-place">${b.place} · ${t.label}${b.founded ? ' · gesticht ' + b.founded : ''}</div>
+      </div>
+      <div class="listview-item-arr">→</div>
+    `;
+    el.addEventListener('click', () => {
+      closeListView();
+      openDetail(b);
+    });
+    container.appendChild(el);
+  });
+  document.getElementById('listview').classList.add('open');
+}
+function closeListView() {
+  document.getElementById('listview').classList.remove('open');
+}
+
+/* ═══════════════════════════════════════════════════════
+   SPECIAL ACTIONS
+═══════════════════════════════════════════════════════ */
+function surpriseMe() {
+  const visible = BEGRAAFPLAATSEN.filter(b => activeFilters.has(b.type));
+  if (visible.length === 0) return toast('Geen begraafplaatsen actief');
+  const random = visible[Math.floor(Math.random() * visible.length)];
+  openDetail(random);
+}
+
+function findNearest() {
+  if (!navigator.geolocation) return toast('Geolocatie niet beschikbaar');
+  toast('Locatie ophalen…');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const { latitude, longitude } = pos.coords;
+      // Vind dichtstbijzijnde
+      let nearest = null, nearestDist = Infinity;
+      BEGRAAFPLAATSEN.filter(b => activeFilters.has(b.type)).forEach(b => {
+        const d = haversine(latitude, longitude, b.lat, b.lng);
+        if (d < nearestDist) { nearestDist = d; nearest = b; }
+      });
+      if (nearest) {
+        toast(`${nearest.name} — ${nearestDist.toFixed(1)} km`);
+        openDetail(nearest);
+      }
+    },
+    err => toast('Geen toegang tot je locatie')
+  );
+}
+
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 +
+    Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLng/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+/* ═══════════════════════════════════════════════════════
+   UI helpers
+═══════════════════════════════════════════════════════ */
+function updateStats() {
+  document.getElementById('stat-total').textContent = BEGRAAFPLAATSEN.length;
+  document.getElementById('stat-fav').textContent = favorites.length;
+}
+
+function toggleFilters() {
+  document.getElementById('filters').classList.toggle('open');
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function closeWelcome() {
+  document.getElementById('welcome').classList.add('hidden');
+  localStorage.setItem('atlas-seen', '1');
+}
+
+// Skip welcome if seen before
+if (localStorage.getItem('atlas-seen')) {
+  document.getElementById('welcome').classList.add('hidden');
+}
+
+// ESC sluit overlays
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeDetail();
+    closeListView();
+  }
+});
+
+</script>
+</body>
+</html>
