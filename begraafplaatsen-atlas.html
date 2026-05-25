@@ -1988,14 +1988,26 @@ function renderMarkers() {
 
 function buildPopup(b) {
   const t = TYPES[b.type];
+  const idx = BEGRAAFPLAATSEN.indexOf(b);
   return `
     <div class="popup-eyebrow" style="color:${t.color};">${t.icon} ${t.label}</div>
     <div class="popup-title">${b.name}</div>
     <div class="popup-place">${b.place}</div>
     <div class="popup-desc">${b.desc.substring(0, 110)}…</div>
-    <a class="popup-btn" onclick="openDetail(BEGRAAFPLAATSEN.find(x=>x.name==='${b.name.replace(/'/g,"\\'")}')); return false;">Meer info →</a>
+    <button type="button" class="popup-btn" data-idx="${idx}">Meer info →</button>
   `;
 }
+
+// Event delegation voor popup-knoppen (popups zijn dynamisch dus delegation is robuuster)
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.popup-btn[data-idx]');
+  if (!btn) return;
+  const idx = parseInt(btn.dataset.idx, 10);
+  if (!isNaN(idx) && BEGRAAFPLAATSEN[idx]) {
+    map.closePopup();
+    openDetail(BEGRAAFPLAATSEN[idx]);
+  }
+});
 
 /* ═══════════════════════════════════════════════════════
    FILTERS
