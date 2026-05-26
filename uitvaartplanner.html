@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Uitvaartplanner — Uitvaart-Platform.nl</title>
+<title>Uitvaartplanner | Bereken kosten, plan wensen, vergelijk scenarios | Uitvaart-Platform.nl</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -309,10 +309,894 @@ body {
 .up-info-stat-nr { font-size: 1.4rem; font-weight: 900; color: #4a1942; line-height: 1; }
 .up-info-stat-label { font-size: 0.65rem; color: #6b6570; font-weight: 300; margin-top: 2px; }
 @media (max-width: 680px) { .up-info-banner { flex-direction: column; } .up-info-stats { gap: 18px; } }
+/* ════════════════════════════════════════════════════════════
+   v4 UITBREIDINGEN — nieuwe visuele en functionele componenten
+   Alle nieuwe classes prefix: .upv4-
+══════════════════════════════════════════════════════════════ */
+
+/* ── HERO SFEERBEELD (decoratieve SVG patroon achter hero) ── */
+.up-hero { position: relative; }
+.up-hero-sfeer {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  z-index: 1;
+}
+.up-hero-inner { position: relative; z-index: 2; }
+
+/* ── QUICK START TEMPLATES BANNER ── */
+.upv4-templates {
+  background: linear-gradient(135deg, #faf7f2 0%, #f5ede9 100%);
+  border: 1px solid #e2d9e0;
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 14px;
+}
+.upv4-templates-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+}
+.upv4-templates-titel {
+  font-size: 0.95rem; font-weight: 800; color: #4a1942;
+}
+.upv4-templates-sub {
+  font-size: 0.74rem; color: #6b6570; font-weight: 300;
+  margin-top: 2px;
+}
+.upv4-templates-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+}
+.upv4-template-card {
+  background: #fff;
+  border: 2px solid #e2d9e0;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.upv4-template-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: #e8834a;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.upv4-template-card:hover {
+  border-color: #4a1942;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(74,25,66,0.1);
+}
+.upv4-template-card:hover::before { transform: scaleX(1); }
+.upv4-template-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(232,131,74,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+.upv4-template-naam {
+  font-size: 0.86rem; font-weight: 800; color: #4a1942;
+  margin-bottom: 4px;
+}
+.upv4-template-prijs {
+  font-size: 1.1rem; font-weight: 900; color: #e8834a;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.upv4-template-desc {
+  font-size: 0.7rem; color: #6b6570; font-weight: 300;
+  line-height: 1.5;
+}
+
+/* ── ANIMATED PRICE UPDATE ── */
+.upv4-prijs-update {
+  animation: upv4PriceFlash 0.6s ease;
+}
+@keyframes upv4PriceFlash {
+  0% { color: #e8834a; transform: scale(1); }
+  50% { color: #c8622a; transform: scale(1.08); }
+  100% { color: #fff; transform: scale(1); }
+}
+
+/* ── DONUT CHART ── */
+.upv4-donut-wrap {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 18px 16px;
+  margin: 16px 0;
+  position: relative;
+}
+.upv4-donut-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.upv4-donut-titel {
+  font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+.upv4-donut-leeg {
+  text-align: center; padding: 24px 12px;
+  font-size: 0.72rem; color: rgba(255,255,255,0.45);
+  font-style: italic;
+}
+.upv4-donut-svg {
+  display: block; margin: 0 auto;
+}
+.upv4-donut-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  margin-top: 6px;
+}
+.upv4-donut-center-bedrag {
+  font-size: 0.95rem; font-weight: 900; color: #fff;
+  letter-spacing: -0.01em;
+}
+.upv4-donut-center-label {
+  font-size: 0.58rem; font-weight: 400;
+  color: rgba(255,255,255,0.5); text-transform: uppercase;
+  letter-spacing: 0.08em; margin-top: 2px;
+}
+.upv4-donut-legenda {
+  margin-top: 12px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px;
+}
+.upv4-donut-legenda-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.75);
+}
+.upv4-donut-legenda-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── COLOR-CODED SECTIES ── */
+.up-sectie[data-cat="basis"] .up-sectie-nr { background: #4a1942; }
+.up-sectie[data-cat="graf"] .up-sectie-nr { background: #6b3060; }
+.up-sectie[data-cat="plechtigheid"] .up-sectie-nr { background: #e8834a; }
+.up-sectie[data-cat="herinnering"] .up-sectie-nr { background: #c47d8f; }
+.up-sectie[data-cat="admin"] .up-sectie-nr { background: #8c6878; }
+
+.up-sectie[data-cat="basis"] { border-left: 3px solid #4a1942; }
+.up-sectie[data-cat="graf"] { border-left: 3px solid #6b3060; }
+.up-sectie[data-cat="plechtigheid"] { border-left: 3px solid #e8834a; }
+.up-sectie[data-cat="herinnering"] { border-left: 3px solid #c47d8f; }
+.up-sectie[data-cat="admin"] { border-left: 3px solid #8c6878; }
+
+/* ── TOOLTIP BIJ SLIDERS ── */
+.up-rij-slider-wrap { position: relative; }
+.upv4-slider-tooltip {
+  position: absolute;
+  bottom: 100%; left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: #4a1942; color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem; font-weight: 600;
+  white-space: nowrap;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+.upv4-slider-tooltip::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #4a1942;
+}
+.up-rij-slider:hover ~ .upv4-slider-tooltip,
+.up-rij-slider:active ~ .upv4-slider-tooltip,
+.up-rij-slider:focus ~ .upv4-slider-tooltip {
+  opacity: 1;
+}
+
+/* ── AUTO-SAVE INDICATOR ── */
+.upv4-autosave {
+  position: fixed; bottom: 20px; right: 20px;
+  background: #4a1942; color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 0.78rem; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 8px 20px rgba(74,25,66,0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s;
+  z-index: 200;
+  pointer-events: none;
+}
+.upv4-autosave.zichtbaar {
+  opacity: 1; transform: translateY(0);
+}
+.upv4-autosave-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px;
+  background: #e8834a; color: #fff;
+  border-radius: 50%; font-size: 0.7rem;
+}
+
+/* ── PROGRESS BAR ── */
+.upv4-progress {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap;
+}
+.upv4-progress-label {
+  font-size: 0.74rem; font-weight: 700; color: #4a1942;
+  flex-shrink: 0;
+}
+.upv4-progress-bar {
+  flex: 1; min-width: 200px;
+  height: 8px; background: #f0ebef;
+  border-radius: 4px; overflow: hidden;
+}
+.upv4-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a1942, #e8834a);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+.upv4-progress-percentage {
+  font-size: 0.84rem; font-weight: 800; color: #e8834a;
+  flex-shrink: 0;
+  min-width: 40px; text-align: right;
+}
+
+/* ── ONBOARDING MODAL ── */
+.upv4-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(74,25,66,0.75);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.upv4-modal-overlay.zichtbaar {
+  opacity: 1; pointer-events: auto;
+}
+.upv4-modal {
+  background: #fff;
+  border-radius: 18px;
+  padding: 36px 32px;
+  max-width: 520px; width: 100%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  max-height: 90vh; overflow-y: auto;
+}
+.upv4-modal-close {
+  position: absolute; top: 14px; right: 18px;
+  background: none; border: none;
+  font-size: 1.4rem; color: #6b6570;
+  cursor: pointer;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.upv4-modal-close:hover { background: #faf7f2; }
+.upv4-modal-eyebrow {
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #e8834a; margin-bottom: 10px;
+}
+.upv4-modal h2 {
+  font-size: 1.4rem; font-weight: 900; color: #4a1942;
+  letter-spacing: -0.02em; line-height: 1.2;
+  margin-bottom: 10px;
+}
+.upv4-modal h2 em { font-style: italic; font-weight: 300; color: #c47d8f; }
+.upv4-modal-intro {
+  font-size: 0.86rem; color: #4a4046; font-weight: 300;
+  line-height: 1.65; margin-bottom: 22px;
+}
+.upv4-modal-keuzes {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 18px;
+}
+.upv4-modal-keuze {
+  background: #faf7f2;
+  border: 2px solid #e2d9e0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  text-align: left;
+  display: flex; align-items: center; gap: 14px;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+}
+.upv4-modal-keuze:hover {
+  border-color: #4a1942;
+  background: #fff;
+  transform: translateX(3px);
+}
+.upv4-modal-keuze-icon {
+  font-size: 1.5rem;
+  width: 42px; height: 42px;
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.upv4-modal-keuze-text { flex: 1; }
+.upv4-modal-keuze-naam {
+  font-size: 0.88rem; font-weight: 800; color: #4a1942;
+}
+.upv4-modal-keuze-sub {
+  font-size: 0.72rem; color: #6b6570; font-weight: 300;
+  margin-top: 2px; line-height: 1.4;
+}
+.upv4-modal-skip {
+  font-size: 0.74rem; color: #6b6570;
+  text-align: center;
+  background: none; border: none;
+  cursor: pointer;
+  padding: 8px;
+  font-family: 'Poppins', sans-serif;
+  display: block; width: 100%;
+}
+.upv4-modal-skip:hover { color: #4a1942; }
+
+/* ── AI WENSENASSISTENT ── */
+.upv4-ai {
+  background: linear-gradient(135deg, #4a1942 0%, #6b3060 100%);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.upv4-ai::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 90% 0%, rgba(232,131,74,0.22) 0%, transparent 55%);
+  pointer-events: none;
+}
+.upv4-ai-inner { position: relative; }
+.upv4-ai-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(232,131,74,0.15);
+  border: 1px solid rgba(232,131,74,0.35);
+  border-radius: 30px; padding: 5px 12px;
+  margin-bottom: 14px;
+}
+.upv4-ai-badge-dot {
+  width: 7px; height: 7px;
+  background: #e8834a; border-radius: 50%;
+  animation: upv4Pulse 2s infinite;
+}
+@keyframes upv4Pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+.upv4-ai-badge span {
+  font-size: 0.6rem; font-weight: 700; color: #ffb285;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.upv4-ai-titel {
+  font-size: 1.3rem; font-weight: 900; color: #fff;
+  letter-spacing: -0.02em; line-height: 1.2;
+  margin-bottom: 10px;
+}
+.upv4-ai-titel em { font-style: italic; font-weight: 300; color: rgba(255,255,255,0.55); }
+.upv4-ai-sub {
+  font-size: 0.84rem; color: rgba(255,255,255,0.72);
+  font-weight: 300; line-height: 1.65;
+  margin-bottom: 18px; max-width: 580px;
+}
+.upv4-ai-input-wrap {
+  display: flex; gap: 8px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 6px;
+}
+.upv4-ai-input {
+  flex: 1;
+  border: none; outline: none;
+  background: transparent;
+  padding: 10px 14px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.86rem;
+  color: #1e1520;
+}
+.upv4-ai-input::placeholder { color: #b0a8b0; }
+.upv4-ai-knop {
+  background: #e8834a; color: #fff;
+  border: none; border-radius: 9px;
+  padding: 10px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.upv4-ai-knop:hover { background: #c8622a; }
+.upv4-ai-voorbeelden {
+  margin-top: 14px;
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.upv4-ai-voorbeeld {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 20px;
+  padding: 6px 13px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem; color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.upv4-ai-voorbeeld:hover {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+}
+.upv4-ai-resultaat {
+  margin-top: 16px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.82rem; color: rgba(255,255,255,0.92);
+  line-height: 1.65;
+  display: none;
+}
+.upv4-ai-resultaat.zichtbaar { display: block; animation: upv4FadeIn 0.4s ease; }
+.upv4-ai-resultaat strong { color: #ffb285; font-weight: 700; }
+@keyframes upv4FadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SMART SUGGESTIONS ── */
+.upv4-suggestion {
+  background: linear-gradient(135deg, rgba(232,131,74,0.1) 0%, rgba(196,125,143,0.08) 100%);
+  border: 1px solid rgba(232,131,74,0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 12px 0;
+  font-size: 0.78rem; color: #4a4046;
+  line-height: 1.6;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.upv4-suggestion-icon {
+  font-size: 1rem; flex-shrink: 0;
+  margin-top: -1px;
+}
+.upv4-suggestion strong { color: #c8622a; font-weight: 700; }
+.upv4-suggestion-knop {
+  display: inline-block;
+  background: #e8834a; color: #fff;
+  border: none; border-radius: 6px;
+  padding: 4px 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem; font-weight: 700;
+  cursor: pointer; margin-left: 8px;
+}
+.upv4-suggestion-knop:hover { background: #c8622a; }
+
+/* ── SPAREN/INFLATIE CALCULATOR ── */
+.upv4-sparen {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 14px;
+}
+.upv4-sparen-titel {
+  font-size: 1.1rem; font-weight: 900; color: #4a1942;
+  letter-spacing: -0.01em; margin-bottom: 6px;
+}
+.upv4-sparen-titel em { font-style: italic; font-weight: 300; color: #c47d8f; }
+.upv4-sparen-sub {
+  font-size: 0.84rem; color: #6b6570; font-weight: 300;
+  line-height: 1.65; margin-bottom: 20px;
+  max-width: 580px;
+}
+.upv4-sparen-velden {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.upv4-sparen-veld { display: flex; flex-direction: column; gap: 6px; }
+.upv4-sparen-veld label {
+  font-size: 0.7rem; font-weight: 700; color: #6b6570;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.upv4-sparen-veld input {
+  border: 1.5px solid #e2d9e0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  color: #4a1942; background: #fff;
+}
+.upv4-sparen-veld input:focus {
+  outline: none; border-color: #4a1942;
+}
+.upv4-sparen-resultaat {
+  background: linear-gradient(135deg, #4a1942 0%, #6b3060 100%);
+  border-radius: 12px;
+  padding: 22px 24px;
+  color: #fff;
+  position: relative; overflow: hidden;
+}
+.upv4-sparen-resultaat::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 80% at 90% 50%, rgba(232,131,74,0.2) 0%, transparent 55%);
+  pointer-events: none;
+}
+.upv4-sparen-resultaat-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  position: relative;
+}
+.upv4-sparen-resultaat-blok-titel {
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 6px;
+}
+.upv4-sparen-resultaat-bedrag {
+  font-size: 1.6rem; font-weight: 900; color: #fff;
+  letter-spacing: -0.02em; line-height: 1;
+}
+.upv4-sparen-resultaat-bedrag span {
+  font-size: 1rem; font-weight: 400; opacity: 0.6;
+}
+.upv4-sparen-resultaat-sub {
+  font-size: 0.74rem; color: rgba(255,255,255,0.55);
+  margin-top: 4px;
+}
+
+/* ── WENSEN FORMULIER ── */
+.upv4-wensen {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 14px;
+}
+.upv4-wensen-header { margin-bottom: 22px; }
+.upv4-wensen-titel {
+  font-size: 1.1rem; font-weight: 900; color: #4a1942;
+  letter-spacing: -0.01em; margin-bottom: 6px;
+}
+.upv4-wensen-titel em { font-style: italic; font-weight: 300; color: #c47d8f; }
+.upv4-wensen-sub {
+  font-size: 0.84rem; color: #6b6570; font-weight: 300;
+  line-height: 1.65; max-width: 620px;
+}
+.upv4-wensen-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.upv4-wensen-veld { display: flex; flex-direction: column; gap: 6px; }
+.upv4-wensen-veld.breed { grid-column: 1 / -1; }
+.upv4-wensen-veld label {
+  font-size: 0.74rem; font-weight: 700; color: #4a1942;
+}
+.upv4-wensen-veld label small {
+  font-weight: 300; color: #6b6570; font-size: 0.68rem;
+  margin-left: 6px;
+}
+.upv4-wensen-veld input,
+.upv4-wensen-veld textarea,
+.upv4-wensen-veld select {
+  border: 1.5px solid #e2d9e0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.84rem;
+  color: #1e1520; background: #fff;
+  resize: vertical;
+}
+.upv4-wensen-veld textarea { min-height: 80px; }
+.upv4-wensen-veld input:focus,
+.upv4-wensen-veld textarea:focus,
+.upv4-wensen-veld select:focus {
+  outline: none; border-color: #4a1942;
+}
+.upv4-wensen-acties {
+  margin-top: 22px;
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+
+/* ── VERGELIJK SCENARIOS ── */
+.upv4-scenarios {
+  background: #fff;
+  border: 1px solid #e2d9e0;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.upv4-scenarios-header {
+  background: #faf7f2;
+  border-bottom: 1px solid #e2d9e0;
+  padding: 18px 24px;
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.upv4-scenarios-titel-blok h3 {
+  font-size: 1rem; font-weight: 800; color: #4a1942;
+  margin: 0;
+}
+.upv4-scenarios-sub {
+  font-size: 0.76rem; color: #6b6570; font-weight: 300;
+}
+.upv4-scenarios-knop {
+  background: #4a1942; color: #fff;
+  border: none; border-radius: 9px;
+  padding: 9px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem; font-weight: 700;
+  cursor: pointer;
+}
+.upv4-scenarios-knop:hover { background: #3a1233; }
+.upv4-scenarios-body { padding: 22px 24px; }
+.upv4-scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.upv4-scenario-card {
+  background: #faf7f2;
+  border: 1px solid #e2d9e0;
+  border-radius: 12px;
+  padding: 18px;
+  position: relative;
+}
+.upv4-scenario-card.huidig {
+  border-color: #e8834a; border-width: 2px;
+  background: linear-gradient(135deg, #faf7f2 0%, #fff 100%);
+}
+.upv4-scenario-naam {
+  font-size: 0.86rem; font-weight: 800; color: #4a1942;
+  margin-bottom: 4px;
+}
+.upv4-scenario-meta {
+  font-size: 0.7rem; color: #6b6570; font-weight: 300;
+  margin-bottom: 14px;
+}
+.upv4-scenario-bedrag {
+  font-size: 1.5rem; font-weight: 900; color: #e8834a;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.upv4-scenario-acties {
+  display: flex; gap: 6px;
+}
+.upv4-scenario-knop {
+  flex: 1;
+  background: #fff; border: 1px solid #e2d9e0;
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem; font-weight: 700; color: #4a1942;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.upv4-scenario-knop:hover {
+  background: #4a1942; color: #fff; border-color: #4a1942;
+}
+.upv4-scenario-knop.verwijder {
+  color: #c8622a;
+}
+.upv4-scenario-knop.verwijder:hover {
+  background: #c8622a; color: #fff; border-color: #c8622a;
+}
+.upv4-scenarios-leeg {
+  text-align: center; padding: 28px;
+  font-size: 0.82rem; color: #6b6570; font-style: italic;
+}
+
+/* ── CROSS-LINK BLOK ── */
+.upv4-crosslink {
+  background: linear-gradient(135deg, #faf7f2 0%, #f5ede9 100%);
+  border: 1px solid #e2d9e0;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 18px;
+  flex-wrap: wrap;
+}
+.upv4-crosslink-icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  background: rgba(74,25,66,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; flex-shrink: 0;
+}
+.upv4-crosslink-text { flex: 1; min-width: 200px; }
+.upv4-crosslink-titel {
+  font-size: 0.92rem; font-weight: 800; color: #4a1942;
+  margin-bottom: 3px;
+}
+.upv4-crosslink-sub {
+  font-size: 0.76rem; color: #6b6570; font-weight: 300;
+  line-height: 1.55;
+}
+.upv4-crosslink-knop {
+  background: #e8834a; color: #fff;
+  border: none; border-radius: 9px;
+  padding: 11px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.upv4-crosslink-knop:hover {
+  background: #c8622a; transform: translateY(-1px);
+}
+
+/* ── LIVE ONDERNEMERS COUNT ── */
+.upv4-ondernemers-live {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(45,122,79,0.1);
+  border: 1px solid rgba(45,122,79,0.25);
+  border-radius: 18px;
+  padding: 4px 11px;
+  font-size: 0.72rem; font-weight: 700; color: #2d7a4f;
+  margin-top: 8px;
+}
+.upv4-ondernemers-live-dot {
+  width: 7px; height: 7px;
+  background: #2d7a4f; border-radius: 50%;
+  animation: upv4Pulse 2s infinite;
+}
+
+/* ── PDF DOWNLOAD KNOP UITGEBREID ── */
+.upv4-pdf-laden {
+  display: none; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: #6b6570;
+}
+.upv4-pdf-laden.zichtbaar { display: inline-flex; }
+.upv4-pdf-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid #e2d9e0;
+  border-top-color: #4a1942;
+  border-radius: 50%;
+  animation: upv4Spin 0.8s linear infinite;
+}
+@keyframes upv4Spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── KNOPPENRIJ TEMPLATES TOP ── */
+.upv4-knoppen-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.upv4-mini-knop {
+  background: #fff;
+  border: 1.5px solid #e2d9e0;
+  border-radius: 9px;
+  padding: 8px 14px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.76rem; font-weight: 700;
+  color: #4a1942;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.18s;
+}
+.upv4-mini-knop:hover {
+  border-color: #4a1942;
+  background: #4a1942;
+  color: #fff;
+}
+
+/* ── MOBIEL ── */
+@media (max-width: 900px) {
+  .upv4-templates { padding: 18px 20px; }
+  .upv4-templates-grid { grid-template-columns: 1fr 1fr; }
+  .upv4-sparen-velden { grid-template-columns: 1fr; }
+  .upv4-sparen-resultaat-grid { grid-template-columns: 1fr; }
+  .upv4-wensen-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .upv4-templates { padding: 14px 16px; }
+  .upv4-templates-grid { grid-template-columns: 1fr; gap: 8px; }
+  .upv4-template-card { padding: 12px; }
+  .upv4-template-prijs { font-size: 1rem; }
+  .upv4-ai { padding: 20px 18px; }
+  .upv4-ai-titel { font-size: 1.1rem; }
+  .upv4-ai-input-wrap { flex-direction: column; padding: 8px; }
+  .upv4-ai-knop { width: 100%; padding: 10px; }
+  .upv4-modal { padding: 24px 22px; max-height: 85vh; }
+  .upv4-modal h2 { font-size: 1.15rem; }
+  .upv4-sparen, .upv4-wensen { padding: 18px; }
+  .upv4-crosslink { padding: 14px 16px; gap: 12px; }
+  .upv4-crosslink-knop { padding: 10px 14px; font-size: 0.76rem; }
+  .upv4-autosave { bottom: 12px; right: 12px; padding: 8px 12px; font-size: 0.72rem; }
+  .upv4-progress { padding: 11px 14px; }
+  .upv4-progress-bar { min-width: 130px; }
+}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FinancialProduct",
+  "name": "Uitvaartplanner",
+  "provider": {
+    "@type": "Organization",
+    "name": "Uitvaart-Platform.nl",
+    "url": "https://uitvaart-platform.nl"
+  },
+  "description": "Gratis interactieve uitvaartplanner met kostenberekening per regio, scenario-vergelijking, sparendoelen en persoonlijk wensenformulier.",
+  "category": "Funeral Planning",
+  "feesAndCommissionsSpecification": "Gratis",
+  "areaServed": {
+    "@type": "Country",
+    "name": "Nederland"
+  }
+}
+</script>
 </head>
 <body>
 <div class="up-wrap">
+
+<!-- ONBOARDING MODAL -->
+<div class="upv4-modal-overlay" id="upv4OnboardingModal">
+  <div class="upv4-modal">
+    <button class="upv4-modal-close" onclick="upv4SluitOnboarding('gesloten')">×</button>
+    <div class="upv4-modal-eyebrow">★ Welkom bij de uitvaartplanner</div>
+    <h2>Voor wie plan je deze <em>uitvaart</em>?</h2>
+    <p class="upv4-modal-intro">Zodat we de tool kunnen aanpassen aan jouw situatie, hieronder drie veelvoorkomende vertrekpunten. Je kunt later altijd alles aanpassen.</p>
+    <div class="upv4-modal-keuzes">
+      <button class="upv4-modal-keuze" onclick="upv4SluitOnboarding('acuut')">
+        <span class="upv4-modal-keuze-icon">🕊️</span>
+        <span class="upv4-modal-keuze-text">
+          <span class="upv4-modal-keuze-naam">Acute situatie (na overlijden)</span>
+          <span class="upv4-modal-keuze-sub">We helpen je rustig door de keuzes</span>
+        </span>
+      </button>
+      <button class="upv4-modal-keuze" onclick="upv4SluitOnboarding('jezelf')">
+        <span class="upv4-modal-keuze-icon">📋</span>
+        <span class="upv4-modal-keuze-text">
+          <span class="upv4-modal-keuze-naam">Vooruitdenken voor mezelf</span>
+          <span class="upv4-modal-keuze-sub">Eigen wensen vastleggen voor de toekomst</span>
+        </span>
+      </button>
+      <button class="upv4-modal-keuze" onclick="upv4SluitOnboarding('orientatie')">
+        <span class="upv4-modal-keuze-icon">🔍</span>
+        <span class="upv4-modal-keuze-text">
+          <span class="upv4-modal-keuze-naam">Algemene oriëntatie</span>
+          <span class="upv4-modal-keuze-sub">Even kijken wat de mogelijkheden zijn</span>
+        </span>
+      </button>
+    </div>
+    <button class="upv4-modal-skip" onclick="upv4SluitOnboarding('overslaan')">Overslaan, ik wil zelf beginnen →</button>
+  </div>
+</div>
+
+
+<!-- AUTO-SAVE TOAST -->
+<div class="upv4-autosave" id="upv4Toast">
+  <span class="upv4-autosave-check">✓</span>
+  <span>Opgeslagen</span>
+</div>
+
+
 
 <!-- PRINT HEADER -->
 <div class="up-print-header">
@@ -348,6 +1232,79 @@ body {
 </div>
 
 <!-- TABS -->
+
+
+<!-- TEMPLATES SECTIE -->
+<div class="upv4-templates up-no-print" id="upv4TemplatesSectie">
+  <div class="upv4-templates-header">
+    <div>
+      <div class="upv4-templates-titel">⚡ Snel beginnen met een voorbeeld</div>
+      <div class="upv4-templates-sub">Vier startpunten om snel een idee te krijgen — daarna alles aanpasbaar</div>
+    </div>
+  </div>
+  <div class="upv4-templates-grid">
+    <button class="upv4-template-card" onclick="upv4ToepasTemplate('sober')">
+      <div class="upv4-template-icon">🕊️</div>
+      <div class="upv4-template-naam">Sober afscheid</div>
+      <div class="upv4-template-prijs">~€ 5.000</div>
+      <div class="upv4-template-desc">Crematie zonder ceremonie, in besloten kring</div>
+    </button>
+    <button class="upv4-template-card" onclick="upv4ToepasTemplate('persoonlijk')">
+      <div class="upv4-template-icon">💐</div>
+      <div class="upv4-template-naam">Persoonlijk afscheid</div>
+      <div class="upv4-template-prijs">~€ 8.000</div>
+      <div class="upv4-template-desc">Crematie met intieme ceremonie en eigen accenten</div>
+    </button>
+    <button class="upv4-template-card" onclick="upv4ToepasTemplate('uitgebreid')">
+      <div class="upv4-template-icon">⛪</div>
+      <div class="upv4-template-naam">Uitgebreide ceremonie</div>
+      <div class="upv4-template-prijs">~€ 12.000</div>
+      <div class="upv4-template-desc">Begrafenis met aula, drukwerk en receptie</div>
+    </button>
+    <button class="upv4-template-card" onclick="upv4ToepasTemplate('volledig')">
+      <div class="upv4-template-icon">✨</div>
+      <div class="upv4-template-naam">Volledig persoonlijk</div>
+      <div class="upv4-template-prijs">~€ 18.000+</div>
+      <div class="upv4-template-desc">Geen budgetgrens, alle opties geselecteerd</div>
+    </button>
+  </div>
+</div>
+
+
+<!-- AI WENSENASSISTENT -->
+<div class="upv4-ai up-no-print" id="upv4AiSectie">
+  <div class="upv4-ai-inner">
+    <div class="upv4-ai-badge">
+      <span class="upv4-ai-badge-dot"></span>
+      <span>★ AI Wensenassistent</span>
+    </div>
+    <div class="upv4-ai-titel">Beschrijf je <em>wensen</em>, de planner stelt zich aan</div>
+    <div class="upv4-ai-sub">Vertel in eigen woorden wat voor uitvaart je voor je ziet. Onze assistent vertaalt dat direct naar de juiste opties en bedragen in de planner hieronder.</div>
+    <div class="upv4-ai-input-wrap">
+      <input type="text" class="upv4-ai-input" id="upv4AiInput" placeholder="bv. 'Ik wil een sobere crematie met live muziek en familie samenkomst' " onkeydown="if(event.key==='Enter')upv4VerwerkAI()">
+      <button class="upv4-ai-knop" onclick="upv4VerwerkAI()">Verwerk →</button>
+    </div>
+    <div class="upv4-ai-voorbeelden">
+      <button class="upv4-ai-voorbeeld" onclick="upv4VulVoorbeeld('Sobere crematie in besloten kring')">Sobere crematie in besloten kring</button>
+      <button class="upv4-ai-voorbeeld" onclick="upv4VulVoorbeeld('Persoonlijke ceremonie met live muziek')">Persoonlijke ceremonie met live muziek</button>
+      <button class="upv4-ai-voorbeeld" onclick="upv4VulVoorbeeld('Natuurbegraving op een groene plek')">Natuurbegraving op een groene plek</button>
+      <button class="upv4-ai-voorbeeld" onclick="upv4VulVoorbeeld('Uitgebreide begrafenis met receptie voor de familie')">Uitgebreide begrafenis met receptie</button>
+    </div>
+    <div class="upv4-ai-resultaat" id="upv4AiResultaat"></div>
+  </div>
+</div>
+
+
+<!-- PROGRESS BAR -->
+<div class="upv4-progress up-no-print">
+  <span class="upv4-progress-label">Voortgang planning</span>
+  <div class="upv4-progress-bar">
+    <div class="upv4-progress-fill" id="upv4ProgressFill" style="width:0%"></div>
+  </div>
+  <span class="upv4-progress-percentage" id="upv4ProgressPct">0%</span>
+</div>
+
+
 <div class="up-tabs up-no-print">
   <button class="up-tab actief" onclick="toonTab('calculator')">
     <span class="up-tab-icoon">🧮</span> Kostencalculator
@@ -364,6 +1321,15 @@ body {
   <button class="up-tab" onclick="toonTab('tips')">
     <span class="up-tab-icoon">💡</span> Bespaar tips
   </button>
+  <button class="up-tab" onclick="toonTab('sparen')">
+    <span class="up-tab-icoon">💰</span> Sparen
+  </button>
+  <button class="up-tab" onclick="toonTab('wensen')">
+    <span class="up-tab-icoon">📝</span> Mijn wensen
+  </button>
+  <button class="up-tab" onclick="toonTab('scenarios')">
+    <span class="up-tab-icoon">🔀</span> Scenarios
+  </button>
 </div>
 
 <!-- ══════════════════════════════════════════════════
@@ -376,7 +1342,35 @@ body {
     <div>
 
       <!-- TYPE & REGIO -->
-      <div class="up-sectie">
+      
+<!-- SMART SUGGESTIONS CONTAINER -->
+<div id="upv4Suggesties" style="display:none;"></div>
+
+
+<!-- CROSS-LINK NAAR LOKALE PAGINA (verschijnt na regio selectie) -->
+<div class="upv4-crosslink up-no-print" id="upv4CrosslinkPlaats">
+  <div class="upv4-crosslink-icon">📍</div>
+  <div class="upv4-crosslink-text">
+    <div class="upv4-crosslink-titel">Vind een uitvaartondernemer in jouw regio</div>
+    <div class="upv4-crosslink-sub">Bekijk lokale specialisten, kosten en begraafplaatsen per plaats in onze gids.</div>
+    <span class="upv4-ondernemers-live"><span class="upv4-ondernemers-live-dot"></span>500+ ondernemers actief</span>
+  </div>
+  <a href="https://uitvaart-platform.nl/uitvaart-per-plaats" class="upv4-crosslink-knop" target="_blank">Bekijk per plaats →</a>
+</div>
+
+
+<!-- CROSS-LINK NAAR UITVAARTVERZEKERING -->
+<div class="upv4-crosslink up-no-print">
+  <div class="upv4-crosslink-icon">🛡️</div>
+  <div class="upv4-crosslink-text">
+    <div class="upv4-crosslink-titel">Een uitvaartverzekering kan deze kosten dekken</div>
+    <div class="upv4-crosslink-sub">Bekijk alle Nederlandse uitvaartverzekeraars en vergelijk dekkingen en premies.</div>
+  </div>
+  <a href="https://uitvaart-platform.nl/uitvaartverzekering" class="upv4-crosslink-knop" target="_blank">Vergelijk verzekeraars →</a>
+</div>
+
+
+<div class="up-sectie" data-cat="basis">
         <div class="up-sectie-body open" style="display:block;">
           <div style="margin-bottom:16px;">
             <div style="font-size:0.84rem;font-weight:800;color:#4a1942;margin-bottom:10px;">Type uitvaart</div>
@@ -406,7 +1400,7 @@ body {
       </div>
 
       <!-- SECTIE 1: BASISKOSTEN -->
-      <div class="up-sectie">
+      <div class="up-sectie" data-cat="graf">
         <div class="up-sectie-header open" onclick="toggleSectie(this)">
           <div class="up-sectie-nr">1</div>
           <div class="up-sectie-info">
@@ -492,7 +1486,7 @@ body {
       </div>
 
       <!-- SECTIE 2: BEGRAAFPLAATS / CREMATORIUM -->
-      <div class="up-sectie">
+      <div class="up-sectie" data-cat="plechtigheid">
         <div class="up-sectie-header" onclick="toggleSectie(this)">
           <div class="up-sectie-nr">2</div>
           <div class="up-sectie-info">
@@ -592,7 +1586,7 @@ body {
       </div>
 
       <!-- SECTIE 3: PLECHTIGHEID -->
-      <div class="up-sectie">
+      <div class="up-sectie" data-cat="herinnering">
         <div class="up-sectie-header" onclick="toggleSectie(this)">
           <div class="up-sectie-nr">3</div>
           <div class="up-sectie-info">
@@ -710,7 +1704,7 @@ body {
       </div>
 
       <!-- SECTIE 4: HERINNERING & AS -->
-      <div class="up-sectie">
+      <div class="up-sectie" data-cat="admin">
         <div class="up-sectie-header" onclick="toggleSectie(this)">
           <div class="up-sectie-nr">4</div>
           <div class="up-sectie-info">
@@ -923,8 +1917,21 @@ body {
           </div>
         </div>
 
-        <div class="up-acties">
-          <button class="up-btn up-btn-oranje" onclick="downloadPDF()">⬇️ Download PDF overzicht</button>
+        <!-- DONUT CHART (gaat in sticky overzicht) -->
+<div class="upv4-donut-wrap" id="upv4DonutWrap">
+  <div class="upv4-donut-header">
+    <span class="upv4-donut-titel">Kostenverdeling</span>
+  </div>
+  <div style="position:relative; min-height: 150px;">
+    <div class="upv4-donut-leeg" id="upv4DonutLeeg">Selecteer opties om de verdeling te zien</div>
+    <svg class="upv4-donut-svg" id="upv4DonutSvg" viewBox="0 0 140 140" width="140" height="140" style="display:none;"></svg>
+    <div class="upv4-donut-center" id="upv4DonutCenter">
+      <div class="upv4-donut-center-bedrag" id="upv4DonutCenterBedrag">€ 0</div>
+      <div class="upv4-donut-center-label">Totaal</div>
+    </div>
+  </div>
+<div class="up-acties">
+          <button class="up-btn up-btn-oranje" onclick="upv4DownloadPDF()">⬇️ Download PDF overzicht</button>
           <button class="up-btn up-btn-paars" onclick="window.print()">🖨️ Afdrukken</button>
           <a href="https://uitvaart-platform.nl/bedrijvengids" class="up-btn up-btn-wit" target="_blank">🗂️ Vind een specialist</a>
           <button class="up-btn up-btn-wit" onclick="wisData()" style="font-size:0.76rem;opacity:0.7;">🗑️ Opgeslagen planning wissen</button>
@@ -1394,6 +2401,144 @@ body {
   </div>
 </div>
 
+<!-- TAB: SPAREN VOOR UITVAART -->
+<div class="up-tabinhoud" id="tab-sparen">
+  <div class="upv4-sparen">
+    <div class="upv4-sparen-titel">Sparen voor je <em>uitvaart</em></div>
+    <div class="upv4-sparen-sub">Bereken hoeveel je per maand moet sparen om over X jaar voldoende geld voor jouw uitvaart te hebben. We rekenen met 2,5% inflatie en de door jou gekozen rente.</div>
+
+    <div class="upv4-sparen-velden">
+      <div class="upv4-sparen-veld">
+        <label>Doelbedrag (vandaag)</label>
+        <input type="number" id="upv4SparenBedrag" value="8000" min="1000" max="50000" step="500" oninput="upv4BerekenSparen()">
+      </div>
+      <div class="upv4-sparen-veld">
+        <label>Aantal jaren sparen</label>
+        <input type="number" id="upv4SparenJaren" value="20" min="1" max="50" step="1" oninput="upv4BerekenSparen()">
+      </div>
+      <div class="upv4-sparen-veld">
+        <label>Verwacht rendement (% p.j.)</label>
+        <input type="number" id="upv4SparenRente" value="2.0" min="0" max="10" step="0.1" oninput="upv4BerekenSparen()">
+      </div>
+    </div>
+
+    <div style="margin-bottom: 16px;">
+      <button class="upv4-mini-knop" onclick="upv4PakOverHuidigBedrag()">📋 Gebruik het bedrag uit mijn planning</button>
+    </div>
+
+    <div class="upv4-sparen-resultaat">
+      <div class="upv4-sparen-resultaat-grid">
+        <div>
+          <div class="upv4-sparen-resultaat-blok-titel">Toekomstige kosten</div>
+          <div class="upv4-sparen-resultaat-bedrag" id="upv4SparenToekomstig">€ 0</div>
+          <div class="upv4-sparen-resultaat-sub" id="upv4SparenSubToekomst">Bij 2.5% inflatie</div>
+        </div>
+        <div>
+          <div class="upv4-sparen-resultaat-blok-titel">Per maand sparen</div>
+          <div class="upv4-sparen-resultaat-bedrag" id="upv4SparenMaand">€ 0</div>
+          <div class="upv4-sparen-resultaat-sub" id="upv4SparenSubMaand">om jouw doel te halen</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="up-tip" style="margin-top: 18px;">
+      <strong>Tip:</strong> Een uitvaartverzekering of -depot kan een alternatief zijn voor zelf sparen. Bij een depot bouw je geld op specifiek voor je uitvaart, bij een verzekering ben je verzekerd voor een vast bedrag. Bekijk de verschillende mogelijkheden op onze <a href="https://uitvaart-platform.nl/uitvaartverzekering" target="_blank" style="color: #c8622a; font-weight: 700;">uitvaartverzekering pagina</a>.
+    </div>
+  </div>
+</div>
+
+
+<!-- TAB: MIJN WENSEN -->
+<div class="up-tabinhoud" id="tab-wensen">
+  <div class="upv4-wensen">
+    <div class="upv4-wensen-header">
+      <div class="upv4-wensen-titel">Mijn <em>uitvaartwensen</em></div>
+      <div class="upv4-wensen-sub">Leg vast wat je voor je uitvaart wenst, zodat nabestaanden later weten wat je belangrijk vond. Je kunt dit formulier opslaan en als PDF downloaden om te delen met familie of in een nabestaandendossier op te bergen.</div>
+    </div>
+
+    <div class="upv4-wensen-grid">
+      <div class="upv4-wensen-veld">
+        <label>Jouw naam</label>
+        <input type="text" id="wens-naam" placeholder="Voornaam en achternaam">
+      </div>
+      <div class="upv4-wensen-veld">
+        <label>Geboortedatum</label>
+        <input type="text" id="wens-geboortedatum" placeholder="dd-mm-jjjj">
+      </div>
+      <div class="upv4-wensen-veld">
+        <label>Voorkeursvorm <small>(begrafenis/crematie/natuur)</small></label>
+        <select id="wens-type">
+          <option value="">Maak een keuze</option>
+          <option value="Begrafenis">Begrafenis</option>
+          <option value="Crematie">Crematie</option>
+          <option value="Natuurbegraving">Natuurbegraving</option>
+          <option value="Thuisuitvaart">Thuisuitvaart</option>
+          <option value="Maakt mij niet uit">Maakt mij niet uit</option>
+        </select>
+      </div>
+      <div class="upv4-wensen-veld">
+        <label>Plaats / locatie <small>(specifieke voorkeur?)</small></label>
+        <input type="text" id="wens-locatie" placeholder="bv. begraafplaats Westerveld, of: in mijn geboortedorp">
+      </div>
+      <div class="upv4-wensen-veld breed">
+        <label>Muziekwensen <small>(specifieke nummers, stijlen, of geen muziek?)</small></label>
+        <textarea id="wens-muziek" placeholder="bv. 'Time to say goodbye' van Andrea Bocelli, en stille momenten met een viool"></textarea>
+      </div>
+      <div class="upv4-wensen-veld">
+        <label>Spreker of ceremoniemeester</label>
+        <input type="text" id="wens-spreker" placeholder="bv. een goede vriend / dominee / niet ingevuld">
+      </div>
+      <div class="upv4-wensen-veld">
+        <label>Bloemenvoorkeur</label>
+        <input type="text" id="wens-bloemen" placeholder="bv. witte rozen / wilde bloemen / geen bloemen, donatie aan goed doel">
+      </div>
+      <div class="upv4-wensen-veld">
+        <label>Kledingvoorkeur <small>(voor jezelf en/of bezoekers)</small></label>
+        <input type="text" id="wens-kleding" placeholder="bv. zwart / mijn favoriete pak / kleurrijk">
+      </div>
+      <div class="upv4-wensen-veld breed">
+        <label>Persoonlijke boodschap aan mijn naasten</label>
+        <textarea id="wens-boodschap" placeholder="Een korte tekst voor je nabestaanden, bv. een herinnering, levensles, of bedankje"></textarea>
+      </div>
+      <div class="upv4-wensen-veld breed">
+        <label>Contactpersoon na overlijden <small>(naam en telefoonnummer)</small></label>
+        <input type="text" id="wens-contact" placeholder="bv. Jan Jansen, 06-12345678">
+      </div>
+    </div>
+
+    <div class="upv4-wensen-acties">
+      <button class="up-btn up-btn-paars" onclick="upv4OpslaanWensen()">💾 Sla op (in browser)</button>
+      <button class="up-btn up-btn-oranje" onclick="upv4DownloadWensen()">📄 Download als PDF</button>
+    </div>
+
+    <div class="up-tip" style="margin-top: 18px;">
+      <strong>Belangrijk:</strong> Dit document heeft geen juridische status. Een testament of wilsbeschikking bij een notaris geeft je wensen wel rechtskracht. Lees meer over <a href="https://uitvaart-platform.nl/erfenis-en-testament" target="_blank" style="color: #c8622a; font-weight: 700;">testament en erfrecht</a>.
+    </div>
+  </div>
+</div>
+
+
+<!-- TAB: SCENARIOS VERGELIJKEN -->
+<div class="up-tabinhoud" id="tab-scenarios">
+  <div class="upv4-scenarios">
+    <div class="upv4-scenarios-header">
+      <div class="upv4-scenarios-titel-blok">
+        <h3>Vergelijk meerdere scenarios</h3>
+        <div class="upv4-scenarios-sub">Sla verschillende versies van je planning op om naast elkaar te vergelijken</div>
+      </div>
+      <button class="upv4-scenarios-knop" onclick="upv4OpslaanScenario()">+ Sla huidige planning op</button>
+    </div>
+    <div class="upv4-scenarios-body">
+      <div class="upv4-scenarios-grid" id="upv4ScenariosGrid"></div>
+    </div>
+  </div>
+
+  <div class="up-tip" style="margin: 14px 0 0;">
+    <strong>Hoe werkt het?</strong> Pas de calculator aan zoals jij wilt en klik op "Sla huidige planning op". Geef het scenario een naam. Maak vervolgens een andere versie en sla die ook op. Dan zie je ze hier naast elkaar — handig om bijvoorbeeld "sober" en "uitgebreid" met elkaar te vergelijken.
+  </div>
+</div>
+
+
 </div><!-- /up-wrap -->
 
 <script>
@@ -1781,6 +2926,1017 @@ berekenAlles = function() {
     });
   }
 })();
+
+
+
+/* ════════════════════════════════════════════════════════════
+   v4 UITBREIDINGEN — JavaScript
+   Functies: templates, donut chart, animaties, PDF, AI, sparen,
+             wensen, scenarios, onboarding, smart suggestions
+══════════════════════════════════════════════════════════════ */
+
+// ── QUICK START TEMPLATES ──
+var UPV4_TEMPLATES = {
+  sober: {
+    naam: 'Sober afscheid',
+    type: 'crematie',
+    sliders: {
+      'slider-ondernemer': 1700, 'slider-opbaren': 350,
+      'slider-kist': 400, 'slider-urn': 100, 'slider-rouwvervoer': 350,
+      'slider-grafrecht': 800, 'slider-crematorium': 850, 'slider-as': 150,
+      'slider-natuur': 1200, 'slider-grafsteen': 400
+    },
+    checks: { 'prijs-bloemen': true },
+    checkBedragen: { 'prijs-bloemen': 75 }
+  },
+  persoonlijk: {
+    naam: 'Persoonlijk afscheid',
+    type: 'crematie',
+    sliders: {
+      'slider-ondernemer': 2500, 'slider-opbaren': 600,
+      'slider-kist': 900, 'slider-urn': 250, 'slider-rouwvervoer': 550,
+      'slider-grafrecht': 2000, 'slider-crematorium': 1100, 'slider-as': 300,
+      'slider-natuur': 2200, 'slider-grafsteen': 1200
+    },
+    checks: {
+      'prijs-bloemen': true, 'prijs-muziek': true, 'prijs-drukwerk': true
+    },
+    checkBedragen: {
+      'prijs-bloemen': 200, 'prijs-muziek': 350, 'prijs-drukwerk': 220
+    }
+  },
+  uitgebreid: {
+    naam: 'Uitgebreide ceremonie',
+    type: 'begraving',
+    sliders: {
+      'slider-ondernemer': 3500, 'slider-opbaren': 800,
+      'slider-kist': 1500, 'slider-urn': 400, 'slider-rouwvervoer': 800,
+      'slider-grafrecht': 3000, 'slider-crematorium': 1300, 'slider-as': 400,
+      'slider-natuur': 3000, 'slider-grafsteen': 2000
+    },
+    checks: {
+      'prijs-bloemen': true, 'prijs-muziek': true, 'prijs-spreker': true,
+      'prijs-locatie': true, 'prijs-drukwerk': true, 'prijs-catering': true,
+      'prijs-grafsteen': true
+    },
+    checkBedragen: {
+      'prijs-bloemen': 400, 'prijs-muziek': 600, 'prijs-spreker': 400,
+      'prijs-locatie': 800, 'prijs-drukwerk': 350, 'prijs-catering': 700,
+      'prijs-grafsteen': 2000
+    }
+  },
+  volledig: {
+    naam: 'Volledig persoonlijk',
+    type: 'begraving',
+    sliders: {
+      'slider-ondernemer': 5000, 'slider-opbaren': 1000,
+      'slider-kist': 2500, 'slider-urn': 800, 'slider-rouwvervoer': 1000,
+      'slider-grafrecht': 4500, 'slider-crematorium': 1500, 'slider-as': 600,
+      'slider-natuur': 4000, 'slider-grafsteen': 3500
+    },
+    checks: {
+      'prijs-bloemen': true, 'prijs-muziek': true, 'prijs-spreker': true,
+      'prijs-locatie': true, 'prijs-drukwerk': true, 'prijs-catering': true,
+      'prijs-fotograaf': true, 'prijs-livestream': true, 'prijs-styling': true,
+      'prijs-grafsteen': true, 'prijs-sieraden': true, 'prijs-gedenkboek': true
+    },
+    checkBedragen: {
+      'prijs-bloemen': 700, 'prijs-muziek': 900, 'prijs-spreker': 600,
+      'prijs-locatie': 1500, 'prijs-drukwerk': 500, 'prijs-catering': 1500,
+      'prijs-fotograaf': 600, 'prijs-livestream': 350, 'prijs-styling': 500,
+      'prijs-grafsteen': 3500, 'prijs-sieraden': 350, 'prijs-gedenkboek': 200
+    }
+  }
+};
+
+function upv4ToepasTemplate(naam) {
+  var t = UPV4_TEMPLATES[naam];
+  if (!t) return;
+
+  // Type instellen
+  var typeKnop = document.querySelector('.up-type-knop[onclick*="' + t.type + '"]');
+  if (typeKnop) kiesType(t.type, typeKnop);
+
+  // Wacht even zodat type display goed staat
+  setTimeout(function() {
+    // Sliders
+    Object.keys(t.sliders).forEach(function(sliderId) {
+      var el = document.getElementById(sliderId);
+      if (el) {
+        el.value = t.sliders[sliderId];
+        var prijsId = sliderId.replace('slider-', 'prijs-');
+        updateSlider(el, prijsId);
+      }
+    });
+
+    // Checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+      var onchange = cb.getAttribute('onchange') || '';
+      var match = onchange.match(/'(prijs-[a-z]+)'/);
+      if (match) {
+        var prijsId = match[1];
+        var wenstAan = !!t.checks[prijsId];
+        if (cb.checked !== wenstAan) {
+          cb.checked = wenstAan;
+          cb.dispatchEvent(new Event('change'));
+        }
+        // Bij aan zetten en custom bedrag, slider erop instellen
+        if (wenstAan && t.checkBedragen && t.checkBedragen[prijsId]) {
+          var sliderId = prijsId.replace('prijs-', 'slider-');
+          var sliderEl = document.getElementById(sliderId);
+          if (sliderEl) {
+            sliderEl.value = t.checkBedragen[prijsId];
+            updateSlider(sliderEl, prijsId);
+          }
+        }
+      }
+    });
+
+    // Smooth scroll naar overzicht
+    var ov = document.querySelector('.up-overzicht');
+    if (ov) ov.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Toast tonen
+    upv4ToonToast('Template "' + t.naam + '" toegepast');
+  }, 50);
+}
+
+// ── ANIMATED PRICE UPDATE ──
+var upv4LaatsteTotaal = 0;
+function upv4AnimateerPrijs() {
+  var el = document.getElementById('grandTotaal');
+  if (!el) return;
+  el.classList.remove('upv4-prijs-update');
+  void el.offsetWidth; // force reflow
+  el.classList.add('upv4-prijs-update');
+}
+
+// ── DONUT CHART ──
+function upv4TekenDonut() {
+  var svgEl = document.getElementById('upv4DonutSvg');
+  var centerBedragEl = document.getElementById('upv4DonutCenterBedrag');
+  var legendaEl = document.getElementById('upv4DonutLegenda');
+  var leegEl = document.getElementById('upv4DonutLeeg');
+  if (!svgEl) return;
+
+  // Verzamel categorieën
+  var cats = [
+    { naam: 'Basis', kleur: '#4a1942', id: 'basis' },
+    { naam: 'Plek', kleur: '#6b3060', id: 'graf' },
+    { naam: 'Ceremonie', kleur: '#e8834a', id: 'plechtigheid' },
+    { naam: 'Herinnering', kleur: '#c47d8f', id: 'herinnering' },
+    { naam: 'Admin', kleur: '#8c6878', id: 'admin' }
+  ];
+
+  var totaal = 0;
+  var idsPerCat = {
+    basis: ['prijs-ondernemer','prijs-akte','prijs-opbaren','prijs-kist','prijs-urn','prijs-rouwvervoer'],
+    graf: ['prijs-grafrecht','prijs-begraving','prijs-grafsteen','prijs-grafonderhoud','prijs-crematorium','prijs-as','prijs-natuur'],
+    plechtigheid: ['prijs-bloemen','prijs-muziek','prijs-spreker','prijs-locatie','prijs-drukwerk','prijs-catering','prijs-fotograaf','prijs-livestream','prijs-styling'],
+    herinnering: ['prijs-sieraden','prijs-gedenkboek','prijs-herinneringsproducten','prijs-digitaal'],
+    admin: ['prijs-notaris','prijs-boedel','prijs-rouwbegeleiding','prijs-repatriering']
+  };
+  cats.forEach(function(c) {
+    c.bedrag = 0;
+    idsPerCat[c.id].forEach(function(pid) {
+      c.bedrag += (prijzen[pid] || 0);
+    });
+    totaal += c.bedrag;
+  });
+
+  if (totaal === 0) {
+    svgEl.style.display = 'none';
+    if (leegEl) leegEl.style.display = 'block';
+    if (centerBedragEl) centerBedragEl.textContent = '€ 0';
+    if (legendaEl) legendaEl.innerHTML = '';
+    return;
+  }
+  svgEl.style.display = 'block';
+  if (leegEl) leegEl.style.display = 'none';
+
+  // SVG dimensions
+  var size = 140;
+  var radius = 56;
+  var strokeWidth = 18;
+  var cx = size / 2, cy = size / 2;
+  var circ = 2 * Math.PI * radius;
+
+  var html = '';
+  var offset = 0;
+  cats.forEach(function(c) {
+    if (c.bedrag === 0) return;
+    var pct = c.bedrag / totaal;
+    var lengte = circ * pct;
+    var gap = circ - lengte;
+    html += '<circle cx="' + cx + '" cy="' + cy + '" r="' + radius + '"' +
+            ' fill="none" stroke="' + c.kleur + '" stroke-width="' + strokeWidth + '"' +
+            ' stroke-dasharray="' + lengte + ' ' + gap + '"' +
+            ' stroke-dashoffset="' + (-offset) + '"' +
+            ' transform="rotate(-90 ' + cx + ' ' + cy + ')"' +
+            ' style="transition: all 0.5s ease;"></circle>';
+    offset += lengte;
+  });
+
+  svgEl.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
+  svgEl.setAttribute('width', size);
+  svgEl.setAttribute('height', size);
+  svgEl.innerHTML = html;
+
+  if (centerBedragEl) centerBedragEl.textContent = '€ ' + totaal.toLocaleString('nl-NL');
+
+  // Legenda
+  if (legendaEl) {
+    legendaEl.innerHTML = cats.filter(function(c) { return c.bedrag > 0; }).map(function(c) {
+      var pct = Math.round((c.bedrag / totaal) * 100);
+      return '<div class="upv4-donut-legenda-item">' +
+             '<span class="upv4-donut-legenda-dot" style="background:' + c.kleur + '"></span>' +
+             c.naam + ' ' + pct + '%' +
+             '</div>';
+    }).join('');
+  }
+}
+
+// ── SLIDER TOOLTIPS ──
+function upv4UpdateSliderTooltip(slider) {
+  var tooltipId = slider.id + '-tooltip';
+  var tip = document.getElementById(tooltipId);
+  if (!tip) {
+    // Maak tooltip aan
+    tip = document.createElement('div');
+    tip.className = 'upv4-slider-tooltip';
+    tip.id = tooltipId;
+    slider.parentNode.insertBefore(tip, slider.nextSibling);
+  }
+  var min = parseFloat(slider.min);
+  var max = parseFloat(slider.max);
+  var val = parseFloat(slider.value);
+  var pct = ((val - min) / (max - min)) * 100;
+  tip.textContent = '€ ' + Math.round(val * regioFactor).toLocaleString('nl-NL');
+  tip.style.left = pct + '%';
+}
+
+// ── PROGRESS BAR ──
+function upv4UpdateProgress() {
+  var barEl = document.getElementById('upv4ProgressFill');
+  var pctEl = document.getElementById('upv4ProgressPct');
+  if (!barEl) return;
+
+  // Bereken progress: hoeveel sliders aangepast van default + hoeveel checkboxes aan
+  var totaalSlider = 0, defaultSlider = 0;
+  document.querySelectorAll('.up-rij-slider').forEach(function(s) {
+    totaalSlider++;
+    // Kijk of slider zichtbaar is (relevant voor dit type)
+    var wrap = s.closest('.up-rij-slider-wrap');
+    if (!wrap || !wrap.classList.contains('zichtbaar')) {
+      defaultSlider++;
+    } else {
+      defaultSlider++;
+    }
+  });
+
+  // Tel hoeveel checkboxes optioneel aan staan (niet de verplichte)
+  var optAan = 0, optTotaal = 0;
+  document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+    var rij = cb.closest('.up-rij');
+    if (rij && rij.querySelector('.up-badge-optioneel')) {
+      optTotaal++;
+      if (cb.checked) optAan++;
+    }
+  });
+
+  // Bereken percentage: combinatie van wat ingevuld is
+  var grand = parseInt(document.getElementById('grandTotaal').textContent.replace(/\D/g, '')) || 0;
+  var pct = 0;
+  if (grand >= 1000) pct = Math.min(100, Math.round((grand / 12000) * 100));
+
+  barEl.style.width = pct + '%';
+  if (pctEl) pctEl.textContent = pct + '%';
+}
+
+// ── ONBOARDING MODAL ──
+var UPV4_ONBOARDING_SLEUTEL = 'uitvaartplanner_onboarding_v1';
+function upv4ToonOnboarding() {
+  var done = localStorage.getItem(UPV4_ONBOARDING_SLEUTEL);
+  if (done) return;
+  var modal = document.getElementById('upv4OnboardingModal');
+  if (modal) modal.classList.add('zichtbaar');
+}
+function upv4SluitOnboarding(keuze) {
+  var modal = document.getElementById('upv4OnboardingModal');
+  if (modal) modal.classList.remove('zichtbaar');
+  localStorage.setItem(UPV4_ONBOARDING_SLEUTEL, keuze || 'gesloten');
+
+  // Pas template toe op basis van keuze
+  if (keuze === 'jezelf') {
+    setTimeout(function() { upv4ToepasTemplate('persoonlijk'); }, 300);
+  } else if (keuze === 'acuut') {
+    // Geen template, maar wel toon notitie
+    upv4ToonToast('We helpen je rustig door de keuzes — je kunt altijd opslaan en later doorgaan');
+  } else if (keuze === 'orientatie') {
+    setTimeout(function() { upv4ToepasTemplate('persoonlijk'); }, 300);
+  }
+}
+
+// ── AI WENSENASSISTENT (keyword-based) ──
+var UPV4_AI_KEYWORDS = {
+  // Sober / klein
+  sober: { slider: { 'slider-ondernemer': 1700, 'slider-kist': 400, 'slider-opbaren': 350, 'slider-rouwvervoer': 400 }, msg: 'Soberder ingesteld' },
+  klein: { slider: { 'slider-ondernemer': 1800, 'slider-kist': 500, 'slider-rouwvervoer': 400 }, msg: 'Kleinere ceremonie' },
+  ingetogen: { slider: { 'slider-ondernemer': 1900, 'slider-kist': 500 }, msg: 'Ingetogen aanpak' },
+  goedkoop: { slider: { 'slider-ondernemer': 1700, 'slider-kist': 400 }, msg: 'Op een budget' },
+  budget: { slider: { 'slider-ondernemer': 1800, 'slider-kist': 500 }, msg: 'Budget-bewust' },
+  // Uitgebreid / groot
+  uitgebreid: { slider: { 'slider-ondernemer': 3500, 'slider-kist': 1500 }, check: { 'prijs-bloemen': 400, 'prijs-muziek': 600, 'prijs-locatie': 800, 'prijs-catering': 700 }, msg: 'Uitgebreide ceremonie' },
+  groot: { slider: { 'slider-ondernemer': 3800, 'slider-kist': 1800 }, check: { 'prijs-bloemen': 500, 'prijs-locatie': 900, 'prijs-catering': 900 }, msg: 'Grote ceremonie' },
+  luxe: { slider: { 'slider-ondernemer': 4500, 'slider-kist': 2800 }, msg: 'Luxere uitvoering' },
+  // Persoonlijk
+  persoonlijk: { check: { 'prijs-spreker': 400, 'prijs-drukwerk': 350, 'prijs-fotograaf': 500 }, msg: 'Persoonlijke ceremonie' },
+  uniek: { check: { 'prijs-spreker': 400, 'prijs-styling': 500, 'prijs-fotograaf': 500 }, msg: 'Unieke elementen' },
+  // Muziek
+  muziek: { check: { 'prijs-muziek': 600 }, msg: 'Live muziek toegevoegd' },
+  zingen: { check: { 'prijs-muziek': 500 }, msg: 'Muziek toegevoegd' },
+  // Religieus
+  religieus: { check: { 'prijs-spreker': 350, 'prijs-locatie': 600 }, msg: 'Religieuze ceremonie' },
+  kerk: { check: { 'prijs-spreker': 350, 'prijs-locatie': 600 }, msg: 'Kerkdienst' },
+  islam: { type: 'begraving', msg: 'Islamitische uitvaart instellen' },
+  joods: { type: 'begraving', msg: 'Joodse uitvaart' },
+  // Natuur
+  natuur: { type: 'natuur', msg: 'Natuurbegraving gekozen' },
+  groen: { type: 'natuur', msg: 'Groene/natuurlijke uitvaart' },
+  duurzaam: { type: 'natuur', check: { 'prijs-bloemen': 150 }, msg: 'Duurzame keuzes' },
+  // Crematie / begrafenis
+  crematie: { type: 'crematie', msg: 'Crematie gekozen' },
+  cremeren: { type: 'crematie', msg: 'Crematie gekozen' },
+  begraving: { type: 'begraving', msg: 'Begrafenis gekozen' },
+  begrafenis: { type: 'begraving', msg: 'Begrafenis gekozen' },
+  begraven: { type: 'begraving', msg: 'Begrafenis gekozen' },
+  // Thuis
+  thuis: { type: 'thuis', msg: 'Thuisuitvaart gekozen' },
+  // Familie/intiem
+  intiem: { slider: { 'slider-ondernemer': 2200 }, check: { 'prijs-locatie': 400 }, msg: 'Intieme ceremonie' },
+  familie: { check: { 'prijs-catering': 500, 'prijs-locatie': 600 }, msg: 'Familie samenkomst' },
+  // Receptie
+  receptie: { check: { 'prijs-catering': 800, 'prijs-locatie': 700 }, msg: 'Receptie toegevoegd' },
+  // Drukwerk/kaarten
+  kaarten: { check: { 'prijs-drukwerk': 300 }, msg: 'Rouwkaarten toegevoegd' },
+  drukwerk: { check: { 'prijs-drukwerk': 300 }, msg: 'Drukwerk toegevoegd' },
+  // Bloemen
+  bloemen: { check: { 'prijs-bloemen': 350 }, msg: 'Bloemen toegevoegd' },
+  // Foto/video
+  foto: { check: { 'prijs-fotograaf': 500 }, msg: 'Fotograaf toegevoegd' },
+  video: { check: { 'prijs-livestream': 350 }, msg: 'Live stream toegevoegd' },
+  livestream: { check: { 'prijs-livestream': 350 }, msg: 'Live stream toegevoegd' },
+  herinnering: { check: { 'prijs-gedenkboek': 200, 'prijs-sieraden': 300 }, msg: 'Herinneringsproducten toegevoegd' }
+};
+
+function upv4VerwerkAI() {
+  var input = document.getElementById('upv4AiInput');
+  var resultaat = document.getElementById('upv4AiResultaat');
+  if (!input || !input.value.trim()) return;
+
+  var tekst = input.value.toLowerCase();
+  var aanpassingen = [];
+  var msgs = [];
+  var typeGevonden = null;
+
+  // Doorzoek keywords
+  Object.keys(UPV4_AI_KEYWORDS).forEach(function(kw) {
+    if (tekst.indexOf(kw) === -1) return;
+    var actie = UPV4_AI_KEYWORDS[kw];
+    aanpassingen.push({ kw: kw, actie: actie });
+    if (actie.type) typeGevonden = actie.type;
+    if (actie.msg) msgs.push(actie.msg);
+  });
+
+  if (aanpassingen.length === 0) {
+    resultaat.classList.add('zichtbaar');
+    resultaat.innerHTML = '<strong>Hmm</strong>, ik herken nog geen specifieke wensen in jouw tekst. Probeer woorden als: <em>sober</em>, <em>persoonlijk</em>, <em>natuur</em>, <em>uitgebreid</em>, <em>muziek</em>, <em>familie</em>, <em>crematie</em>, <em>begrafenis</em>.';
+    return;
+  }
+
+  // Type instellen indien gevonden
+  if (typeGevonden) {
+    var typeKnop = document.querySelector('.up-type-knop[onclick*="' + typeGevonden + '"]');
+    if (typeKnop) kiesType(typeGevonden, typeKnop);
+  }
+
+  // Aanpassingen toepassen
+  setTimeout(function() {
+    aanpassingen.forEach(function(a) {
+      // Sliders
+      if (a.actie.slider) {
+        Object.keys(a.actie.slider).forEach(function(sId) {
+          var sEl = document.getElementById(sId);
+          if (sEl) {
+            sEl.value = a.actie.slider[sId];
+            var pId = sId.replace('slider-', 'prijs-');
+            updateSlider(sEl, pId);
+          }
+        });
+      }
+      // Check + bedrag
+      if (a.actie.check) {
+        Object.keys(a.actie.check).forEach(function(pId) {
+          document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+            var onch = cb.getAttribute('onchange') || '';
+            if (onch.indexOf("'" + pId + "'") !== -1 && !cb.checked) {
+              cb.checked = true;
+              cb.dispatchEvent(new Event('change'));
+            }
+          });
+          // Update slider bedrag indien slider bestaat
+          var sId = pId.replace('prijs-', 'slider-');
+          var sEl = document.getElementById(sId);
+          if (sEl) {
+            sEl.value = a.actie.check[pId];
+            updateSlider(sEl, pId);
+          }
+        });
+      }
+    });
+
+    var unieke = [];
+    msgs.forEach(function(m) { if (unieke.indexOf(m) === -1) unieke.push(m); });
+    resultaat.classList.add('zichtbaar');
+    resultaat.innerHTML = '<strong>✓ Aanpassingen verwerkt:</strong> ' + unieke.join(' · ') + '. Bekijk het overzicht rechts voor de bijgewerkte kosten.';
+
+    // Smooth scroll naar overzicht
+    var ov = document.querySelector('.up-overzicht');
+    if (ov) setTimeout(function() { ov.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 800);
+  }, 100);
+}
+
+function upv4VulVoorbeeld(tekst) {
+  var input = document.getElementById('upv4AiInput');
+  if (input) {
+    input.value = tekst;
+    input.focus();
+  }
+}
+
+// ── SMART SUGGESTIONS ──
+function upv4ToonSuggesties() {
+  var container = document.getElementById('upv4Suggesties');
+  if (!container) return;
+  var suggesties = [];
+
+  var grand = parseInt(document.getElementById('grandTotaal').textContent.replace(/\D/g, '')) || 0;
+
+  // 1. Uitgebreide ceremonie zonder drukwerk
+  var ondernemerVal = parseInt(document.getElementById('slider-ondernemer')?.value || 0);
+  var drukwerkAan = (prijzen['prijs-drukwerk'] || 0) > 0;
+  if (ondernemerVal >= 3000 && !drukwerkAan) {
+    suggesties.push({
+      icon: '📋',
+      tekst: 'Je hebt een uitgebreide ondernemer-begeleiding gekozen maar geen <strong>rouwdrukwerk</strong>. De meeste families kiezen kaarten bij dit type uitvaart.',
+      knop: 'Toevoegen',
+      actie: 'voegToe:prijs-drukwerk:300'
+    });
+  }
+
+  // 2. Geen muziek bij ceremonie met spreker
+  var sprekerAan = (prijzen['prijs-spreker'] || 0) > 0;
+  var muziekAan = (prijzen['prijs-muziek'] || 0) > 0;
+  if (sprekerAan && !muziekAan) {
+    suggesties.push({
+      icon: '🎵',
+      tekst: 'Je hebt een spreker maar nog geen <strong>muziek</strong>. Muziek (live of opgenomen) maakt een ceremonie vaak persoonlijker.',
+      knop: 'Toevoegen',
+      actie: 'voegToe:prijs-muziek:450'
+    });
+  }
+
+  // 3. Crematie maar geen as-bestemming
+  if (uitvaartType === 'crematie' && (prijzen['prijs-as'] || 0) === 0) {
+    var asEl = document.getElementById('prijs-as');
+    if (asEl) {
+      // Default waarde uit slider
+      var sliderAs = document.getElementById('slider-as');
+      if (sliderAs && parseInt(sliderAs.value) > 0) {
+        // Geen suggestie nodig, staat ingesteld
+      }
+    }
+  }
+
+  // 4. Totaal >12k en geen herinneringsproduct
+  var herInProd = (prijzen['prijs-sieraden'] || 0) + (prijzen['prijs-gedenkboek'] || 0) +
+                  (prijzen['prijs-herinneringsproducten'] || 0);
+  if (grand > 12000 && herInProd === 0) {
+    suggesties.push({
+      icon: '💎',
+      tekst: 'Bij een uitgebreide uitvaart kiezen veel families ook een <strong>herinneringsproduct</strong> zoals sieraden met as of een gedenkboek.',
+      knop: 'Bekijken',
+      actie: 'opensectie:herinnering'
+    });
+  }
+
+  // 5. Catering aan, maar geen locatie
+  var cateringAan = (prijzen['prijs-catering'] || 0) > 0;
+  var locatieAan = (prijzen['prijs-locatie'] || 0) > 0;
+  if (cateringAan && !locatieAan) {
+    suggesties.push({
+      icon: '🏛️',
+      tekst: 'Je hebt catering aangevinkt maar geen <strong>locatie/aula</strong>. Wil je de catering ergens anders dan op het crematorium of de begraafplaats?',
+      knop: 'Toevoegen',
+      actie: 'voegToe:prijs-locatie:600'
+    });
+  }
+
+  // Toon (max 2 actief)
+  if (suggesties.length === 0) {
+    container.innerHTML = '';
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'block';
+  container.innerHTML = suggesties.slice(0, 2).map(function(s) {
+    return '<div class="upv4-suggestion">' +
+           '<span class="upv4-suggestion-icon">' + s.icon + '</span>' +
+           '<div>' + s.tekst +
+             '<button class="upv4-suggestion-knop" onclick="upv4SuggestieActie(\'' + s.actie + '\')">' +
+             s.knop + '</button></div></div>';
+  }).join('');
+}
+
+function upv4SuggestieActie(actie) {
+  var parts = actie.split(':');
+  if (parts[0] === 'voegToe') {
+    var pId = parts[1];
+    var bedrag = parseInt(parts[2]);
+    // Vind de checkbox bij deze prijs
+    document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+      var onch = cb.getAttribute('onchange') || '';
+      if (onch.indexOf("'" + pId + "'") !== -1 && !cb.checked) {
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+    // Slider waarde zetten
+    var sId = pId.replace('prijs-', 'slider-');
+    var sEl = document.getElementById(sId);
+    if (sEl) {
+      sEl.value = bedrag;
+      updateSlider(sEl, pId);
+    }
+    upv4ToonToast('Toegevoegd aan jouw uitvaart');
+  } else if (parts[0] === 'opensectie') {
+    // Vind sectie en klik open
+    var sectieMap = { 'herinnering': 4, 'plechtigheid': 3, 'admin': 5 };
+    var nr = sectieMap[parts[1]];
+    if (nr) {
+      document.querySelectorAll('.up-sectie').forEach(function(s) {
+        var sNr = s.querySelector('.up-sectie-nr');
+        if (sNr && sNr.textContent.trim() === '' + nr) {
+          var header = s.querySelector('.up-sectie-header');
+          if (header && !header.classList.contains('open')) {
+            header.click();
+            s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    }
+  }
+}
+
+// ── ECHTE PDF GENERATIE ──
+function upv4DownloadPDF() {
+  var laden = document.getElementById('upv4PdfLaden');
+  if (laden) laden.classList.add('zichtbaar');
+
+  setTimeout(function() {
+    if (typeof window.jspdf === 'undefined') {
+      alert('PDF library nog aan het laden, probeer over een seconde opnieuw.');
+      if (laden) laden.classList.remove('zichtbaar');
+      return;
+    }
+    var doc = new window.jspdf.jsPDF();
+
+    // Header
+    doc.setFillColor(74, 25, 66);
+    doc.rect(0, 0, 210, 38, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.text('Uitvaartplanner', 14, 18);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Uitvaart-Platform.nl', 14, 26);
+    doc.setFontSize(8);
+    doc.text(new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }), 14, 33);
+
+    // Type + regio
+    var type = document.getElementById('overzichtType')?.textContent || '';
+    doc.setTextColor(74, 25, 66);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('Jouw uitvaartplanning', 14, 52);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(type, 14, 58);
+
+    // Totaal
+    var grand = document.getElementById('grandTotaal')?.textContent || '0';
+    doc.setFillColor(250, 247, 242);
+    doc.rect(14, 65, 182, 22, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(74, 25, 66);
+    doc.text('GESCHATTE TOTALE KOSTEN', 18, 73);
+    doc.setFontSize(20);
+    doc.setTextColor(232, 131, 74);
+    doc.text('€ ' + grand, 18, 84);
+
+    // Categorieen tabel
+    var y = 100;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(74, 25, 66);
+    doc.text('Kostenverdeling', 14, y);
+    y += 6;
+
+    var cats = [
+      ['Basiskosten', 'totaal-basis'],
+      ['Begraafplaats/crematorium', 'totaal-graf'],
+      ['Plechtigheid', 'totaal-plechtigheid'],
+      ['Herinnering', 'totaal-herinnering'],
+      ['Administratie', 'totaal-admin']
+    ];
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    cats.forEach(function(c) {
+      var bedrag = document.getElementById(c[1])?.textContent || '€ 0';
+      doc.setTextColor(60, 60, 60);
+      doc.text(c[0], 18, y);
+      doc.setTextColor(74, 25, 66);
+      doc.setFont('helvetica', 'bold');
+      doc.text(bedrag, 196, y, { align: 'right' });
+      doc.setFont('helvetica', 'normal');
+      y += 7;
+    });
+
+    // Persoonlijke samenvatting
+    y += 8;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(74, 25, 66);
+    doc.text('Persoonlijke samenvatting', 14, y);
+    y += 6;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(60, 60, 60);
+
+    var samenvatting = upv4MaakSamenvatting();
+    var lijnen = doc.splitTextToSize(samenvatting, 180);
+    lijnen.forEach(function(l) {
+      doc.text(l, 14, y);
+      y += 5;
+    });
+
+    // Voettekst
+    y = 275;
+    doc.setFillColor(74, 25, 66);
+    doc.rect(0, y, 210, 22, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(8);
+    doc.text('Dit overzicht is een schatting. Vraag altijd een persoonlijke offerte aan bij een uitvaartondernemer.', 14, y + 8);
+    doc.text('Bezoek uitvaart-platform.nl voor de meest uitgebreide kennisbank en bedrijvengids van Nederland.', 14, y + 14);
+
+    doc.save('uitvaartplanning-' + new Date().toISOString().slice(0,10) + '.pdf');
+
+    if (laden) laden.classList.remove('zichtbaar');
+    upv4ToonToast('PDF gedownload');
+  }, 200);
+}
+
+function upv4MaakSamenvatting() {
+  var typeMap = {
+    begraving: 'begrafenis',
+    crematie: 'crematie',
+    natuur: 'natuurbegraving',
+    thuis: 'thuisuitvaart'
+  };
+  var type = typeMap[uitvaartType] || 'uitvaart';
+  var regio = document.getElementById('regioSelect')?.options[document.getElementById('regioSelect').selectedIndex]?.text || '';
+  var grand = document.getElementById('grandTotaal')?.textContent || '0';
+
+  // Tel actieve onderdelen
+  var actieveOnderdelen = [];
+  if ((prijzen['prijs-bloemen'] || 0) > 0) actieveOnderdelen.push('bloemen');
+  if ((prijzen['prijs-muziek'] || 0) > 0) actieveOnderdelen.push('muziek');
+  if ((prijzen['prijs-spreker'] || 0) > 0) actieveOnderdelen.push('een spreker');
+  if ((prijzen['prijs-locatie'] || 0) > 0) actieveOnderdelen.push('een aula/locatie');
+  if ((prijzen['prijs-drukwerk'] || 0) > 0) actieveOnderdelen.push('rouwdrukwerk');
+  if ((prijzen['prijs-catering'] || 0) > 0) actieveOnderdelen.push('catering');
+  if ((prijzen['prijs-fotograaf'] || 0) > 0) actieveOnderdelen.push('een fotograaf');
+  if ((prijzen['prijs-livestream'] || 0) > 0) actieveOnderdelen.push('live stream');
+  if ((prijzen['prijs-grafsteen'] || 0) > 0) actieveOnderdelen.push('een grafsteen');
+
+  var onderdelenTekst = '';
+  if (actieveOnderdelen.length > 0) {
+    if (actieveOnderdelen.length === 1) {
+      onderdelenTekst = 'Je hebt gekozen voor ' + actieveOnderdelen[0] + '.';
+    } else {
+      var laatste = actieveOnderdelen.pop();
+      onderdelenTekst = 'Je hebt gekozen voor ' + actieveOnderdelen.join(', ') + ' en ' + laatste + '.';
+    }
+  }
+
+  var s = 'Op basis van jouw keuzes plan je een ' + type + ' in ' + regio + '. ';
+  s += 'De geschatte totale kosten komen uit op ongeveer ' + grand + ' euro. ';
+  if (onderdelenTekst) s += onderdelenTekst + ' ';
+  s += 'Belangrijk: dit is een richtprijs op basis van landelijke gemiddelden, aangepast aan jouw regio. Voor exacte kosten is een offerte bij een uitvaartondernemer noodzakelijk. ';
+  s += 'Vergeet niet om naast deze planning ook de administratieve afhandeling te regelen (overlijdensakte, nalatenschap, eventuele uitkeringen).';
+
+  return s;
+}
+
+// ── SPAREN / INFLATIE CALCULATOR ──
+function upv4BerekenSparen() {
+  var bedrag = parseInt(document.getElementById('upv4SparenBedrag')?.value) || 0;
+  var jaren = parseInt(document.getElementById('upv4SparenJaren')?.value) || 0;
+  var rente = parseFloat(document.getElementById('upv4SparenRente')?.value) || 0;
+  var inflatie = 2.5; // gemiddelde inflatie
+
+  // Toekomstige waarde van uitvaartkosten met inflatie
+  var toekomstigeKosten = bedrag * Math.pow(1 + inflatie/100, jaren);
+
+  // Maandbedrag bij rente
+  var r = rente / 100 / 12;
+  var n = jaren * 12;
+  var maandBedrag;
+  if (r > 0) {
+    maandBedrag = toekomstigeKosten * r / (Math.pow(1 + r, n) - 1);
+  } else {
+    maandBedrag = toekomstigeKosten / n;
+  }
+
+  document.getElementById('upv4SparenToekomstig').textContent = '€ ' + Math.round(toekomstigeKosten).toLocaleString('nl-NL');
+  document.getElementById('upv4SparenMaand').textContent = '€ ' + Math.round(maandBedrag).toLocaleString('nl-NL');
+  document.getElementById('upv4SparenJaarTotaal').textContent = '€ ' + Math.round(maandBedrag * 12).toLocaleString('nl-NL');
+  document.getElementById('upv4SparenSubToekomst').textContent = 'Bij ' + inflatie + '% inflatie';
+  document.getElementById('upv4SparenSubMaand').textContent = 'om ' + jaren + ' jaar te sparen';
+}
+
+function upv4PakOverHuidigBedrag() {
+  var grand = parseInt(document.getElementById('grandTotaal').textContent.replace(/\D/g, '')) || 7500;
+  var input = document.getElementById('upv4SparenBedrag');
+  if (input) {
+    input.value = grand;
+    upv4BerekenSparen();
+  }
+}
+
+// ── WENSEN FORMULIER ──
+var UPV4_WENSEN_SLEUTEL = 'uitvaartplanner_wensen_v1';
+function upv4OpslaanWensen() {
+  var velden = ['wens-naam', 'wens-geboortedatum', 'wens-type', 'wens-locatie',
+                'wens-muziek', 'wens-spreker', 'wens-bloemen',
+                'wens-kleding', 'wens-boodschap', 'wens-contact'];
+  var data = {};
+  velden.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) data[id] = el.value;
+  });
+  data.opgeslagenOp = new Date().toISOString();
+  try {
+    localStorage.setItem(UPV4_WENSEN_SLEUTEL, JSON.stringify(data));
+    upv4ToonToast('Wensen opgeslagen');
+  } catch(e) { alert('Opslaan niet gelukt.'); }
+}
+
+function upv4LaadWensen() {
+  try {
+    var data = JSON.parse(localStorage.getItem(UPV4_WENSEN_SLEUTEL) || '{}');
+    Object.keys(data).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && id !== 'opgeslagenOp') el.value = data[id];
+    });
+  } catch(e) {}
+}
+
+function upv4DownloadWensen() {
+  if (typeof window.jspdf === 'undefined') {
+    alert('PDF library nog aan het laden, probeer over een seconde opnieuw.');
+    return;
+  }
+  var doc = new window.jspdf.jsPDF();
+
+  // Header
+  doc.setFillColor(74, 25, 66);
+  doc.rect(0, 0, 210, 38, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text('Mijn uitvaartwensen', 14, 18);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('Uitvaart-Platform.nl', 14, 26);
+  doc.setFontSize(8);
+  doc.text(new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }), 14, 33);
+
+  var y = 50;
+  var velden = [
+    ['Naam', 'wens-naam'],
+    ['Geboortedatum', 'wens-geboortedatum'],
+    ['Voorkeursvorm', 'wens-type'],
+    ['Plaats / locatie', 'wens-locatie'],
+    ['Muziekwensen', 'wens-muziek'],
+    ['Spreker / ceremoniemeester', 'wens-spreker'],
+    ['Bloemen', 'wens-bloemen'],
+    ['Kleding', 'wens-kleding'],
+    ['Persoonlijke boodschap', 'wens-boodschap'],
+    ['Contactpersoon', 'wens-contact']
+  ];
+  velden.forEach(function(v) {
+    var waarde = document.getElementById(v[1])?.value || '(niet ingevuld)';
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(74, 25, 66);
+    doc.text(v[0], 14, y);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    var lines = doc.splitTextToSize(waarde, 180);
+    lines.forEach(function(l, i) {
+      doc.text(l, 14, y + 5 + i * 5);
+    });
+    y += 5 + lines.length * 5 + 4;
+    if (y > 260) { doc.addPage(); y = 20; }
+  });
+
+  // Voettekst
+  doc.setFillColor(74, 25, 66);
+  doc.rect(0, 275, 210, 22, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(8);
+  doc.text('Bewaar dit document op een veilige plek en deel het met je naasten.', 14, 283);
+  doc.text('Bezoek uitvaart-platform.nl voor meer hulpmiddelen bij uitvaartplanning.', 14, 289);
+
+  doc.save('mijn-uitvaartwensen-' + new Date().toISOString().slice(0,10) + '.pdf');
+  upv4ToonToast('Wensen-document gedownload');
+}
+
+// ── SCENARIOS VERGELIJKEN ──
+var UPV4_SCENARIOS_SLEUTEL = 'uitvaartplanner_scenarios_v1';
+
+function upv4HuidigeScenario() {
+  var sliders = {};
+  document.querySelectorAll('.up-rij-slider').forEach(function(s) {
+    if (s.id) sliders[s.id] = s.value;
+  });
+  var checks = {};
+  document.querySelectorAll('input[type="checkbox"]').forEach(function(c, i) {
+    checks['cb_' + i] = c.checked;
+  });
+  return {
+    naam: '',
+    type: uitvaartType,
+    regio: document.getElementById('regioSelect').value,
+    sliders: sliders,
+    checks: checks,
+    totaal: parseInt(document.getElementById('grandTotaal').textContent.replace(/\D/g, '')) || 0,
+    timestamp: new Date().toISOString()
+  };
+}
+
+function upv4OpslaanScenario() {
+  var naam = prompt('Geef dit scenario een naam (bv. "Sober en goedkoop" of "Mama\'s wensen")');
+  if (!naam) return;
+  var scenarios = JSON.parse(localStorage.getItem(UPV4_SCENARIOS_SLEUTEL) || '[]');
+  var s = upv4HuidigeScenario();
+  s.naam = naam;
+  scenarios.push(s);
+  localStorage.setItem(UPV4_SCENARIOS_SLEUTEL, JSON.stringify(scenarios));
+  upv4RenderScenarios();
+  upv4ToonToast('Scenario "' + naam + '" opgeslagen');
+}
+
+function upv4RenderScenarios() {
+  var container = document.getElementById('upv4ScenariosGrid');
+  if (!container) return;
+  var scenarios = JSON.parse(localStorage.getItem(UPV4_SCENARIOS_SLEUTEL) || '[]');
+
+  if (scenarios.length === 0) {
+    container.innerHTML = '<div class="upv4-scenarios-leeg">Nog geen scenario\'s opgeslagen. Pas de calculator aan zoals jij wilt en klik op "Sla huidige op" om te vergelijken.</div>';
+    return;
+  }
+
+  // Voeg huidige toe als referentie
+  var huidig = upv4HuidigeScenario();
+  var huidigCard = '<div class="upv4-scenario-card huidig">' +
+    '<div class="upv4-scenario-naam">Huidig (live)</div>' +
+    '<div class="upv4-scenario-meta">' + huidig.type + '</div>' +
+    '<div class="upv4-scenario-bedrag">€ ' + huidig.totaal.toLocaleString('nl-NL') + '</div>' +
+    '<div class="upv4-scenario-acties"><button class="upv4-scenario-knop" onclick="upv4OpslaanScenario()">Opslaan</button></div>' +
+    '</div>';
+
+  var html = huidigCard + scenarios.map(function(s, i) {
+    var d = new Date(s.timestamp);
+    var datum = d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+    return '<div class="upv4-scenario-card">' +
+      '<div class="upv4-scenario-naam">' + s.naam + '</div>' +
+      '<div class="upv4-scenario-meta">' + s.type + ' · opgeslagen ' + datum + '</div>' +
+      '<div class="upv4-scenario-bedrag">€ ' + s.totaal.toLocaleString('nl-NL') + '</div>' +
+      '<div class="upv4-scenario-acties">' +
+        '<button class="upv4-scenario-knop" onclick="upv4LaadScenario(' + i + ')">Laden</button>' +
+        '<button class="upv4-scenario-knop verwijder" onclick="upv4VerwijderScenario(' + i + ')">Verwijder</button>' +
+      '</div></div>';
+  }).join('');
+
+  container.innerHTML = html;
+}
+
+function upv4LaadScenario(idx) {
+  var scenarios = JSON.parse(localStorage.getItem(UPV4_SCENARIOS_SLEUTEL) || '[]');
+  var s = scenarios[idx];
+  if (!s) return;
+  if (!confirm('Scenario "' + s.naam + '" laden? Dit overschrijft je huidige planning.')) return;
+
+  // Type
+  var typeKnop = document.querySelector('.up-type-knop[onclick*="' + s.type + '"]');
+  if (typeKnop) kiesType(s.type, typeKnop);
+  // Regio
+  if (s.regio) {
+    document.getElementById('regioSelect').value = s.regio;
+    updateRegio(s.regio);
+  }
+  // Sliders
+  setTimeout(function() {
+    Object.keys(s.sliders).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.value = s.sliders[id];
+        var pId = id.replace('slider-', 'prijs-');
+        updateSlider(el, pId);
+      }
+    });
+    // Checks
+    document.querySelectorAll('input[type="checkbox"]').forEach(function(c, i) {
+      var wenstAan = !!s.checks['cb_' + i];
+      if (c.checked !== wenstAan) {
+        c.checked = wenstAan;
+        c.dispatchEvent(new Event('change'));
+      }
+    });
+    berekenAlles();
+    upv4ToonToast('Scenario "' + s.naam + '" geladen');
+    // Switch terug naar calculator
+    document.querySelectorAll('.up-tab').forEach(function(t) {
+      if (t.getAttribute('onclick')?.indexOf('calculator') !== -1) t.click();
+    });
+  }, 100);
+}
+
+function upv4VerwijderScenario(idx) {
+  var scenarios = JSON.parse(localStorage.getItem(UPV4_SCENARIOS_SLEUTEL) || '[]');
+  if (!confirm('Scenario "' + scenarios[idx].naam + '" verwijderen?')) return;
+  scenarios.splice(idx, 1);
+  localStorage.setItem(UPV4_SCENARIOS_SLEUTEL, JSON.stringify(scenarios));
+  upv4RenderScenarios();
+}
+
+// ── TOAST NOTIFICATIES ──
+function upv4ToonToast(tekst) {
+  var t = document.getElementById('upv4Toast');
+  if (!t) return;
+  t.innerHTML = '<span class="upv4-autosave-check">✓</span><span>' + tekst + '</span>';
+  t.classList.add('zichtbaar');
+  setTimeout(function() { t.classList.remove('zichtbaar'); }, 2500);
+}
+
+// ── HOOK: na elke berekenAlles ook chart + suggestions + progress updaten ──
+(function() {
+  if (typeof berekenAlles !== 'function') return;
+  var orig = berekenAlles;
+  window.berekenAlles = function() {
+    orig();
+    upv4TekenDonut();
+    upv4UpdateProgress();
+    upv4ToonSuggesties();
+    upv4AnimateerPrijs();
+  };
+})();
+
+// ── INITIALISATIE ──
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    upv4TekenDonut();
+    upv4UpdateProgress();
+    upv4ToonSuggesties();
+    upv4ToonOnboarding();
+    upv4LaadWensen();
+    upv4RenderScenarios();
+
+    // Slider tooltips voor alle sliders met live update
+    document.querySelectorAll('.up-rij-slider').forEach(function(s) {
+      upv4UpdateSliderTooltip(s);
+      s.addEventListener('input', function() { upv4UpdateSliderTooltip(s); });
+    });
+
+    // Bereken sparen direct
+    if (document.getElementById('upv4SparenBedrag')) upv4BerekenSparen();
+  }, 200);
+});
 
 </script>
 
