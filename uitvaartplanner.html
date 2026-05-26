@@ -562,9 +562,9 @@ body {
   position: fixed; inset: 0;
   background: rgba(74,25,66,0.75);
   backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: flex-start; justify-content: center;
   z-index: 1000;
-  padding: 20px;
+  padding: 30px 20px;
   opacity: 0; pointer-events: none;
   transition: opacity 0.3s;
 }
@@ -578,7 +578,7 @@ body {
   max-width: 520px; width: 100%;
   position: relative;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  max-height: 90vh; overflow-y: auto;
+  max-height: 720px; overflow-y: auto;
 }
 .upv4-modal-close {
   position: absolute; top: 14px; right: 18px;
@@ -1930,6 +1930,8 @@ body {
       <div class="upv4-donut-center-label">Totaal</div>
     </div>
   </div>
+  <div class="upv4-donut-legenda" id="upv4DonutLegenda"></div>
+</div>
 <div class="up-acties">
           <button class="up-btn up-btn-oranje" onclick="upv4DownloadPDF()">⬇️ Download PDF overzicht</button>
           <button class="up-btn up-btn-paars" onclick="window.print()">🖨️ Afdrukken</button>
@@ -3219,7 +3221,14 @@ function upv4ToonOnboarding() {
   var done = localStorage.getItem(UPV4_ONBOARDING_SLEUTEL);
   if (done) return;
   var modal = document.getElementById('upv4OnboardingModal');
-  if (modal) modal.classList.add('zichtbaar');
+  if (modal) {
+    modal.classList.add('zichtbaar');
+    // Vraag de parent (Soffie) om naar de iframe te scrollen
+    // Als de parent een listener heeft hiervoor, scrollt hij de iframe in beeld
+    try {
+      window.parent.postMessage({ scrollIframeIntoView: true, reden: 'modal-open' }, '*');
+    } catch(e) {}
+  }
 }
 function upv4SluitOnboarding(keuze) {
   var modal = document.getElementById('upv4OnboardingModal');
