@@ -34,6 +34,11 @@ body { padding: 16px; min-height: 100vh; }
 
 .ec-pane { display: none; }
 .ec-pane.active { display: block; }
+.ec-privacy-bar { background: #f0f7ed; border-bottom: 1px solid #d4e8d4; padding: 10px 30px; font-size: 0.72rem; color: #2e4030; line-height: 1.5; display: flex; align-items: center; gap: 8px; }
+.ec-privacy-bar strong { color: #1e1520; font-weight: 700; }
+.ec-privacy-bar-icon { font-size: 1rem; flex-shrink: 0; }
+@media (max-width: 600px) { .ec-privacy-bar { padding: 10px 18px; font-size: 0.68rem; } }
+@media print { .ec-privacy-bar { display: none; } }
 
 /* ===== ALGEMENE COMPONENTEN ===== */
 .ec-body-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
@@ -358,6 +363,11 @@ body { padding: 16px; min-height: 100vh; }
     <button class="ec-tab" data-tab="vg"><span class="ec-tab-icoon">👑</span> Vruchtgebruik</button>
     <button class="ec-tab" data-tab="intl"><span class="ec-tab-icoon">🌍</span> Internationaal</button>
   </nav>
+
+  <div class="ec-privacy-bar">
+    <span class="ec-privacy-bar-icon">🔒</span>
+    <span><strong>Privacy:</strong> alle ingevulde gegevens blijven uitsluitend lokaal in jouw browser. Uitvaart-Platform.nl slaat <strong>niets</strong> op en heeft geen toegang tot je gegevens.</span>
+  </div>
 
   <!-- ========== MODE 1: QUICK ========== -->
   <div class="ec-pane active" data-pane="quick">
