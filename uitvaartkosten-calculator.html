@@ -28,6 +28,11 @@ body { padding: 16px; min-height: 100vh; }
 .uk-tab.active { color: #fff; border-bottom-color: #e8834a; }
 .uk-pane { display: none; }
 .uk-pane.active { display: block; }
+.uk-privacy-bar { background: #f0f7ed; border-bottom: 1px solid #d4e8d4; padding: 10px 30px; font-size: 0.72rem; color: #2e4030; line-height: 1.5; display: flex; align-items: center; gap: 8px; }
+.uk-privacy-bar strong { color: #1e1520; font-weight: 700; }
+.uk-privacy-bar-icon { font-size: 1rem; flex-shrink: 0; }
+@media (max-width: 600px) { .uk-privacy-bar { padding: 10px 18px; font-size: 0.68rem; } }
+@media print { .uk-privacy-bar { display: none; } }
 
 .uk-body { display: grid; grid-template-columns: 1fr 1.1fr; gap: 0; min-height: 600px; }
 @media (max-width: 1000px) { .uk-body { grid-template-columns: 1fr; } }
@@ -216,6 +221,11 @@ body { padding: 16px; min-height: 100vh; }
     <button class="uk-tab" data-tab="intl"><span>🌍</span> Repatriëring</button>
     <button class="uk-tab" data-tab="verzekering"><span>🛡️</span> Verzekering match</button>
   </nav>
+
+  <div class="uk-privacy-bar">
+    <span class="uk-privacy-bar-icon">🔒</span>
+    <span><strong>Privacy:</strong> alle ingevulde gegevens blijven uitsluitend lokaal in jouw browser. Uitvaart-Platform.nl slaat <strong>niets</strong> op en heeft geen toegang tot je gegevens.</span>
+  </div>
 
   <!-- ========== SNEL ========== -->
   <div class="uk-pane active" data-pane="snel">
@@ -920,13 +930,12 @@ body { padding: 16px; min-height: 100vh; }
     // Begraven
     var grafBasis = vState.graftype === 'algemeen' ? 1800 : vState.graftype === 'eigen' ? 5000 : 7500;
     var grafKosten = grafBasis * (vState.grafjaren / 20);
-    var bDetail = {
-      'Basis ceremonie en kist': basisCeremonie,
-      'Delven en dichten': 900,
-      'Grafrechten ' + vState.grafjaren + ' jaar': grafKosten,
-      'Grafsteen': vState.grafsteen,
-      'Uitvaartondernemer': 2200
-    };
+    var bDetail = {};
+    bDetail['Basis ceremonie en kist'] = basisCeremonie;
+    bDetail['Delven en dichten'] = 900;
+    bDetail['Grafrechten ' + vState.grafjaren + ' jaar'] = grafKosten;
+    bDetail['Grafsteen'] = vState.grafsteen;
+    bDetail['Uitvaartondernemer'] = 2200;
     var bTotaal = 0;
     Object.values(bDetail).forEach(function(v) { bTotaal += v; });
     bTotaal *= rFactor;
