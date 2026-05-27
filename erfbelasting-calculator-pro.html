@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Erfbelasting Calculator PRO 2026 - Uitvaart-Platform.nl</title>
-<meta name="description" content="Professionele erfbelasting calculator 2026. Bereken complete nalatenschap met meerdere erfgenamen, schenkingsstrategie en BOR bedrijfsopvolging.">
+<title>Erfbelasting Calculator PRO+ 2026 - Uitvaart-Platform.nl</title>
+<meta name="description" content="Meest complete erfbelasting calculator 2026. Volledige nalatenschap, schenkingsstrategie, BOR, tweetrapsmaking, vruchtgebruik, internationaal vermogen en save/load scenarios.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,7 +15,6 @@ body { padding: 16px; min-height: 100vh; }
 
 .ec-app { max-width: 1300px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; }
 
-/* Header */
 .ec-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; }
 .ec-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
 .ec-header-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
@@ -25,48 +24,63 @@ body { padding: 16px; min-height: 100vh; }
 .ec-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; box-shadow: 0 0 8px #e8834a; animation: pulse 2s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-/* Tabs */
-.ec-tabs { background: #2e0f29; padding: 0 30px; display: flex; gap: 4px; overflow-x: auto; }
-.ec-tab { background: transparent; border: none; padding: 14px 18px; font-family: inherit; font-size: 0.82rem; font-weight: 600; color: #b09cae; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+.ec-tabs { background: #2e0f29; padding: 0 30px; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; }
+.ec-tabs::-webkit-scrollbar { height: 4px; }
+.ec-tabs::-webkit-scrollbar-thumb { background: #4a1942; }
+.ec-tab { background: transparent; border: none; padding: 14px 16px; font-family: inherit; font-size: 0.78rem; font-weight: 600; color: #b09cae; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
 .ec-tab:hover { color: #fcd9c4; }
 .ec-tab.active { color: #fff; border-bottom-color: #e8834a; }
 .ec-tab-icoon { font-size: 1rem; }
 
-/* Mode panes */
 .ec-pane { display: none; }
 .ec-pane.active { display: block; }
 
-/* ============== MODE 1: QUICK ============== */
-.ec-quick-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-@media (max-width: 900px) { .ec-quick-body { grid-template-columns: 1fr; } }
-.ec-input-zone { padding: 26px 30px; border-right: 1px solid #f0eae7; }
-.ec-result-zone { padding: 26px 30px; background: linear-gradient(135deg, #faf7f2 0%, #fff 100%); }
-@media (max-width: 900px) { .ec-input-zone { border-right: none; border-bottom: 1px solid #f0eae7; } }
+/* ===== ALGEMENE COMPONENTEN ===== */
+.ec-body-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.ec-body-pro { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; min-height: 600px; }
+@media (max-width: 1100px) { .ec-body-pro, .ec-body-2col { grid-template-columns: 1fr; } }
 
-.ec-stap { margin-bottom: 20px; }
+.ec-input-zone { padding: 22px 26px; border-right: 1px solid #f0eae7; max-height: 900px; overflow-y: auto; }
+.ec-result-zone { padding: 22px 26px; background: linear-gradient(135deg, #faf7f2 0%, #fff 100%); max-height: 900px; overflow-y: auto; }
+@media (max-width: 1100px) {
+  .ec-input-zone { border-right: none; border-bottom: 1px solid #f0eae7; max-height: none; }
+  .ec-result-zone { max-height: none; }
+}
+.ec-input-zone::-webkit-scrollbar, .ec-result-zone::-webkit-scrollbar { width: 6px; }
+.ec-input-zone::-webkit-scrollbar-thumb, .ec-result-zone::-webkit-scrollbar-thumb { background: #d3c8cd; border-radius: 3px; }
+
+.ec-stap { margin-bottom: 18px; }
 .ec-stap:last-child { margin-bottom: 0; }
 .ec-stap-label { display: flex; align-items: center; gap: 10px; font-size: 0.62rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #e8834a; margin-bottom: 10px; }
 .ec-stap-nr { width: 22px; height: 22px; background: #4a1942; color: #e8834a; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; }
 
-.ec-relatie-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-@media (max-width: 600px) { .ec-relatie-grid { grid-template-columns: repeat(2, 1fr); } }
-.ec-relatie-btn { background: #faf7f2; border: 2px solid transparent; border-radius: 12px; padding: 12px 10px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-family: inherit; }
-.ec-relatie-btn:hover { background: #fff; border-color: #f0d5bc; }
-.ec-relatie-btn.active { background: #fff; border-color: #e8834a; box-shadow: 0 4px 14px rgba(232,131,74,0.18); }
-.ec-relatie-icoon { font-size: 1.4rem; line-height: 1; }
-.ec-relatie-naam { font-size: 0.74rem; font-weight: 700; color: #4a1942; line-height: 1.2; }
+.ec-blok { background: #faf7f2; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
+.ec-blok-kop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.ec-blok-titel { font-size: 0.86rem; font-weight: 700; color: #4a1942; display: flex; align-items: center; gap: 8px; }
+.ec-blok-titel-icoon { width: 26px; height: 26px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #e8834a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; }
+.ec-blok-subtitel { font-size: 0.7rem; color: #6a5e64; font-weight: 600; font-variant-numeric: tabular-nums; }
 
-.ec-bedrag-wrap { background: #faf7f2; border-radius: 14px; padding: 16px 18px; }
-.ec-bedrag-input-row { display: flex; align-items: center; gap: 4px; background: #fff; border: 2px solid #e2d9e0; border-radius: 10px; padding: 4px 14px; transition: all 0.2s; }
-.ec-bedrag-input-row:focus-within { border-color: #e8834a; box-shadow: 0 4px 14px rgba(232,131,74,0.12); }
-.ec-bedrag-prefix { font-size: 1.2rem; font-weight: 700; color: #4a1942; }
-.ec-bedrag-input { flex: 1; border: none; outline: none; font-family: inherit; font-size: 1.3rem; font-weight: 700; color: #4a1942; padding: 12px 0; background: transparent; font-variant-numeric: tabular-nums; }
-.ec-bedrag-slider { width: 100%; margin-top: 14px; -webkit-appearance: none; appearance: none; height: 6px; background: #e2d9e0; border-radius: 3px; outline: none; }
-.ec-bedrag-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(232,131,74,0.4); }
-.ec-bedrag-slider::-moz-range-thumb { width: 22px; height: 22px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 2px 8px rgba(232,131,74,0.4); }
-.ec-snel-knoppen { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
-.ec-snel-knop { padding: 6px 12px; background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; cursor: pointer; font-family: inherit; font-size: 0.72rem; font-weight: 600; color: #6a5e64; transition: all 0.2s; }
-.ec-snel-knop:hover { background: #e8834a; border-color: #e8834a; color: #fff; }
+.ec-veld { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #e2d9e0; }
+.ec-veld:last-child { border-bottom: none; }
+.ec-veld-icoon { width: 28px; height: 28px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+.ec-veld-info { flex: 1; min-width: 0; }
+.ec-veld-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; line-height: 1.2; }
+.ec-veld-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 1px; line-height: 1.3; }
+.ec-veld-input { width: 130px; border: 1.5px solid #e2d9e0; background: #fff; border-radius: 8px; padding: 7px 10px; font-family: inherit; font-size: 0.84rem; font-weight: 700; color: #4a1942; text-align: right; font-variant-numeric: tabular-nums; outline: none; transition: all 0.2s; }
+.ec-veld-input:focus { border-color: #e8834a; }
+.ec-veld-input.negatief { color: #c4666c; }
+.ec-veld-input::-webkit-outer-spin-button, .ec-veld-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.ec-toggle-rij { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: #fff; border: 1.5px solid #e2d9e0; border-radius: 10px; margin-top: 6px; cursor: pointer; transition: all 0.2s; }
+.ec-toggle-rij:hover { border-color: #e8834a; }
+.ec-toggle-rij.active { background: #faf0e7; border-color: #e8834a; }
+.ec-toggle-rij input[type="checkbox"] { width: 18px; height: 18px; accent-color: #e8834a; cursor: pointer; flex-shrink: 0; }
+.ec-toggle-tekst { flex: 1; font-size: 0.78rem; font-weight: 600; color: #4a1942; line-height: 1.3; }
+.ec-toggle-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 2px; font-weight: 400; }
+
+.ec-subtotaal { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 4px; border-top: 2px solid #4a1942; margin-top: 8px; font-weight: 700; }
+.ec-subtotaal-label { font-size: 0.78rem; color: #4a1942; }
+.ec-subtotaal-waarde { font-size: 0.92rem; color: #4a1942; font-variant-numeric: tabular-nums; }
 
 .ec-result-card { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 16px; padding: 22px 24px; position: relative; overflow: hidden; margin-bottom: 14px; }
 .ec-result-card::before { content: ""; position: absolute; top: -50px; right: -50px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
@@ -88,51 +102,33 @@ body { padding: 16px; min-height: 100vh; }
 .ec-schijf-waarde { font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
 .ec-schijf-percentage { display: inline-block; padding: 2px 8px; background: #faf0e7; color: #d4733c; border-radius: 8px; font-size: 0.66rem; font-weight: 700; margin-left: 6px; }
 
-/* ============== MODE 2: PRO ============== */
-.ec-pro-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; min-height: 600px; }
-@media (max-width: 1100px) { .ec-pro-body { grid-template-columns: 1fr; } }
+.ec-bedrag-wrap { background: #faf7f2; border-radius: 14px; padding: 16px 18px; }
+.ec-bedrag-input-row { display: flex; align-items: center; gap: 4px; background: #fff; border: 2px solid #e2d9e0; border-radius: 10px; padding: 4px 14px; transition: all 0.2s; }
+.ec-bedrag-input-row:focus-within { border-color: #e8834a; box-shadow: 0 4px 14px rgba(232,131,74,0.12); }
+.ec-bedrag-prefix { font-size: 1.2rem; font-weight: 700; color: #4a1942; }
+.ec-bedrag-input { flex: 1; border: none; outline: none; font-family: inherit; font-size: 1.3rem; font-weight: 700; color: #4a1942; padding: 12px 0; background: transparent; font-variant-numeric: tabular-nums; }
+.ec-bedrag-slider { width: 100%; margin-top: 14px; -webkit-appearance: none; appearance: none; height: 6px; background: #e2d9e0; border-radius: 3px; outline: none; }
+.ec-bedrag-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(232,131,74,0.4); }
+.ec-bedrag-slider::-moz-range-thumb { width: 22px; height: 22px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 2px 8px rgba(232,131,74,0.4); }
+.ec-snel-knoppen { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+.ec-snel-knop { padding: 6px 12px; background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; cursor: pointer; font-family: inherit; font-size: 0.72rem; font-weight: 600; color: #6a5e64; transition: all 0.2s; }
+.ec-snel-knop:hover { background: #e8834a; border-color: #e8834a; color: #fff; }
 
-.ec-pro-input { padding: 22px 26px; border-right: 1px solid #f0eae7; max-height: 900px; overflow-y: auto; }
-.ec-pro-result { padding: 22px 26px; background: linear-gradient(135deg, #faf7f2 0%, #fff 100%); max-height: 900px; overflow-y: auto; }
-@media (max-width: 1100px) {
-  .ec-pro-input { border-right: none; border-bottom: 1px solid #f0eae7; max-height: none; }
-  .ec-pro-result { max-height: none; }
-}
-
-.ec-pro-input::-webkit-scrollbar, .ec-pro-result::-webkit-scrollbar { width: 6px; }
-.ec-pro-input::-webkit-scrollbar-thumb, .ec-pro-result::-webkit-scrollbar-thumb { background: #d3c8cd; border-radius: 3px; }
-
-.ec-blok { background: #faf7f2; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
-.ec-blok-kop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.ec-blok-titel { font-size: 0.86rem; font-weight: 700; color: #4a1942; display: flex; align-items: center; gap: 8px; }
-.ec-blok-titel-icoon { width: 26px; height: 26px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #e8834a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; }
-.ec-blok-subtitel { font-size: 0.7rem; color: #6a5e64; font-weight: 600; font-variant-numeric: tabular-nums; }
-
-.ec-veld { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #e2d9e0; }
-.ec-veld:last-child { border-bottom: none; }
-.ec-veld-icoon { width: 28px; height: 28px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
-.ec-veld-info { flex: 1; }
-.ec-veld-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; line-height: 1.2; }
-.ec-veld-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 1px; line-height: 1.3; }
-.ec-veld-input { width: 130px; border: 1.5px solid #e2d9e0; background: #fff; border-radius: 8px; padding: 7px 10px; font-family: inherit; font-size: 0.84rem; font-weight: 700; color: #4a1942; text-align: right; font-variant-numeric: tabular-nums; outline: none; transition: all 0.2s; }
-.ec-veld-input:focus { border-color: #e8834a; }
-.ec-veld-input.negatief { color: #c4666c; }
-.ec-veld-input::-webkit-outer-spin-button, .ec-veld-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
-.ec-subtotaal { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 4px; border-top: 2px solid #4a1942; margin-top: 8px; font-weight: 700; }
-.ec-subtotaal-label { font-size: 0.78rem; color: #4a1942; }
-.ec-subtotaal-waarde { font-size: 0.92rem; color: #4a1942; font-variant-numeric: tabular-nums; }
-
-.ec-totaal-blok { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; position: relative; overflow: hidden; }
-.ec-totaal-blok::before { content: ""; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
-.ec-totaal-label { font-size: 0.66rem; color: #fcd9c4; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 4px; position: relative; }
-.ec-totaal-waarde { font-size: 1.6rem; font-weight: 800; color: #e8834a; font-variant-numeric: tabular-nums; position: relative; }
-.ec-totaal-sub { font-size: 0.76rem; color: #ede0eb; margin-top: 2px; position: relative; }
+.ec-relatie-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+@media (max-width: 600px) { .ec-relatie-grid { grid-template-columns: repeat(2, 1fr); } }
+.ec-relatie-btn { background: #faf7f2; border: 2px solid transparent; border-radius: 12px; padding: 12px 10px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-family: inherit; }
+.ec-relatie-btn:hover { background: #fff; border-color: #f0d5bc; }
+.ec-relatie-btn.active { background: #fff; border-color: #e8834a; box-shadow: 0 4px 14px rgba(232,131,74,0.18); }
+.ec-relatie-icoon { font-size: 1.4rem; line-height: 1; }
+.ec-relatie-naam { font-size: 0.74rem; font-weight: 700; color: #4a1942; line-height: 1.2; }
 
 /* Erfgenamen lijst */
 .ec-erfgenaam-lijst { display: flex; flex-direction: column; gap: 8px; }
-.ec-erfgenaam { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 10px; padding: 10px 12px; display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 8px; align-items: center; transition: all 0.2s; }
+.ec-erfgenaam { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 10px; padding: 10px 12px; transition: all 0.2s; }
 .ec-erfgenaam:hover { border-color: #e8834a; }
+.ec-erfgenaam-rij1 { display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 8px; align-items: center; }
+.ec-erfgenaam-rij2 { margin-top: 6px; padding-top: 6px; border-top: 1px dashed #e2d9e0; display: none; }
+.ec-erfgenaam.kind-type .ec-erfgenaam-rij2 { display: block; }
 .ec-erfgenaam-icoon { font-size: 1.1rem; }
 .ec-erfgenaam-naam-input { border: none; outline: none; font-family: inherit; font-size: 0.82rem; font-weight: 600; color: #4a1942; background: transparent; min-width: 60px; padding: 4px 0; }
 .ec-erfgenaam-select { border: 1px solid #e2d9e0; background: #faf7f2; border-radius: 6px; padding: 5px 8px; font-family: inherit; font-size: 0.74rem; font-weight: 600; color: #4a1942; cursor: pointer; outline: none; }
@@ -142,6 +138,10 @@ body { padding: 16px; min-height: 100vh; }
 .ec-erfgenaam-del { background: transparent; border: none; color: #c4666c; cursor: pointer; padding: 4px 6px; border-radius: 6px; font-size: 0.9rem; transition: all 0.2s; }
 .ec-erfgenaam-del:hover { background: #fcecee; }
 .ec-erfgenaam-del:disabled { opacity: 0.3; cursor: not-allowed; }
+.ec-erfgenaam-mini-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #6a5e64; cursor: pointer; padding: 3px 8px; border-radius: 6px; transition: all 0.2s; }
+.ec-erfgenaam-mini-toggle:hover { background: #faf0e7; }
+.ec-erfgenaam-mini-toggle input { width: 14px; height: 14px; accent-color: #e8834a; cursor: pointer; }
+.ec-erfgenaam-mini-toggle.actief { color: #d4733c; font-weight: 700; }
 
 .ec-add-btn { background: #fff; border: 2px dashed #e2d9e0; color: #6a5e64; padding: 10px; border-radius: 10px; cursor: pointer; font-family: inherit; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 4px; }
 .ec-add-btn:hover { background: #faf7f2; border-color: #e8834a; color: #e8834a; }
@@ -149,7 +149,12 @@ body { padding: 16px; min-height: 100vh; }
 .ec-warning { background: #fef7e8; border-left: 4px solid #d4a017; border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: 0.74rem; color: #5a4a10; line-height: 1.5; }
 .ec-warning strong { color: #4a1942; font-weight: 700; }
 
-/* Resultaat tabel pro */
+.ec-totaal-blok { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.ec-totaal-blok::before { content: ""; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.ec-totaal-label { font-size: 0.66rem; color: #fcd9c4; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 4px; position: relative; }
+.ec-totaal-waarde { font-size: 1.6rem; font-weight: 800; color: #e8834a; font-variant-numeric: tabular-nums; position: relative; }
+.ec-totaal-sub { font-size: 0.76rem; color: #ede0eb; margin-top: 2px; position: relative; }
+
 .ec-erfgenaam-resultaat { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; }
 .ec-erfgenaam-r-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .ec-erfgenaam-r-icoon { width: 32px; height: 32px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; }
@@ -161,6 +166,7 @@ body { padding: 16px; min-height: 100vh; }
 .ec-erfgenaam-r-waarde { font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
 .ec-erfgenaam-r-waarde.belasting { color: #c4666c; }
 .ec-erfgenaam-r-waarde.netto { color: #6b9a7f; }
+.ec-erfgenaam-r-badge { display: inline-block; padding: 2px 8px; background: #faf0e7; color: #d4733c; border-radius: 8px; font-size: 0.62rem; font-weight: 700; margin-left: 4px; }
 
 .ec-tijdslijn { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; margin-top: 12px; }
 .ec-tijdslijn-titel { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6a5e64; margin-bottom: 10px; }
@@ -168,10 +174,6 @@ body { padding: 16px; min-height: 100vh; }
 .ec-deadline-tijd { background: #faf0e7; color: #d4733c; padding: 2px 8px; border-radius: 8px; font-size: 0.66rem; font-weight: 700; flex-shrink: 0; min-width: 90px; text-align: center; }
 .ec-deadline-tekst { color: #2e2129; line-height: 1.5; }
 .ec-deadline-tekst strong { color: #4a1942; }
-
-/* ============== MODE 3: SCHENKINGEN ============== */
-.ec-gift-body { display: grid; grid-template-columns: 1fr 1.2fr; gap: 0; }
-@media (max-width: 1000px) { .ec-gift-body { grid-template-columns: 1fr; } }
 
 .ec-scenario-vergelijking { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
 @media (max-width: 800px) { .ec-scenario-vergelijking { grid-template-columns: 1fr; } }
@@ -192,9 +194,13 @@ body { padding: 16px; min-height: 100vh; }
 .ec-strategie-tekst strong { color: #fff; font-weight: 700; }
 .ec-strategie-tekst .highlight { color: #e8834a; font-weight: 800; }
 
-/* ============== MODE 4: BOR ============== */
-.ec-bor-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-@media (max-width: 900px) { .ec-bor-body { grid-template-columns: 1fr; } }
+.ec-multiyear-tabel { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; overflow: hidden; margin-top: 14px; }
+.ec-multiyear-header { background: #faf7f2; padding: 10px 16px; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #6a5e64; }
+.ec-multiyear-row { display: grid; grid-template-columns: 60px 1fr 1fr 1fr; gap: 10px; padding: 8px 16px; border-top: 1px solid #f0eae7; font-size: 0.76rem; align-items: center; }
+.ec-multiyear-row.titel { font-weight: 700; color: #6a5e64; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.6px; background: #faf7f2; }
+.ec-multiyear-row.totaal { font-weight: 800; background: #faf0e7; color: #4a1942; }
+.ec-multiyear-jaar { font-weight: 700; color: #e8834a; }
+.ec-multiyear-bedrag { text-align: right; font-variant-numeric: tabular-nums; }
 
 .ec-bor-vergelijking { background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
 .ec-bor-rij { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e2d9e0; font-size: 0.84rem; }
@@ -207,37 +213,119 @@ body { padding: 16px; min-height: 100vh; }
 .ec-info-box { background: #faf0e7; border-left: 4px solid #e8834a; border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-size: 0.78rem; color: #4a4046; line-height: 1.6; }
 .ec-info-box strong { color: #4a1942; font-weight: 700; }
 
-/* Footer */
-.ec-footer { padding: 14px 30px; border-top: 1px solid #f0eae7; background: #faf7f2; font-size: 0.72rem; color: #6a5e64; line-height: 1.5; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+/* ============== TWEETRAPSMAKING ============== */
+.ec-fase-blok { background: #fff; border: 1px solid #e2d9e0; border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; position: relative; }
+.ec-fase-blok::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #e8834a; border-radius: 14px 0 0 14px; }
+.ec-fase-titel { font-size: 0.82rem; font-weight: 800; color: #4a1942; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.ec-fase-nr { width: 24px; height: 24px; background: #4a1942; color: #e8834a; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; }
+.ec-fase-uitleg { font-size: 0.72rem; color: #6a5e64; margin-bottom: 8px; line-height: 1.5; }
+.ec-fase-rij { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 0.8rem; }
+.ec-fase-naam { color: #4a4046; }
+.ec-fase-waarde { font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
+.ec-fase-waarde.belasting { color: #c4666c; }
+
+/* ============== VRUCHTGEBRUIK ============== */
+.ec-vg-leeftijd-wrap { background: #faf7f2; border-radius: 14px; padding: 16px 18px; }
+.ec-vg-leeftijd-input { display: flex; align-items: center; gap: 4px; background: #fff; border: 2px solid #e2d9e0; border-radius: 10px; padding: 4px 14px; }
+.ec-vg-leeftijd-input:focus-within { border-color: #e8834a; }
+.ec-vg-leeftijd-number { flex: 1; border: none; outline: none; font-family: inherit; font-size: 1.3rem; font-weight: 700; color: #4a1942; padding: 12px 0; background: transparent; font-variant-numeric: tabular-nums; text-align: center; }
+.ec-vg-leeftijd-suffix { font-size: 0.9rem; font-weight: 600; color: #6a5e64; }
+
+.ec-vg-verdeling { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ec-vg-deel { background: #fff; border: 2px solid; border-radius: 12px; padding: 14px 16px; }
+.ec-vg-deel.vruchtgebruik { border-color: #e8834a; }
+.ec-vg-deel.bloot { border-color: #4a1942; }
+.ec-vg-deel-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #6a5e64; margin-bottom: 4px; }
+.ec-vg-deel.vruchtgebruik .ec-vg-deel-label { color: #e8834a; }
+.ec-vg-deel.bloot .ec-vg-deel-label { color: #4a1942; }
+.ec-vg-deel-naam { font-size: 0.86rem; font-weight: 700; color: #4a1942; margin-bottom: 8px; }
+.ec-vg-deel-waarde { font-size: 1.4rem; font-weight: 800; color: #4a1942; font-variant-numeric: tabular-nums; line-height: 1; }
+.ec-vg-deel-pct { font-size: 0.74rem; color: #6a5e64; font-weight: 600; margin-top: 4px; }
+
+.ec-factor-tabel { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 12px 14px; margin-top: 10px; }
+.ec-factor-titel { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6a5e64; margin-bottom: 8px; }
+.ec-factor-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.ec-factor-cel { padding: 5px 8px; background: #faf7f2; border-radius: 6px; font-size: 0.7rem; display: flex; justify-content: space-between; transition: all 0.2s; }
+.ec-factor-cel.actief { background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); color: #fff; font-weight: 700; }
+.ec-factor-leeftijd { color: #6a5e64; }
+.ec-factor-cel.actief .ec-factor-leeftijd { color: #fcd9c4; }
+.ec-factor-waarde { font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
+.ec-factor-cel.actief .ec-factor-waarde { color: #fff; }
+
+/* ============== INTERNATIONAAL ============== */
+.ec-land-select { width: 100%; padding: 10px 14px; border: 1.5px solid #e2d9e0; border-radius: 10px; background: #fff; font-family: inherit; font-size: 0.86rem; font-weight: 600; color: #4a1942; outline: none; cursor: pointer; }
+.ec-land-select:focus { border-color: #e8834a; }
+
+.ec-land-info { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 12px 16px; margin-top: 10px; }
+.ec-land-info-rij { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 0.78rem; }
+.ec-land-info-label { color: #6a5e64; }
+.ec-land-info-waarde { font-weight: 700; color: #4a1942; }
+
+/* ============== FOOTER + ACTIONS ============== */
+.ec-footer { padding: 14px 30px; border-top: 1px solid #f0eae7; background: #faf7f2; font-size: 0.72rem; color: #6a5e64; line-height: 1.5; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .ec-footer-link { color: #4a1942; text-decoration: none; font-weight: 600; border-bottom: 2px solid #e8834a; transition: color 0.2s; }
 .ec-footer-link:hover { color: #e8834a; }
-.ec-actions { display: flex; gap: 8px; }
+.ec-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 .ec-action-btn { background: #4a1942; color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
 .ec-action-btn:hover { background: #6b2862; transform: translateY(-1px); }
 .ec-action-btn.secondary { background: #fff; color: #4a1942; border: 1.5px solid #e2d9e0; }
 .ec-action-btn.secondary:hover { border-color: #e8834a; color: #e8834a; background: #fff; }
 
+/* Modal scenarios */
+.ec-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(46,15,41,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; backdrop-filter: blur(4px); }
+.ec-modal-overlay.active { display: flex; }
+.ec-modal { background: #fff; border-radius: 16px; max-width: 500px; width: 100%; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; }
+.ec-modal-header { padding: 18px 22px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
+.ec-modal-titel { font-size: 1rem; font-weight: 800; margin: 0; }
+.ec-modal-close { background: transparent; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; padding: 0; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+.ec-modal-body { padding: 20px 22px; overflow-y: auto; }
+.ec-modal-naam-input { width: 100%; padding: 10px 14px; border: 1.5px solid #e2d9e0; border-radius: 10px; font-family: inherit; font-size: 0.9rem; outline: none; margin-bottom: 12px; }
+.ec-modal-naam-input:focus { border-color: #e8834a; }
+.ec-scenario-saved { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #faf7f2; border-radius: 10px; margin-bottom: 6px; gap: 10px; }
+.ec-scenario-saved-info { flex: 1; min-width: 0; }
+.ec-scenario-saved-naam { font-size: 0.84rem; font-weight: 700; color: #4a1942; }
+.ec-scenario-saved-meta { font-size: 0.66rem; color: #6a5e64; }
+.ec-scenario-saved-acties { display: flex; gap: 4px; }
+.ec-scenario-saved-btn { background: #fff; border: 1px solid #e2d9e0; border-radius: 6px; padding: 4px 8px; font-size: 0.7rem; font-weight: 600; cursor: pointer; color: #4a1942; transition: all 0.2s; }
+.ec-scenario-saved-btn:hover { border-color: #e8834a; color: #e8834a; }
+.ec-scenario-saved-btn.danger { color: #c4666c; }
+.ec-scenario-saved-btn.danger:hover { border-color: #c4666c; }
+.ec-modal-leeg { text-align: center; padding: 30px 20px; color: #6a5e64; font-size: 0.84rem; }
+
+/* ============== PRINT STYLES ============== */
 @media print {
-  body { background: #fff; padding: 0; }
-  .ec-app { box-shadow: none; }
-  .ec-action-btn, .ec-footer-link { display: none; }
-  .ec-tabs { display: none; }
+  body { background: #fff; padding: 0; margin: 0; }
+  .ec-app { box-shadow: none; max-width: 100%; border-radius: 0; }
+  .ec-action-btn, .ec-footer-link, .ec-modal-overlay { display: none !important; }
+  .ec-tabs { display: none !important; }
+  .ec-add-btn { display: none !important; }
+  .ec-erfgenaam-del { display: none !important; }
   .ec-pane:not(.active) { display: none !important; }
-  .ec-pro-input, .ec-pro-result { max-height: none; overflow: visible; }
+  .ec-pane.active { display: block !important; }
+  .ec-input-zone, .ec-result-zone { max-height: none !important; overflow: visible !important; }
+  .ec-body-pro, .ec-body-2col { display: block; }
+  .ec-input-zone { border-right: none; }
+  .ec-print-cover { display: block !important; }
+  .ec-print-footer { display: block !important; }
+  .ec-header::before { display: none; }
+  @page { margin: 18mm 14mm; }
 }
+.ec-print-cover { display: none; padding: 30px; text-align: center; border-bottom: 2px solid #4a1942; }
+.ec-print-cover-titel { font-size: 1.4rem; font-weight: 800; color: #4a1942; margin-bottom: 6px; }
+.ec-print-cover-sub { font-size: 0.86rem; color: #6a5e64; }
+.ec-print-cover-meta { font-size: 0.72rem; color: #6a5e64; margin-top: 10px; }
+.ec-print-footer { display: none; padding: 12px 30px; border-top: 1px solid #e2d9e0; font-size: 0.66rem; color: #6a5e64; text-align: center; }
 
 @media (max-width: 600px) {
   body { padding: 10px; }
   .ec-header { padding: 18px 20px; }
   .ec-tabs { padding: 0 14px; }
-  .ec-tab { padding: 12px 12px; font-size: 0.76rem; }
-  .ec-input-zone, .ec-result-zone, .ec-pro-input, .ec-pro-result { padding: 18px; }
+  .ec-tab { padding: 12px 12px; font-size: 0.74rem; }
+  .ec-input-zone, .ec-result-zone { padding: 18px; }
   .ec-result-bedrag { font-size: 1.8rem; }
   .ec-detail-grid { grid-template-columns: 1fr; }
-  .ec-erfgenaam { grid-template-columns: auto 1fr auto; gap: 6px; }
-  .ec-erfgenaam-select { grid-column: 2; grid-row: 2; }
-  .ec-erfgenaam-pct-wrap { grid-column: 3; grid-row: 1; }
-  .ec-erfgenaam-del { grid-column: 4; grid-row: 1; }
+  .ec-erfgenaam-rij1 { grid-template-columns: auto 1fr auto; gap: 6px; }
+  .ec-factor-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
@@ -245,11 +333,17 @@ body { padding: 16px; min-height: 100vh; }
 
 <div class="ec-app">
 
+  <div class="ec-print-cover">
+    <div class="ec-print-cover-titel">Erfbelasting Berekening</div>
+    <div class="ec-print-cover-sub">Volledig overzicht 2026</div>
+    <div class="ec-print-cover-meta" id="ec-print-datum"></div>
+  </div>
+
   <header class="ec-header">
     <div class="ec-header-content">
       <div>
-        <h1 class="ec-titel">Erfbelasting Calculator PRO</h1>
-        <div class="ec-subtitel">Tarieven en regelgeving 2026 &middot; Volledige nalatenschap, schenkingsstrategie en BOR</div>
+        <h1 class="ec-titel">Erfbelasting Calculator PRO+</h1>
+        <div class="ec-subtitel">2026 &middot; Met tweetrapsmaking, vruchtgebruik en internationaal vermogen</div>
       </div>
       <div class="ec-badge"><span class="ec-badge-dot"></span> Live berekening</div>
     </div>
@@ -259,16 +353,18 @@ body { padding: 16px; min-height: 100vh; }
     <button class="ec-tab active" data-tab="quick"><span class="ec-tab-icoon">⚡</span> Snel</button>
     <button class="ec-tab" data-tab="pro"><span class="ec-tab-icoon">📊</span> Volledige nalatenschap</button>
     <button class="ec-tab" data-tab="gift"><span class="ec-tab-icoon">🎁</span> Schenkingsstrategie</button>
-    <button class="ec-tab" data-tab="bor"><span class="ec-tab-icoon">🏢</span> Bedrijfsopvolging</button>
+    <button class="ec-tab" data-tab="bor"><span class="ec-tab-icoon">🏢</span> BOR</button>
+    <button class="ec-tab" data-tab="tt"><span class="ec-tab-icoon">🔁</span> Tweetrapsmaking</button>
+    <button class="ec-tab" data-tab="vg"><span class="ec-tab-icoon">👑</span> Vruchtgebruik</button>
+    <button class="ec-tab" data-tab="intl"><span class="ec-tab-icoon">🌍</span> Internationaal</button>
   </nav>
 
   <!-- ========== MODE 1: QUICK ========== -->
   <div class="ec-pane active" data-pane="quick">
-    <div class="ec-quick-body">
-
+    <div class="ec-body-2col">
       <div class="ec-input-zone">
         <div class="ec-stap">
-          <div class="ec-stap-label"><span class="ec-stap-nr">1</span> Wat is je relatie tot de overledene?</div>
+          <div class="ec-stap-label"><span class="ec-stap-nr">1</span> Relatie tot overledene</div>
           <div class="ec-relatie-grid" id="ec-relaties">
             <button class="ec-relatie-btn active" data-relatie="partner"><span class="ec-relatie-icoon">💑</span><span class="ec-relatie-naam">Partner</span></button>
             <button class="ec-relatie-btn" data-relatie="kind"><span class="ec-relatie-icoon">👶</span><span class="ec-relatie-naam">Kind</span></button>
@@ -278,14 +374,10 @@ body { padding: 16px; min-height: 100vh; }
             <button class="ec-relatie-btn" data-relatie="anders"><span class="ec-relatie-icoon">👤</span><span class="ec-relatie-naam">Anders</span></button>
           </div>
         </div>
-
         <div class="ec-stap">
-          <div class="ec-stap-label"><span class="ec-stap-nr">2</span> Hoeveel erf je?</div>
+          <div class="ec-stap-label"><span class="ec-stap-nr">2</span> Erfenisbedrag</div>
           <div class="ec-bedrag-wrap">
-            <div class="ec-bedrag-input-row">
-              <span class="ec-bedrag-prefix">€</span>
-              <input type="text" class="ec-bedrag-input" id="ec-q-bedrag-display" value="100.000" inputmode="numeric">
-            </div>
+            <div class="ec-bedrag-input-row"><span class="ec-bedrag-prefix">€</span><input type="text" class="ec-bedrag-input" id="ec-q-bedrag-display" value="100.000" inputmode="numeric"></div>
             <input type="range" class="ec-bedrag-slider" id="ec-q-bedrag-slider" min="0" max="2000000" step="5000" value="100000">
             <div class="ec-snel-knoppen">
               <button class="ec-snel-knop" data-bedrag="25000">€25k</button>
@@ -298,7 +390,6 @@ body { padding: 16px; min-height: 100vh; }
           </div>
         </div>
       </div>
-
       <div class="ec-result-zone">
         <div class="ec-result-card">
           <div class="ec-result-label">Je betaalt aan erfbelasting</div>
@@ -318,27 +409,30 @@ body { padding: 16px; min-height: 100vh; }
           <div class="ec-schijf-rij" id="ec-q-s2-rij"><span class="ec-schijf-naam">Schijf 2 <span class="ec-schijf-percentage" id="ec-q-s2-pct">20%</span></span><span class="ec-schijf-waarde" id="ec-q-s2">€0</span></div>
         </div>
       </div>
-
     </div>
   </div>
 
   <!-- ========== MODE 2: PRO ========== -->
   <div class="ec-pane" data-pane="pro">
-    <div class="ec-pro-body">
-
-      <div class="ec-pro-input">
+    <div class="ec-body-pro">
+      <div class="ec-input-zone">
 
         <div class="ec-blok">
           <div class="ec-blok-kop">
             <div class="ec-blok-titel"><div class="ec-blok-titel-icoon">+</div> Bezittingen</div>
             <div class="ec-blok-subtitel" id="ec-pro-bezit-totaal">€0</div>
           </div>
-          <div class="ec-veld"><div class="ec-veld-icoon">🏠</div><div class="ec-veld-info"><div class="ec-veld-naam">Woning (WOZ-waarde)</div><div class="ec-veld-uitleg">Belastingdienst gebruikt WOZ van overlijdens­jaar of jaar erna</div></div><input type="number" class="ec-veld-input" data-pro="woning" value="0"></div>
-          <div class="ec-veld"><div class="ec-veld-icoon">💰</div><div class="ec-veld-info"><div class="ec-veld-naam">Spaargeld</div><div class="ec-veld-uitleg">Banksaldo, deposito's, contant geld</div></div><input type="number" class="ec-veld-input" data-pro="spaargeld" value="0"></div>
-          <div class="ec-veld"><div class="ec-veld-icoon">📈</div><div class="ec-veld-info"><div class="ec-veld-naam">Beleggingen</div><div class="ec-veld-uitleg">Aandelen, obligaties, fondsen, crypto</div></div><input type="number" class="ec-veld-input" data-pro="beleggingen" value="0"></div>
-          <div class="ec-veld"><div class="ec-veld-icoon">🛋️</div><div class="ec-veld-info"><div class="ec-veld-naam">Inboedel</div><div class="ec-veld-uitleg">Forfait €5.000 (standaard) of geschatte waarde</div></div><input type="number" class="ec-veld-input" data-pro="inboedel" value="5000"></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">🏠</div><div class="ec-veld-info"><div class="ec-veld-naam">Woning (WOZ-waarde)</div><div class="ec-veld-uitleg">WOZ van overlijdens­jaar of jaar erna</div></div><input type="number" class="ec-veld-input" data-pro="woning" value="0"></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">💰</div><div class="ec-veld-info"><div class="ec-veld-naam">Spaargeld</div><div class="ec-veld-uitleg">Banksaldo, deposito's</div></div><input type="number" class="ec-veld-input" data-pro="spaargeld" value="0"></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">📈</div><div class="ec-veld-info"><div class="ec-veld-naam">Beleggingen</div><div class="ec-veld-uitleg">Aandelen, fondsen, crypto</div></div><input type="number" class="ec-veld-input" data-pro="beleggingen" value="0"></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">🛋️</div><div class="ec-veld-info"><div class="ec-veld-naam">Inboedel</div><div class="ec-veld-uitleg">Forfait €5.000 (standaard)</div></div><input type="number" class="ec-veld-input" data-pro="inboedel" value="5000"></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">🛡️</div><div class="ec-veld-info"><div class="ec-veld-naam">Levensverzekering uitkering</div><div class="ec-veld-uitleg">Uitkering aan begunstigde (valt vaak onder erfbelasting)</div></div><input type="number" class="ec-veld-input" data-pro="levensverzekering" value="0"></div>
           <div class="ec-veld"><div class="ec-veld-icoon">🎁</div><div class="ec-veld-info"><div class="ec-veld-naam">Schenkingen laatste 180 dagen</div><div class="ec-veld-uitleg">Tellen mee voor erfbelasting</div></div><input type="number" class="ec-veld-input" data-pro="schenkingen" value="0"></div>
           <div class="ec-veld"><div class="ec-veld-icoon">📦</div><div class="ec-veld-info"><div class="ec-veld-naam">Overig vermogen</div><div class="ec-veld-uitleg">Voertuigen, kunst, kostbaarheden</div></div><input type="number" class="ec-veld-input" data-pro="overig" value="0"></div>
+          <label class="ec-toggle-rij" id="ec-pro-lvz-toggle">
+            <input type="checkbox" id="ec-pro-lvz-check">
+            <div><div class="ec-toggle-tekst">Begunstigde levensverzekering heeft zelf de premie betaald</div><div class="ec-toggle-uitleg">In dat geval valt de uitkering NIET onder erfbelasting (Art. 13 Sw)</div></div>
+          </label>
         </div>
 
         <div class="ec-blok">
@@ -346,11 +440,21 @@ body { padding: 16px; min-height: 100vh; }
             <div class="ec-blok-titel"><div class="ec-blok-titel-icoon">−</div> Schulden en aftrekposten</div>
             <div class="ec-blok-subtitel" id="ec-pro-schuld-totaal">€0</div>
           </div>
-          <div class="ec-veld"><div class="ec-veld-icoon">🏦</div><div class="ec-veld-info"><div class="ec-veld-naam">Hypotheekschuld</div><div class="ec-veld-uitleg">Restant hypotheek op moment van overlijden</div></div><input type="number" class="ec-veld-input negatief" data-pro="hypotheek" value="0"></div>
-          <div class="ec-veld"><div class="ec-veld-icoon">💳</div><div class="ec-veld-info"><div class="ec-veld-naam">Andere schulden</div><div class="ec-veld-uitleg">Persoonlijke lening, openstaande facturen</div></div><input type="number" class="ec-veld-input negatief" data-pro="andere_schulden" value="0"></div>
-          <div class="ec-veld"><div class="ec-veld-icoon">⚱️</div><div class="ec-veld-info"><div class="ec-veld-naam">Uitvaartkosten</div><div class="ec-veld-uitleg">Maximaal aftrekbaar: redelijke uitvaartkosten</div></div><input type="number" class="ec-veld-input negatief" data-pro="uitvaart" value="8000"></div>
-          <div class="ec-veld"><div class="ec-veld-icoon">📋</div><div class="ec-veld-info"><div class="ec-veld-naam">Successiekosten</div><div class="ec-veld-uitleg">Notaris verklaring van erfrecht, taxaties</div></div><input type="number" class="ec-veld-input negatief" data-pro="successie" value="500"></div>
-          <div class="ec-subtotaal"><div class="ec-subtotaal-label">Netto nalatenschap</div><div class="ec-subtotaal-waarde" id="ec-pro-netto-nalatenschap">€0</div></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">🏦</div><div class="ec-veld-info"><div class="ec-veld-naam">Hypotheekschuld</div><div class="ec-veld-uitleg">Restant hypotheek bij overlijden</div></div><input type="number" class="ec-veld-input negatief" data-pro="hypotheek" value="0"></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">💳</div><div class="ec-veld-info"><div class="ec-veld-naam">Andere schulden</div><div class="ec-veld-uitleg">Lening, openstaande facturen</div></div><input type="number" class="ec-veld-input negatief" data-pro="andere_schulden" value="0"></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">⚱️</div><div class="ec-veld-info"><div class="ec-veld-naam">Uitvaartkosten</div><div class="ec-veld-uitleg">Redelijke uitvaartkosten</div></div><input type="number" class="ec-veld-input negatief" data-pro="uitvaart" value="8000"></div>
+          <div class="ec-veld"><div class="ec-veld-icoon">📋</div><div class="ec-veld-info"><div class="ec-veld-naam">Successiekosten</div><div class="ec-veld-uitleg">Notariskosten, taxaties</div></div><input type="number" class="ec-veld-input negatief" data-pro="successie" value="500"></div>
+          <div class="ec-subtotaal"><div class="ec-subtotaal-label">Netto belastbare nalatenschap</div><div class="ec-subtotaal-waarde" id="ec-pro-netto-nalatenschap">€0</div></div>
+        </div>
+
+        <div class="ec-blok">
+          <div class="ec-blok-kop">
+            <div class="ec-blok-titel"><div class="ec-blok-titel-icoon">⚙</div> Bijzondere situaties</div>
+          </div>
+          <label class="ec-toggle-rij" id="ec-pro-emigratie-toggle">
+            <input type="checkbox" id="ec-pro-emigratie-check">
+            <div><div class="ec-toggle-tekst">Nederlander geëmigreerd in afgelopen 10 jaar</div><div class="ec-toggle-uitleg">Tot 10 jaar na emigratie blijft Nederlandse erfbelastingplicht (10-jaars regel)</div></div>
+          </label>
         </div>
 
         <div class="ec-blok">
@@ -365,7 +469,7 @@ body { padding: 16px; min-height: 100vh; }
 
       </div>
 
-      <div class="ec-pro-result">
+      <div class="ec-result-zone">
 
         <div class="ec-totaal-blok">
           <div class="ec-totaal-label">Totaal verschuldigde erfbelasting</div>
@@ -381,41 +485,34 @@ body { padding: 16px; min-height: 100vh; }
         <div id="ec-pro-erfgenaam-resultaten"></div>
 
         <div class="ec-tijdslijn">
-          <div class="ec-tijdslijn-titel">Belangrijke deadlines en stappen</div>
-          <div class="ec-deadline"><div class="ec-deadline-tijd">3 maanden</div><div class="ec-deadline-tekst"><strong>Beslissing aanvaarden of verwerpen</strong> per erfgenaam. Beneficiair aanvaarden bij twijfel over schulden.</div></div>
-          <div class="ec-deadline"><div class="ec-deadline-tijd">4-8 weken</div><div class="ec-deadline-tekst"><strong>Verklaring van erfrecht</strong> aanvragen bij notaris. Vanaf €300.</div></div>
-          <div class="ec-deadline"><div class="ec-deadline-tijd">20 maanden</div><div class="ec-deadline-tekst"><strong>Aangifte erfbelasting</strong> indienen bij Belastingdienst. Verlengd in 2026.</div></div>
+          <div class="ec-tijdslijn-titel">Deadlines en stappen</div>
+          <div class="ec-deadline"><div class="ec-deadline-tijd">3 maanden</div><div class="ec-deadline-tekst"><strong>Beslissing aanvaarden of verwerpen</strong> per erfgenaam.</div></div>
+          <div class="ec-deadline"><div class="ec-deadline-tijd">4-8 weken</div><div class="ec-deadline-tekst"><strong>Verklaring van erfrecht</strong> bij notaris, vanaf €300.</div></div>
+          <div class="ec-deadline"><div class="ec-deadline-tijd">20 maanden</div><div class="ec-deadline-tekst"><strong>Aangifte erfbelasting</strong> indienen (verlengd in 2026).</div></div>
         </div>
 
       </div>
-
     </div>
   </div>
 
   <!-- ========== MODE 3: SCHENKINGSSTRATEGIE ========== -->
   <div class="ec-pane" data-pane="gift">
-    <div class="ec-gift-body">
-
+    <div class="ec-body-2col">
       <div class="ec-input-zone">
         <div class="ec-stap">
           <div class="ec-stap-label"><span class="ec-stap-nr">1</span> Huidig vermogen</div>
           <div class="ec-bedrag-wrap">
-            <div class="ec-bedrag-input-row">
-              <span class="ec-bedrag-prefix">€</span>
-              <input type="text" class="ec-bedrag-input" id="ec-g-vermogen-display" value="800.000" inputmode="numeric">
-            </div>
+            <div class="ec-bedrag-input-row"><span class="ec-bedrag-prefix">€</span><input type="text" class="ec-bedrag-input" id="ec-g-vermogen-display" value="800.000" inputmode="numeric"></div>
             <input type="range" class="ec-bedrag-slider" id="ec-g-vermogen-slider" min="50000" max="3000000" step="10000" value="800000">
           </div>
         </div>
-
         <div class="ec-stap">
           <div class="ec-stap-label"><span class="ec-stap-nr">2</span> Familiesamenstelling</div>
           <div class="ec-blok">
-            <div class="ec-veld"><div class="ec-veld-icoon">👶</div><div class="ec-veld-info"><div class="ec-veld-naam">Aantal kinderen</div><div class="ec-veld-uitleg">Inclusief stiefkinderen door huwelijk</div></div><input type="number" class="ec-veld-input" id="ec-g-kinderen" value="2" min="0" max="10"></div>
-            <div class="ec-veld"><div class="ec-veld-icoon">👧</div><div class="ec-veld-info"><div class="ec-veld-naam">Aantal kleinkinderen</div><div class="ec-veld-uitleg">Voor extra schenkingsvrijstellingen</div></div><input type="number" class="ec-veld-input" id="ec-g-kleinkinderen" value="0" min="0" max="20"></div>
+            <div class="ec-veld"><div class="ec-veld-icoon">👶</div><div class="ec-veld-info"><div class="ec-veld-naam">Aantal kinderen</div><div class="ec-veld-uitleg">Inclusief stiefkinderen</div></div><input type="number" class="ec-veld-input" id="ec-g-kinderen" value="2" min="0" max="10"></div>
+            <div class="ec-veld"><div class="ec-veld-icoon">👧</div><div class="ec-veld-info"><div class="ec-veld-naam">Aantal kleinkinderen</div><div class="ec-veld-uitleg">Voor extra vrijstellingen</div></div><input type="number" class="ec-veld-input" id="ec-g-kleinkinderen" value="0" min="0" max="20"></div>
           </div>
         </div>
-
         <div class="ec-stap">
           <div class="ec-stap-label"><span class="ec-stap-nr">3</span> Planning­horizon</div>
           <div class="ec-bedrag-wrap">
@@ -428,142 +525,361 @@ body { padding: 16px; min-height: 100vh; }
           </div>
         </div>
       </div>
-
       <div class="ec-result-zone">
-
         <div class="ec-strategie-advies">
           <div class="ec-strategie-label">💡 Strategisch advies</div>
           <div class="ec-strategie-tekst" id="ec-g-advies">—</div>
         </div>
-
         <div class="ec-scenario-vergelijking">
-          <div class="ec-scenario" id="ec-g-scenario-a">
-            <div class="ec-scenario-titel">Niets schenken</div>
-            <div class="ec-scenario-sub">Volledig vermogen als erfenis bij overlijden</div>
-            <div class="ec-scenario-belasting" id="ec-g-belasting-a">€0</div>
-            <div class="ec-scenario-besparing">Baseline scenario</div>
-          </div>
-          <div class="ec-scenario" id="ec-g-scenario-b">
-            <div class="ec-scenario-titel">Jaarlijks schenken</div>
-            <div class="ec-scenario-sub">Optimaal benutten jaarvrijstellingen</div>
-            <div class="ec-scenario-belasting" id="ec-g-belasting-b">€0</div>
-            <div class="ec-scenario-besparing" id="ec-g-besparing-b">—</div>
-          </div>
-          <div class="ec-scenario" id="ec-g-scenario-c">
-            <div class="ec-scenario-titel">Maximale strategie</div>
-            <div class="ec-scenario-sub">Eenmalig verhoogd + jaarlijks</div>
-            <div class="ec-scenario-belasting" id="ec-g-belasting-c">€0</div>
-            <div class="ec-scenario-besparing" id="ec-g-besparing-c">—</div>
-          </div>
+          <div class="ec-scenario" id="ec-g-scenario-a"><div class="ec-scenario-titel">Niets schenken</div><div class="ec-scenario-sub">Volledig vermogen als erfenis</div><div class="ec-scenario-belasting" id="ec-g-belasting-a">€0</div><div class="ec-scenario-besparing">Baseline</div></div>
+          <div class="ec-scenario" id="ec-g-scenario-b"><div class="ec-scenario-titel">Jaarlijks schenken</div><div class="ec-scenario-sub">Optimaal jaarvrijstellingen</div><div class="ec-scenario-belasting" id="ec-g-belasting-b">€0</div><div class="ec-scenario-besparing" id="ec-g-besparing-b">—</div></div>
+          <div class="ec-scenario" id="ec-g-scenario-c"><div class="ec-scenario-titel">Maximale strategie</div><div class="ec-scenario-sub">Eenmalig verhoogd + jaarlijks</div><div class="ec-scenario-belasting" id="ec-g-belasting-c">€0</div><div class="ec-scenario-besparing" id="ec-g-besparing-c">—</div></div>
+        </div>
+        <div class="ec-info-box">
+          <strong>Vrijstellingen 2026:</strong> €6.713 per kind/jaar, €2.690 per kleinkind/jaar. <strong>Eenmalig verhoogd</strong> 18-40 jaar: €32.195 of €66.328 voor woning/studie.
         </div>
 
-        <div class="ec-info-box">
-          <strong>Vrijstellingen 2026 per ontvanger per jaar:</strong> €6.713 kinderen, €2.690 kleinkinderen en anderen. <strong>Eenmalig verhoogd</strong> kind 18-40 jaar: €32.195 algemeen of €66.328 voor eigen woning/studie.
+        <div class="ec-multiyear-tabel">
+          <div class="ec-multiyear-header">Meerjarige planning (cumulatief)</div>
+          <div class="ec-multiyear-row titel"><span>Jaar</span><span class="ec-multiyear-bedrag">Schenking</span><span class="ec-multiyear-bedrag">Cumulatief</span><span class="ec-multiyear-bedrag">Resterend</span></div>
+          <div id="ec-g-multiyear-body"></div>
         </div>
 
         <div class="ec-schijf-blok">
-          <div class="ec-schijf-titel">Details strategische schenking</div>
-          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Vrij te schenken per jaar (alle kinderen)</span><span class="ec-schijf-waarde" id="ec-g-jaar-totaal">€0</span></div>
-          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Vrij te schenken per jaar (kleinkinderen)</span><span class="ec-schijf-waarde" id="ec-g-jaar-kleinkinderen">€0</span></div>
-          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Totaal vrij te schenken over horizon</span><span class="ec-schijf-waarde" id="ec-g-horizon-totaal">€0</span></div>
-          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Eenmalig verhoogd (alle kinderen 18-40)</span><span class="ec-schijf-waarde" id="ec-g-eenmalig">€0</span></div>
+          <div class="ec-schijf-titel">Details strategie</div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Vrij per jaar (kinderen)</span><span class="ec-schijf-waarde" id="ec-g-jaar-totaal">€0</span></div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Vrij per jaar (kleinkinderen)</span><span class="ec-schijf-waarde" id="ec-g-jaar-kleinkinderen">€0</span></div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Totaal vrij over horizon</span><span class="ec-schijf-waarde" id="ec-g-horizon-totaal">€0</span></div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Eenmalig verhoogd</span><span class="ec-schijf-waarde" id="ec-g-eenmalig">€0</span></div>
         </div>
-
       </div>
-
     </div>
   </div>
 
   <!-- ========== MODE 4: BOR ========== -->
   <div class="ec-pane" data-pane="bor">
-    <div class="ec-bor-body">
-
+    <div class="ec-body-2col">
       <div class="ec-input-zone">
         <div class="ec-stap">
           <div class="ec-stap-label"><span class="ec-stap-nr">1</span> Ondernemingswaarde</div>
           <div class="ec-bedrag-wrap">
-            <div class="ec-bedrag-input-row">
-              <span class="ec-bedrag-prefix">€</span>
-              <input type="text" class="ec-bedrag-input" id="ec-b-onderneming-display" value="2.000.000" inputmode="numeric">
-            </div>
+            <div class="ec-bedrag-input-row"><span class="ec-bedrag-prefix">€</span><input type="text" class="ec-bedrag-input" id="ec-b-onderneming-display" value="2.000.000" inputmode="numeric"></div>
             <input type="range" class="ec-bedrag-slider" id="ec-b-onderneming-slider" min="100000" max="10000000" step="50000" value="2000000">
-            <div style="font-size:0.7rem;color:#6a5e64;margin-top:8px;">Waarde van het echte ondernemings­vermogen (geen passief vermogen of vastgoed BV).</div>
+            <div style="font-size:0.7rem;color:#6a5e64;margin-top:8px;">Echt ondernemingsvermogen (geen passief vermogen).</div>
           </div>
         </div>
-
         <div class="ec-stap">
-          <div class="ec-stap-label"><span class="ec-stap-nr">2</span> Privé vermogen erflater</div>
+          <div class="ec-stap-label"><span class="ec-stap-nr">2</span> Privé vermogen</div>
           <div class="ec-bedrag-wrap">
-            <div class="ec-bedrag-input-row">
-              <span class="ec-bedrag-prefix">€</span>
-              <input type="text" class="ec-bedrag-input" id="ec-b-prive-display" value="300.000" inputmode="numeric">
-            </div>
+            <div class="ec-bedrag-input-row"><span class="ec-bedrag-prefix">€</span><input type="text" class="ec-bedrag-input" id="ec-b-prive-display" value="300.000" inputmode="numeric"></div>
             <input type="range" class="ec-bedrag-slider" id="ec-b-prive-slider" min="0" max="3000000" step="10000" value="300000">
-            <div style="font-size:0.7rem;color:#6a5e64;margin-top:8px;">Eigen woning, spaargeld, beleggingen (alle privé vermogen).</div>
           </div>
         </div>
-
         <div class="ec-stap">
-          <div class="ec-stap-label"><span class="ec-stap-nr">3</span> Erfgenaam-relatie</div>
+          <div class="ec-stap-label"><span class="ec-stap-nr">3</span> Erfgenaam</div>
           <div class="ec-relatie-grid" style="grid-template-columns: repeat(2, 1fr);">
             <button class="ec-relatie-btn active" data-bor-relatie="partner"><span class="ec-relatie-icoon">💑</span><span class="ec-relatie-naam">Partner</span></button>
             <button class="ec-relatie-btn" data-bor-relatie="kind"><span class="ec-relatie-icoon">👶</span><span class="ec-relatie-naam">Kind</span></button>
           </div>
         </div>
       </div>
-
       <div class="ec-result-zone">
-
         <div class="ec-totaal-blok">
           <div class="ec-totaal-label">Besparing dankzij BOR</div>
           <div class="ec-totaal-waarde" id="ec-b-besparing">€0</div>
           <div class="ec-totaal-sub" id="ec-b-besparing-sub">Vul de gegevens in</div>
         </div>
-
         <div class="ec-bor-vergelijking">
-          <div style="font-size:0.66rem; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:#6a5e64; margin-bottom:10px;">Met BOR (Bedrijfsopvolgingsregeling)</div>
-          <div class="ec-bor-rij"><span class="ec-bor-naam">Eerste schijf vrijgesteld (100%)</span><span class="ec-bor-waarde" id="ec-b-schijf1-vrij">€0</span></div>
-          <div class="ec-bor-rij"><span class="ec-bor-naam">Tweede schijf vrijgesteld (75%)</span><span class="ec-bor-waarde" id="ec-b-schijf2-vrij">€0</span></div>
+          <div style="font-size:0.66rem; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:#6a5e64; margin-bottom:10px;">Met BOR</div>
+          <div class="ec-bor-rij"><span class="ec-bor-naam">Eerste schijf vrij (100%)</span><span class="ec-bor-waarde" id="ec-b-schijf1-vrij">€0</span></div>
+          <div class="ec-bor-rij"><span class="ec-bor-naam">Tweede schijf vrij (75%)</span><span class="ec-bor-waarde" id="ec-b-schijf2-vrij">€0</span></div>
           <div class="ec-bor-rij"><span class="ec-bor-naam">Belastbaar ondernemings­vermogen</span><span class="ec-bor-waarde" id="ec-b-onderneming-belast">€0</span></div>
-          <div class="ec-bor-rij"><span class="ec-bor-naam">Belastbaar privé vermogen (na vrijstelling)</span><span class="ec-bor-waarde" id="ec-b-prive-belast">€0</span></div>
+          <div class="ec-bor-rij"><span class="ec-bor-naam">Belastbaar privé vermogen</span><span class="ec-bor-waarde" id="ec-b-prive-belast">€0</span></div>
           <div class="ec-bor-rij belangrijk"><span class="ec-bor-naam">Totaal erfbelasting MET BOR</span><span class="ec-bor-waarde" id="ec-b-belasting-met">€0</span></div>
         </div>
-
         <div class="ec-bor-vergelijking">
-          <div style="font-size:0.66rem; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:#6a5e64; margin-bottom:10px;">Zonder BOR (regulier)</div>
-          <div class="ec-bor-rij"><span class="ec-bor-naam">Totaal vermogen (onderneming + privé)</span><span class="ec-bor-waarde" id="ec-b-totaal-zonder">€0</span></div>
+          <div style="font-size:0.66rem; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:#6a5e64; margin-bottom:10px;">Zonder BOR</div>
+          <div class="ec-bor-rij"><span class="ec-bor-naam">Totaal vermogen</span><span class="ec-bor-waarde" id="ec-b-totaal-zonder">€0</span></div>
           <div class="ec-bor-rij"><span class="ec-bor-naam">Vrijstelling</span><span class="ec-bor-waarde" id="ec-b-vrij-zonder">€0</span></div>
           <div class="ec-bor-rij"><span class="ec-bor-naam">Belastbaar</span><span class="ec-bor-waarde" id="ec-b-belastbaar-zonder">€0</span></div>
           <div class="ec-bor-rij belangrijk"><span class="ec-bor-naam">Totaal erfbelasting ZONDER BOR</span><span class="ec-bor-waarde" id="ec-b-belasting-zonder">€0</span></div>
         </div>
-
         <div class="ec-info-box">
-          <strong>BOR-voorwaarden 2026:</strong> Het moet een echte onderneming zijn (geen beleggingsvermogen). De opvolger moet de onderneming minimaal 5 jaar voortzetten. Het ondernemings­vermogen moet minimaal 5 jaar in de onderneming hebben gezeten. Voor passief vermogen (vastgoed BV's, beleggingen) geldt BOR niet. Specialistisch fiscaal advies onmisbaar.
+          <strong>BOR-voorwaarden:</strong> echte onderneming, opvolger zet 5 jaar voort, vermogen 5 jaar in onderneming. Geen BOR op passief vermogen of vastgoed-BV.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODE 5: TWEETRAPSMAKING ========== -->
+  <div class="ec-pane" data-pane="tt">
+    <div class="ec-body-2col">
+      <div class="ec-input-zone">
+        <div class="ec-info-box">
+          <strong>Tweetrapsmaking:</strong> de eerste erfgenaam (bezwaarde) erft, maar wat hij niet opmaakt gaat bij zijn overlijden naar de tweede erfgenaam (verwachter). De verwachter erft fiscaal als ware het direct van de oorspronkelijke erflater — dat kan veel belasting besparen.
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">1</span> Nalatenschap</div>
+          <div class="ec-bedrag-wrap">
+            <div class="ec-bedrag-input-row"><span class="ec-bedrag-prefix">€</span><input type="text" class="ec-bedrag-input" id="ec-tt-bedrag-display" value="500.000" inputmode="numeric"></div>
+            <input type="range" class="ec-bedrag-slider" id="ec-tt-bedrag-slider" min="50000" max="3000000" step="10000" value="500000">
+          </div>
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">2</span> Bezwaarde (eerste erfgenaam)</div>
+          <div class="ec-relatie-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <button class="ec-relatie-btn active" data-tt-bez="partner"><span class="ec-relatie-icoon">💑</span><span class="ec-relatie-naam">Partner</span></button>
+            <button class="ec-relatie-btn" data-tt-bez="kind"><span class="ec-relatie-icoon">👶</span><span class="ec-relatie-naam">Kind</span></button>
+            <button class="ec-relatie-btn" data-tt-bez="broer"><span class="ec-relatie-icoon">👫</span><span class="ec-relatie-naam">Broer/zus</span></button>
+          </div>
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">3</span> Verwachter (tweede erfgenaam)</div>
+          <div class="ec-relatie-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <button class="ec-relatie-btn active" data-tt-ver="kind"><span class="ec-relatie-icoon">👶</span><span class="ec-relatie-naam">Kind</span></button>
+            <button class="ec-relatie-btn" data-tt-ver="kleinkind"><span class="ec-relatie-icoon">👧</span><span class="ec-relatie-naam">Kleinkind</span></button>
+            <button class="ec-relatie-btn" data-tt-ver="anders"><span class="ec-relatie-icoon">👤</span><span class="ec-relatie-naam">Anders</span></button>
+          </div>
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">4</span> Verbruik door bezwaarde</div>
+          <div class="ec-bedrag-wrap">
+            <div style="font-size:0.78rem;color:#6a5e64;margin-bottom:8px;">Geschat percentage dat de bezwaarde tijdens leven opmaakt</div>
+            <div class="ec-bedrag-input-row">
+              <input type="text" class="ec-bedrag-input" id="ec-tt-verbruik-display" value="30" inputmode="numeric" style="text-align:center;">
+              <span class="ec-bedrag-prefix" style="font-size:0.86rem;">%</span>
+            </div>
+            <input type="range" class="ec-bedrag-slider" id="ec-tt-verbruik-slider" min="0" max="100" step="5" value="30">
+          </div>
+        </div>
+      </div>
+      <div class="ec-result-zone">
+        <div class="ec-totaal-blok">
+          <div class="ec-totaal-label">Totale erfbelasting (beide fases)</div>
+          <div class="ec-totaal-waarde" id="ec-tt-totaal">€0</div>
+          <div class="ec-totaal-sub" id="ec-tt-totaal-sub">vs. alternatieve scenarios</div>
         </div>
 
-      </div>
+        <div class="ec-fase-blok">
+          <div class="ec-fase-titel"><span class="ec-fase-nr">1</span> Eerste overlijden &mdash; naar bezwaarde</div>
+          <div class="ec-fase-uitleg" id="ec-tt-fase1-uitleg">—</div>
+          <div class="ec-fase-rij"><span class="ec-fase-naam">Erfenis</span><span class="ec-fase-waarde" id="ec-tt-f1-erfenis">€0</span></div>
+          <div class="ec-fase-rij"><span class="ec-fase-naam">Vrijstelling bezwaarde</span><span class="ec-fase-waarde" id="ec-tt-f1-vrij">€0</span></div>
+          <div class="ec-fase-rij"><span class="ec-fase-naam">Belasting bezwaarde</span><span class="ec-fase-waarde belasting" id="ec-tt-f1-belasting">€0</span></div>
+        </div>
 
+        <div class="ec-fase-blok">
+          <div class="ec-fase-titel"><span class="ec-fase-nr">2</span> Tweede overlijden &mdash; naar verwachter</div>
+          <div class="ec-fase-uitleg" id="ec-tt-fase2-uitleg">—</div>
+          <div class="ec-fase-rij"><span class="ec-fase-naam">Resterend na verbruik</span><span class="ec-fase-waarde" id="ec-tt-f2-erfenis">€0</span></div>
+          <div class="ec-fase-rij"><span class="ec-fase-naam">Vrijstelling verwachter (origineel)</span><span class="ec-fase-waarde" id="ec-tt-f2-vrij">€0</span></div>
+          <div class="ec-fase-rij"><span class="ec-fase-naam">Belasting verwachter</span><span class="ec-fase-waarde belasting" id="ec-tt-f2-belasting">€0</span></div>
+        </div>
+
+        <div class="ec-info-box" id="ec-tt-vergelijking">
+          <strong>Vergelijking met alternatief:</strong> <span id="ec-tt-vergelijking-tekst">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODE 6: VRUCHTGEBRUIK ========== -->
+  <div class="ec-pane" data-pane="vg">
+    <div class="ec-body-2col">
+      <div class="ec-input-zone">
+        <div class="ec-info-box">
+          <strong>Vruchtgebruik:</strong> de overledene laat het gebruik en de opbrengst van vermogen na aan één persoon (vruchtgebruiker, vaak partner), terwijl de blote eigendom naar anderen gaat (vaak kinderen). De fiscale waarde van vruchtgebruik hangt af van leeftijd vruchtgebruiker (Art. 5 Successiewet). Bij overlijden vruchtgebruiker eindigt vruchtgebruik en wordt blote eigendom volle eigendom — zonder nieuwe erfbelasting.
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">1</span> Waarde van het vermogen</div>
+          <div class="ec-bedrag-wrap">
+            <div class="ec-bedrag-input-row"><span class="ec-bedrag-prefix">€</span><input type="text" class="ec-bedrag-input" id="ec-vg-bedrag-display" value="500.000" inputmode="numeric"></div>
+            <input type="range" class="ec-bedrag-slider" id="ec-vg-bedrag-slider" min="50000" max="3000000" step="10000" value="500000">
+          </div>
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">2</span> Leeftijd vruchtgebruiker</div>
+          <div class="ec-vg-leeftijd-wrap">
+            <div class="ec-vg-leeftijd-input">
+              <input type="number" class="ec-vg-leeftijd-number" id="ec-vg-leeftijd" value="65" min="0" max="110">
+              <span class="ec-vg-leeftijd-suffix">jaar</span>
+            </div>
+            <input type="range" class="ec-bedrag-slider" id="ec-vg-leeftijd-slider" min="0" max="100" step="1" value="65" style="margin-top:14px;">
+          </div>
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">3</span> Relaties</div>
+          <div style="font-size:0.74rem;color:#6a5e64;margin-bottom:8px;">Vruchtgebruiker:</div>
+          <div class="ec-relatie-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom:10px;">
+            <button class="ec-relatie-btn active" data-vg-vg="partner"><span class="ec-relatie-icoon">💑</span><span class="ec-relatie-naam">Partner</span></button>
+            <button class="ec-relatie-btn" data-vg-vg="kind"><span class="ec-relatie-icoon">👶</span><span class="ec-relatie-naam">Kind</span></button>
+          </div>
+          <div style="font-size:0.74rem;color:#6a5e64;margin-bottom:8px;">Blote eigenaar:</div>
+          <div class="ec-relatie-grid" style="grid-template-columns: repeat(2, 1fr);">
+            <button class="ec-relatie-btn active" data-vg-be="kind"><span class="ec-relatie-icoon">👶</span><span class="ec-relatie-naam">Kind</span></button>
+            <button class="ec-relatie-btn" data-vg-be="kleinkind"><span class="ec-relatie-icoon">👧</span><span class="ec-relatie-naam">Kleinkind</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="ec-result-zone">
+        <div class="ec-totaal-blok">
+          <div class="ec-totaal-label">Totale erfbelasting (beide partijen)</div>
+          <div class="ec-totaal-waarde" id="ec-vg-totaal">€0</div>
+          <div class="ec-totaal-sub" id="ec-vg-totaal-sub">vs. erfenis zonder vruchtgebruik</div>
+        </div>
+
+        <div class="ec-vg-verdeling" style="margin-bottom:12px;">
+          <div class="ec-vg-deel vruchtgebruik">
+            <div class="ec-vg-deel-label">Vruchtgebruik</div>
+            <div class="ec-vg-deel-naam" id="ec-vg-vg-naam">Partner</div>
+            <div class="ec-vg-deel-waarde" id="ec-vg-vg-waarde">€0</div>
+            <div class="ec-vg-deel-pct" id="ec-vg-vg-pct">0%</div>
+          </div>
+          <div class="ec-vg-deel bloot">
+            <div class="ec-vg-deel-label">Blote eigendom</div>
+            <div class="ec-vg-deel-naam" id="ec-vg-be-naam">Kind</div>
+            <div class="ec-vg-deel-waarde" id="ec-vg-be-waarde">€0</div>
+            <div class="ec-vg-deel-pct" id="ec-vg-be-pct">0%</div>
+          </div>
+        </div>
+
+        <div class="ec-schijf-blok">
+          <div class="ec-schijf-titel">Erfbelasting per partij (fase 1)</div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Vruchtgebruiker betaalt</span><span class="ec-schijf-waarde" id="ec-vg-vg-belasting">€0</span></div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Blote eigenaar betaalt</span><span class="ec-schijf-waarde" id="ec-vg-be-belasting">€0</span></div>
+        </div>
+
+        <div class="ec-info-box" id="ec-vg-fase2-info">
+          <strong>Fase 2 (bij overlijden vruchtgebruiker):</strong> <span id="ec-vg-fase2-tekst">—</span>
+        </div>
+
+        <div class="ec-factor-tabel">
+          <div class="ec-factor-titel">Waarderingsfactor leeftijd (Art. 5 Successiewet)</div>
+          <div class="ec-factor-grid" id="ec-vg-factor-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODE 7: INTERNATIONAAL ========== -->
+  <div class="ec-pane" data-pane="intl">
+    <div class="ec-body-2col">
+      <div class="ec-input-zone">
+        <div class="ec-info-box">
+          <strong>Internationaal vermogen:</strong> bij buitenlands vermogen geldt vaak dubbele belasting (Nederland en het land waar het vermogen is). Belastingverdragen voorkomen meestal dubbele heffing via een verrekening (credit). Voor Nederlanders die binnen 10 jaar na emigratie overlijden, blijft Nederlandse erfbelastingplicht.
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">1</span> Land waar buitenlands vermogen is</div>
+          <select class="ec-land-select" id="ec-intl-land">
+            <option value="duitsland">🇩🇪 Duitsland</option>
+            <option value="belgie">🇧🇪 België</option>
+            <option value="frankrijk">🇫🇷 Frankrijk</option>
+            <option value="spanje">🇪🇸 Spanje</option>
+            <option value="italie">🇮🇹 Italië</option>
+            <option value="vk">🇬🇧 Verenigd Koninkrijk</option>
+            <option value="vs">🇺🇸 Verenigde Staten</option>
+            <option value="zwitserland">🇨🇭 Zwitserland</option>
+            <option value="portugal">🇵🇹 Portugal</option>
+            <option value="anders">🌍 Anders / geen verdrag</option>
+          </select>
+          <div class="ec-land-info" id="ec-intl-land-info"></div>
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">2</span> Buitenlands vermogen</div>
+          <div class="ec-bedrag-wrap">
+            <div class="ec-bedrag-input-row"><span class="ec-bedrag-prefix">€</span><input type="text" class="ec-bedrag-input" id="ec-intl-buiten-display" value="200.000" inputmode="numeric"></div>
+            <input type="range" class="ec-bedrag-slider" id="ec-intl-buiten-slider" min="0" max="3000000" step="10000" value="200000">
+          </div>
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">3</span> Nederlands vermogen</div>
+          <div class="ec-bedrag-wrap">
+            <div class="ec-bedrag-input-row"><span class="ec-bedrag-prefix">€</span><input type="text" class="ec-bedrag-input" id="ec-intl-nl-display" value="300.000" inputmode="numeric"></div>
+            <input type="range" class="ec-bedrag-slider" id="ec-intl-nl-slider" min="0" max="3000000" step="10000" value="300000">
+          </div>
+        </div>
+        <div class="ec-stap">
+          <div class="ec-stap-label"><span class="ec-stap-nr">4</span> Erfgenaam-relatie</div>
+          <div class="ec-relatie-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <button class="ec-relatie-btn active" data-intl-rel="partner"><span class="ec-relatie-icoon">💑</span><span class="ec-relatie-naam">Partner</span></button>
+            <button class="ec-relatie-btn" data-intl-rel="kind"><span class="ec-relatie-icoon">👶</span><span class="ec-relatie-naam">Kind</span></button>
+            <button class="ec-relatie-btn" data-intl-rel="anders"><span class="ec-relatie-icoon">👤</span><span class="ec-relatie-naam">Anders</span></button>
+          </div>
+        </div>
+        <label class="ec-toggle-rij" id="ec-intl-emigratie-toggle" style="margin-top:14px;">
+          <input type="checkbox" id="ec-intl-emigratie-check">
+          <div><div class="ec-toggle-tekst">Erflater was Nederlander en geëmigreerd in afgelopen 10 jaar</div><div class="ec-toggle-uitleg">10-jaars regel: dan blijft Nederlandse erfbelastingplicht op wereldvermogen</div></div>
+        </label>
+      </div>
+      <div class="ec-result-zone">
+        <div class="ec-totaal-blok">
+          <div class="ec-totaal-label">Totale netto-belasting na verrekening</div>
+          <div class="ec-totaal-waarde" id="ec-intl-totaal">€0</div>
+          <div class="ec-totaal-sub" id="ec-intl-totaal-sub">Nederland + buitenland samen</div>
+        </div>
+
+        <div class="ec-schijf-blok">
+          <div class="ec-schijf-titel">Belasting per land</div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Totaal vermogen wereldwijd</span><span class="ec-schijf-waarde" id="ec-intl-wereld">€0</span></div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Nederlandse erfbelasting (bruto)</span><span class="ec-schijf-waarde" id="ec-intl-nl-bel">€0</span></div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Buitenlandse erfbelasting (schatting)</span><span class="ec-schijf-waarde" id="ec-intl-buit-bel">€0</span></div>
+          <div class="ec-schijf-rij"><span class="ec-schijf-naam">Verrekening verdrag</span><span class="ec-schijf-waarde" id="ec-intl-verrekening">€0</span></div>
+          <div class="ec-schijf-rij" style="font-weight:700;border-top:1px solid #4a1942;padding-top:8px;margin-top:4px;"><span class="ec-schijf-naam">Netto totale belasting</span><span class="ec-schijf-waarde" id="ec-intl-netto-belasting">€0</span></div>
+        </div>
+
+        <div class="ec-info-box" id="ec-intl-advies"><strong>Advies:</strong> <span id="ec-intl-advies-tekst">Vul je situatie in voor een indicatie.</span></div>
+      </div>
     </div>
   </div>
 
   <footer class="ec-footer">
-    <span>Tarieven 2026 op basis van Belastingdienst en BW Boek 4. Indicatieve berekening, geen vervanging van professioneel advies. <a href="https://uitvaart-platform.nl/erfbelasting-calculator" class="ec-footer-link" target="_top">Meer info</a></span>
+    <span>Tarieven 2026 op basis van Belastingdienst en BW Boek 4. Indicatieve berekening, geen vervanging van professioneel advies. <a href="https://uitvaart-platform.nl" class="ec-footer-link" target="_top">uitvaart-platform.nl</a></span>
     <div class="ec-actions">
-      <button class="ec-action-btn secondary" onclick="window.print()">🖨️ PDF</button>
+      <button class="ec-action-btn secondary" id="ec-save-btn">💾 Opslaan</button>
+      <button class="ec-action-btn secondary" id="ec-load-btn">📂 Scenarios</button>
+      <button class="ec-action-btn secondary" onclick="window.print()">📄 PDF</button>
       <button class="ec-action-btn" id="ec-reset-btn">🔄 Reset</button>
     </div>
   </footer>
 
+  <div class="ec-print-footer">Uitvaart-Platform.nl &middot; Erfbelasting Calculator PRO+ &middot; Tarieven 2026 &middot; Indicatieve berekening</div>
+
+</div>
+
+<!-- Save modal -->
+<div class="ec-modal-overlay" id="ec-modal-save">
+  <div class="ec-modal">
+    <div class="ec-modal-header">
+      <h3 class="ec-modal-titel">Scenario opslaan</h3>
+      <button class="ec-modal-close" data-close-modal>✕</button>
+    </div>
+    <div class="ec-modal-body">
+      <div style="font-size:0.8rem;color:#6a5e64;margin-bottom:10px;">Geef je scenario een naam om het later terug te vinden.</div>
+      <input type="text" class="ec-modal-naam-input" id="ec-save-naam" placeholder="Bijv: 'Familie Jansen - met BOR'">
+      <button class="ec-action-btn" id="ec-save-confirm" style="width:100%;justify-content:center;">💾 Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Load modal -->
+<div class="ec-modal-overlay" id="ec-modal-load">
+  <div class="ec-modal">
+    <div class="ec-modal-header">
+      <h3 class="ec-modal-titel">Opgeslagen scenarios</h3>
+      <button class="ec-modal-close" data-close-modal>✕</button>
+    </div>
+    <div class="ec-modal-body" id="ec-load-body"></div>
+  </div>
 </div>
 
 <script>
 (function() {
   'use strict';
 
-  // 2026 tarieven
   var ER = {
     partner:   { naam: 'Partner', vrij: 828035, laag: 0.10, hoog: 0.20, icoon: '💑' },
-    kind:      { naam: 'Kind',    vrij: 26230,  laag: 0.10, hoog: 0.20, icoon: '👶' },
+    kind:      { naam: 'Kind', vrij: 26230,  laag: 0.10, hoog: 0.20, icoon: '👶' },
+    kind_gh:   { naam: 'Kind (gehandicapt)', vrij: 69791, laag: 0.10, hoog: 0.20, icoon: '🦽' },
     kleinkind: { naam: 'Kleinkind', vrij: 26230, laag: 0.18, hoog: 0.36, icoon: '👧' },
     ouder:     { naam: 'Ouder', vrij: 52495, laag: 0.30, hoog: 0.40, icoon: '👴' },
     broer:     { naam: 'Broer/zus', vrij: 2769, laag: 0.30, hoog: 0.40, icoon: '👫' },
@@ -574,16 +890,40 @@ body { padding: 16px; min-height: 100vh; }
   var SCHENK_VRIJ_KIND = 6713;
   var SCHENK_VRIJ_KLEIN = 2690;
   var SCHENK_EENMALIG = 32195;
-  var BOR_VRIJ = 1325253; // 2026 schatting voor 100%
+  var BOR_VRIJ = 1325253;
 
-  // ======== HELPERS ========
+  // Vruchtgebruik factoren Art. 5 Successiewet 1956
+  var VG_FACTOREN = [
+    { vanaf: 0, tot: 20, factor: 16 }, { vanaf: 20, tot: 30, factor: 14 },
+    { vanaf: 30, tot: 40, factor: 12 }, { vanaf: 40, tot: 50, factor: 10 },
+    { vanaf: 50, tot: 55, factor: 8 }, { vanaf: 55, tot: 60, factor: 7 },
+    { vanaf: 60, tot: 65, factor: 6 }, { vanaf: 65, tot: 70, factor: 5 },
+    { vanaf: 70, tot: 75, factor: 4 }, { vanaf: 75, tot: 80, factor: 3 },
+    { vanaf: 80, tot: 85, factor: 2 }, { vanaf: 85, tot: 90, factor: 1.5 },
+    { vanaf: 90, tot: 999, factor: 1 }
+  ];
+
+  // Landen info voor internationaal
+  var LANDEN = {
+    duitsland:   { naam: 'Duitsland', tarief: [0.07, 0.30], vrij: 400000, verdrag: true, beschrijving: 'Erfbelasting 7-30%. Verdrag NL-DE voorkomt dubbele heffing. Vrijstelling kinderen €400.000.' },
+    belgie:      { naam: 'België', tarief: [0.03, 0.27], vrij: 15000, verdrag: false, beschrijving: 'Per gewest. Vlaanderen 3-27%. Beperkt verdrag. Voor onroerend goed dubbele heffing mogelijk.' },
+    frankrijk:   { naam: 'Frankrijk', tarief: [0.05, 0.45], vrij: 100000, verdrag: true, beschrijving: 'Sterk progressief 5-45%. Partner 100% vrij. Verdrag voor onroerend goed.' },
+    spanje:      { naam: 'Spanje', tarief: [0.0765, 0.34], vrij: 16000, verdrag: false, beschrijving: 'Per regio sterk variërend. Geen verdrag — risico dubbele heffing op Spaanse onroerend goed.' },
+    italie:      { naam: 'Italië', tarief: [0.04, 0.08], vrij: 1000000, verdrag: false, beschrijving: 'Lage tarieven 4-8%. €1 miljoen vrijstelling per kind/partner.' },
+    vk:          { naam: 'Verenigd Koninkrijk', tarief: [0.40, 0.40], vrij: 325000, verdrag: true, beschrijving: 'Vlak 40% boven £325.000 (~€385.000). Partner 100% vrij. Verdrag NL-UK.' },
+    vs:          { naam: 'Verenigde Staten', tarief: [0.18, 0.40], vrij: 60000, verdrag: true, beschrijving: 'Voor niet-residents: 18-40% boven $60.000 vrijstelling. Verdrag NL-US.' },
+    zwitserland: { naam: 'Zwitserland', tarief: [0, 0.30], vrij: 0, verdrag: true, beschrijving: 'Per kanton sterk variërend. Partners/kinderen vaak vrij. Verdrag NL-CH.' },
+    portugal:    { naam: 'Portugal', tarief: [0, 0], vrij: 0, verdrag: false, beschrijving: 'Geen erfbelasting voor naaste familie. Bekend belastingvoordeel.' },
+    anders:      { naam: 'Anders', tarief: [0.20, 0.40], vrij: 0, verdrag: false, beschrijving: 'Tarieven en regels onbekend. Raadpleeg altijd lokale fiscalist.' }
+  };
+
   function fEuro(n) { n = Math.round(n); return '€' + n.toLocaleString('nl-NL'); }
   function pEuro(s) { return parseInt(String(s).replace(/[^0-9-]/g, ''), 10) || 0; }
   function fPct(n) { if (n === 0) return '0%'; var r = Math.round(n * 10) / 10; if (r === Math.floor(r)) return r + '%'; return r.toFixed(1).replace('.', ',') + '%'; }
 
   function berekenBelasting(bedrag, relatieKey) {
     var data = ER[relatieKey];
-    if (!data) return { belasting: 0, vrij: 0, belastbaar: 0, schijf1: 0, schijf2: 0 };
+    if (!data) return { belasting: 0, vrij: 0, belastbaar: 0, schijf1: 0, schijf2: 0, data: ER.anders };
     var vrij = data.vrij === Infinity ? bedrag : data.vrij;
     var belastbaar = Math.max(0, bedrag - vrij);
     var schijf1 = 0, schijf2 = 0;
@@ -603,6 +943,14 @@ body { padding: 16px; min-height: 100vh; }
     };
   }
 
+  // Vruchtgebruik factor lookup
+  function vgFactor(leeftijd) {
+    for (var i = 0; i < VG_FACTOREN.length; i++) {
+      if (leeftijd >= VG_FACTOREN[i].vanaf && leeftijd < VG_FACTOREN[i].tot) return VG_FACTOREN[i].factor;
+    }
+    return 1;
+  }
+
   // ======== TAB SWITCHING ========
   document.getElementById('ec-tabs').addEventListener('click', function(e) {
     var btn = e.target.closest('.ec-tab');
@@ -616,7 +964,6 @@ body { padding: 16px; min-height: 100vh; }
 
   // ======== MODE 1: QUICK ========
   var qState = { relatie: 'partner', bedrag: 100000 };
-
   function qUpdate() {
     var r = berekenBelasting(qState.bedrag, qState.relatie);
     document.getElementById('ec-q-belasting').textContent = fEuro(r.belasting);
@@ -631,13 +978,12 @@ body { padding: 16px; min-height: 100vh; }
     document.getElementById('ec-q-s2-pct').textContent = (r.data.hoog * 100) + '%';
     document.getElementById('ec-q-s2-rij').style.display = r.belastbaar > SCHIJFGRENS ? 'flex' : 'none';
     var uitleg;
-    if (r.bruto === 0) uitleg = 'Vul een bedrag in om je belasting te zien';
-    else if (r.belastbaar === 0) uitleg = 'Je erfenis valt binnen je <strong>vrijstelling van ' + fEuro(r.vrij) + '</strong>. Geen erfbelasting verschuldigd.';
+    if (r.bruto === 0) uitleg = 'Vul een bedrag in';
+    else if (r.belastbaar === 0) uitleg = 'Binnen je <strong>vrijstelling van ' + fEuro(r.vrij) + '</strong>. Geen erfbelasting.';
     else if (r.belastbaar > SCHIJFGRENS) uitleg = 'Belastbaar deel valt in <strong>twee schijven</strong>: ' + (r.data.laag*100) + '% en ' + (r.data.hoog*100) + '%.';
     else uitleg = 'Belastbaar deel volledig in <strong>eerste schijf van ' + (r.data.laag*100) + '%</strong>.';
     document.getElementById('ec-q-uitleg').innerHTML = uitleg;
   }
-
   document.getElementById('ec-relaties').addEventListener('click', function(e) {
     var btn = e.target.closest('.ec-relatie-btn');
     if (!btn) return;
@@ -646,7 +992,6 @@ body { padding: 16px; min-height: 100vh; }
     qState.relatie = btn.dataset.relatie;
     qUpdate();
   });
-
   function qSetBedrag(n) {
     qState.bedrag = Math.max(0, Math.min(5000000, n));
     document.getElementById('ec-q-bedrag-display').value = qState.bedrag.toLocaleString('nl-NL');
@@ -661,17 +1006,17 @@ body { padding: 16px; min-height: 100vh; }
   document.querySelectorAll('[data-pane="quick"] .ec-snel-knop').forEach(function(btn) {
     btn.addEventListener('click', function() { qSetBedrag(parseInt(btn.dataset.bedrag, 10)); });
   });
-
   qUpdate();
 
   // ======== MODE 2: PRO ========
   var pState = {
-    woning: 0, spaargeld: 0, beleggingen: 0, inboedel: 5000, schenkingen: 0, overig: 0,
+    woning: 0, spaargeld: 0, beleggingen: 0, inboedel: 5000, schenkingen: 0, overig: 0, levensverzekering: 0,
+    lvz_zelf_premie: false, emigratie10jaar: false,
     hypotheek: 0, andere_schulden: 0, uitvaart: 8000, successie: 500,
     erfgenamen: [
-      { id: 1, naam: 'Partner', type: 'partner', pct: 50 },
-      { id: 2, naam: 'Kind 1', type: 'kind', pct: 25 },
-      { id: 3, naam: 'Kind 2', type: 'kind', pct: 25 }
+      { id: 1, naam: 'Partner', type: 'partner', pct: 50, gehandicapt: false },
+      { id: 2, naam: 'Kind 1', type: 'kind', pct: 25, gehandicapt: false },
+      { id: 3, naam: 'Kind 2', type: 'kind', pct: 25, gehandicapt: false }
     ],
     nextId: 4
   };
@@ -680,31 +1025,37 @@ body { padding: 16px; min-height: 100vh; }
     var container = document.getElementById('ec-pro-erfgenamen');
     var html = '';
     pState.erfgenamen.forEach(function(e) {
-      var data = ER[e.type];
-      html += '<div class="ec-erfgenaam" data-id="' + e.id + '">';
+      var typeKey = (e.type === 'kind' && e.gehandicapt) ? 'kind_gh' : e.type;
+      var data = ER[typeKey];
+      var isKind = e.type === 'kind';
+      html += '<div class="ec-erfgenaam' + (isKind ? ' kind-type' : '') + '" data-id="' + e.id + '">';
+      html += '<div class="ec-erfgenaam-rij1">';
       html += '<span class="ec-erfgenaam-icoon">' + data.icoon + '</span>';
-      html += '<input type="text" class="ec-erfgenaam-naam-input" data-field="naam" value="' + e.naam + '">';
+      html += '<input type="text" class="ec-erfgenaam-naam-input" data-field="naam" value="' + e.naam.replace(/"/g, '&quot;') + '">';
       html += '<select class="ec-erfgenaam-select" data-field="type">';
-      Object.keys(ER).forEach(function(k) {
+      ['partner','kind','kleinkind','ouder','broer','anders','anbi'].forEach(function(k) {
         html += '<option value="' + k + '"' + (k === e.type ? ' selected' : '') + '>' + ER[k].naam + '</option>';
       });
       html += '</select>';
       html += '<div class="ec-erfgenaam-pct-wrap"><input type="number" class="ec-erfgenaam-pct" data-field="pct" value="' + e.pct + '" min="0" max="100" step="0.1"><span class="ec-erfgenaam-pct-suffix">%</span></div>';
       html += '<button class="ec-erfgenaam-del" data-id="' + e.id + '"' + (pState.erfgenamen.length === 1 ? ' disabled' : '') + '>✕</button>';
       html += '</div>';
+      if (isKind) {
+        html += '<div class="ec-erfgenaam-rij2"><label class="ec-erfgenaam-mini-toggle' + (e.gehandicapt ? ' actief' : '') + '"><input type="checkbox" data-field="gehandicapt"' + (e.gehandicapt ? ' checked' : '') + '> 🦽 Verhoogde vrijstelling gehandicapt kind (€69.791)</label></div>';
+      }
+      html += '</div>';
     });
     container.innerHTML = html;
   }
 
   function pBezittingen() {
-    return pState.woning + pState.spaargeld + pState.beleggingen + pState.inboedel + pState.schenkingen + pState.overig;
+    var lvz = pState.lvz_zelf_premie ? 0 : pState.levensverzekering;
+    return pState.woning + pState.spaargeld + pState.beleggingen + pState.inboedel + pState.schenkingen + pState.overig + lvz;
   }
   function pSchulden() {
     return pState.hypotheek + pState.andere_schulden + pState.uitvaart + pState.successie;
   }
-  function pNetto() {
-    return Math.max(0, pBezittingen() - pSchulden());
-  }
+  function pNetto() { return Math.max(0, pBezittingen() - pSchulden()); }
 
   function pUpdate() {
     var bezit = pBezittingen();
@@ -717,27 +1068,24 @@ body { padding: 16px; min-height: 100vh; }
 
     var totaalPct = pState.erfgenamen.reduce(function(s, e) { return s + (parseFloat(e.pct) || 0); }, 0);
     document.getElementById('ec-pro-pct-totaal').textContent = totaalPct.toFixed(1).replace('.', ',') + '%';
-
     var warning = document.getElementById('ec-pro-warning');
     if (Math.abs(totaalPct - 100) > 0.1 && pState.erfgenamen.length > 0) {
       warning.style.display = 'block';
-      warning.innerHTML = '<strong>Let op:</strong> percentages tellen op tot ' + totaalPct.toFixed(1).replace('.', ',') + '%. ' + (totaalPct > 100 ? 'Te veel verdeeld.' : 'Nog ' + (100-totaalPct).toFixed(1).replace('.', ',') + '% over om te verdelen.');
-    } else {
-      warning.style.display = 'none';
-    }
+      warning.innerHTML = '<strong>Let op:</strong> percentages tellen op tot ' + totaalPct.toFixed(1).replace('.', ',') + '%. ' + (totaalPct > 100 ? 'Te veel verdeeld.' : 'Nog ' + (100-totaalPct).toFixed(1).replace('.', ',') + '% over.');
+    } else warning.style.display = 'none';
 
-    var totaalBelasting = 0;
-    var totaalNetto = 0;
-    var resultsHtml = '';
+    var totaalBelasting = 0, totaalNetto = 0, resultsHtml = '';
     pState.erfgenamen.forEach(function(e) {
       var bedrag = netto * (parseFloat(e.pct) || 0) / 100;
-      var r = berekenBelasting(bedrag, e.type);
+      var typeKey = (e.type === 'kind' && e.gehandicapt) ? 'kind_gh' : e.type;
+      var r = berekenBelasting(bedrag, typeKey);
       totaalBelasting += r.belasting;
       totaalNetto += r.netto;
+      var badge = (e.type === 'kind' && e.gehandicapt) ? '<span class="ec-erfgenaam-r-badge">Verhoogde vrijstelling</span>' : '';
       resultsHtml += '<div class="ec-erfgenaam-resultaat">';
       resultsHtml += '<div class="ec-erfgenaam-r-header">';
       resultsHtml += '<div class="ec-erfgenaam-r-icoon">' + r.data.icoon + '</div>';
-      resultsHtml += '<div style="flex:1;"><div class="ec-erfgenaam-r-naam">' + e.naam + '</div><div class="ec-erfgenaam-r-sub">' + r.data.naam + ' &middot; ' + fPct(parseFloat(e.pct) || 0) + ' van nalatenschap</div></div>';
+      resultsHtml += '<div style="flex:1;"><div class="ec-erfgenaam-r-naam">' + e.naam + badge + '</div><div class="ec-erfgenaam-r-sub">' + r.data.naam + ' &middot; ' + fPct(parseFloat(e.pct) || 0) + ' van nalatenschap</div></div>';
       resultsHtml += '</div>';
       resultsHtml += '<div class="ec-erfgenaam-r-detail">';
       resultsHtml += '<div class="ec-erfgenaam-r-rij"><span class="ec-erfgenaam-r-label">Erfdeel</span><span class="ec-erfgenaam-r-waarde">' + fEuro(bedrag) + '</span></div>';
@@ -751,10 +1099,12 @@ body { padding: 16px; min-height: 100vh; }
     document.getElementById('ec-pro-erfgenaam-resultaten').innerHTML = resultsHtml;
     document.getElementById('ec-pro-totaal-belasting').textContent = fEuro(totaalBelasting);
     document.getElementById('ec-pro-voor-erfgenamen').textContent = fEuro(totaalNetto);
-    document.getElementById('ec-pro-totaal-sub').textContent = netto > 0 ? 'Effectief ' + fPct((totaalBelasting/netto)*100) + ' op nalatenschap van ' + fEuro(netto) : 'Vul de nalatenschap en erfgenamen in';
+    var subTxt = netto > 0 ? 'Effectief ' + fPct((totaalBelasting/netto)*100) + ' op ' + fEuro(netto) : 'Vul de nalatenschap en erfgenamen in';
+    if (pState.emigratie10jaar) subTxt += ' &middot; 10-jaars regel actief';
+    if (pState.lvz_zelf_premie && pState.levensverzekering > 0) subTxt += ' &middot; Levensverz. buiten erfbelasting';
+    document.getElementById('ec-pro-totaal-sub').innerHTML = subTxt;
   }
 
-  // Pro input handlers
   document.querySelectorAll('[data-pro]').forEach(function(input) {
     input.addEventListener('input', function() {
       var key = input.dataset.pro;
@@ -762,8 +1112,17 @@ body { padding: 16px; min-height: 100vh; }
       pUpdate();
     });
   });
+  document.getElementById('ec-pro-lvz-check').addEventListener('change', function(e) {
+    pState.lvz_zelf_premie = e.target.checked;
+    document.getElementById('ec-pro-lvz-toggle').classList.toggle('active', e.target.checked);
+    pUpdate();
+  });
+  document.getElementById('ec-pro-emigratie-check').addEventListener('change', function(e) {
+    pState.emigratie10jaar = e.target.checked;
+    document.getElementById('ec-pro-emigratie-toggle').classList.toggle('active', e.target.checked);
+    pUpdate();
+  });
 
-  // Erfgenaam handlers (delegated)
   document.getElementById('ec-pro-erfgenamen').addEventListener('input', function(e) {
     var target = e.target;
     var row = target.closest('.ec-erfgenaam');
@@ -773,18 +1132,19 @@ body { padding: 16px; min-height: 100vh; }
     if (!erfgenaam) return;
     var field = target.dataset.field;
     if (field === 'naam') erfgenaam.naam = target.value;
-    else if (field === 'type') { erfgenaam.type = target.value; pRenderErfgenamen(); }
     else if (field === 'pct') erfgenaam.pct = parseFloat(target.value) || 0;
     pUpdate();
   });
   document.getElementById('ec-pro-erfgenamen').addEventListener('change', function(e) {
     var target = e.target;
-    if (target.dataset.field === 'type') {
-      var row = target.closest('.ec-erfgenaam');
-      var id = parseInt(row.dataset.id, 10);
-      var erfgenaam = pState.erfgenamen.find(function(eg) { return eg.id === id; });
-      if (erfgenaam) { erfgenaam.type = target.value; pRenderErfgenamen(); pUpdate(); }
-    }
+    var row = target.closest('.ec-erfgenaam');
+    if (!row) return;
+    var id = parseInt(row.dataset.id, 10);
+    var erfgenaam = pState.erfgenamen.find(function(eg) { return eg.id === id; });
+    if (!erfgenaam) return;
+    var field = target.dataset.field;
+    if (field === 'type') { erfgenaam.type = target.value; if (target.value !== 'kind') erfgenaam.gehandicapt = false; pRenderErfgenamen(); pUpdate(); }
+    else if (field === 'gehandicapt') { erfgenaam.gehandicapt = target.checked; pRenderErfgenamen(); pUpdate(); }
   });
   document.getElementById('ec-pro-erfgenamen').addEventListener('click', function(e) {
     var btn = e.target.closest('.ec-erfgenaam-del');
@@ -793,80 +1153,77 @@ body { padding: 16px; min-height: 100vh; }
     pState.erfgenamen = pState.erfgenamen.filter(function(eg) { return eg.id !== id; });
     pRenderErfgenamen(); pUpdate();
   });
-
   document.getElementById('ec-pro-add-erfgenaam').addEventListener('click', function() {
-    var nieuw = { id: pState.nextId++, naam: 'Erfgenaam ' + (pState.erfgenamen.length + 1), type: 'kind', pct: 0 };
-    pState.erfgenamen.push(nieuw);
-    pRenderErfgenamen();
-    pUpdate();
+    pState.erfgenamen.push({ id: pState.nextId++, naam: 'Erfgenaam ' + (pState.erfgenamen.length + 1), type: 'kind', pct: 0, gehandicapt: false });
+    pRenderErfgenamen(); pUpdate();
   });
-
   pRenderErfgenamen();
   pUpdate();
 
-  // ======== MODE 3: SCHENKINGEN ========
+  // ======== MODE 3: GIFT ========
   var gState = { vermogen: 800000, kinderen: 2, kleinkinderen: 0, jaren: 15 };
 
   function gUpdate() {
-    var jaarTotaalKind = gState.kinderen * SCHENK_VRIJ_KIND;
-    var jaarTotaalKleinkind = gState.kleinkinderen * SCHENK_VRIJ_KLEIN;
-    var jaarTotaal = jaarTotaalKind + jaarTotaalKleinkind;
+    var jaarKind = gState.kinderen * SCHENK_VRIJ_KIND;
+    var jaarKlein = gState.kleinkinderen * SCHENK_VRIJ_KLEIN;
+    var jaarTotaal = jaarKind + jaarKlein;
     var horizonTotaal = jaarTotaal * gState.jaren;
     var eenmalig = gState.kinderen * SCHENK_EENMALIG;
 
-    document.getElementById('ec-g-jaar-totaal').textContent = fEuro(jaarTotaalKind);
-    document.getElementById('ec-g-jaar-kleinkinderen').textContent = fEuro(jaarTotaalKleinkind);
+    document.getElementById('ec-g-jaar-totaal').textContent = fEuro(jaarKind);
+    document.getElementById('ec-g-jaar-kleinkinderen').textContent = fEuro(jaarKlein);
     document.getElementById('ec-g-horizon-totaal').textContent = fEuro(horizonTotaal);
     document.getElementById('ec-g-eenmalig').textContent = fEuro(eenmalig);
 
-    // Verdeel vermogen over kinderen voor scenario A (geen schenking)
     var perKind = gState.kinderen > 0 ? gState.vermogen / gState.kinderen : 0;
-    var perKindResA = berekenBelasting(perKind, 'kind');
-    var belastingA = perKindResA.belasting * gState.kinderen;
+    var belastingA = berekenBelasting(perKind, 'kind').belasting * gState.kinderen;
 
-    // Scenario B: jaarlijks schenken volledig benut
     var geschonkenB = Math.min(horizonTotaal, gState.vermogen);
     var resterendB = gState.vermogen - geschonkenB;
     var perKindB = gState.kinderen > 0 ? resterendB / gState.kinderen : 0;
-    var perKindResB = berekenBelasting(perKindB, 'kind');
-    var belastingB = perKindResB.belasting * gState.kinderen;
+    var belastingB = berekenBelasting(perKindB, 'kind').belasting * gState.kinderen;
 
-    // Scenario C: eenmalig + jaarlijks
     var geschonkenC = Math.min(horizonTotaal + eenmalig, gState.vermogen);
     var resterendC = gState.vermogen - geschonkenC;
     var perKindC = gState.kinderen > 0 ? resterendC / gState.kinderen : 0;
-    var perKindResC = berekenBelasting(perKindC, 'kind');
-    var belastingC = perKindResC.belasting * gState.kinderen;
+    var belastingC = berekenBelasting(perKindC, 'kind').belasting * gState.kinderen;
 
     document.getElementById('ec-g-belasting-a').textContent = fEuro(belastingA);
     document.getElementById('ec-g-belasting-b').textContent = fEuro(belastingB);
     document.getElementById('ec-g-belasting-c').textContent = fEuro(belastingC);
-
     document.getElementById('ec-g-besparing-b').innerHTML = belastingA > belastingB ? 'Bespaart <strong>' + fEuro(belastingA - belastingB) + '</strong>' : 'Geen besparing';
     document.getElementById('ec-g-besparing-c').innerHTML = belastingA > belastingC ? 'Bespaart <strong>' + fEuro(belastingA - belastingC) + '</strong>' : 'Geen besparing';
 
-    // Beste scenario
     document.querySelectorAll('.ec-scenario').forEach(function(s) { s.classList.remove('beste'); s.querySelectorAll('.ec-scenario-badge').forEach(function(b) { b.remove(); }); });
     var beste = belastingC <= belastingB && belastingC <= belastingA ? 'c' : (belastingB <= belastingA ? 'b' : 'a');
     var besteEl = document.getElementById('ec-g-scenario-' + beste);
     besteEl.classList.add('beste');
     var badge = document.createElement('div'); badge.className = 'ec-scenario-badge'; badge.textContent = '✓ Beste'; besteEl.appendChild(badge);
 
-    // Strategisch advies
-    var advies;
-    var maxBesparing = belastingA - Math.min(belastingB, belastingC);
-    if (gState.kinderen === 0) {
-      advies = 'Voer aantal kinderen in om schenkingsstrategie te zien. Voor kinderloze nalatenschappen liggen andere strategieën voor de hand (ANBI, partner­voorzieningen).';
-    } else if (belastingA === 0) {
-      advies = 'Je vermogen valt binnen de vrijstellingen. <strong>Geen schenkingsstrategie nodig</strong> — bij overlijden is er geen erfbelasting verschuldigd.';
-    } else if (maxBesparing < 1000) {
-      advies = 'De besparing van schenken is <strong>beperkt voor jouw vermogen</strong> (' + fEuro(maxBesparing) + '). Bij een groter vermogen of meer kinderen wordt het verschil groter.';
-    } else {
-      advies = 'Door <span class="highlight">jaarlijks ' + fEuro(jaarTotaal) + '</span> te schenken aan ' + gState.kinderen + (gState.kinderen === 1 ? ' kind' : ' kinderen') + (gState.kleinkinderen > 0 ? ' en ' + gState.kleinkinderen + ' kleinkind(eren)' : '') + ' bespaar je over ' + gState.jaren + ' jaar tot <strong>' + fEuro(maxBesparing) + '</strong> aan erfbelasting. Combineer met de eenmalige verhoogde vrijstelling van €32.195 per kind 18-40 jaar voor maximale besparing.';
-    }
+    var advies, maxBesparing = belastingA - Math.min(belastingB, belastingC);
+    if (gState.kinderen === 0) advies = 'Voer aantal kinderen in voor strategie.';
+    else if (belastingA === 0) advies = '<strong>Geen schenkingsstrategie nodig</strong> — vermogen valt binnen vrijstellingen.';
+    else if (maxBesparing < 1000) advies = 'Besparing is <strong>beperkt</strong> (' + fEuro(maxBesparing) + ').';
+    else advies = 'Door <span class="highlight">jaarlijks ' + fEuro(jaarTotaal) + '</span> te schenken bespaar je over ' + gState.jaren + ' jaar tot <strong>' + fEuro(maxBesparing) + '</strong>. Combineer met de eenmalige verhoogde vrijstelling van €32.195 voor maximale besparing.';
     document.getElementById('ec-g-advies').innerHTML = advies;
-  }
 
+    // Multi-year tabel
+    var multiHtml = '';
+    var resterend = gState.vermogen;
+    var cumulatief = 0;
+    var maxJaren = Math.min(gState.jaren, 10);
+    for (var j = 1; j <= maxJaren; j++) {
+      var schenkDitJaar = Math.min(jaarTotaal, resterend);
+      cumulatief += schenkDitJaar;
+      resterend -= schenkDitJaar;
+      multiHtml += '<div class="ec-multiyear-row"><span class="ec-multiyear-jaar">Jaar ' + j + '</span><span class="ec-multiyear-bedrag">' + fEuro(schenkDitJaar) + '</span><span class="ec-multiyear-bedrag">' + fEuro(cumulatief) + '</span><span class="ec-multiyear-bedrag">' + fEuro(resterend) + '</span></div>';
+    }
+    if (gState.jaren > 10) {
+      multiHtml += '<div class="ec-multiyear-row" style="color:#6a5e64;font-style:italic;font-size:0.7rem;"><span>...</span><span class="ec-multiyear-bedrag">jaar 11-' + gState.jaren + '</span><span class="ec-multiyear-bedrag">' + fEuro(Math.min(horizonTotaal, gState.vermogen)) + '</span><span class="ec-multiyear-bedrag">' + fEuro(Math.max(0, gState.vermogen - horizonTotaal)) + '</span></div>';
+    }
+    multiHtml += '<div class="ec-multiyear-row totaal"><span>Totaal</span><span class="ec-multiyear-bedrag">' + fEuro(Math.min(horizonTotaal, gState.vermogen)) + '</span><span class="ec-multiyear-bedrag">' + fEuro(Math.min(horizonTotaal, gState.vermogen)) + '</span><span class="ec-multiyear-bedrag">' + fEuro(Math.max(0, gState.vermogen - horizonTotaal)) + '</span></div>';
+    document.getElementById('ec-g-multiyear-body').innerHTML = multiHtml;
+  }
   function gSetVermogen(n) {
     gState.vermogen = Math.max(0, n);
     document.getElementById('ec-g-vermogen-display').value = gState.vermogen.toLocaleString('nl-NL');
@@ -886,40 +1243,31 @@ body { padding: 16px; min-height: 100vh; }
   document.getElementById('ec-g-jaren-display').addEventListener('input', function(e) { var n = parseInt(e.target.value, 10) || 1; gSetJaren(n); });
   document.getElementById('ec-g-kinderen').addEventListener('input', function(e) { gState.kinderen = parseInt(e.target.value, 10) || 0; gUpdate(); });
   document.getElementById('ec-g-kleinkinderen').addEventListener('input', function(e) { gState.kleinkinderen = parseInt(e.target.value, 10) || 0; gUpdate(); });
-
   gUpdate();
 
   // ======== MODE 4: BOR ========
   var bState = { onderneming: 2000000, prive: 300000, relatie: 'partner' };
-
   function bUpdate() {
-    // Met BOR
-    var borVrijDeel = Math.min(bState.onderneming, BOR_VRIJ); // 100% vrij
-    var borBelastDeel = Math.max(0, bState.onderneming - BOR_VRIJ); // 75% vrij van rest
+    var borVrijDeel = Math.min(bState.onderneming, BOR_VRIJ);
+    var borBelastDeel = Math.max(0, bState.onderneming - BOR_VRIJ);
     var schijf2VrijDeel = borBelastDeel * 0.75;
-    var onderBelast = borBelastDeel * 0.25; // belastbaar deel onderneming
-
+    var onderBelast = borBelastDeel * 0.25;
     var data = ER[bState.relatie];
     var priveVrij = data.vrij;
     var priveBelast = Math.max(0, bState.prive - priveVrij);
     var totaalBelastMet = onderBelast + priveBelast;
-
-    function progressief(bedrag, data) {
-      if (bedrag <= 0) return 0;
-      if (bedrag > SCHIJFGRENS) return SCHIJFGRENS * data.laag + (bedrag - SCHIJFGRENS) * data.hoog;
-      return bedrag * data.laag;
+    function progressief(b, d) {
+      if (b <= 0) return 0;
+      if (b > SCHIJFGRENS) return SCHIJFGRENS * d.laag + (b - SCHIJFGRENS) * d.hoog;
+      return b * d.laag;
     }
     var belastingMet = progressief(totaalBelastMet, data);
-
-    // Zonder BOR
     var totaalVermogen = bState.onderneming + bState.prive;
     var totaalBelastZonder = Math.max(0, totaalVermogen - priveVrij);
     var belastingZonder = progressief(totaalBelastZonder, data);
-
     var besparing = belastingZonder - belastingMet;
-
     document.getElementById('ec-b-besparing').textContent = fEuro(Math.max(0, besparing));
-    document.getElementById('ec-b-besparing-sub').textContent = besparing > 0 ? 'Bij BOR voortzetting min. 5 jaar' : 'BOR levert in jouw situatie geen besparing';
+    document.getElementById('ec-b-besparing-sub').textContent = besparing > 0 ? 'Bij BOR voortzetting min. 5 jaar' : 'Geen besparing in jouw situatie';
     document.getElementById('ec-b-schijf1-vrij').textContent = fEuro(borVrijDeel);
     document.getElementById('ec-b-schijf2-vrij').textContent = fEuro(schijf2VrijDeel);
     document.getElementById('ec-b-onderneming-belast').textContent = fEuro(onderBelast);
@@ -930,16 +1278,16 @@ body { padding: 16px; min-height: 100vh; }
     document.getElementById('ec-b-belastbaar-zonder').textContent = fEuro(totaalBelastZonder);
     document.getElementById('ec-b-belasting-zonder').textContent = fEuro(belastingZonder);
   }
-
   function bSet(key, n) {
     bState[key] = Math.max(0, n);
     document.getElementById('ec-b-' + key + '-display').value = bState[key].toLocaleString('nl-NL');
-    document.getElementById('ec-b-' + key + '-slider').value = Math.min(parseInt(document.getElementById('ec-b-' + key + '-slider').max, 10), bState[key]);
+    var slider = document.getElementById('ec-b-' + key + '-slider');
+    slider.value = Math.min(parseInt(slider.max, 10), bState[key]);
     bUpdate();
   }
   ['onderneming', 'prive'].forEach(function(k) {
     document.getElementById('ec-b-' + k + '-slider').addEventListener('input', function(e) { bSet(k, parseInt(e.target.value, 10)); });
-    document.getElementById('ec-b-' + k + '-display').addEventListener('input', function(e) { var n = pEuro(e.target.value); bState[k] = n; document.getElementById('ec-b-' + k + '-slider').value = Math.min(parseInt(document.getElementById('ec-b-' + k + '-slider').max, 10), n); bUpdate(); });
+    document.getElementById('ec-b-' + k + '-display').addEventListener('input', function(e) { var n = pEuro(e.target.value); bState[k] = n; var slider = document.getElementById('ec-b-' + k + '-slider'); slider.value = Math.min(parseInt(slider.max, 10), n); bUpdate(); });
     document.getElementById('ec-b-' + k + '-display').addEventListener('blur', function(e) { e.target.value = bState[k].toLocaleString('nl-NL'); });
   });
   document.querySelectorAll('[data-bor-relatie]').forEach(function(btn) {
@@ -950,8 +1298,333 @@ body { padding: 16px; min-height: 100vh; }
       bUpdate();
     });
   });
-
   bUpdate();
+
+  // ======== MODE 5: TWEETRAPSMAKING ========
+  var ttState = { bedrag: 500000, bezwaarde: 'partner', verwachter: 'kind', verbruikPct: 30 };
+
+  function ttUpdate() {
+    var bezRes = berekenBelasting(ttState.bedrag, ttState.bezwaarde);
+    var resterend = ttState.bedrag * (1 - ttState.verbruikPct / 100);
+    var verRes = berekenBelasting(resterend, ttState.verwachter);
+    var totaal = bezRes.belasting + verRes.belasting;
+
+    document.getElementById('ec-tt-totaal').textContent = fEuro(totaal);
+
+    document.getElementById('ec-tt-f1-erfenis').textContent = fEuro(ttState.bedrag);
+    document.getElementById('ec-tt-f1-vrij').textContent = fEuro(bezRes.vrij);
+    document.getElementById('ec-tt-f1-belasting').textContent = fEuro(bezRes.belasting);
+    document.getElementById('ec-tt-fase1-uitleg').innerHTML = 'De bezwaarde (' + ER[ttState.bezwaarde].naam + ') erft <strong>' + fEuro(ttState.bedrag) + '</strong> en betaalt belasting volgens zijn relatie tot de erflater.';
+
+    document.getElementById('ec-tt-f2-erfenis').textContent = fEuro(resterend);
+    document.getElementById('ec-tt-f2-vrij').textContent = fEuro(verRes.vrij);
+    document.getElementById('ec-tt-f2-belasting').textContent = fEuro(verRes.belasting);
+    document.getElementById('ec-tt-fase2-uitleg').innerHTML = 'De verwachter (' + ER[ttState.verwachter].naam + ') krijgt het resterende vermogen na ' + ttState.verbruikPct + '% verbruik. Belasting wordt berekend met de <strong>oorspronkelijke relatie tot de erflater</strong> — niet tot de bezwaarde.';
+
+    // Vergelijking met direct via bezwaarde naar verwachter (zonder tweetrap)
+    // Zonder tweetrap: bezwaarde erft alles, dan vererft naar zijn erfgenaam met zijn relatie tot verwachter
+    // Voor kind als bezwaarde, kind als verwachter: dezelfde tarief
+    // Voor partner als bezwaarde, kind als verwachter: kind erft van partner met kind-tarief
+    var altRes = berekenBelasting(resterend, 'kind'); // assume vererft via bezwaarde naar verwachter met kind-tarief
+    var altTotaal = bezRes.belasting + altRes.belasting;
+
+    // Eigenlijk: zonder tweetrap zou bezwaarde de bedrag erven, en bij zijn dood zou verwachter erven met de relatie verwachter-bezwaarde (vaak ook 'kind' bijv)
+    // Voor de tweetrap voordeel: vooral relevant als origineel hoge vrijstelling, zoals partner-tarief
+    var voordeel = altTotaal - totaal;
+
+    var vergText;
+    if (Math.abs(voordeel) < 100) {
+      vergText = 'In jouw situatie geeft tweetrapsmaking <strong>geen significant voordeel</strong>. Beide partijen vallen onder dezelfde tarieven.';
+    } else if (voordeel > 0) {
+      vergText = 'Door de tweetrapsmaking bespaart de verwachter <strong>' + fEuro(voordeel) + '</strong> aan erfbelasting (origineel partner-tarief blijft van toepassing).';
+    } else {
+      vergText = 'In jouw configuratie geeft de tweetrap geen besparing — overweeg directe vererving.';
+    }
+    document.getElementById('ec-tt-vergelijking-tekst').innerHTML = vergText;
+    document.getElementById('ec-tt-totaal-sub').textContent = voordeel > 0 ? 'Bespaart ' + fEuro(voordeel) + ' vs direct vererven' : 'Geen besparing vs alternatief';
+  }
+  function ttSetBedrag(n) {
+    ttState.bedrag = Math.max(0, n);
+    document.getElementById('ec-tt-bedrag-display').value = ttState.bedrag.toLocaleString('nl-NL');
+    document.getElementById('ec-tt-bedrag-slider').value = Math.min(3000000, ttState.bedrag);
+    ttUpdate();
+  }
+  function ttSetVerbruik(n) {
+    ttState.verbruikPct = Math.max(0, Math.min(100, n));
+    document.getElementById('ec-tt-verbruik-display').value = ttState.verbruikPct;
+    document.getElementById('ec-tt-verbruik-slider').value = ttState.verbruikPct;
+    ttUpdate();
+  }
+  document.getElementById('ec-tt-bedrag-slider').addEventListener('input', function(e) { ttSetBedrag(parseInt(e.target.value, 10)); });
+  document.getElementById('ec-tt-bedrag-display').addEventListener('input', function(e) { var n = pEuro(e.target.value); ttState.bedrag = n; document.getElementById('ec-tt-bedrag-slider').value = Math.min(3000000, n); ttUpdate(); });
+  document.getElementById('ec-tt-bedrag-display').addEventListener('blur', function(e) { e.target.value = ttState.bedrag.toLocaleString('nl-NL'); });
+  document.getElementById('ec-tt-verbruik-slider').addEventListener('input', function(e) { ttSetVerbruik(parseInt(e.target.value, 10)); });
+  document.getElementById('ec-tt-verbruik-display').addEventListener('input', function(e) { ttSetVerbruik(parseInt(e.target.value, 10) || 0); });
+  document.querySelectorAll('[data-tt-bez]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-tt-bez]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      ttState.bezwaarde = btn.dataset.ttBez;
+      ttUpdate();
+    });
+  });
+  document.querySelectorAll('[data-tt-ver]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-tt-ver]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      ttState.verwachter = btn.dataset.ttVer;
+      ttUpdate();
+    });
+  });
+  ttUpdate();
+
+  // ======== MODE 6: VRUCHTGEBRUIK ========
+  var vgState = { bedrag: 500000, leeftijd: 65, vgRel: 'partner', beRel: 'kind' };
+
+  function vgRenderFactoren() {
+    var html = '';
+    VG_FACTOREN.forEach(function(f) {
+      var actief = vgState.leeftijd >= f.vanaf && vgState.leeftijd < f.tot;
+      var rangeText = f.tot >= 999 ? f.vanaf + '+' : f.vanaf + '-' + (f.tot - 1);
+      html += '<div class="ec-factor-cel' + (actief ? ' actief' : '') + '"><span class="ec-factor-leeftijd">' + rangeText + ' j</span><span class="ec-factor-waarde">' + f.factor + '</span></div>';
+    });
+    document.getElementById('ec-vg-factor-grid').innerHTML = html;
+  }
+
+  function vgUpdate() {
+    var factor = vgFactor(vgState.leeftijd);
+    var vgWaarde = vgState.bedrag * 0.04 * factor;
+    var beWaarde = vgState.bedrag - vgWaarde;
+    var vgPct = (vgWaarde / vgState.bedrag) * 100;
+    var bePct = (beWaarde / vgState.bedrag) * 100;
+
+    var vgRes = berekenBelasting(vgWaarde, vgState.vgRel);
+    var beRes = berekenBelasting(beWaarde, vgState.beRel);
+    var totaal = vgRes.belasting + beRes.belasting;
+
+    // Alternatief: alles naar vruchtgebruiker
+    var altRes = berekenBelasting(vgState.bedrag, vgState.vgRel);
+    var voordeel = altRes.belasting - totaal;
+
+    document.getElementById('ec-vg-totaal').textContent = fEuro(totaal);
+    document.getElementById('ec-vg-totaal-sub').textContent = voordeel > 0 ? 'Bespaart ' + fEuro(voordeel) + ' vs alles naar partner' : 'Volledige verdeling geanalyseerd';
+
+    document.getElementById('ec-vg-vg-naam').textContent = ER[vgState.vgRel].naam;
+    document.getElementById('ec-vg-be-naam').textContent = ER[vgState.beRel].naam;
+    document.getElementById('ec-vg-vg-waarde').textContent = fEuro(vgWaarde);
+    document.getElementById('ec-vg-be-waarde').textContent = fEuro(beWaarde);
+    document.getElementById('ec-vg-vg-pct').textContent = fPct(vgPct) + ' &middot; factor ' + factor + ' × 4%';
+    document.getElementById('ec-vg-be-pct').textContent = fPct(bePct) + ' van vermogen';
+    document.getElementById('ec-vg-vg-belasting').textContent = fEuro(vgRes.belasting);
+    document.getElementById('ec-vg-be-belasting').textContent = fEuro(beRes.belasting);
+
+    document.getElementById('ec-vg-fase2-tekst').innerHTML = 'Bij overlijden vruchtgebruiker eindigt het vruchtgebruik automatisch. De blote eigenaar (' + ER[vgState.beRel].naam + ') krijgt dan automatisch volledige eigendom over <strong>' + fEuro(vgState.bedrag) + '</strong> — <strong>zonder nieuwe erfbelasting</strong>. Dit is het belangrijkste fiscale voordeel van een vruchtgebruik-constructie.';
+
+    vgRenderFactoren();
+  }
+  function vgSetBedrag(n) {
+    vgState.bedrag = Math.max(0, n);
+    document.getElementById('ec-vg-bedrag-display').value = vgState.bedrag.toLocaleString('nl-NL');
+    document.getElementById('ec-vg-bedrag-slider').value = Math.min(3000000, vgState.bedrag);
+    vgUpdate();
+  }
+  function vgSetLeeftijd(n) {
+    vgState.leeftijd = Math.max(0, Math.min(110, n));
+    document.getElementById('ec-vg-leeftijd').value = vgState.leeftijd;
+    document.getElementById('ec-vg-leeftijd-slider').value = Math.min(100, vgState.leeftijd);
+    vgUpdate();
+  }
+  document.getElementById('ec-vg-bedrag-slider').addEventListener('input', function(e) { vgSetBedrag(parseInt(e.target.value, 10)); });
+  document.getElementById('ec-vg-bedrag-display').addEventListener('input', function(e) { var n = pEuro(e.target.value); vgState.bedrag = n; document.getElementById('ec-vg-bedrag-slider').value = Math.min(3000000, n); vgUpdate(); });
+  document.getElementById('ec-vg-bedrag-display').addEventListener('blur', function(e) { e.target.value = vgState.bedrag.toLocaleString('nl-NL'); });
+  document.getElementById('ec-vg-leeftijd').addEventListener('input', function(e) { vgSetLeeftijd(parseInt(e.target.value, 10) || 0); });
+  document.getElementById('ec-vg-leeftijd-slider').addEventListener('input', function(e) { vgSetLeeftijd(parseInt(e.target.value, 10)); });
+  document.querySelectorAll('[data-vg-vg]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-vg-vg]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      vgState.vgRel = btn.dataset.vgVg;
+      vgUpdate();
+    });
+  });
+  document.querySelectorAll('[data-vg-be]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-vg-be]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      vgState.beRel = btn.dataset.vgBe;
+      vgUpdate();
+    });
+  });
+  vgUpdate();
+
+  // ======== MODE 7: INTERNATIONAAL ========
+  var intlState = { land: 'duitsland', buiten: 200000, nl: 300000, relatie: 'partner', emigratie: false };
+
+  function intlUpdate() {
+    var land = LANDEN[intlState.land];
+    var wereld = intlState.buiten + intlState.nl;
+
+    // Land info tonen
+    var infoHtml = '<div class="ec-land-info-rij"><span class="ec-land-info-label">Tarief</span><span class="ec-land-info-waarde">' + Math.round(land.tarief[0]*100) + '-' + Math.round(land.tarief[1]*100) + '%</span></div>';
+    if (land.vrij > 0) infoHtml += '<div class="ec-land-info-rij"><span class="ec-land-info-label">Vrijstelling (kinderen)</span><span class="ec-land-info-waarde">' + fEuro(land.vrij) + '</span></div>';
+    infoHtml += '<div class="ec-land-info-rij"><span class="ec-land-info-label">Belastingverdrag met NL</span><span class="ec-land-info-waarde">' + (land.verdrag ? 'Ja' : 'Nee/beperkt') + '</span></div>';
+    infoHtml += '<div style="margin-top:8px;font-size:0.7rem;color:#6a5e64;line-height:1.5;">' + land.beschrijving + '</div>';
+    document.getElementById('ec-intl-land-info').innerHTML = infoHtml;
+
+    // NL belasting (over wereldvermogen als emigratie10jaar of standaard binnenlands belastingplichtig)
+    var nlBedrag = intlState.emigratie ? wereld : (intlState.nl + (land.verdrag ? 0 : intlState.buiten));
+    // Eigenlijk: NL heft altijd over wereldvermogen voor binnenlands belastingplichtigen. Verrekening voorkomt dubbele heffing.
+    var nlBel = berekenBelasting(wereld, intlState.relatie).belasting;
+
+    // Buitenlandse belasting (geschat)
+    function progressief(b, tariefLaag, tariefHoog, schijfgrens) {
+      if (b <= 0) return 0;
+      if (b > schijfgrens) return schijfgrens * tariefLaag + (b - schijfgrens) * tariefHoog;
+      return b * tariefLaag;
+    }
+    var buitVrij = Math.min(land.vrij, intlState.buiten);
+    var buitBelastbaar = Math.max(0, intlState.buiten - buitVrij);
+    var buitBel = progressief(buitBelastbaar, land.tarief[0], land.tarief[1], 100000);
+
+    // Verrekening: alleen mogelijk bij verdrag
+    var verrekening = 0;
+    if (land.verdrag) {
+      // Verrekening tot het bedrag dat NL over het buitenlandse deel zou heffen
+      var nlOverBuiten = nlBel * (intlState.buiten / wereld);
+      verrekening = Math.min(buitBel, nlOverBuiten);
+    }
+
+    var nettoTotaal = nlBel + buitBel - verrekening;
+
+    document.getElementById('ec-intl-wereld').textContent = fEuro(wereld);
+    document.getElementById('ec-intl-nl-bel').textContent = fEuro(nlBel);
+    document.getElementById('ec-intl-buit-bel').textContent = fEuro(buitBel);
+    document.getElementById('ec-intl-verrekening').textContent = '-' + fEuro(verrekening);
+    document.getElementById('ec-intl-netto-belasting').textContent = fEuro(nettoTotaal);
+    document.getElementById('ec-intl-totaal').textContent = fEuro(nettoTotaal);
+    document.getElementById('ec-intl-totaal-sub').textContent = wereld > 0 ? 'Effectief ' + fPct((nettoTotaal/wereld)*100) + ' op wereldvermogen' : 'Vul gegevens in';
+
+    var advies;
+    if (land.verdrag) {
+      advies = 'Met <strong>' + land.naam + '</strong> bestaat een belastingverdrag dat dubbele heffing voorkomt. NL verrekent ' + fEuro(verrekening) + ' aan buitenlandse belasting.';
+    } else if (intlState.buiten > 50000) {
+      advies = 'Tussen NL en <strong>' + land.naam + '</strong> is <strong>geen volledig verdrag</strong>. Risico op dubbele heffing van ' + fEuro(buitBel) + '. Schakel een internationaal fiscalist in voor optimalisatie.';
+    } else {
+      advies = 'Buitenlands vermogen is beperkt, fiscaal effect blijft overzichtelijk.';
+    }
+    if (intlState.emigratie) advies += ' De <strong>10-jaars regel</strong> is actief: NL heft erfbelasting op wereldvermogen.';
+    document.getElementById('ec-intl-advies-tekst').innerHTML = advies;
+  }
+  function intlSet(key, n) {
+    intlState[key] = Math.max(0, n);
+    document.getElementById('ec-intl-' + key + '-display').value = intlState[key].toLocaleString('nl-NL');
+    document.getElementById('ec-intl-' + key + '-slider').value = Math.min(3000000, intlState[key]);
+    intlUpdate();
+  }
+  document.getElementById('ec-intl-land').addEventListener('change', function(e) { intlState.land = e.target.value; intlUpdate(); });
+  ['buiten', 'nl'].forEach(function(k) {
+    document.getElementById('ec-intl-' + k + '-slider').addEventListener('input', function(e) { intlSet(k, parseInt(e.target.value, 10)); });
+    document.getElementById('ec-intl-' + k + '-display').addEventListener('input', function(e) { var n = pEuro(e.target.value); intlState[k] = n; document.getElementById('ec-intl-' + k + '-slider').value = Math.min(3000000, n); intlUpdate(); });
+    document.getElementById('ec-intl-' + k + '-display').addEventListener('blur', function(e) { e.target.value = intlState[k].toLocaleString('nl-NL'); });
+  });
+  document.querySelectorAll('[data-intl-rel]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-intl-rel]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      intlState.relatie = btn.dataset.intlRel;
+      intlUpdate();
+    });
+  });
+  document.getElementById('ec-intl-emigratie-check').addEventListener('change', function(e) {
+    intlState.emigratie = e.target.checked;
+    document.getElementById('ec-intl-emigratie-toggle').classList.toggle('active', e.target.checked);
+    intlUpdate();
+  });
+  intlUpdate();
+
+  // ======== SAVE / LOAD SCENARIOS ========
+  var STORAGE_KEY = 'ec-pro-scenarios-v1';
+
+  function getScenarios() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e) { return []; }
+  }
+  function setScenarios(scenarios) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(scenarios)); return true; }
+    catch(e) { return false; }
+  }
+
+  function currentState() {
+    return { q: qState, p: pState, g: gState, b: bState, tt: ttState, vg: vgState, intl: intlState };
+  }
+  function loadState(s) {
+    if (s.q) { qState = s.q; document.querySelectorAll('#ec-relaties .ec-relatie-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.relatie === qState.relatie); }); qSetBedrag(qState.bedrag); }
+    if (s.p) { pState = s.p; document.querySelectorAll('[data-pro]').forEach(function(input) { input.value = pState[input.dataset.pro] || 0; }); document.getElementById('ec-pro-lvz-check').checked = pState.lvz_zelf_premie; document.getElementById('ec-pro-lvz-toggle').classList.toggle('active', pState.lvz_zelf_premie); document.getElementById('ec-pro-emigratie-check').checked = pState.emigratie10jaar; document.getElementById('ec-pro-emigratie-toggle').classList.toggle('active', pState.emigratie10jaar); pRenderErfgenamen(); pUpdate(); }
+    if (s.g) { gState = s.g; gSetVermogen(gState.vermogen); gSetJaren(gState.jaren); document.getElementById('ec-g-kinderen').value = gState.kinderen; document.getElementById('ec-g-kleinkinderen').value = gState.kleinkinderen; gUpdate(); }
+    if (s.b) { bState = s.b; bSet('onderneming', bState.onderneming); bSet('prive', bState.prive); document.querySelectorAll('[data-bor-relatie]').forEach(function(b) { b.classList.toggle('active', b.dataset.borRelatie === bState.relatie); }); bUpdate(); }
+    if (s.tt) { ttState = s.tt; ttSetBedrag(ttState.bedrag); ttSetVerbruik(ttState.verbruikPct); document.querySelectorAll('[data-tt-bez]').forEach(function(b) { b.classList.toggle('active', b.dataset.ttBez === ttState.bezwaarde); }); document.querySelectorAll('[data-tt-ver]').forEach(function(b) { b.classList.toggle('active', b.dataset.ttVer === ttState.verwachter); }); ttUpdate(); }
+    if (s.vg) { vgState = s.vg; vgSetBedrag(vgState.bedrag); vgSetLeeftijd(vgState.leeftijd); document.querySelectorAll('[data-vg-vg]').forEach(function(b) { b.classList.toggle('active', b.dataset.vgVg === vgState.vgRel); }); document.querySelectorAll('[data-vg-be]').forEach(function(b) { b.classList.toggle('active', b.dataset.vgBe === vgState.beRel); }); vgUpdate(); }
+    if (s.intl) { intlState = s.intl; document.getElementById('ec-intl-land').value = intlState.land; intlSet('buiten', intlState.buiten); intlSet('nl', intlState.nl); document.querySelectorAll('[data-intl-rel]').forEach(function(b) { b.classList.toggle('active', b.dataset.intlRel === intlState.relatie); }); document.getElementById('ec-intl-emigratie-check').checked = intlState.emigratie; document.getElementById('ec-intl-emigratie-toggle').classList.toggle('active', intlState.emigratie); intlUpdate(); }
+  }
+
+  function showModal(id) { document.getElementById(id).classList.add('active'); }
+  function hideModal(id) { document.getElementById(id).classList.remove('active'); }
+  document.querySelectorAll('[data-close-modal]').forEach(function(btn) {
+    btn.addEventListener('click', function() { btn.closest('.ec-modal-overlay').classList.remove('active'); });
+  });
+  document.querySelectorAll('.ec-modal-overlay').forEach(function(o) {
+    o.addEventListener('click', function(e) { if (e.target === o) o.classList.remove('active'); });
+  });
+
+  document.getElementById('ec-save-btn').addEventListener('click', function() {
+    showModal('ec-modal-save');
+    setTimeout(function() { document.getElementById('ec-save-naam').focus(); }, 100);
+  });
+  document.getElementById('ec-save-confirm').addEventListener('click', function() {
+    var naam = document.getElementById('ec-save-naam').value.trim();
+    if (!naam) { alert('Geef een naam op'); return; }
+    var scenarios = getScenarios();
+    scenarios.push({ naam: naam, datum: new Date().toISOString(), state: currentState() });
+    if (setScenarios(scenarios)) {
+      hideModal('ec-modal-save');
+      document.getElementById('ec-save-naam').value = '';
+    } else {
+      alert('Opslaan mislukt. localStorage mogelijk vol of niet beschikbaar.');
+    }
+  });
+
+  document.getElementById('ec-load-btn').addEventListener('click', function() {
+    var scenarios = getScenarios();
+    var body = document.getElementById('ec-load-body');
+    if (scenarios.length === 0) {
+      body.innerHTML = '<div class="ec-modal-leeg">Nog geen opgeslagen scenarios. Sla eerst een berekening op.</div>';
+    } else {
+      var html = '';
+      scenarios.forEach(function(s, i) {
+        var d = new Date(s.datum);
+        html += '<div class="ec-scenario-saved"><div class="ec-scenario-saved-info"><div class="ec-scenario-saved-naam">' + s.naam + '</div><div class="ec-scenario-saved-meta">' + d.toLocaleDateString('nl-NL') + ' ' + d.toLocaleTimeString('nl-NL', {hour: '2-digit', minute: '2-digit'}) + '</div></div><div class="ec-scenario-saved-acties"><button class="ec-scenario-saved-btn" data-load="' + i + '">Laden</button><button class="ec-scenario-saved-btn danger" data-delete="' + i + '">Verwijderen</button></div></div>';
+      });
+      body.innerHTML = html;
+    }
+    showModal('ec-modal-load');
+  });
+
+  document.getElementById('ec-load-body').addEventListener('click', function(e) {
+    var loadBtn = e.target.closest('[data-load]');
+    var delBtn = e.target.closest('[data-delete]');
+    if (loadBtn) {
+      var i = parseInt(loadBtn.dataset.load, 10);
+      var scenarios = getScenarios();
+      if (scenarios[i]) { loadState(scenarios[i].state); hideModal('ec-modal-load'); }
+    } else if (delBtn) {
+      if (!confirm('Dit scenario verwijderen?')) return;
+      var i2 = parseInt(delBtn.dataset.delete, 10);
+      var scenarios2 = getScenarios();
+      scenarios2.splice(i2, 1);
+      setScenarios(scenarios2);
+      document.getElementById('ec-load-btn').click();
+    }
+  });
 
   // ======== RESET ========
   document.getElementById('ec-reset-btn').addEventListener('click', function() {
@@ -959,13 +1632,10 @@ body { padding: 16px; min-height: 100vh; }
     qState = { relatie: 'partner', bedrag: 100000 };
     document.querySelectorAll('#ec-relaties .ec-relatie-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.relatie === 'partner'); });
     qSetBedrag(100000);
-    pState = {
-      woning: 0, spaargeld: 0, beleggingen: 0, inboedel: 5000, schenkingen: 0, overig: 0,
-      hypotheek: 0, andere_schulden: 0, uitvaart: 8000, successie: 500,
-      erfgenamen: [{ id: 1, naam: 'Partner', type: 'partner', pct: 50 },{ id: 2, naam: 'Kind 1', type: 'kind', pct: 25 },{ id: 3, naam: 'Kind 2', type: 'kind', pct: 25 }],
-      nextId: 4
-    };
+    pState = { woning: 0, spaargeld: 0, beleggingen: 0, inboedel: 5000, schenkingen: 0, overig: 0, levensverzekering: 0, lvz_zelf_premie: false, emigratie10jaar: false, hypotheek: 0, andere_schulden: 0, uitvaart: 8000, successie: 500, erfgenamen: [{ id: 1, naam: 'Partner', type: 'partner', pct: 50, gehandicapt: false },{ id: 2, naam: 'Kind 1', type: 'kind', pct: 25, gehandicapt: false },{ id: 3, naam: 'Kind 2', type: 'kind', pct: 25, gehandicapt: false }], nextId: 4 };
     document.querySelectorAll('[data-pro]').forEach(function(input) { input.value = pState[input.dataset.pro] || 0; });
+    document.getElementById('ec-pro-lvz-check').checked = false; document.getElementById('ec-pro-lvz-toggle').classList.remove('active');
+    document.getElementById('ec-pro-emigratie-check').checked = false; document.getElementById('ec-pro-emigratie-toggle').classList.remove('active');
     pRenderErfgenamen(); pUpdate();
     gState = { vermogen: 800000, kinderen: 2, kleinkinderen: 0, jaren: 15 };
     gSetVermogen(800000); gSetJaren(15);
@@ -975,7 +1645,26 @@ body { padding: 16px; min-height: 100vh; }
     bSet('onderneming', 2000000); bSet('prive', 300000);
     document.querySelectorAll('[data-bor-relatie]').forEach(function(b) { b.classList.toggle('active', b.dataset.borRelatie === 'partner'); });
     bUpdate();
+    ttState = { bedrag: 500000, bezwaarde: 'partner', verwachter: 'kind', verbruikPct: 30 };
+    ttSetBedrag(500000); ttSetVerbruik(30);
+    document.querySelectorAll('[data-tt-bez]').forEach(function(b) { b.classList.toggle('active', b.dataset.ttBez === 'partner'); });
+    document.querySelectorAll('[data-tt-ver]').forEach(function(b) { b.classList.toggle('active', b.dataset.ttVer === 'kind'); });
+    ttUpdate();
+    vgState = { bedrag: 500000, leeftijd: 65, vgRel: 'partner', beRel: 'kind' };
+    vgSetBedrag(500000); vgSetLeeftijd(65);
+    document.querySelectorAll('[data-vg-vg]').forEach(function(b) { b.classList.toggle('active', b.dataset.vgVg === 'partner'); });
+    document.querySelectorAll('[data-vg-be]').forEach(function(b) { b.classList.toggle('active', b.dataset.vgBe === 'kind'); });
+    vgUpdate();
+    intlState = { land: 'duitsland', buiten: 200000, nl: 300000, relatie: 'partner', emigratie: false };
+    document.getElementById('ec-intl-land').value = 'duitsland';
+    intlSet('buiten', 200000); intlSet('nl', 300000);
+    document.querySelectorAll('[data-intl-rel]').forEach(function(b) { b.classList.toggle('active', b.dataset.intlRel === 'partner'); });
+    document.getElementById('ec-intl-emigratie-check').checked = false; document.getElementById('ec-intl-emigratie-toggle').classList.remove('active');
+    intlUpdate();
   });
+
+  // Print date
+  document.getElementById('ec-print-datum').textContent = 'Berekend op ' + new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
 
 })();
 </script>
