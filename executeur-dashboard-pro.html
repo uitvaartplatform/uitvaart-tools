@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executeur Dashboard PRO 2026 - Uitvaart-Platform.nl</title>
+<meta name="description" content="Volledig dashboard voor executeurs: workflow, boedelbeschrijving, deadlines, documenten, communicatie­templates en rekening en verantwoording.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { padding: 16px; min-height: 100vh; }
+
+.ex-app { max-width: 1400px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; }
+.ex-print-cover { display: none; }
+.ex-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; }
+.ex-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.ex-header-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.ex-titel { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; letter-spacing: -0.3px; margin: 0; }
+.ex-subtitel { font-size: 0.78rem; color: #fcd9c4; margin-top: 2px; }
+.ex-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(232,131,74,0.25); color: #fff; border-radius: 14px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px; }
+.ex-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; box-shadow: 0 0 8px #e8834a; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.ex-tabs { background: #2e0f29; padding: 0 20px; display: flex; gap: 2px; overflow-x: auto; }
+.ex-tab { background: transparent; border: none; padding: 14px 14px; font-family: inherit; font-size: 0.78rem; font-weight: 600; color: #b09cae; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.ex-tab:hover { color: #fcd9c4; }
+.ex-tab.active { color: #fff; border-bottom-color: #e8834a; }
+.ex-tab-icoon { font-size: 0.95rem; }
+
+.ex-pane { display: none; padding: 22px 28px; }
+.ex-pane.active { display: block; }
+
+.ex-stap-label { display: flex; align-items: center; gap: 10px; font-size: 0.66rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #e8834a; margin-bottom: 10px; }
+.ex-stap-nr { width: 22px; height: 22px; background: #4a1942; color: #e8834a; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; }
+
+.ex-card { background: #faf7f2; border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; }
+.ex-card-kop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 12px; }
+.ex-card-titel { font-size: 0.95rem; font-weight: 700; color: #4a1942; display: flex; align-items: center; gap: 8px; }
+.ex-card-titel-icoon { width: 28px; height: 28px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #e8834a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.86rem; }
+.ex-card-sub { font-size: 0.74rem; color: #6a5e64; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.ex-veld-rij { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e2d9e0; }
+.ex-veld-rij:last-child { border-bottom: none; }
+.ex-veld-naam { font-size: 0.84rem; font-weight: 600; color: #4a1942; }
+.ex-veld-uitleg { font-size: 0.7rem; color: #6a5e64; margin-top: 2px; line-height: 1.3; }
+.ex-input { border: 1.5px solid #e2d9e0; background: #fff; border-radius: 8px; padding: 8px 12px; font-family: inherit; font-size: 0.86rem; font-weight: 600; color: #4a1942; outline: none; transition: all 0.2s; min-width: 140px; }
+.ex-input:focus { border-color: #e8834a; }
+.ex-input.bedrag { text-align: right; font-variant-numeric: tabular-nums; }
+.ex-input.wide { min-width: 280px; }
+.ex-input.full { width: 100%; }
+.ex-input-date { border: 1.5px solid #e2d9e0; background: #fff; border-radius: 8px; padding: 8px 12px; font-family: inherit; font-size: 0.86rem; font-weight: 600; color: #4a1942; outline: none; }
+.ex-input::-webkit-outer-spin-button, .ex-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.ex-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ex-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.ex-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 900px) { .ex-grid-2, .ex-grid-3, .ex-grid-4 { grid-template-columns: 1fr; } }
+
+/* Dashboard stat cards */
+.ex-stat { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 16px 18px; }
+.ex-stat-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #6a5e64; margin-bottom: 6px; }
+.ex-stat-value { font-size: 1.6rem; font-weight: 800; color: #4a1942; line-height: 1; font-variant-numeric: tabular-nums; }
+.ex-stat-sub { font-size: 0.7rem; color: #6a5e64; margin-top: 4px; }
+.ex-stat.primary { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border: none; }
+.ex-stat.primary .ex-stat-label { color: #fcd9c4; }
+.ex-stat.primary .ex-stat-value { color: #e8834a; }
+.ex-stat.primary .ex-stat-sub { color: #ede0eb; }
+.ex-stat.success { border-color: #6b9a7f; background: #f7fbf8; }
+.ex-stat.success .ex-stat-value { color: #6b9a7f; }
+.ex-stat.danger { border-color: #c4666c; background: #fcf3f4; }
+.ex-stat.danger .ex-stat-value { color: #c4666c; }
+
+/* Fase tracker */
+.ex-fase-tracker { background: #fff; border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; border: 1px solid #e2d9e0; }
+.ex-fase-titel { font-size: 0.66rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #6a5e64; margin-bottom: 14px; }
+.ex-fase-balk { display: flex; gap: 4px; margin-bottom: 16px; }
+.ex-fase-segment { flex: 1; height: 8px; background: #e2d9e0; border-radius: 4px; transition: all 0.3s; }
+.ex-fase-segment.actief { background: #e8834a; }
+.ex-fase-segment.voltooid { background: #6b9a7f; }
+.ex-fases-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+@media (max-width: 900px) { .ex-fases-grid { grid-template-columns: repeat(2, 1fr); } }
+.ex-fase-blok { background: #faf7f2; border: 1.5px solid transparent; border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
+.ex-fase-blok:hover { border-color: #e8834a; }
+.ex-fase-blok.actief { background: #fff7ef; border-color: #e8834a; }
+.ex-fase-blok.voltooid { background: #f7fbf8; border-color: #6b9a7f; }
+.ex-fase-icoon { font-size: 1.4rem; line-height: 1; margin-bottom: 4px; }
+.ex-fase-nr { font-size: 0.62rem; font-weight: 700; color: #6a5e64; }
+.ex-fase-naam { font-size: 0.74rem; font-weight: 700; color: #4a1942; margin-top: 2px; line-height: 1.2; }
+.ex-fase-status { font-size: 0.62rem; color: #6a5e64; margin-top: 2px; }
+.ex-fase-blok.voltooid .ex-fase-status { color: #6b9a7f; font-weight: 700; }
+.ex-fase-blok.actief .ex-fase-status { color: #e8834a; font-weight: 700; }
+
+/* Item rij (boedelbeschrijving) */
+.ex-item-rij { display: grid; grid-template-columns: 1fr 130px 30px; gap: 8px; align-items: center; padding: 8px 12px; background: #fff; border: 1px solid #e2d9e0; border-radius: 8px; margin-bottom: 6px; }
+.ex-item-naam { border: none; outline: none; font-family: inherit; font-size: 0.84rem; font-weight: 600; color: #4a1942; background: transparent; }
+.ex-item-naam:focus { background: #faf7f2; padding: 4px 6px; border-radius: 4px; }
+.ex-item-bedrag { border: 1.5px solid #e2d9e0; background: #fff; border-radius: 6px; padding: 6px 10px; font-family: inherit; font-size: 0.84rem; font-weight: 700; color: #4a1942; text-align: right; font-variant-numeric: tabular-nums; outline: none; }
+.ex-item-bedrag.negatief { color: #c4666c; }
+.ex-item-bedrag:focus { border-color: #e8834a; }
+.ex-item-bedrag::-webkit-outer-spin-button, .ex-item-bedrag::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.ex-item-del { background: transparent; border: none; color: #c4666c; cursor: pointer; padding: 4px 8px; border-radius: 6px; font-size: 0.9rem; }
+.ex-item-del:hover { background: #fcecee; }
+
+.ex-add-btn { background: #fff; border: 2px dashed #e2d9e0; color: #6a5e64; padding: 8px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.78rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 4px; }
+.ex-add-btn:hover { background: #faf7f2; border-color: #e8834a; color: #e8834a; }
+
+.ex-subtotaal { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: #4a1942; color: #fff; border-radius: 8px; margin-top: 8px; font-weight: 700; font-size: 0.86rem; font-variant-numeric: tabular-nums; }
+
+/* Deadline tijdlijn */
+.ex-deadline-rij { background: #fff; border: 1px solid #e2d9e0; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; display: grid; grid-template-columns: 24px 1fr auto auto; gap: 12px; align-items: center; transition: all 0.2s; }
+.ex-deadline-rij.urgent { border-left: 4px solid #c4666c; background: #fcf3f4; }
+.ex-deadline-rij.warning { border-left: 4px solid #d4a017; background: #fef7e8; }
+.ex-deadline-rij.success { border-left: 4px solid #6b9a7f; background: #f7fbf8; }
+.ex-deadline-rij.voltooid { opacity: 0.6; }
+.ex-deadline-rij.voltooid .ex-deadline-naam { text-decoration: line-through; }
+.ex-deadline-check { width: 22px; height: 22px; border: 2px solid #d3c8cd; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.ex-deadline-check.checked { background: #6b9a7f; border-color: #6b9a7f; }
+.ex-deadline-check.checked::after { content: "✓"; color: #fff; font-weight: 800; font-size: 0.86rem; }
+.ex-deadline-naam { font-size: 0.86rem; font-weight: 700; color: #4a1942; }
+.ex-deadline-uitleg { font-size: 0.7rem; color: #6a5e64; margin-top: 2px; line-height: 1.4; }
+.ex-deadline-datum { font-size: 0.76rem; font-weight: 700; color: #4a1942; text-align: right; font-variant-numeric: tabular-nums; }
+.ex-deadline-resterend { font-size: 0.66rem; color: #6a5e64; text-align: right; margin-top: 2px; }
+.ex-deadline-resterend.urgent { color: #c4666c; font-weight: 700; }
+.ex-deadline-resterend.warning { color: #b88010; font-weight: 700; }
+
+.ex-deadline-prio { padding: 3px 10px; border-radius: 10px; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; white-space: nowrap; }
+.ex-prio-hoog { background: #c4666c; color: #fff; }
+.ex-prio-gem { background: #d4a017; color: #fff; }
+.ex-prio-laag { background: #6b9a7f; color: #fff; }
+
+/* Documenten lijst */
+.ex-doc-rij { background: #fff; border: 1px solid #e2d9e0; border-radius: 10px; padding: 12px 14px; margin-bottom: 6px; display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; }
+.ex-doc-rij.verzameld { background: #f7fbf8; border-color: #6b9a7f; }
+.ex-doc-naam { font-size: 0.86rem; font-weight: 600; color: #4a1942; }
+.ex-doc-bron { font-size: 0.7rem; color: #6a5e64; margin-top: 2px; }
+.ex-doc-status { padding: 3px 10px; border-radius: 10px; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; }
+.ex-status-te-doen { background: #faf7f2; color: #6a5e64; }
+.ex-status-bezig { background: #fef7e8; color: #8a6a15; }
+.ex-status-klaar { background: #f0f7ed; color: #2e4030; }
+
+/* Templates */
+.ex-tmpl-card { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.ex-tmpl-kop { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.ex-tmpl-titel { font-size: 0.86rem; font-weight: 700; color: #4a1942; }
+.ex-tmpl-cat { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #e8834a; }
+.ex-tmpl-tekst { background: #faf7f2; border-radius: 8px; padding: 10px 14px; font-size: 0.78rem; color: #2e2129; line-height: 1.6; white-space: pre-wrap; font-family: inherit; max-height: 200px; overflow-y: auto; }
+.ex-tmpl-acties { display: flex; gap: 6px; margin-top: 8px; }
+.ex-tmpl-btn { background: #4a1942; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px; }
+.ex-tmpl-btn:hover { background: #6b2862; }
+.ex-tmpl-btn.secondary { background: #fff; color: #4a1942; border: 1.5px solid #e2d9e0; }
+.ex-tmpl-btn.secondary:hover { border-color: #e8834a; color: #e8834a; }
+.ex-tmpl-btn.copied { background: #6b9a7f; }
+
+/* Erfgenaam card */
+.ex-erfg-card { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; }
+.ex-erfg-kop { display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; align-items: center; margin-bottom: 8px; }
+.ex-erfg-icoon { width: 36px; height: 36px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; }
+.ex-erfg-naam { border: none; outline: none; font-family: inherit; font-size: 0.95rem; font-weight: 700; color: #4a1942; background: transparent; padding: 4px 0; }
+.ex-erfg-naam:focus { background: #faf7f2; padding: 4px 8px; border-radius: 6px; }
+.ex-erfg-detail { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2d9e0; }
+@media (max-width: 700px) { .ex-erfg-detail { grid-template-columns: 1fr; } }
+.ex-erfg-veld-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #6a5e64; margin-bottom: 2px; }
+.ex-erfg-status { padding: 3px 8px; border-radius: 8px; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.5px; }
+.ex-status-onbekend { background: #faf7f2; color: #6a5e64; }
+.ex-status-akkoord { background: #f0f7ed; color: #2e4030; }
+.ex-status-beneficiair { background: #fef7e8; color: #8a6a15; }
+.ex-status-verworpen { background: #fcecee; color: #8a3a40; }
+
+/* Info box */
+.ex-info { background: #faf0e7; border-left: 4px solid #e8834a; border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-size: 0.78rem; color: #4a4046; line-height: 1.6; }
+.ex-info strong { color: #4a1942; font-weight: 700; }
+.ex-info.warning { background: #fef7e8; border-color: #d4a017; color: #5a4a10; }
+.ex-info.success { background: #f0f7ed; border-color: #6b9a7f; color: #2e4030; }
+
+/* Rekening verantwoording */
+.ex-rek-rij { display: grid; grid-template-columns: 1fr 140px; gap: 12px; padding: 8px 0; border-bottom: 1px dashed #e2d9e0; align-items: center; }
+.ex-rek-rij:last-child { border-bottom: none; }
+.ex-rek-rij.totaal { border-top: 2px solid #4a1942; border-bottom: none; padding-top: 12px; font-weight: 800; margin-top: 6px; }
+.ex-rek-rij.totaal .ex-rek-naam { color: #4a1942; }
+.ex-rek-naam { font-size: 0.84rem; color: #4a4046; }
+.ex-rek-waarde { font-size: 0.92rem; font-weight: 700; color: #4a1942; text-align: right; font-variant-numeric: tabular-nums; }
+.ex-rek-waarde.in { color: #6b9a7f; }
+.ex-rek-waarde.uit { color: #c4666c; }
+
+/* Footer */
+.ex-footer { padding: 14px 30px; border-top: 1px solid #f0eae7; background: #faf7f2; font-size: 0.72rem; color: #6a5e64; line-height: 1.5; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.ex-footer-link { color: #4a1942; text-decoration: none; font-weight: 600; border-bottom: 2px solid #e8834a; }
+.ex-footer-link:hover { color: #e8834a; }
+.ex-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.ex-action-btn { background: #4a1942; color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.ex-action-btn:hover { background: #6b2862; transform: translateY(-1px); }
+.ex-action-btn.secondary { background: #fff; color: #4a1942; border: 1.5px solid #e2d9e0; }
+.ex-action-btn.secondary:hover { border-color: #e8834a; color: #e8834a; }
+.ex-action-btn.success { background: #6b9a7f; }
+.ex-action-btn.success:hover { background: #588469; }
+
+/* Modal */
+.ex-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(46,15,41,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+.ex-modal-overlay.zichtbaar { display: flex; }
+.ex-modal { background: #fff; border-radius: 16px; max-width: 520px; width: 100%; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; }
+.ex-modal-header { padding: 18px 22px; border-bottom: 1px solid #f0eae7; display: flex; justify-content: space-between; align-items: center; }
+.ex-modal-titel { font-size: 1rem; font-weight: 700; color: #4a1942; }
+.ex-modal-close { background: none; border: none; color: #6a5e64; cursor: pointer; font-size: 1.4rem; padding: 4px 8px; border-radius: 6px; }
+.ex-modal-close:hover { background: #faf7f2; }
+.ex-modal-body { padding: 18px 22px; overflow-y: auto; }
+.ex-modal-footer { padding: 14px 22px; border-top: 1px solid #f0eae7; background: #faf7f2; display: flex; gap: 8px; justify-content: flex-end; }
+.ex-modal-input { width: 100%; border: 1.5px solid #e2d9e0; border-radius: 10px; padding: 10px 14px; font-family: inherit; font-size: 0.9rem; color: #4a1942; outline: none; }
+.ex-modal-input:focus { border-color: #e8834a; }
+.ex-modal-label { font-size: 0.74rem; font-weight: 600; color: #6a5e64; margin-bottom: 6px; display: block; }
+.ex-scenario-item { background: #faf7f2; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.ex-scenario-item-info { flex: 1; }
+.ex-scenario-item-naam { font-size: 0.86rem; font-weight: 700; color: #4a1942; }
+.ex-scenario-item-datum { font-size: 0.66rem; color: #6a5e64; }
+.ex-scenario-item-btn { background: #fff; border: 1px solid #e2d9e0; color: #4a1942; padding: 6px 12px; border-radius: 8px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; }
+.ex-scenario-item-btn:hover { background: #e8834a; border-color: #e8834a; color: #fff; }
+.ex-scenario-item-btn.del { color: #c4666c; }
+.ex-modal-leeg { text-align: center; padding: 30px 20px; color: #6a5e64; font-size: 0.86rem; }
+
+@media print {
+  @page { margin: 1.5cm; }
+  body { background: #fff; padding: 0; }
+  .ex-app { box-shadow: none; border-radius: 0; }
+  .ex-tabs, .ex-action-btn, .ex-modal-overlay, .ex-tmpl-acties, .ex-add-btn, .ex-item-del, .ex-deadline-check { display: none !important; }
+  .ex-pane { display: block !important; page-break-before: always; }
+  .ex-pane:first-of-type { page-break-before: avoid; }
+  .ex-print-cover { display: block !important; padding: 60px 40px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; text-align: center; page-break-after: always; }
+  .ex-print-cover h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 16px; }
+  .ex-print-cover .lead { font-size: 1rem; color: #fcd9c4; margin-bottom: 30px; }
+  .ex-print-cover .datum { font-size: 0.86rem; color: #ede0eb; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); }
+  .ex-erfg-card, .ex-card, .ex-deadline-rij, .ex-doc-rij, .ex-tmpl-card { page-break-inside: avoid; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  .ex-header { padding: 18px 20px; }
+  .ex-tabs { padding: 0 10px; }
+  .ex-tab { padding: 12px 10px; font-size: 0.72rem; }
+  .ex-pane { padding: 18px 16px; }
+  .ex-deadline-rij { grid-template-columns: 24px 1fr; }
+  .ex-deadline-datum, .ex-deadline-prio { grid-column: 2; }
+}
+</style>
+</head>
+<body>
+
+<div class="ex-print-cover">
+  <h1>Executeur Dossier</h1>
+  <div class="lead">Volledige documentatie nalatenschap­afwikkeling</div>
+  <div class="datum" id="ex-print-datum"></div>
+</div>
+
+<div class="ex-app">
+
+  <header class="ex-header">
+    <div class="ex-header-content">
+      <div>
+        <h1 class="ex-titel">Executeur Dashboard PRO</h1>
+        <div class="ex-subtitel">2026 &middot; 7 modi &middot; Boedelbeschrijving &middot; Deadlines &middot; Communicatie­templates &middot; Rekening en verantwoording</div>
+      </div>
+      <div class="ex-badge"><span class="ex-badge-dot"></span> Volledig dossier</div>
+    </div>
+  </header>
+
+  <nav class="ex-tabs" id="ex-tabs">
+    <button class="ex-tab active" data-tab="dashboard"><span class="ex-tab-icoon">📊</span> Dashboard</button>
+    <button class="ex-tab" data-tab="boedel"><span class="ex-tab-icoon">📂</span> Boedelbeschrijving</button>
+    <button class="ex-tab" data-tab="deadlines"><span class="ex-tab-icoon">📅</span> Deadlines</button>
+    <button class="ex-tab" data-tab="documenten"><span class="ex-tab-icoon">📄</span> Documenten</button>
+    <button class="ex-tab" data-tab="communicatie"><span class="ex-tab-icoon">✉️</span> Communicatie</button>
+    <button class="ex-tab" data-tab="erfgenamen"><span class="ex-tab-icoon">👥</span> Erfgenamen</button>
+    <button class="ex-tab" data-tab="rekening"><span class="ex-tab-icoon">🧮</span> Rekening & verantwoording</button>
+  </nav>
+
+  <!-- ========== TAB 1: DASHBOARD ========== -->
+  <div class="ex-pane active" data-pane="dashboard">
+
+    <div class="ex-card">
+      <div class="ex-card-kop">
+        <div class="ex-card-titel"><div class="ex-card-titel-icoon">i</div> Basisgegevens</div>
+      </div>
+      <div class="ex-grid-3">
+        <div>
+          <div class="ex-stap-label">Overledene</div>
+          <input type="text" class="ex-input full" id="ex-overledene-naam" placeholder="Volledige naam" value="">
+        </div>
+        <div>
+          <div class="ex-stap-label">Overlijdens­datum</div>
+          <input type="date" class="ex-input-date full" id="ex-overlijdens-datum">
+        </div>
+        <div>
+          <div class="ex-stap-label">Datum aanvaarding executeur</div>
+          <input type="date" class="ex-input-date full" id="ex-aanvaardings-datum">
+        </div>
+      </div>
+      <div class="ex-grid-2" style="margin-top:14px;">
+        <div>
+          <div class="ex-stap-label">Naam executeur</div>
+          <input type="text" class="ex-input full" id="ex-executeur-naam" placeholder="Eigen naam" value="">
+        </div>
+        <div>
+          <div class="ex-stap-label">Verklaring van erfrecht aangevraagd?</div>
+          <select class="ex-input full" id="ex-vve-status">
+            <option value="nee">Nog niet aangevraagd</option>
+            <option value="aangevraagd">Aangevraagd bij notaris</option>
+            <option value="ontvangen">Ontvangen</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-fase-tracker">
+      <div class="ex-fase-titel">Voortgang fases</div>
+      <div class="ex-fase-balk" id="ex-fase-balk"></div>
+      <div class="ex-fases-grid" id="ex-fases-grid"></div>
+    </div>
+
+    <div class="ex-grid-4">
+      <div class="ex-stat primary" id="ex-stat-netto"><div class="ex-stat-label">Netto vermogen</div><div class="ex-stat-value" id="ex-dashboard-netto">€0</div><div class="ex-stat-sub" id="ex-dashboard-netto-sub">bezittingen − schulden</div></div>
+      <div class="ex-stat" id="ex-stat-bezit"><div class="ex-stat-label">Totaal bezittingen</div><div class="ex-stat-value" id="ex-dashboard-bezit">€0</div><div class="ex-stat-sub" id="ex-dashboard-bezit-aantal">0 items</div></div>
+      <div class="ex-stat danger" id="ex-stat-schuld"><div class="ex-stat-label">Totaal schulden</div><div class="ex-stat-value" id="ex-dashboard-schuld">€0</div><div class="ex-stat-sub" id="ex-dashboard-schuld-aantal">0 items</div></div>
+      <div class="ex-stat" id="ex-stat-erfg"><div class="ex-stat-label">Erfgenamen</div><div class="ex-stat-value" id="ex-dashboard-erfg">0</div><div class="ex-stat-sub" id="ex-dashboard-erfg-sub">0 akkoord</div></div>
+    </div>
+
+    <div class="ex-grid-2" style="margin-top:14px;">
+      <div class="ex-card">
+        <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">⏰</div> Volgende deadlines</div></div>
+        <div id="ex-dashboard-deadlines"></div>
+      </div>
+      <div class="ex-card">
+        <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">📄</div> Documenten voortgang</div></div>
+        <div id="ex-dashboard-docs"></div>
+      </div>
+    </div>
+
+    <div class="ex-info">
+      <strong>Het executeurschap in het kort:</strong> als executeur ben je verantwoordelijk voor de afwikkeling van de nalatenschap. Belangrijkste taken: boedelbeschrijving maken, schulden voldoen, erfbelasting aangeven, verdelen aan erfgenamen, en rekening en verantwoording afleggen. Je hebt recht op beloning (standaard 1% van het vermogen op overlijdens­dag, tenzij testament anders bepaalt). Termijn is wettelijk niet vastgesteld maar binnen 1-2 jaar is gebruikelijk.
+    </div>
+  </div>
+
+  <!-- ========== TAB 2: BOEDELBESCHRIJVING ========== -->
+  <div class="ex-pane" data-pane="boedel">
+
+    <div class="ex-info">
+      <strong>Boedelbeschrijving</strong> is een officieel document met alle bezittingen en schulden van de overledene op de dag van overlijden. Het vormt de basis voor de aangifte erfbelasting en de verdeling onder erfgenamen.
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">+</div> Bezittingen</div><div class="ex-card-sub" id="ex-bezit-totaal">€0</div></div>
+
+      <div class="ex-stap-label" style="margin-top:14px;">🏠 Onroerend goed</div>
+      <div id="ex-bezit-woning"></div>
+      <button class="ex-add-btn" data-add="woning">+ Onroerend goed</button>
+
+      <div class="ex-stap-label" style="margin-top:14px;">🚗 Voertuigen</div>
+      <div id="ex-bezit-voertuig"></div>
+      <button class="ex-add-btn" data-add="voertuig">+ Voertuig</button>
+
+      <div class="ex-stap-label" style="margin-top:14px;">🏦 Bankrekeningen</div>
+      <div id="ex-bezit-bank"></div>
+      <button class="ex-add-btn" data-add="bank">+ Bankrekening</button>
+
+      <div class="ex-stap-label" style="margin-top:14px;">📈 Beleggingen</div>
+      <div id="ex-bezit-beleg"></div>
+      <button class="ex-add-btn" data-add="beleg">+ Beleggingsrekening</button>
+
+      <div class="ex-stap-label" style="margin-top:14px;">🛋️ Inboedel en persoonlijke bezittingen</div>
+      <div id="ex-bezit-inboedel"></div>
+      <button class="ex-add-btn" data-add="inboedel">+ Inboedel</button>
+
+      <div class="ex-stap-label" style="margin-top:14px;">📦 Overige bezittingen</div>
+      <div id="ex-bezit-overig"></div>
+      <button class="ex-add-btn" data-add="overig">+ Overig</button>
+
+      <div class="ex-subtotaal"><span>Subtotaal bezittingen</span><span id="ex-bezit-subtotaal">€0</span></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">−</div> Schulden en kosten</div><div class="ex-card-sub" id="ex-schuld-totaal">€0</div></div>
+
+      <div class="ex-stap-label" style="margin-top:6px;">🏦 Hypotheken en leningen</div>
+      <div id="ex-schuld-lening"></div>
+      <button class="ex-add-btn" data-add="lening">+ Lening</button>
+
+      <div class="ex-stap-label" style="margin-top:14px;">💳 Openstaande rekeningen</div>
+      <div id="ex-schuld-rekening"></div>
+      <button class="ex-add-btn" data-add="rekening">+ Rekening</button>
+
+      <div class="ex-stap-label" style="margin-top:14px;">⚱️ Uitvaartkosten</div>
+      <div id="ex-schuld-uitvaart"></div>
+      <button class="ex-add-btn" data-add="uitvaart">+ Uitvaartkosten</button>
+
+      <div class="ex-stap-label" style="margin-top:14px;">🏛️ Belastingschulden</div>
+      <div id="ex-schuld-belasting"></div>
+      <button class="ex-add-btn" data-add="belasting">+ Belastingschuld</button>
+
+      <div class="ex-subtotaal"><span>Subtotaal schulden</span><span id="ex-schuld-subtotaal">€0</span></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">=</div> Netto nalatenschap</div></div>
+      <div class="ex-grid-3">
+        <div class="ex-stat"><div class="ex-stat-label">Totaal bezittingen</div><div class="ex-stat-value" id="ex-eind-bezit">€0</div></div>
+        <div class="ex-stat danger"><div class="ex-stat-label">Totaal schulden</div><div class="ex-stat-value" id="ex-eind-schuld">€0</div></div>
+        <div class="ex-stat success"><div class="ex-stat-label">Netto te verdelen</div><div class="ex-stat-value" id="ex-eind-netto">€0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 3: DEADLINES ========== -->
+  <div class="ex-pane" data-pane="deadlines">
+
+    <div class="ex-info warning">
+      <strong>Belangrijk:</strong> deadlines worden automatisch berekend op basis van de overlijdens­datum die je hebt ingevuld op het Dashboard. Vul die eerst in. Klik op het vinkje om een taak als voltooid te markeren.
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">📅</div> Alle deadlines en taken</div><div class="ex-card-sub" id="ex-deadline-voortgang">0 / 0 voltooid</div></div>
+      <div id="ex-deadlines-lijst"></div>
+    </div>
+
+    <div class="ex-info">
+      <strong>Welke deadlines zijn wettelijk?</strong> Echt wettelijk verplicht zijn: aangifte erfbelasting (uiterlijk 20 maanden na overlijden in 2026), en de aanvaardings­beslissing voor erfgenamen (3 maanden adviestermijn). De andere deadlines zijn richtlijnen of best practices voor een soepele afwikkeling.
+    </div>
+  </div>
+
+  <!-- ========== TAB 4: DOCUMENTEN ========== -->
+  <div class="ex-pane" data-pane="documenten">
+
+    <div class="ex-info">
+      <strong>Document checklist:</strong> klik op het vinkje als je een document hebt verzameld. Met al deze documenten kun je vrijwel alle afwikkelings­handelingen verrichten.
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">📋</div> Persoonlijke documenten</div></div>
+      <div id="ex-docs-persoonlijk"></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">⚖️</div> Juridische documenten</div></div>
+      <div id="ex-docs-juridisch"></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">💰</div> Financiële documenten</div></div>
+      <div id="ex-docs-financieel"></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">🛡️</div> Verzekeringen</div></div>
+      <div id="ex-docs-verzekering"></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">🏠</div> Woning en wonen</div></div>
+      <div id="ex-docs-woning"></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">🛍️</div> Abonnementen en contracten</div></div>
+      <div id="ex-docs-abonnement"></div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 5: COMMUNICATIE ========== -->
+  <div class="ex-pane" data-pane="communicatie">
+
+    <div class="ex-info">
+      <strong>Communicatie­templates:</strong> klik op "Kopiëren" om de tekst naar je klembord te kopiëren. Pas de tekst aan naar de specifieke situatie en stuur per e-mail of brief.
+    </div>
+
+    <div id="ex-templates"></div>
+  </div>
+
+  <!-- ========== TAB 6: ERFGENAMEN ========== -->
+  <div class="ex-pane" data-pane="erfgenamen">
+
+    <div class="ex-info">
+      <strong>Erfgenamen­beheer:</strong> voor elke erfgenaam houd je status bij van aanvaarding en uitkering. Erfgenamen hebben 3 maanden om te beslissen (kan via boedelnotaris worden gevraagd).
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">👥</div> Erfgenamen</div><div class="ex-card-sub" id="ex-erfg-aantal">0 erfgenamen</div></div>
+      <div id="ex-erfgenamen-lijst"></div>
+      <button class="ex-add-btn" id="ex-add-erfgenaam">+ Erfgenaam toevoegen</button>
+    </div>
+  </div>
+
+  <!-- ========== TAB 7: REKENING & VERANTWOORDING ========== -->
+  <div class="ex-pane" data-pane="rekening">
+
+    <div class="ex-info">
+      <strong>Rekening en verantwoording</strong> (BW Boek 4 art. 151) is je eindverslag aan de erfgenamen. Hier laat je zien welke handelingen je hebt verricht, wat is uitgegeven en ontvangen, en hoe het saldo onder erfgenamen wordt verdeeld.
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">📥</div> Inkomsten tijdens executele</div></div>
+      <div id="ex-rek-inkomsten"></div>
+      <button class="ex-add-btn" data-add="rek-in">+ Inkomstenpost</button>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">📤</div> Uitgaven tijdens executele</div></div>
+      <div id="ex-rek-uitgaven"></div>
+      <button class="ex-add-btn" data-add="rek-uit">+ Uitgavenpost</button>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">🧮</div> Eindsaldo en verdeling</div></div>
+      <div class="ex-rek-rij"><span class="ex-rek-naam">Bezittingen op overlijdens­dag</span><span class="ex-rek-waarde" id="ex-rek-start-bezit">€0</span></div>
+      <div class="ex-rek-rij"><span class="ex-rek-naam">Schulden op overlijdens­dag</span><span class="ex-rek-waarde uit" id="ex-rek-start-schuld">€0</span></div>
+      <div class="ex-rek-rij"><span class="ex-rek-naam">Inkomsten tijdens executele</span><span class="ex-rek-waarde in" id="ex-rek-tot-in">€0</span></div>
+      <div class="ex-rek-rij"><span class="ex-rek-naam">Uitgaven tijdens executele</span><span class="ex-rek-waarde uit" id="ex-rek-tot-uit">€0</span></div>
+      <div class="ex-rek-rij totaal"><span class="ex-rek-naam">Eindsaldo te verdelen</span><span class="ex-rek-waarde" id="ex-rek-eind">€0</span></div>
+      <div class="ex-rek-rij">
+        <span class="ex-rek-naam">Executeursbeloning (standaard 1% van vermogen overlijdens­dag)</span>
+        <span class="ex-rek-waarde uit" id="ex-rek-beloning">€0</span>
+      </div>
+      <div class="ex-rek-rij totaal"><span class="ex-rek-naam">Netto te verdelen aan erfgenamen</span><span class="ex-rek-waarde in" id="ex-rek-netto-verdelen">€0</span></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-card-kop"><div class="ex-card-titel"><div class="ex-card-titel-icoon">📊</div> Verdeling per erfgenaam</div></div>
+      <div id="ex-rek-verdeling"></div>
+    </div>
+
+    <div class="ex-info success">
+      <strong>Eindafronding:</strong> als alle erfgenamen tekenen voor akkoord en alle taken zijn voltooid, eindigt jouw functie als executeur. Bewaar dit document samen met de boedelbeschrijving en alle bewijsstukken voor minimaal 5 jaar.
+    </div>
+  </div>
+
+  <footer class="ex-footer">
+    <span>Voor executeurs van Nederlandse nalatenschappen 2026. <a href="https://uitvaart-platform.nl/nalatenschap-erfrecht" class="ex-footer-link" target="_top">Meer info</a></span>
+    <div class="ex-actions">
+      <button class="ex-action-btn secondary" id="ex-load-btn">📂 Laden</button>
+      <button class="ex-action-btn success" id="ex-save-btn">💾 Opslaan</button>
+      <button class="ex-action-btn secondary" onclick="window.print()">🖨️ Volledig dossier (PDF)</button>
+      <button class="ex-action-btn" id="ex-reset-btn">🔄 Reset</button>
+    </div>
+  </footer>
+
+</div>
+
+<div class="ex-modal-overlay" id="ex-modal-save">
+  <div class="ex-modal">
+    <div class="ex-modal-header"><div class="ex-modal-titel">💾 Dossier opslaan</div><button class="ex-modal-close" data-close>✕</button></div>
+    <div class="ex-modal-body">
+      <label class="ex-modal-label">Naam voor dit dossier</label>
+      <input type="text" class="ex-modal-input" id="ex-save-naam" placeholder="bijv. 'Dossier de Vries'" maxlength="60">
+    </div>
+    <div class="ex-modal-footer">
+      <button class="ex-action-btn secondary" data-close>Annuleren</button>
+      <button class="ex-action-btn success" id="ex-save-confirm">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<div class="ex-modal-overlay" id="ex-modal-load">
+  <div class="ex-modal">
+    <div class="ex-modal-header"><div class="ex-modal-titel">📂 Dossier laden</div><button class="ex-modal-close" data-close>✕</button></div>
+    <div class="ex-modal-body"><div id="ex-load-lijst"></div></div>
+    <div class="ex-modal-footer"><button class="ex-action-btn secondary" data-close>Sluiten</button></div>
+  </div>
+</div>
+
+<script>
+(function() {
+'use strict';
+
+// ======== CONSTANTS ========
+var FASES = [
+  { id: 'acceptatie', icoon: '✅', naam: 'Acceptatie' },
+  { id: 'inventarisatie', icoon: '🔍', naam: 'Inventarisatie' },
+  { id: 'boedel', icoon: '📂', naam: 'Boedelbeschrijving' },
+  { id: 'schulden', icoon: '💳', naam: 'Schulden voldoen' },
+  { id: 'belasting', icoon: '🏛️', naam: 'Aangifte belasting' },
+  { id: 'verdeling', icoon: '⚖️', naam: 'Verdeling' },
+  { id: 'rekening', icoon: '🧮', naam: 'R&V opstellen' },
+  { id: 'afsluiting', icoon: '🏁', naam: 'Afsluiting' }
+];
+
+var DEADLINES_DEF = [
+  { id: 'aangifte-overlijden', dagen: 5, naam: 'Aangifte van overlijden bij gemeente', uitleg: 'Door uitvaartonderneming of familie, binnen 5 dagen.', prio: 'hoog' },
+  { id: 'akte-overlijden', dagen: 7, naam: 'Akte van overlijden ophalen', uitleg: 'Bij burgerlijke stand woongemeente. Meerdere exemplaren handig.', prio: 'hoog' },
+  { id: 'banken-melden', dagen: 14, naam: 'Banken op de hoogte brengen', uitleg: 'Rekeningen worden geblokkeerd. Voorkomt onbevoegde transacties.', prio: 'hoog' },
+  { id: 'verzekeringen-melden', dagen: 21, naam: 'Verzekeringen melden', uitleg: 'Levensverzekering, uitvaartverzekering, andere polissen.', prio: 'hoog' },
+  { id: 'vve-aanvragen', dagen: 30, naam: 'Verklaring van erfrecht aanvragen', uitleg: 'Bij notaris. Duurt 4-8 weken. Vanaf €300.', prio: 'hoog' },
+  { id: 'uitvaart-betaald', dagen: 60, naam: 'Uitvaartkosten betalen', uitleg: 'Eerste schuld die uit nalatenschap wordt voldaan.', prio: 'gem' },
+  { id: 'aanvaarding-erfgenamen', dagen: 90, naam: 'Aanvaardingsbeslissing erfgenamen', uitleg: 'Erfgenamen kunnen aanvaarden / beneficiair / verwerpen. Adviestermijn 3 maanden.', prio: 'hoog' },
+  { id: 'opzeggen-abonnementen', dagen: 120, naam: 'Abonnementen opzeggen', uitleg: 'Telefoon, internet, streaming, kranten, sportclubs etc.', prio: 'gem' },
+  { id: 'rouwbericht-verzonden', dagen: 60, naam: 'Rouwbericht aan zakelijke relaties', uitleg: 'Werkgever, klanten, opdrachtgevers, leden vereniging.', prio: 'laag' },
+  { id: 'overschrijven-woning', dagen: 180, naam: 'Woning overschrijven of verkopen', uitleg: 'Bij Kadaster. Notarisakte nodig. Kan ook later.', prio: 'gem' },
+  { id: 'overschrijven-voertuig', dagen: 180, naam: 'Voertuig overschrijven', uitleg: 'RDW. Kentekenbewijs en verklaring van erfrecht.', prio: 'gem' },
+  { id: 'aangifte-ib', dagen: 365, naam: 'Aangifte inkomstenbelasting overledene', uitleg: 'F-formulier voor jaar van overlijden. Door erfgenamen of executeur.', prio: 'hoog' },
+  { id: 'aangifte-erfbelasting', dagen: 600, naam: 'Aangifte erfbelasting indienen', uitleg: 'Uiterlijk 20 maanden na overlijden (was 8). Verlengd in 2026.', prio: 'hoog' },
+  { id: 'verdeling-vermogen', dagen: 365, naam: 'Vermogen verdelen onder erfgenamen', uitleg: 'Pas na voldoen van alle schulden en betalen erfbelasting.', prio: 'hoog' },
+  { id: 'rekening-verantwoording', dagen: 700, naam: 'Rekening en verantwoording afleggen', uitleg: 'Aan erfgenamen, conform BW Boek 4 art. 151.', prio: 'hoog' },
+  { id: 'afsluiten-executele', dagen: 730, naam: 'Executele afsluiten', uitleg: 'Na akkoord erfgenamen. Bewaar dossier minimaal 5 jaar.', prio: 'gem' }
+];
+
+var DOCS_DEF = {
+  persoonlijk: [
+    { id: 'akte-overlijden', naam: 'Akte van overlijden', bron: 'Burgerlijke stand woongemeente' },
+    { id: 'paspoort', naam: 'Paspoort of ID-kaart overledene', bron: 'In bezit overledene, eventueel inleveren gemeente' },
+    { id: 'rijbewijs', naam: 'Rijbewijs', bron: 'Inleveren bij RDW' },
+    { id: 'akte-geboorte', naam: 'Geboorteakte', bron: 'Burgerlijke stand geboorteplaats' },
+    { id: 'akte-huwelijk', naam: 'Huwelijks- of partnerschapsakte', bron: 'Burgerlijke stand huwelijksgemeente' },
+    { id: 'akte-scheiding', naam: 'Scheidingsakte (indien van toepassing)', bron: 'Burgerlijke stand of advocaat' },
+    { id: 'akte-erkenning', naam: 'Erkenningsaktes kinderen', bron: 'Burgerlijke stand' }
+  ],
+  juridisch: [
+    { id: 'testament', naam: 'Testament', bron: 'Centraal Testamentenregister (notaris kan opvragen)' },
+    { id: 'codicil', naam: 'Codicil (eigenhandig testament)', bron: 'Tussen persoonlijke papieren overledene' },
+    { id: 'levenstestament', naam: 'Levenstestament', bron: 'Centraal Levenstestamentenregister' },
+    { id: 'huwelijkse-voorwaarden', naam: 'Huwelijkse voorwaarden', bron: 'Notaris waar opgemaakt' },
+    { id: 'samenlevingscontract', naam: 'Samenlevingscontract', bron: 'Notaris of bij persoonlijke papieren' },
+    { id: 'verklaring-erfrecht', naam: 'Verklaring van erfrecht', bron: 'Aan te vragen bij boedelnotaris' },
+    { id: 'volmacht', naam: 'Eventuele volmachten', bron: 'Bij notaris of in persoonlijke papieren' }
+  ],
+  financieel: [
+    { id: 'bankafschriften', naam: 'Bankafschriften laatste 12 maanden', bron: 'Bank via internetbankieren of papier' },
+    { id: 'rekening-overzicht', naam: 'Overzicht alle bankrekeningen', bron: 'Via banken, eventueel via BKR' },
+    { id: 'beleggingsoverzicht', naam: 'Beleggings­overzicht', bron: 'Broker, bank, pensioen­uitvoerder' },
+    { id: 'pensioenoverzicht', naam: 'Pensioenoverzichten alle fondsen', bron: 'mijnpensioenoverzicht.nl' },
+    { id: 'jaaropgaven', naam: 'Jaaropgaven loon/uitkering', bron: 'Werkgever, UWV, SVB' },
+    { id: 'belastingaangiftes', naam: 'IB-aangiftes laatste 5 jaar', bron: 'MijnBelastingdienst of administratie' },
+    { id: 'schenkingsoverzicht', naam: 'Overzicht gedane schenkingen 5 jaar', bron: 'Administratie overledene of begunstigden' }
+  ],
+  verzekering: [
+    { id: 'levensverzekering', naam: 'Levensverzekering polis(sen)', bron: 'Verzekeraar of administratie' },
+    { id: 'uitvaartverzekering', naam: 'Uitvaartverzekering polis', bron: 'DELA, Monuta, Yarden, Ardanta etc.' },
+    { id: 'overlijdensrisicoverzekering', naam: 'Overlijdensrisicoverzekering', bron: 'Vaak gekoppeld aan hypotheek' },
+    { id: 'opstal-inboedel', naam: 'Opstal- en inboedelverzekering', bron: 'Verzekeraar' },
+    { id: 'aansprakelijkheid', naam: 'Aansprakelijkheids­verzekering', bron: 'Verzekeraar' },
+    { id: 'auto-verzekering', naam: 'Autoverzekering polis', bron: 'Verzekeraar, eventueel opzeggen' },
+    { id: 'reisverzekering', naam: 'Reisverzekering doorlopend', bron: 'Verzekeraar' }
+  ],
+  woning: [
+    { id: 'eigendomsbewijs', naam: 'Eigendomsbewijs woning', bron: 'Notarisakte of Kadaster' },
+    { id: 'hypotheekakte', naam: 'Hypotheekakte', bron: 'Notaris of bank' },
+    { id: 'huurcontract', naam: 'Huurcontract (indien huurder)', bron: 'Verhuurder' },
+    { id: 'woz-beschikking', naam: 'WOZ-beschikking', bron: 'Gemeente of MijnOverheid' },
+    { id: 'energiecontract', naam: 'Energiecontract', bron: 'Energieleverancier' },
+    { id: 'water', naam: 'Watercontract', bron: 'Waterleidingbedrijf' },
+    { id: 'gemeentelijke-belastingen', naam: 'Gemeentelijke belastingen', bron: 'Gemeente' }
+  ],
+  abonnement: [
+    { id: 'telefoon', naam: 'Mobiele telefoon abonnement', bron: 'Provider' },
+    { id: 'internet', naam: 'Internet en TV', bron: 'Provider' },
+    { id: 'streaming', naam: 'Streaming­diensten (Netflix, Spotify, etc.)', bron: 'Per dienst, vaak via e-mail account' },
+    { id: 'kranten', naam: 'Kranten- en tijdschrift­abonnementen', bron: 'Uitgever' },
+    { id: 'lidmaatschappen', naam: 'Verenigingen en clubs', bron: 'Per club' },
+    { id: 'goede-doelen', naam: 'Goede doelen­machtigingen', bron: 'Per organisatie' },
+    { id: 'andere', naam: 'Andere automatische incassos', bron: 'Bankafschriften nakijken' }
+  ]
+};
+
+var TEMPLATES_DEF = [
+  {
+    cat: 'Bank',
+    titel: 'Melding overlijden aan bank',
+    tekst: 'Geachte heer/mevrouw,\n\nHierbij meld ik u het overlijden van [naam overledene], geboren op [geboortedatum], overleden op [overlijdensdatum]. Bijgevoegd treft u een kopie van de akte van overlijden aan.\n\nDe overledene had bij uw bank de volgende rekeningen:\n- [rekening 1]\n- [rekening 2]\n\nIk ben benoemd tot executeur in het testament en zal de nalatenschap afwikkelen. De verklaring van erfrecht volgt na ontvangst van de notaris.\n\nIk verzoek u:\n- Lopende automatische incassos en periodieke overboekingen op te schorten\n- Een overzicht van alle rekeningen en saldi op overlijdens­datum naar mij toe te zenden\n- Geen wijzigingen of overboekingen toe te staan zonder mijn toestemming\n\nMet vriendelijke groet,\n\n[naam executeur]\n[adres]\n[telefoon]\n[e-mail]'
+  },
+  {
+    cat: 'Verzekeraar',
+    titel: 'Claim levensverzekering / uitvaartverzekering',
+    tekst: 'Geachte heer/mevrouw,\n\nHierbij meld ik u het overlijden van [naam overledene], geboren op [geboortedatum], overleden op [overlijdensdatum]. Polisnummer: [polisnummer].\n\nBijgevoegd vindt u:\n- Kopie akte van overlijden\n- Kopie polisblad\n- Verklaring van erfrecht (volgt zsm)\n\nIk verzoek u de uitkering uit hoofde van bovengenoemde polis te verwerken en deze over te maken naar:\nBank: [bank]\nRekening­nummer: [IBAN]\nTen name van: [tenaamstelling]\n\nIndien u aanvullende documenten nodig heeft, hoor ik dat graag.\n\nMet vriendelijke groet,\n\n[naam executeur]\nExecuteur testamentair'
+  },
+  {
+    cat: 'Belastingdienst',
+    titel: 'Melding overlijden Belastingdienst',
+    tekst: 'Geachte heer/mevrouw,\n\nHierbij meld ik u het overlijden van:\nNaam: [naam overledene]\nBSN: [BSN]\nOverlijdens­datum: [datum]\n\nIk ben benoemd tot executeur en zal de aangifte erfbelasting en de inkomstenbelasting over het overlijdensjaar verzorgen. Ik verzoek u de eventuele lopende toeslagen en voorlopige aanslagen aan te passen of stop te zetten.\n\nGraag verneem ik welke documenten u aanvullend nodig heeft en hoe u contact met mij wenst.\n\nMet vriendelijke groet,\n\n[naam executeur]\n[adres]'
+  },
+  {
+    cat: 'UWV / SVB',
+    titel: 'Melding overlijden UWV/SVB',
+    tekst: 'Geachte heer/mevrouw,\n\nHierbij meld ik u het overlijden van:\nNaam: [naam overledene]\nBSN: [BSN]\nOverlijdens­datum: [datum]\n\nIk verzoek u alle lopende uitkeringen (zoals AOW, ANW, WIA, WW) per direct stop te zetten en de eindafrekening naar mij toe te zenden. Een eventueel recht op overlijdensuitkering of nabestaanden­uitkering verneem ik graag.\n\nBijgevoegd: kopie akte van overlijden.\n\nMet vriendelijke groet,\n\n[naam executeur]'
+  },
+  {
+    cat: 'Pensioenfonds',
+    titel: 'Melding overlijden pensioenfonds',
+    tekst: 'Geachte heer/mevrouw,\n\nHierbij meld ik u het overlijden van:\nNaam: [naam overledene]\nDeelnemersnummer/BSN: [nummer]\nOverlijdens­datum: [datum]\n\nIk verzoek u het lopende ouderdomspensioen per direct stop te zetten. Voor zover van toepassing verzoek ik u het partnerpensioen aan de nabestaande partner uit te keren.\n\nGegevens nabestaande partner:\nNaam: [naam]\nBSN: [BSN]\nGeboortedatum: [datum]\nIBAN: [rekening]\n\nIk verneem graag welke aanvullende documenten u nodig heeft.\n\nMet vriendelijke groet,\n\n[naam executeur]'
+  },
+  {
+    cat: 'Woningcorporatie',
+    titel: 'Opzegging huurcontract na overlijden',
+    tekst: 'Geachte heer/mevrouw,\n\nHierbij zeg ik namens de nabestaanden het huurcontract op van:\nNaam huurder: [naam overledene]\nAdres: [adres]\nOverlijdens­datum: [datum]\n\nConform artikel 7:268 BW eindigt het huurcontract van rechtswege twee maanden na overlijden, tenzij een achtergebleven huurder de huur wenst voort te zetten (zie onderstaande informatie).\n\nWoningvoortzetting: [JA/NEE — naam medehuurder/medebewoner]\n\nIk verzoek u contact met mij op te nemen voor de eindinspectie en de oplevering van het gehuurde.\n\nMet vriendelijke groet,\n\n[naam executeur]'
+  },
+  {
+    cat: 'Energie',
+    titel: 'Opzegging / overzetten energie­contract',
+    tekst: 'Geachte heer/mevrouw,\n\nHierbij meld ik u het overlijden van [naam overledene], woonachtig op [adres], overleden op [datum].\n\nIk verzoek u:\n- Het energiecontract per overlijdens­datum aan te passen of op te zeggen\n- De eindafrekening tot overlijdens­datum naar mij toe te zenden\n- Eventuele tegoeden over te maken naar nalatenschap­rekening: [IBAN]\n\nIndien het contract dient te worden voortgezet door een achterblijvende bewoner: contact opnemen met [naam, telefoon].\n\nMet vriendelijke groet,\n\n[naam executeur]'
+  },
+  {
+    cat: 'Werkgever',
+    titel: 'Melding overlijden werkgever',
+    tekst: 'Geachte heer/mevrouw,\n\nHet doet mij verdriet u te moeten meedelen dat [naam overledene] op [datum] is overleden. [naam] was als [functie] werkzaam in uw organisatie.\n\nIk ben aangewezen als executeur en zal de afwikkeling verzorgen. Ik verzoek u:\n- Het dienstverband per overlijdens­datum te beëindigen\n- Een eindafrekening op te maken (resterend vakantie­geld, openstaand loon, eventuele bonussen)\n- De jaaropgave over het lopende jaar zo snel mogelijk toe te zenden\n- Mij te informeren over eventuele werkgevers­regelingen voor nabestaanden (overlijdens­uitkering, partnerpensioen)\n\nBijgevoegd: akte van overlijden.\n\nMet vriendelijke groet,\n\n[naam executeur]'
+  },
+  {
+    cat: 'Erfgenamen',
+    titel: 'Eerste brief aan erfgenamen — informatie en aanvaarding',
+    tekst: 'Beste [naam],\n\nZoals u weet is [naam overledene] op [datum] overleden. In het testament van [naam overledene] ben ik benoemd tot executeur testamentair. In die hoedanigheid heb ik de taak de nalatenschap af te wikkelen.\n\nU bent op grond van het testament/de wet erfgenaam. Voordat u optreedt als erfgenaam, moet u beslissen of u de nalatenschap:\n1. AANVAARDT (u krijgt aandeel én bent aansprakelijk voor evt. schulden)\n2. BENEFICIAIR AANVAARDT (u krijgt aandeel, maar bent niet privé aansprakelijk voor schulden boven de nalatenschap)\n3. VERWERPT (u doet afstand van aandeel én van aansprakelijkheid)\n\nIk adviseer u deze keuze niet overhaast te maken. Indien er onzekerheid is over schulden, is BENEFICIAIR AANVAARDEN vaak het veiligste.\n\nVoorlopige inventaris nalatenschap:\n- Bezittingen geschat: [bedrag]\n- Schulden geschat: [bedrag]\n- Netto verwachting: [bedrag]\n\nIk verzoek u uw beslissing schriftelijk aan mij door te geven binnen 6 weken (vóór [datum]). Beneficiair aanvaarden en verwerpen moet bij de rechtbank: griffierecht 2026 €165.\n\nHeeft u vragen? Bel of mail mij gerust.\n\nMet vriendelijke groet,\n\n[naam executeur]\nExecuteur testamentair\n[telefoon] / [e-mail]'
+  },
+  {
+    cat: 'Erfgenamen',
+    titel: 'Eindbrief erfgenamen — rekening en verantwoording',
+    tekst: 'Beste [naam],\n\nHierbij ontvangt u de rekening en verantwoording van de afwikkeling van de nalatenschap van [naam overledene].\n\nIn deze afwikkeling heb ik conform mijn taak als executeur (BW Boek 4 art. 144 e.v.) alle bezittingen en schulden geïnventariseerd, schulden voldaan, aangifte erfbelasting verzorgd, en het netto resultaat verdeeld onder de erfgenamen.\n\nIn bijlage:\n1. Boedelbeschrijving op overlijdens­datum\n2. Inkomsten en uitgaven tijdens executele\n3. Eindsaldo en verdeling per erfgenaam\n4. Bewijsstukken (op verzoek)\n\nUw aandeel: [bedrag]\nOvergemaakt op: [datum] naar [IBAN]\n\nIk verzoek u dit eindverslag te tekenen voor akkoord. Daarmee eindigt formeel mijn taak als executeur en wordt mij décharge verleend.\n\nDank voor uw vertrouwen tijdens dit proces.\n\nMet vriendelijke groet,\n\n[naam executeur]'
+  },
+  {
+    cat: 'Abonnementen',
+    titel: 'Algemene opzeggingsbrief abonnementen',
+    tekst: 'Geachte heer/mevrouw,\n\nHierbij zeg ik per direct het abonnement / lidmaatschap op van:\nNaam: [naam overledene]\nKlantnummer: [nummer]\nOverlijdens­datum: [datum]\n\nReden: overlijden van de klant.\n\nIk verzoek u:\n- Het abonnement per overlijdens­datum stop te zetten\n- Eventuele tegoeden te restitueren op [IBAN]\n- De automatische incasso direct te stoppen\n- Een schriftelijke bevestiging van opzegging toe te zenden\n\nBijgevoegd: kopie akte van overlijden.\n\nMet vriendelijke groet,\n\n[naam executeur]\n[adres / e-mail]'
+  }
+];
+
+// ======== STATE ========
+var state = {
+  overledene: { naam: '', overlijdensDatum: '', aanvaardingsDatum: '', vveStatus: 'nee' },
+  executeur: { naam: '' },
+  fases: { acceptatie: 'voltooid', inventarisatie: 'actief', boedel: 'todo', schulden: 'todo', belasting: 'todo', verdeling: 'todo', rekening: 'todo', afsluiting: 'todo' },
+  boedel: {
+    woning: [], voertuig: [], bank: [], beleg: [], inboedel: [], overig: [],
+    lening: [], rekening: [], uitvaart: [{id:1,naam:'Uitvaartverzorger',bedrag:8000}], belasting: []
+  },
+  deadlines: {}, // id -> true/false
+  documenten: {}, // id -> 'todo'/'bezig'/'klaar'
+  erfgenamen: [],
+  rekening: { inkomsten: [], uitgaven: [] },
+  nextItemId: 1,
+  nextErfgId: 1
+};
+
+// ======== HELPERS ========
+function fEuro(n) { n = Math.round(n||0); return '€' + n.toLocaleString('nl-NL'); }
+function pNum(s) { return parseInt(String(s).replace(/[^0-9-]/g, ''), 10) || 0; }
+function nextId() { return state.nextItemId++; }
+function nextErfId() { return state.nextErfgId++; }
+function fDatum(d) { if (!d) return '—'; var p = d.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+function daysFromNow(d) { if (!d) return null; var dt = new Date(d); var nu = new Date(); return Math.floor((dt - nu) / 86400000); }
+function addDays(dateStr, days) { if (!dateStr) return ''; var d = new Date(dateStr); d.setDate(d.getDate() + days); return d.toISOString().slice(0,10); }
+
+function setPrintDatum() {
+  var d = new Date(), m = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  document.getElementById('ex-print-datum').textContent = 'Gegenereerd op ' + d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+}
+setPrintDatum();
+
+// ======== TAB SWITCHING ========
+document.getElementById('ex-tabs').addEventListener('click', function(e) {
+  var btn = e.target.closest('.ex-tab'); if (!btn) return;
+  document.querySelectorAll('.ex-tab').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.ex-pane').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelector('[data-pane="' + btn.dataset.tab + '"]').classList.add('active');
+});
+
+// ======== BOEDEL ========
+function sumCat(cat) { return state.boedel[cat].reduce(function(s,i) { return s + (parseFloat(i.bedrag)||0); }, 0); }
+function sumBezit() { return sumCat('woning')+sumCat('voertuig')+sumCat('bank')+sumCat('beleg')+sumCat('inboedel')+sumCat('overig'); }
+function sumSchuld() { return sumCat('lening')+sumCat('rekening')+sumCat('uitvaart')+sumCat('belasting'); }
+function nettoBoedel() { return sumBezit() - sumSchuld(); }
+
+var bezitCats = ['woning','voertuig','bank','beleg','inboedel','overig'];
+var schuldCats = ['lening','rekening','uitvaart','belasting'];
+
+function renderBoedelCat(cat) {
+  var container = document.getElementById('ex-bezit-' + cat) || document.getElementById('ex-schuld-' + cat);
+  if (!container) return;
+  var isSchuld = schuldCats.indexOf(cat) !== -1;
+  var html = '';
+  state.boedel[cat].forEach(function(item) {
+    html += '<div class="ex-item-rij" data-id="' + item.id + '" data-cat="' + cat + '">';
+    html += '<input type="text" class="ex-item-naam" value="' + (item.naam||'').replace(/"/g,'&quot;') + '" placeholder="Omschrijving" data-field="naam">';
+    html += '<input type="number" class="ex-item-bedrag' + (isSchuld?' negatief':'') + '" value="' + (item.bedrag||0) + '" data-field="bedrag" inputmode="numeric">';
+    html += '<button class="ex-item-del" data-action="del">✕</button>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function updateBoedel() {
+  bezitCats.forEach(renderBoedelCat);
+  schuldCats.forEach(renderBoedelCat);
+  document.getElementById('ex-bezit-totaal').textContent = fEuro(sumBezit());
+  document.getElementById('ex-schuld-totaal').textContent = '-' + fEuro(sumSchuld());
+  document.getElementById('ex-bezit-subtotaal').textContent = fEuro(sumBezit());
+  document.getElementById('ex-schuld-subtotaal').textContent = '-' + fEuro(sumSchuld());
+  document.getElementById('ex-eind-bezit').textContent = fEuro(sumBezit());
+  document.getElementById('ex-eind-schuld').textContent = fEuro(sumSchuld());
+  document.getElementById('ex-eind-netto').textContent = fEuro(nettoBoedel());
+  updateDashboard();
+  updateRekening();
+}
+
+document.addEventListener('click', function(e) {
+  var addBtn = e.target.closest('[data-add]');
+  if (addBtn) {
+    var add = addBtn.dataset.add;
+    if (add === 'rek-in') { state.rekening.inkomsten.push({ id: nextId(), naam: '', bedrag: 0 }); updateRekening(); return; }
+    if (add === 'rek-uit') { state.rekening.uitgaven.push({ id: nextId(), naam: '', bedrag: 0 }); updateRekening(); return; }
+    state.boedel[add].push({ id: nextId(), naam: '', bedrag: 0 });
+    renderBoedelCat(add);
+    updateBoedel();
+  }
+});
+
+document.addEventListener('input', function(e) {
+  var row = e.target.closest('[data-cat]');
+  if (row) {
+    var cat = row.dataset.cat;
+    var id = parseInt(row.dataset.id, 10);
+    var item = state.boedel[cat].find(function(x) { return x.id === id; });
+    if (item) {
+      if (e.target.dataset.field === 'naam') item.naam = e.target.value;
+      else if (e.target.dataset.field === 'bedrag') { item.bedrag = parseFloat(e.target.value)||0; updateBoedel(); }
+    }
+  }
+  var rekRow = e.target.closest('[data-rek]');
+  if (rekRow) {
+    var type = rekRow.dataset.rek;
+    var id = parseInt(rekRow.dataset.id, 10);
+    var arr = type === 'in' ? state.rekening.inkomsten : state.rekening.uitgaven;
+    var item = arr.find(function(x) { return x.id === id; });
+    if (item) {
+      if (e.target.dataset.field === 'naam') item.naam = e.target.value;
+      else if (e.target.dataset.field === 'bedrag') { item.bedrag = parseFloat(e.target.value)||0; updateRekening(); }
+    }
+  }
+});
+
+document.addEventListener('click', function(e) {
+  var del = e.target.closest('[data-action="del"]');
+  if (!del) return;
+  var row = del.closest('[data-cat]');
+  if (row) {
+    var cat = row.dataset.cat;
+    var id = parseInt(row.dataset.id, 10);
+    state.boedel[cat] = state.boedel[cat].filter(function(x) { return x.id !== id; });
+    renderBoedelCat(cat); updateBoedel();
+    return;
+  }
+  var rekRow = del.closest('[data-rek]');
+  if (rekRow) {
+    var type = rekRow.dataset.rek;
+    var id = parseInt(rekRow.dataset.id, 10);
+    if (type === 'in') state.rekening.inkomsten = state.rekening.inkomsten.filter(function(x) { return x.id !== id; });
+    else state.rekening.uitgaven = state.rekening.uitgaven.filter(function(x) { return x.id !== id; });
+    updateRekening();
+  }
+});
+
+// ======== DASHBOARD ========
+function renderFases() {
+  var balk = document.getElementById('ex-fase-balk');
+  var grid = document.getElementById('ex-fases-grid');
+  var balkHtml = '', gridHtml = '';
+  FASES.forEach(function(f) {
+    var status = state.fases[f.id] || 'todo';
+    var klasse = status === 'voltooid' ? 'voltooid' : (status === 'actief' ? 'actief' : '');
+    balkHtml += '<div class="ex-fase-segment ' + klasse + '"></div>';
+    gridHtml += '<div class="ex-fase-blok ' + klasse + '" data-fase="' + f.id + '">';
+    gridHtml += '<div class="ex-fase-icoon">' + f.icoon + '</div>';
+    gridHtml += '<div class="ex-fase-nr">Fase ' + (FASES.indexOf(f)+1) + '</div>';
+    gridHtml += '<div class="ex-fase-naam">' + f.naam + '</div>';
+    gridHtml += '<div class="ex-fase-status">' + (status === 'voltooid' ? '✓ Voltooid' : (status === 'actief' ? '● Actief' : 'Te doen')) + '</div>';
+    gridHtml += '</div>';
+  });
+  balk.innerHTML = balkHtml;
+  grid.innerHTML = gridHtml;
+}
+
+document.addEventListener('click', function(e) {
+  var fb = e.target.closest('[data-fase]');
+  if (!fb) return;
+  var fid = fb.dataset.fase;
+  var cur = state.fases[fid];
+  state.fases[fid] = cur === 'voltooid' ? 'todo' : (cur === 'todo' ? 'actief' : 'voltooid');
+  renderFases();
+});
+
+function updateDashboard() {
+  document.getElementById('ex-dashboard-netto').textContent = fEuro(nettoBoedel());
+  document.getElementById('ex-dashboard-bezit').textContent = fEuro(sumBezit());
+  document.getElementById('ex-dashboard-schuld').textContent = fEuro(sumSchuld());
+  var totBezitItems = bezitCats.reduce(function(s,c) { return s + state.boedel[c].length; }, 0);
+  var totSchuldItems = schuldCats.reduce(function(s,c) { return s + state.boedel[c].length; }, 0);
+  document.getElementById('ex-dashboard-bezit-aantal').textContent = totBezitItems + ' item(s)';
+  document.getElementById('ex-dashboard-schuld-aantal').textContent = totSchuldItems + ' item(s)';
+  document.getElementById('ex-dashboard-erfg').textContent = state.erfgenamen.length;
+  var akkoord = state.erfgenamen.filter(function(e) { return e.status === 'akkoord'; }).length;
+  document.getElementById('ex-dashboard-erfg-sub').textContent = akkoord + ' van ' + state.erfgenamen.length + ' akkoord';
+
+  // Volgende deadlines (top 5 niet voltooid)
+  var oDat = state.overledene.overlijdensDatum;
+  var deadlinesMet = DEADLINES_DEF.map(function(d) {
+    var datum = oDat ? addDays(oDat, d.dagen) : '';
+    var rest = oDat ? daysFromNow(datum) : null;
+    return { d: d, datum: datum, rest: rest, voltooid: !!state.deadlines[d.id] };
+  });
+  var openVolg = deadlinesMet.filter(function(x) { return !x.voltooid; }).slice(0, 5);
+  var dHtml = '';
+  openVolg.forEach(function(x) {
+    var rKlasse = '';
+    if (x.rest !== null) {
+      if (x.rest < 0) rKlasse = 'urgent';
+      else if (x.rest < 30) rKlasse = 'warning';
+      else rKlasse = 'success';
+    }
+    dHtml += '<div class="ex-deadline-rij ' + rKlasse + '" style="margin-bottom:6px;grid-template-columns:1fr auto;">';
+    dHtml += '<div><div class="ex-deadline-naam" style="font-size:0.8rem;">' + x.d.naam + '</div></div>';
+    dHtml += '<div><div class="ex-deadline-datum" style="font-size:0.72rem;">' + fDatum(x.datum) + '</div>';
+    if (x.rest !== null) dHtml += '<div class="ex-deadline-resterend ' + rKlasse + '">' + (x.rest < 0 ? Math.abs(x.rest) + ' dgn te laat' : x.rest + ' dgn') + '</div>';
+    dHtml += '</div></div>';
+  });
+  if (openVolg.length === 0) dHtml = '<div style="text-align:center;padding:20px;color:#6a5e64;font-size:0.86rem;">Geen open deadlines</div>';
+  document.getElementById('ex-dashboard-deadlines').innerHTML = dHtml;
+
+  // Documenten voortgang
+  var allDocs = [];
+  Object.keys(DOCS_DEF).forEach(function(cat) { allDocs = allDocs.concat(DOCS_DEF[cat]); });
+  var verzameld = allDocs.filter(function(d) { return state.documenten[d.id] === 'klaar'; }).length;
+  var bezig = allDocs.filter(function(d) { return state.documenten[d.id] === 'bezig'; }).length;
+  var todo = allDocs.length - verzameld - bezig;
+  var pct = Math.round((verzameld / allDocs.length) * 100);
+  document.getElementById('ex-dashboard-docs').innerHTML =
+    '<div style="font-size:0.76rem;color:#4a4046;line-height:1.6;">' +
+    '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Verzameld</span><strong style="color:#6b9a7f;">' + verzameld + ' / ' + allDocs.length + ' (' + pct + '%)</strong></div>' +
+    '<div style="background:#e2d9e0;height:8px;border-radius:4px;overflow:hidden;margin-bottom:10px;"><div style="height:100%;background:#6b9a7f;width:' + pct + '%;"></div></div>' +
+    '<div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>📋 ' + todo + ' te doen</span><span>⏳ ' + bezig + ' bezig</span><span>✓ ' + verzameld + ' klaar</span></div>' +
+    '</div>';
+}
+
+// Header inputs
+document.getElementById('ex-overledene-naam').addEventListener('input', function(e) { state.overledene.naam = e.target.value; });
+document.getElementById('ex-overlijdens-datum').addEventListener('input', function(e) { state.overledene.overlijdensDatum = e.target.value; updateDashboard(); renderDeadlines(); });
+document.getElementById('ex-aanvaardings-datum').addEventListener('input', function(e) { state.overledene.aanvaardingsDatum = e.target.value; });
+document.getElementById('ex-executeur-naam').addEventListener('input', function(e) { state.executeur.naam = e.target.value; });
+document.getElementById('ex-vve-status').addEventListener('change', function(e) { state.overledene.vveStatus = e.target.value; });
+
+// ======== DEADLINES ========
+function renderDeadlines() {
+  var container = document.getElementById('ex-deadlines-lijst');
+  var oDat = state.overledene.overlijdensDatum;
+  var html = '';
+  var voltooid = 0;
+  DEADLINES_DEF.forEach(function(d) {
+    var datum = oDat ? addDays(oDat, d.dagen) : '';
+    var rest = oDat ? daysFromNow(datum) : null;
+    var isVoltooid = !!state.deadlines[d.id];
+    if (isVoltooid) voltooid++;
+    var rKlasse = '';
+    if (rest !== null && !isVoltooid) {
+      if (rest < 0) rKlasse = 'urgent';
+      else if (rest < 30) rKlasse = 'warning';
+      else rKlasse = 'success';
+    }
+    if (isVoltooid) rKlasse += ' voltooid';
+    var prioKlasse = 'ex-prio-' + (d.prio === 'hoog' ? 'hoog' : d.prio === 'gem' ? 'gem' : 'laag');
+    html += '<div class="ex-deadline-rij ' + rKlasse + '" data-deadline="' + d.id + '">';
+    html += '<div class="ex-deadline-check' + (isVoltooid?' checked':'') + '" data-toggle="deadline"></div>';
+    html += '<div><div class="ex-deadline-naam">' + d.naam + '</div><div class="ex-deadline-uitleg">' + d.uitleg + '</div></div>';
+    html += '<div><div class="ex-deadline-datum">' + (oDat ? fDatum(datum) : '— (vul overlijdens­datum)') + '</div>';
+    if (rest !== null && !isVoltooid) {
+      html += '<div class="ex-deadline-resterend ' + (rest < 0 ? 'urgent' : rest < 30 ? 'warning' : '') + '">' + (rest < 0 ? Math.abs(rest) + ' dgn te laat' : rest + ' dgn resterend') + '</div>';
+    }
+    html += '</div>';
+    html += '<span class="ex-deadline-prio ' + prioKlasse + '">' + (d.prio === 'hoog' ? 'hoog' : d.prio === 'gem' ? 'gem' : 'laag') + '</span>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  document.getElementById('ex-deadline-voortgang').textContent = voltooid + ' / ' + DEADLINES_DEF.length + ' voltooid';
+}
+
+document.addEventListener('click', function(e) {
+  var check = e.target.closest('[data-toggle="deadline"]');
+  if (!check) return;
+  var row = check.closest('[data-deadline]');
+  if (!row) return;
+  var id = row.dataset.deadline;
+  state.deadlines[id] = !state.deadlines[id];
+  renderDeadlines();
+  updateDashboard();
+});
+
+// ======== DOCUMENTEN ========
+function renderDocs() {
+  Object.keys(DOCS_DEF).forEach(function(cat) {
+    var container = document.getElementById('ex-docs-' + cat);
+    if (!container) return;
+    var html = '';
+    DOCS_DEF[cat].forEach(function(d) {
+      var status = state.documenten[d.id] || 'todo';
+      var klasse = status === 'klaar' ? 'verzameld' : '';
+      html += '<div class="ex-doc-rij ' + klasse + '" data-doc="' + d.id + '">';
+      html += '<div class="ex-deadline-check' + (status === 'klaar' ? ' checked' : '') + '" data-toggle="doc"></div>';
+      html += '<div><div class="ex-doc-naam">' + d.naam + '</div><div class="ex-doc-bron">' + d.bron + '</div></div>';
+      html += '<select class="ex-input" data-doc-status="' + d.id + '" style="font-size:0.72rem; padding: 4px 8px; min-width: 110px;">';
+      html += '<option value="todo"' + (status==='todo'?' selected':'') + '>Te doen</option>';
+      html += '<option value="bezig"' + (status==='bezig'?' selected':'') + '>Bezig</option>';
+      html += '<option value="klaar"' + (status==='klaar'?' selected':'') + '>Klaar</option>';
+      html += '</select>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  });
+}
+
+document.addEventListener('click', function(e) {
+  var check = e.target.closest('[data-toggle="doc"]');
+  if (!check) return;
+  var row = check.closest('[data-doc]');
+  if (!row) return;
+  var id = row.dataset.doc;
+  state.documenten[id] = state.documenten[id] === 'klaar' ? 'todo' : 'klaar';
+  renderDocs();
+  updateDashboard();
+});
+
+document.addEventListener('change', function(e) {
+  if (e.target.dataset.docStatus) {
+    state.documenten[e.target.dataset.docStatus] = e.target.value;
+    renderDocs();
+    updateDashboard();
+  }
+});
+
+// ======== TEMPLATES ========
+function renderTemplates() {
+  var html = '';
+  TEMPLATES_DEF.forEach(function(t, idx) {
+    html += '<div class="ex-tmpl-card">';
+    html += '<div class="ex-tmpl-kop"><div class="ex-tmpl-titel">' + t.titel + '</div><div class="ex-tmpl-cat">' + t.cat + '</div></div>';
+    html += '<div class="ex-tmpl-tekst" id="ex-tmpl-text-' + idx + '">' + t.tekst.replace(/</g,'&lt;') + '</div>';
+    html += '<div class="ex-tmpl-acties">';
+    html += '<button class="ex-tmpl-btn" data-copy="' + idx + '">📋 Kopiëren</button>';
+    html += '<button class="ex-tmpl-btn secondary" data-print="' + idx + '">🖨️ Printen</button>';
+    html += '</div></div>';
+  });
+  document.getElementById('ex-templates').innerHTML = html;
+}
+
+document.addEventListener('click', function(e) {
+  var copyBtn = e.target.closest('[data-copy]');
+  if (copyBtn) {
+    var idx = parseInt(copyBtn.dataset.copy, 10);
+    var tekst = TEMPLATES_DEF[idx].tekst;
+    // Vul basisgegevens in indien beschikbaar
+    if (state.overledene.naam) tekst = tekst.replace(/\[naam overledene\]/g, state.overledene.naam);
+    if (state.overledene.overlijdensDatum) tekst = tekst.replace(/\[overlijdensdatum\]/g, fDatum(state.overledene.overlijdensDatum)).replace(/\[datum\]/g, fDatum(state.overledene.overlijdensDatum));
+    if (state.executeur.naam) tekst = tekst.replace(/\[naam executeur\]/g, state.executeur.naam);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(tekst).then(function() {
+        copyBtn.textContent = '✓ Gekopieerd';
+        copyBtn.classList.add('copied');
+        setTimeout(function() { copyBtn.textContent = '📋 Kopiëren'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    } else {
+      var ta = document.createElement('textarea'); ta.value = tekst; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      copyBtn.textContent = '✓ Gekopieerd';
+      copyBtn.classList.add('copied');
+      setTimeout(function() { copyBtn.textContent = '📋 Kopiëren'; copyBtn.classList.remove('copied'); }, 2000);
+    }
+  }
+  var printBtn = e.target.closest('[data-print]');
+  if (printBtn) {
+    var idx = parseInt(printBtn.dataset.print, 10);
+    var tekst = TEMPLATES_DEF[idx].tekst;
+    if (state.overledene.naam) tekst = tekst.replace(/\[naam overledene\]/g, state.overledene.naam);
+    if (state.overledene.overlijdensDatum) tekst = tekst.replace(/\[overlijdensdatum\]/g, fDatum(state.overledene.overlijdensDatum)).replace(/\[datum\]/g, fDatum(state.overledene.overlijdensDatum));
+    if (state.executeur.naam) tekst = tekst.replace(/\[naam executeur\]/g, state.executeur.naam);
+    var w = window.open('', '_blank');
+    w.document.write('<html><head><title>' + TEMPLATES_DEF[idx].titel + '</title><style>body{font-family:Georgia,serif;padding:40px;line-height:1.8;}</style></head><body><pre style="white-space:pre-wrap;font-family:inherit;">' + tekst.replace(/</g,'&lt;') + '</pre></body></html>');
+    w.document.close();
+    setTimeout(function() { w.print(); }, 200);
+  }
+});
+
+// ======== ERFGENAMEN ========
+function renderErfgenamen() {
+  var container = document.getElementById('ex-erfgenamen-lijst');
+  var html = '';
+  state.erfgenamen.forEach(function(e) {
+    var statusKlasse = 'ex-status-' + (e.status || 'onbekend');
+    var statusTekst = { onbekend: 'Wacht op beslissing', akkoord: 'Aanvaard', beneficiair: 'Beneficiair', verworpen: 'Verworpen' }[e.status || 'onbekend'];
+    html += '<div class="ex-erfg-card" data-eid="' + e.id + '">';
+    html += '<div class="ex-erfg-kop">';
+    html += '<div class="ex-erfg-icoon">👤</div>';
+    html += '<input type="text" class="ex-erfg-naam" data-field="naam" value="' + (e.naam||'').replace(/"/g,'&quot;') + '" placeholder="Naam erfgenaam">';
+    html += '<span class="ex-erfg-status ' + statusKlasse + '">' + statusTekst + '</span>';
+    html += '<button class="ex-item-del" data-action="erfg-del">✕</button>';
+    html += '</div>';
+    html += '<div class="ex-erfg-detail">';
+    html += '<div><div class="ex-erfg-veld-label">E-mail</div><input type="email" class="ex-input full" data-field="email" value="' + (e.email||'').replace(/"/g,'&quot;') + '" placeholder="email@..."></div>';
+    html += '<div><div class="ex-erfg-veld-label">Telefoon</div><input type="text" class="ex-input full" data-field="telefoon" value="' + (e.telefoon||'').replace(/"/g,'&quot;') + '" placeholder="06-..."></div>';
+    html += '<div><div class="ex-erfg-veld-label">Relatie</div><select class="ex-input full" data-field="relatie">';
+    ['Partner','Kind','Kleinkind','Ouder','Broer/zus','Anders'].forEach(function(r) { html += '<option' + (e.relatie===r?' selected':'') + '>' + r + '</option>'; });
+    html += '</select></div>';
+    html += '</div>';
+    html += '<div class="ex-erfg-detail">';
+    html += '<div><div class="ex-erfg-veld-label">Erfdeel (%)</div><input type="number" class="ex-input full" data-field="pct" value="' + (e.pct||0) + '" step="0.1" min="0" max="100"></div>';
+    html += '<div><div class="ex-erfg-veld-label">Status aanvaarding</div><select class="ex-input full" data-field="status">';
+    ['onbekend','akkoord','beneficiair','verworpen'].forEach(function(s) { html += '<option value="' + s + '"' + (e.status===s?' selected':'') + '>' + ({onbekend:'Wacht op beslissing',akkoord:'Aanvaard',beneficiair:'Beneficiair',verworpen:'Verworpen'}[s]) + '</option>'; });
+    html += '</select></div>';
+    html += '<div><div class="ex-erfg-veld-label">IBAN voor uitkering</div><input type="text" class="ex-input full" data-field="iban" value="' + (e.iban||'').replace(/"/g,'&quot;') + '" placeholder="NL00..."></div>';
+    html += '</div>';
+    html += '<div style="margin-top:10px;"><div class="ex-erfg-veld-label">Notities</div><textarea class="ex-input full" data-field="notities" rows="2" placeholder="Bijzonderheden, contact­momenten, afspraken...">' + (e.notities||'').replace(/</g,'&lt;') + '</textarea></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  document.getElementById('ex-erfg-aantal').textContent = state.erfgenamen.length + (state.erfgenamen.length === 1 ? ' erfgenaam' : ' erfgenamen');
+  updateDashboard();
+  updateRekening();
+}
+
+document.getElementById('ex-add-erfgenaam').addEventListener('click', function() {
+  state.erfgenamen.push({ id: nextErfId(), naam: 'Erfgenaam ' + (state.erfgenamen.length+1), email: '', telefoon: '', relatie: 'Kind', pct: 0, status: 'onbekend', iban: '', notities: '' });
+  renderErfgenamen();
+});
+
+document.getElementById('ex-erfgenamen-lijst').addEventListener('input', function(e) {
+  var row = e.target.closest('[data-eid]');
+  if (!row) return;
+  var eg = state.erfgenamen.find(function(x) { return x.id === parseInt(row.dataset.eid, 10); });
+  if (!eg) return;
+  eg[e.target.dataset.field] = e.target.dataset.field === 'pct' ? (parseFloat(e.target.value)||0) : e.target.value;
+});
+document.getElementById('ex-erfgenamen-lijst').addEventListener('change', function(e) {
+  var row = e.target.closest('[data-eid]');
+  if (!row) return;
+  var eg = state.erfgenamen.find(function(x) { return x.id === parseInt(row.dataset.eid, 10); });
+  if (!eg) return;
+  eg[e.target.dataset.field] = e.target.value;
+  if (e.target.dataset.field === 'status') renderErfgenamen();
+});
+document.getElementById('ex-erfgenamen-lijst').addEventListener('click', function(e) {
+  var del = e.target.closest('[data-action="erfg-del"]');
+  if (!del) return;
+  var row = del.closest('[data-eid]');
+  state.erfgenamen = state.erfgenamen.filter(function(x) { return x.id !== parseInt(row.dataset.eid, 10); });
+  renderErfgenamen();
+});
+
+// ======== REKENING & VERANTWOORDING ========
+function renderRekeningPosten() {
+  ['inkomsten','uitgaven'].forEach(function(type) {
+    var container = document.getElementById('ex-rek-' + type);
+    var arr = state.rekening[type];
+    var html = '';
+    arr.forEach(function(item) {
+      html += '<div class="ex-item-rij" data-rek="' + (type === 'inkomsten' ? 'in' : 'uit') + '" data-id="' + item.id + '">';
+      html += '<input type="text" class="ex-item-naam" value="' + (item.naam||'').replace(/"/g,'&quot;') + '" placeholder="' + (type==='inkomsten'?'bv. dividenden, huur, rente':'bv. notaris, taxatie, reiskosten') + '" data-field="naam">';
+      html += '<input type="number" class="ex-item-bedrag" value="' + (item.bedrag||0) + '" data-field="bedrag" inputmode="numeric">';
+      html += '<button class="ex-item-del" data-action="del">✕</button>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  });
+}
+
+function updateRekening() {
+  renderRekeningPosten();
+  var startBezit = sumBezit();
+  var startSchuld = sumSchuld();
+  var totIn = state.rekening.inkomsten.reduce(function(s,x) { return s + (parseFloat(x.bedrag)||0); }, 0);
+  var totUit = state.rekening.uitgaven.reduce(function(s,x) { return s + (parseFloat(x.bedrag)||0); }, 0);
+  var eindSaldo = startBezit - startSchuld + totIn - totUit;
+  var beloning = startBezit * 0.01; // 1% standaard
+  var nettoVerdelen = eindSaldo - beloning;
+
+  document.getElementById('ex-rek-start-bezit').textContent = fEuro(startBezit);
+  document.getElementById('ex-rek-start-schuld').textContent = '-' + fEuro(startSchuld);
+  document.getElementById('ex-rek-tot-in').textContent = '+' + fEuro(totIn);
+  document.getElementById('ex-rek-tot-uit').textContent = '-' + fEuro(totUit);
+  document.getElementById('ex-rek-eind').textContent = fEuro(eindSaldo);
+  document.getElementById('ex-rek-beloning').textContent = '-' + fEuro(beloning);
+  document.getElementById('ex-rek-netto-verdelen').textContent = fEuro(nettoVerdelen);
+
+  // Verdeling per erfgenaam
+  var vHtml = '';
+  if (state.erfgenamen.length === 0) {
+    vHtml = '<div style="text-align:center;padding:14px;color:#6a5e64;font-size:0.86rem;">Voeg erfgenamen toe op tabblad Erfgenamen.</div>';
+  } else {
+    var totPct = state.erfgenamen.reduce(function(s,e) { return s + (parseFloat(e.pct)||0); }, 0);
+    state.erfgenamen.forEach(function(e) {
+      var deel = (nettoVerdelen * (parseFloat(e.pct)||0)) / 100;
+      vHtml += '<div class="ex-rek-rij"><span class="ex-rek-naam">' + (e.naam||'(naamloos)') + ' <span style="font-size:0.7rem;color:#6a5e64;">' + (e.pct||0) + '%</span></span><span class="ex-rek-waarde in">' + fEuro(deel) + '</span></div>';
+    });
+    if (Math.abs(totPct - 100) > 0.1) {
+      vHtml += '<div class="ex-info warning" style="margin-top:10px;"><strong>Let op:</strong> percentages tellen op tot ' + totPct.toFixed(1).replace('.',',') + '%, niet 100%.</div>';
+    }
+  }
+  document.getElementById('ex-rek-verdeling').innerHTML = vHtml;
+}
+
+// ======== SAVE / LOAD ========
+var STORAGE_KEY = 'ex-dashboards-v1';
+function getAlle() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; } }
+function saveAlle(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) { alert('Opslaan mislukt'); } }
+function openModal(id) { document.getElementById(id).classList.add('zichtbaar'); }
+function closeModal(id) { document.getElementById(id).classList.remove('zichtbaar'); }
+
+document.getElementById('ex-save-btn').addEventListener('click', function() {
+  document.getElementById('ex-save-naam').value = state.overledene.naam ? 'Dossier ' + state.overledene.naam : '';
+  openModal('ex-modal-save');
+  setTimeout(function() { document.getElementById('ex-save-naam').focus(); }, 100);
+});
+document.getElementById('ex-save-confirm').addEventListener('click', function() {
+  var naam = document.getElementById('ex-save-naam').value.trim();
+  if (!naam) { alert('Geef een naam op'); return; }
+  var arr = getAlle();
+  arr.push({ id: Date.now(), naam: naam, datum: new Date().toISOString(), state: JSON.parse(JSON.stringify(state)) });
+  saveAlle(arr);
+  closeModal('ex-modal-save');
+});
+document.getElementById('ex-load-btn').addEventListener('click', function() {
+  var arr = getAlle();
+  var lijst = document.getElementById('ex-load-lijst');
+  if (arr.length === 0) {
+    lijst.innerHTML = '<div class="ex-modal-leeg">Nog geen dossiers opgeslagen.</div>';
+  } else {
+    var html = '';
+    arr.slice().reverse().forEach(function(s) {
+      var d = new Date(s.datum);
+      var ds = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear();
+      html += '<div class="ex-scenario-item"><div class="ex-scenario-item-info"><div class="ex-scenario-item-naam">' + s.naam.replace(/</g,'&lt;') + '</div><div class="ex-scenario-item-datum">' + ds + '</div></div><button class="ex-scenario-item-btn" data-load-id="' + s.id + '">Laden</button><button class="ex-scenario-item-btn del" data-del-id="' + s.id + '">✕</button></div>';
+    });
+    lijst.innerHTML = html;
+  }
+  openModal('ex-modal-load');
+});
+document.getElementById('ex-load-lijst').addEventListener('click', function(e) {
+  var loadBtn = e.target.closest('[data-load-id]');
+  if (loadBtn) {
+    var s = getAlle().find(function(x) { return x.id === parseInt(loadBtn.dataset.loadId, 10); });
+    if (s) { state = s.state; refreshAll(); closeModal('ex-modal-load'); }
+    return;
+  }
+  var delBtn = e.target.closest('[data-del-id]');
+  if (delBtn) {
+    if (!confirm('Verwijderen?')) return;
+    saveAlle(getAlle().filter(function(x) { return x.id !== parseInt(delBtn.dataset.delId, 10); }));
+    document.getElementById('ex-load-btn').click();
+  }
+});
+document.querySelectorAll('[data-close]').forEach(function(b) { b.addEventListener('click', function() { b.closest('.ex-modal-overlay').classList.remove('zichtbaar'); }); });
+document.querySelectorAll('.ex-modal-overlay').forEach(function(o) { o.addEventListener('click', function(e) { if (e.target === o) o.classList.remove('zichtbaar'); }); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.querySelectorAll('.ex-modal-overlay.zichtbaar').forEach(function(o) { o.classList.remove('zichtbaar'); }); });
+
+function refreshAll() {
+  document.getElementById('ex-overledene-naam').value = state.overledene.naam || '';
+  document.getElementById('ex-overlijdens-datum').value = state.overledene.overlijdensDatum || '';
+  document.getElementById('ex-aanvaardings-datum').value = state.overledene.aanvaardingsDatum || '';
+  document.getElementById('ex-executeur-naam').value = state.executeur.naam || '';
+  document.getElementById('ex-vve-status').value = state.overledene.vveStatus || 'nee';
+  renderFases();
+  updateBoedel();
+  renderDeadlines();
+  renderDocs();
+  renderTemplates();
+  renderErfgenamen();
+  updateRekening();
+}
+
+document.getElementById('ex-reset-btn').addEventListener('click', function() {
+  if (!confirm('Hele dossier resetten? Opgeslagen dossiers blijven bewaard.')) return;
+  state = {
+    overledene: { naam: '', overlijdensDatum: '', aanvaardingsDatum: '', vveStatus: 'nee' },
+    executeur: { naam: '' },
+    fases: { acceptatie: 'voltooid', inventarisatie: 'actief', boedel: 'todo', schulden: 'todo', belasting: 'todo', verdeling: 'todo', rekening: 'todo', afsluiting: 'todo' },
+    boedel: { woning: [], voertuig: [], bank: [], beleg: [], inboedel: [], overig: [], lening: [], rekening: [], uitvaart: [{id:1,naam:'Uitvaartverzorger',bedrag:8000}], belasting: [] },
+    deadlines: {}, documenten: {}, erfgenamen: [], rekening: { inkomsten: [], uitgaven: [] },
+    nextItemId: 1, nextErfgId: 1
+  };
+  refreshAll();
+});
+
+// Init
+refreshAll();
+
+})();
+</script>
+
+</body>
+</html>
