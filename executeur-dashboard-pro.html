@@ -15,6 +15,15 @@ body { padding: 16px; min-height: 100vh; }
 
 .ex-app { max-width: 1400px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; }
 .ex-print-cover { display: none; }
+.ex-logo-wrap { border: 2px dashed #e2d9e0; border-radius: 12px; padding: 18px; transition: all 0.2s; cursor: pointer; background: #fff; }
+.ex-logo-wrap:hover { border-color: #e8834a; background: #fff7ef; }
+.ex-logo-wrap.dragover { border-color: #e8834a; background: #fff7ef; border-style: solid; }
+.ex-logo-leeg { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; color: #6a5e64; font-size: 0.86rem; text-align: center; }
+.ex-logo-preview { display: flex; align-items: center; gap: 16px; }
+.ex-logo-preview img { max-height: 80px; max-width: 240px; border-radius: 8px; background: #fff; padding: 4px; border: 1px solid #e2d9e0; }
+.ex-logo-del { background: #fff; border: 1.5px solid #c4666c; color: #c4666c; padding: 6px 12px; border-radius: 8px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; }
+.ex-logo-del:hover { background: #c4666c; color: #fff; }
+.ex-print-logo { display: none; }
 .ex-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; }
 .ex-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
 .ex-header-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
@@ -230,6 +239,7 @@ body { padding: 16px; min-height: 100vh; }
   .ex-print-cover h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 16px; }
   .ex-print-cover .lead { font-size: 1rem; color: #fcd9c4; margin-bottom: 30px; }
   .ex-print-cover .datum { font-size: 0.86rem; color: #ede0eb; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); }
+  .ex-print-logo.zichtbaar { display: block !important; max-height: 100px; max-width: 300px; margin: 0 auto 30px; background: #fff; padding: 14px 20px; border-radius: 10px; }
   .ex-erfg-card, .ex-card, .ex-deadline-rij, .ex-doc-rij, .ex-tmpl-card { page-break-inside: avoid; }
 }
 
@@ -247,6 +257,7 @@ body { padding: 16px; min-height: 100vh; }
 <body>
 
 <div class="ex-print-cover">
+  <img id="ex-print-logo-img" class="ex-print-logo" alt="Logo">
   <h1>Executeur Dossier</h1>
   <div class="lead">Volledige documentatie nalatenschap­afwikkeling</div>
   <div class="datum" id="ex-print-datum"></div>
@@ -309,6 +320,25 @@ body { padding: 16px; min-height: 100vh; }
           </select>
         </div>
       </div>
+      <div style="margin-top:14px;">
+        <div class="ex-stap-label">Eigen logo (verschijnt op PDF)</div>
+        <div class="ex-logo-wrap" id="ex-logo-wrap">
+          <div class="ex-logo-leeg" id="ex-logo-leeg">
+            <span style="font-size:1.6rem;">🖼️</span>
+            <span>Sleep een afbeelding hier of klik om te uploaden</span>
+            <span style="font-size:0.7rem;color:#6a5e64;">PNG of JPG, max 500KB</span>
+          </div>
+          <div class="ex-logo-preview" id="ex-logo-preview" style="display:none;">
+            <img id="ex-logo-img" alt="Logo">
+            <button class="ex-logo-del" id="ex-logo-del" type="button">✕ Verwijderen</button>
+          </div>
+          <input type="file" id="ex-logo-input" accept="image/png,image/jpeg" style="display:none;">
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-info success" style="margin-bottom: 14px;">
+      <strong>🔒 Privacy:</strong> alle gegevens in deze tool worden <strong>uitsluitend lokaal in jouw browser</strong> opgeslagen. Uitvaart-Platform.nl heeft geen toegang tot je dossier en slaat <em>niets</em> op een server op. Je kunt het dossier exporteren via "Opslaan" (downloadt als bestand) of als PDF afdrukken. Bij wissen van browsergeschiedenis verdwijnen de gegevens.
     </div>
 
     <div class="ex-fase-tracker">
@@ -718,7 +748,7 @@ var TEMPLATES_DEF = [
 // ======== STATE ========
 var state = {
   overledene: { naam: '', overlijdensDatum: '', aanvaardingsDatum: '', vveStatus: 'nee' },
-  executeur: { naam: '' },
+  executeur: { naam: '', logo: '' },
   fases: { acceptatie: 'voltooid', inventarisatie: 'actief', boedel: 'todo', schulden: 'todo', belasting: 'todo', verdeling: 'todo', rekening: 'todo', afsluiting: 'todo' },
   boedel: {
     woning: [], voertuig: [], bank: [], beleg: [], inboedel: [], overig: [],
@@ -780,9 +810,7 @@ function renderBoedelCat(cat) {
   container.innerHTML = html;
 }
 
-function updateBoedel() {
-  bezitCats.forEach(renderBoedelCat);
-  schuldCats.forEach(renderBoedelCat);
+function updateBoedelTotals() {
   document.getElementById('ex-bezit-totaal').textContent = fEuro(sumBezit());
   document.getElementById('ex-schuld-totaal').textContent = '-' + fEuro(sumSchuld());
   document.getElementById('ex-bezit-subtotaal').textContent = fEuro(sumBezit());
@@ -791,7 +819,13 @@ function updateBoedel() {
   document.getElementById('ex-eind-schuld').textContent = fEuro(sumSchuld());
   document.getElementById('ex-eind-netto').textContent = fEuro(nettoBoedel());
   updateDashboard();
-  updateRekening();
+  updateRekeningTotals();
+}
+
+function updateBoedel() {
+  bezitCats.forEach(renderBoedelCat);
+  schuldCats.forEach(renderBoedelCat);
+  updateBoedelTotals();
 }
 
 document.addEventListener('click', function(e) {
@@ -814,7 +848,7 @@ document.addEventListener('input', function(e) {
     var item = state.boedel[cat].find(function(x) { return x.id === id; });
     if (item) {
       if (e.target.dataset.field === 'naam') item.naam = e.target.value;
-      else if (e.target.dataset.field === 'bedrag') { item.bedrag = parseFloat(e.target.value)||0; updateBoedel(); }
+      else if (e.target.dataset.field === 'bedrag') { item.bedrag = parseFloat(e.target.value)||0; updateBoedelTotals(); }
     }
   }
   var rekRow = e.target.closest('[data-rek]');
@@ -825,7 +859,7 @@ document.addEventListener('input', function(e) {
     var item = arr.find(function(x) { return x.id === id; });
     if (item) {
       if (e.target.dataset.field === 'naam') item.naam = e.target.value;
-      else if (e.target.dataset.field === 'bedrag') { item.bedrag = parseFloat(e.target.value)||0; updateRekening(); }
+      else if (e.target.dataset.field === 'bedrag') { item.bedrag = parseFloat(e.target.value)||0; updateRekeningTotals(); }
     }
   }
 });
@@ -938,6 +972,52 @@ document.getElementById('ex-overlijdens-datum').addEventListener('input', functi
 document.getElementById('ex-aanvaardings-datum').addEventListener('input', function(e) { state.overledene.aanvaardingsDatum = e.target.value; });
 document.getElementById('ex-executeur-naam').addEventListener('input', function(e) { state.executeur.naam = e.target.value; });
 document.getElementById('ex-vve-status').addEventListener('change', function(e) { state.overledene.vveStatus = e.target.value; });
+
+// Logo upload
+function showLogo(dataUrl) {
+  state.executeur.logo = dataUrl;
+  if (dataUrl) {
+    document.getElementById('ex-logo-img').src = dataUrl;
+    document.getElementById('ex-print-logo-img').src = dataUrl;
+    document.getElementById('ex-print-logo-img').classList.add('zichtbaar');
+    document.getElementById('ex-logo-leeg').style.display = 'none';
+    document.getElementById('ex-logo-preview').style.display = 'flex';
+  } else {
+    document.getElementById('ex-print-logo-img').classList.remove('zichtbaar');
+    document.getElementById('ex-logo-leeg').style.display = 'flex';
+    document.getElementById('ex-logo-preview').style.display = 'none';
+  }
+}
+function handleLogoFile(file) {
+  if (!file) return;
+  if (file.size > 500 * 1024) { alert('Bestand te groot. Maximum 500KB.'); return; }
+  if (!file.type.match(/^image\/(png|jpe?g)$/)) { alert('Alleen PNG of JPG bestanden.'); return; }
+  var reader = new FileReader();
+  reader.onload = function(ev) { showLogo(ev.target.result); };
+  reader.readAsDataURL(file);
+}
+document.getElementById('ex-logo-wrap').addEventListener('click', function(e) {
+  if (e.target.closest('#ex-logo-del')) return;
+  document.getElementById('ex-logo-input').click();
+});
+document.getElementById('ex-logo-input').addEventListener('change', function(e) {
+  if (e.target.files && e.target.files[0]) handleLogoFile(e.target.files[0]);
+});
+document.getElementById('ex-logo-del').addEventListener('click', function(e) {
+  e.stopPropagation();
+  showLogo('');
+  document.getElementById('ex-logo-input').value = '';
+});
+document.getElementById('ex-logo-wrap').addEventListener('dragover', function(e) {
+  e.preventDefault(); this.classList.add('dragover');
+});
+document.getElementById('ex-logo-wrap').addEventListener('dragleave', function() {
+  this.classList.remove('dragover');
+});
+document.getElementById('ex-logo-wrap').addEventListener('drop', function(e) {
+  e.preventDefault(); this.classList.remove('dragover');
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) handleLogoFile(e.dataTransfer.files[0]);
+});
 
 // ======== DEADLINES ========
 function renderDeadlines() {
@@ -1159,8 +1239,7 @@ function renderRekeningPosten() {
   });
 }
 
-function updateRekening() {
-  renderRekeningPosten();
+function updateRekeningTotals() {
   var startBezit = sumBezit();
   var startSchuld = sumSchuld();
   var totIn = state.rekening.inkomsten.reduce(function(s,x) { return s + (parseFloat(x.bedrag)||0); }, 0);
@@ -1192,6 +1271,11 @@ function updateRekening() {
     }
   }
   document.getElementById('ex-rek-verdeling').innerHTML = vHtml;
+}
+
+function updateRekening() {
+  renderRekeningPosten();
+  updateRekeningTotals();
 }
 
 // ======== SAVE / LOAD ========
@@ -1254,6 +1338,7 @@ function refreshAll() {
   document.getElementById('ex-aanvaardings-datum').value = state.overledene.aanvaardingsDatum || '';
   document.getElementById('ex-executeur-naam').value = state.executeur.naam || '';
   document.getElementById('ex-vve-status').value = state.overledene.vveStatus || 'nee';
+  showLogo(state.executeur.logo || '');
   renderFases();
   updateBoedel();
   renderDeadlines();
@@ -1267,7 +1352,7 @@ document.getElementById('ex-reset-btn').addEventListener('click', function() {
   if (!confirm('Hele dossier resetten? Opgeslagen dossiers blijven bewaard.')) return;
   state = {
     overledene: { naam: '', overlijdensDatum: '', aanvaardingsDatum: '', vveStatus: 'nee' },
-    executeur: { naam: '' },
+    executeur: { naam: '', logo: '' },
     fases: { acceptatie: 'voltooid', inventarisatie: 'actief', boedel: 'todo', schulden: 'todo', belasting: 'todo', verdeling: 'todo', rekening: 'todo', afsluiting: 'todo' },
     boedel: { woning: [], voertuig: [], bank: [], beleg: [], inboedel: [], overig: [], lening: [], rekening: [], uitvaart: [{id:1,naam:'Uitvaartverzorger',bedrag:8000}], belasting: [] },
     deadlines: {}, documenten: {}, erfgenamen: [], rekening: { inkomsten: [], uitgaven: [] },
