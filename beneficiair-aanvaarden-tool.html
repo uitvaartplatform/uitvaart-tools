@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beneficiair Aanvaarden Tool 2026 - Uitvaart-Platform.nl</title>
+<meta name="description" content="Aanvaarden, beneficiair of verwerpen? Schuldencheck, beslisboom, stappenplan rechtbank en termijn calculator voor erfgenamen in twijfel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { padding: 16px; min-height: 100vh; }
+.ba-app { max-width: 1300px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; }
+.ba-print-cover { display: none; }
+.ba-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; }
+.ba-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.ba-header-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.ba-titel { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; }
+.ba-subtitel { font-size: 0.78rem; color: #fcd9c4; margin-top: 2px; }
+.ba-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(232,131,74,0.25); color: #fff; border-radius: 14px; font-size: 0.7rem; font-weight: 700; }
+.ba-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.ba-tabs { background: #2e0f29; padding: 0 20px; display: flex; gap: 2px; overflow-x: auto; }
+.ba-tab { background: transparent; border: none; padding: 14px; font-family: inherit; font-size: 0.78rem; font-weight: 600; color: #b09cae; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.ba-tab:hover { color: #fcd9c4; }
+.ba-tab.active { color: #fff; border-bottom-color: #e8834a; }
+.ba-pane { display: none; }
+.ba-pane.active { display: block; }
+
+.ba-body { display: grid; grid-template-columns: 1fr 1.1fr; min-height: 600px; }
+@media (max-width: 1000px) { .ba-body { grid-template-columns: 1fr; } }
+.ba-input { padding: 22px 26px; border-right: 1px solid #f0eae7; max-height: 920px; overflow-y: auto; }
+.ba-result { padding: 22px 26px; background: linear-gradient(135deg, #faf7f2 0%, #fff 100%); max-height: 920px; overflow-y: auto; }
+@media (max-width: 1000px) { .ba-input { border-right: none; border-bottom: 1px solid #f0eae7; max-height: none; } .ba-result { max-height: none; } }
+
+.ba-stap { margin-bottom: 18px; }
+.ba-stap-label { display: flex; align-items: center; gap: 10px; font-size: 0.62rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #e8834a; margin-bottom: 10px; }
+.ba-stap-nr { width: 22px; height: 22px; background: #4a1942; color: #e8834a; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; }
+
+.ba-blok { background: #faf7f2; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
+.ba-blok-kop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.ba-blok-titel { font-size: 0.86rem; font-weight: 700; color: #4a1942; display: flex; align-items: center; gap: 8px; }
+.ba-blok-titel-icoon { width: 26px; height: 26px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #e8834a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; }
+.ba-blok-sub { font-size: 0.74rem; color: #6a5e64; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.ba-veld { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #e2d9e0; }
+.ba-veld:last-child { border-bottom: none; }
+.ba-veld-icoon { width: 28px; height: 28px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+.ba-veld-info { flex: 1; }
+.ba-veld-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; line-height: 1.2; }
+.ba-veld-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 1px; line-height: 1.3; }
+.ba-veld-input { width: 130px; border: 1.5px solid #e2d9e0; background: #fff; border-radius: 8px; padding: 7px 10px; font-family: inherit; font-size: 0.84rem; font-weight: 700; color: #4a1942; text-align: right; font-variant-numeric: tabular-nums; outline: none; }
+.ba-veld-input:focus { border-color: #e8834a; }
+.ba-veld-input::-webkit-outer-spin-button, .ba-veld-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.ba-toggle-rij { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: #fff; border: 1.5px solid #e2d9e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-bottom: 6px; }
+.ba-toggle-rij:hover { border-color: #e8834a; }
+.ba-toggle-rij.active { border-color: #c4666c; background: #fcecee; }
+.ba-toggle-check { width: 20px; height: 20px; border: 2px solid #d3c8cd; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.ba-toggle-rij.active .ba-toggle-check { background: #c4666c; border-color: #c4666c; }
+.ba-toggle-rij.active .ba-toggle-check::after { content: "⚠"; color: #fff; font-size: 0.7rem; font-weight: 800; }
+.ba-toggle-info { flex: 1; }
+.ba-toggle-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; }
+.ba-toggle-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 2px; line-height: 1.3; }
+.ba-toggle-rij.active .ba-toggle-uitleg { color: #8c3a40; }
+
+.ba-input-text { width: 100%; border: 1.5px solid #e2d9e0; background: #fff; border-radius: 10px; padding: 10px 14px; font-family: inherit; font-size: 0.86rem; color: #4a1942; outline: none; }
+.ba-input-text:focus { border-color: #e8834a; }
+
+.ba-resultaat { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 20px 24px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.ba-resultaat::before { content: ""; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.ba-resultaat.zuiver { background: linear-gradient(135deg, #6b9a7f 0%, #588469 100%); }
+.ba-resultaat.beneficiair { background: linear-gradient(135deg, #d4a017 0%, #a87d10 100%); }
+.ba-resultaat.verwerpen { background: linear-gradient(135deg, #c4666c 0%, #a04a52 100%); }
+.ba-resultaat-label { font-size: 0.66rem; color: rgba(255,255,255,0.85); font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; position: relative; }
+.ba-resultaat-keuze { font-size: 1.8rem; font-weight: 800; color: #fff; line-height: 1.1; margin-top: 6px; position: relative; }
+.ba-resultaat-sub { font-size: 0.86rem; color: rgba(255,255,255,0.9); margin-top: 6px; position: relative; line-height: 1.5; }
+
+.ba-keuze-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+@media (max-width: 800px) { .ba-keuze-grid { grid-template-columns: 1fr; } }
+.ba-keuze-blok { background: #fff; border: 2px solid #e2d9e0; border-radius: 12px; padding: 16px 18px; position: relative; transition: all 0.3s; }
+.ba-keuze-blok.aanbevolen { border-color: #6b9a7f; box-shadow: 0 8px 20px rgba(107,154,127,0.2); }
+.ba-keuze-blok.afgeraden { opacity: 0.55; }
+.ba-keuze-badge { position: absolute; top: -8px; right: 10px; background: #6b9a7f; color: #fff; font-size: 0.6rem; font-weight: 700; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+.ba-keuze-badge.gevaar { background: #c4666c; }
+.ba-keuze-icoon { font-size: 1.6rem; line-height: 1; }
+.ba-keuze-titel { font-size: 0.92rem; font-weight: 700; color: #4a1942; margin: 6px 0 4px; }
+.ba-keuze-sub { font-size: 0.7rem; color: #6a5e64; margin-bottom: 10px; line-height: 1.4; min-height: 32px; }
+.ba-keuze-detail { font-size: 0.74rem; line-height: 1.5; }
+.ba-keuze-detail-rij { display: flex; padding: 3px 0; gap: 8px; }
+.ba-keuze-detail-rij::before { content: ""; width: 5px; height: 5px; background: #e8834a; border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+
+.ba-totaal { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 18px 22px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.ba-totaal::before { content: ""; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.ba-totaal-label { font-size: 0.66rem; color: #fcd9c4; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; position: relative; }
+.ba-totaal-waarde { font-size: 2rem; font-weight: 800; color: #e8834a; line-height: 1; margin-top: 4px; position: relative; font-variant-numeric: tabular-nums; }
+.ba-totaal-sub { font-size: 0.78rem; color: #ede0eb; margin-top: 4px; position: relative; }
+
+.ba-risico-balk { background: #e2d9e0; height: 28px; border-radius: 8px; overflow: hidden; position: relative; margin: 14px 0; }
+.ba-risico-fill { height: 100%; transition: all 0.4s; background: linear-gradient(90deg, #6b9a7f 0%, #d4a017 50%, #c4666c 100%); }
+.ba-risico-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 0.72rem; font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,0.4); letter-spacing: 0.5px; text-transform: uppercase; }
+
+.ba-stappen { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }
+.ba-stap-rij { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #e2d9e0; align-items: start; }
+.ba-stap-rij:last-child { border-bottom: none; }
+.ba-stap-num { width: 32px; height: 32px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.86rem; }
+.ba-stap-info-titel { font-size: 0.86rem; font-weight: 700; color: #4a1942; line-height: 1.3; }
+.ba-stap-info-sub { font-size: 0.72rem; color: #6a5e64; margin-top: 2px; line-height: 1.4; }
+.ba-stap-tijd { background: #faf0e7; color: #d4733c; padding: 3px 8px; border-radius: 8px; font-size: 0.66rem; font-weight: 700; }
+
+.ba-tabel { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+.ba-tabel-titel { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6a5e64; margin-bottom: 8px; }
+.ba-tabel-rij { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.78rem; border-bottom: 1px dashed #e2d9e0; }
+.ba-tabel-rij:last-child { border-bottom: none; }
+.ba-tabel-rij.belangrijk { font-weight: 800; padding-top: 8px; border-top: 2px solid #4a1942; border-bottom: none; margin-top: 4px; }
+.ba-tabel-naam { color: #4a4046; }
+.ba-tabel-waarde { font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
+.ba-tabel-waarde.neg { color: #c4666c; }
+
+.ba-info-box { background: #faf0e7; border-left: 4px solid #e8834a; border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-size: 0.78rem; color: #4a4046; line-height: 1.6; }
+.ba-info-box strong { color: #4a1942; font-weight: 700; }
+.ba-info-box.warning { background: #fef7e8; border-color: #d4a017; color: #5a4a10; }
+.ba-info-box.danger { background: #fcecee; border-color: #c4666c; color: #8c3a40; }
+.ba-info-box.success { background: #f0f7ed; border-color: #6b9a7f; color: #2e4030; }
+
+.ba-uitleg { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.ba-uitleg::before { content: ""; position: absolute; top: -50px; right: -50px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.ba-uitleg-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #fcd9c4; margin-bottom: 6px; position: relative; }
+.ba-uitleg-tekst { font-size: 0.84rem; color: #ede0eb; line-height: 1.65; position: relative; }
+.ba-uitleg-tekst strong { color: #fff; font-weight: 700; }
+.ba-uitleg-tekst .highlight { color: #e8834a; font-weight: 800; }
+
+.ba-termijn-card { background: #fff; border: 2px solid #e2d9e0; border-radius: 14px; padding: 22px 24px; text-align: center; margin-bottom: 14px; }
+.ba-termijn-card.urgent { border-color: #d4a017; background: linear-gradient(135deg, #fef7e8 0%, #fff 100%); }
+.ba-termijn-card.kritiek { border-color: #c4666c; background: linear-gradient(135deg, #fcecee 0%, #fff 100%); }
+.ba-termijn-card.overschreden { background: linear-gradient(135deg, #c4666c 0%, #a04a52 100%); color: #fff; border-color: #c4666c; }
+.ba-termijn-label { font-size: 0.66rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #6a5e64; margin-bottom: 4px; }
+.ba-termijn-card.overschreden .ba-termijn-label { color: #fde0e3; }
+.ba-termijn-dagen { font-size: 3.5rem; font-weight: 800; color: #4a1942; line-height: 1; font-variant-numeric: tabular-nums; }
+.ba-termijn-card.urgent .ba-termijn-dagen { color: #a87d10; }
+.ba-termijn-card.kritiek .ba-termijn-dagen { color: #c4666c; }
+.ba-termijn-card.overschreden .ba-termijn-dagen { color: #fff; }
+.ba-termijn-uitleg { font-size: 0.86rem; color: #4a4046; margin-top: 8px; }
+.ba-termijn-card.overschreden .ba-termijn-uitleg { color: #fff; }
+.ba-termijn-datum { font-size: 0.78rem; color: #6a5e64; margin-top: 4px; font-weight: 600; }
+.ba-termijn-card.overschreden .ba-termijn-datum { color: #fde0e3; }
+
+.ba-doc { display: grid; grid-template-columns: 32px 1fr; gap: 12px; padding: 10px 14px; background: #fff; border: 1px solid #e2d9e0; border-radius: 10px; margin-bottom: 6px; align-items: center; cursor: pointer; }
+.ba-doc:hover { border-color: #e8834a; }
+.ba-doc.gedaan { background: #f0f7ed; border-color: #6b9a7f; }
+.ba-doc-check { width: 22px; height: 22px; border: 2px solid #d3c8cd; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+.ba-doc.gedaan .ba-doc-check { background: #6b9a7f; border-color: #6b9a7f; }
+.ba-doc.gedaan .ba-doc-check::after { content: "✓"; color: #fff; font-weight: 800; }
+.ba-doc-info { font-size: 0.82rem; font-weight: 600; color: #4a1942; line-height: 1.3; }
+.ba-doc-sub { font-size: 0.68rem; color: #6a5e64; margin-top: 2px; font-weight: 500; }
+.ba-doc-tag { display: inline-block; padding: 1px 6px; background: #faf0e7; color: #d4733c; border-radius: 6px; font-size: 0.62rem; font-weight: 700; margin-left: 4px; }
+
+.ba-footer { padding: 14px 30px; border-top: 1px solid #f0eae7; background: #faf7f2; font-size: 0.72rem; color: #6a5e64; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.ba-footer-link { color: #4a1942; text-decoration: none; font-weight: 600; border-bottom: 2px solid #e8834a; }
+.ba-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.ba-action-btn { background: #4a1942; color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.ba-action-btn:hover { background: #6b2862; }
+.ba-action-btn.secondary { background: #fff; color: #4a1942; border: 1.5px solid #e2d9e0; }
+.ba-action-btn.secondary:hover { border-color: #e8834a; color: #e8834a; }
+
+@media print {
+  @page { margin: 1.5cm; }
+  body { background: #fff; padding: 0; }
+  .ba-app { box-shadow: none; border-radius: 0; }
+  .ba-tabs, .ba-action-btn { display: none !important; }
+  .ba-pane:not(.active) { display: none !important; }
+  .ba-input, .ba-result { max-height: none; overflow: visible; }
+  .ba-print-cover { display: block !important; padding: 60px 40px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; text-align: center; page-break-after: always; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  .ba-header { padding: 18px 20px; }
+  .ba-tabs { padding: 0 10px; }
+  .ba-tab { padding: 12px 10px; font-size: 0.72rem; }
+  .ba-input, .ba-result { padding: 18px; }
+  .ba-termijn-dagen { font-size: 2.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="ba-print-cover">
+  <h1>Aanvaardingsbeslissing Rapport</h1>
+  <div class="lead">Zuiver, beneficiair of verwerpen — onderbouwde beslissing</div>
+  <div class="datum" id="ba-print-datum"></div>
+</div>
+
+<div class="ba-app">
+  <header class="ba-header">
+    <div class="ba-header-content">
+      <div>
+        <h1 class="ba-titel">Beneficiair Aanvaarden Beslissingsboom PRO</h1>
+        <div class="ba-subtitel">2026 &middot; 5 modi &middot; Schuldencheck &middot; Beslisboom &middot; Termijn alert</div>
+      </div>
+      <div class="ba-badge"><span class="ba-badge-dot"></span> Live advies</div>
+    </div>
+  </header>
+
+  <nav class="ba-tabs" id="ba-tabs">
+    <button class="ba-tab active" data-tab="check"><span>🔍</span> Schuldencheck</button>
+    <button class="ba-tab" data-tab="boom"><span>⚖️</span> Beslisboom</button>
+    <button class="ba-tab" data-tab="stappen"><span>📋</span> Stappenplan</button>
+    <button class="ba-tab" data-tab="termijn"><span>⏰</span> Termijn alert</button>
+    <button class="ba-tab" data-tab="docs"><span>📄</span> Documenten</button>
+  </nav>
+
+  <!-- ========== SCHULDENCHECK ========== -->
+  <div class="ba-pane active" data-pane="check">
+    <div class="ba-body">
+      <div class="ba-input">
+        <div class="ba-blok">
+          <div class="ba-blok-kop"><div class="ba-blok-titel"><div class="ba-blok-titel-icoon">+</div> Bezittingen</div><div class="ba-blok-sub" id="ba-bezit-totaal">€0</div></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">🏠</div><div class="ba-veld-info"><div class="ba-veld-naam">Woning (WOZ)</div></div><input type="number" class="ba-veld-input" data-bezit="woning" value="0"></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">💰</div><div class="ba-veld-info"><div class="ba-veld-naam">Spaargeld</div></div><input type="number" class="ba-veld-input" data-bezit="spaargeld" value="0"></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">📈</div><div class="ba-veld-info"><div class="ba-veld-naam">Beleggingen</div></div><input type="number" class="ba-veld-input" data-bezit="beleggingen" value="0"></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">🛋️</div><div class="ba-veld-info"><div class="ba-veld-naam">Inboedel en overig</div></div><input type="number" class="ba-veld-input" data-bezit="inboedel" value="0"></div>
+        </div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-kop"><div class="ba-blok-titel"><div class="ba-blok-titel-icoon">−</div> Bekende schulden</div><div class="ba-blok-sub" id="ba-schuld-totaal">€0</div></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">🏦</div><div class="ba-veld-info"><div class="ba-veld-naam">Hypotheek</div></div><input type="number" class="ba-veld-input" data-schuld="hypotheek" value="0"></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">💳</div><div class="ba-veld-info"><div class="ba-veld-naam">Persoonlijke lening of krediet</div></div><input type="number" class="ba-veld-input" data-schuld="krediet" value="0"></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">📄</div><div class="ba-veld-info"><div class="ba-veld-naam">Openstaande facturen</div></div><input type="number" class="ba-veld-input" data-schuld="facturen" value="0"></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">⚰️</div><div class="ba-veld-info"><div class="ba-veld-naam">Uitvaartkosten (open)</div></div><input type="number" class="ba-veld-input" data-schuld="uitvaart" value="8000"></div>
+          <div class="ba-veld"><div class="ba-veld-icoon">🧾</div><div class="ba-veld-info"><div class="ba-veld-naam">Belastingschulden</div></div><input type="number" class="ba-veld-input" data-schuld="belasting" value="0"></div>
+        </div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-kop"><div class="ba-blok-titel"><div class="ba-blok-titel-icoon">⚠</div> Risicosignalen</div></div>
+          <div class="ba-toggle-rij" data-risico="onderneming">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Erflater had eigen bedrijf, BV of eenmanszaak</div>
+              <div class="ba-toggle-uitleg">Bedrijfsschulden, BTW-claims, leveranciers, personeelsvorderingen vaak verborgen</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-risico="borg">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Erflater stond borg voor anderen</div>
+              <div class="ba-toggle-uitleg">Borgstelling voor familie of vrienden wordt vaak een claim</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-risico="rechtszaak">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Lopende rechtszaak of conflict</div>
+              <div class="ba-toggle-uitleg">Schadeclaim, conflict met buurman, familie of werkgever</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-risico="onderzoek">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Onderzoek door Belastingdienst of UWV</div>
+              <div class="ba-toggle-uitleg">Naheffingsaanslag of terugvordering mogelijk</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-risico="hoek">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Eigen woning met hoge hypotheek</div>
+              <div class="ba-toggle-uitleg">Restschuld bij gedwongen verkoop mogelijk</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-risico="onbekend">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Onbekend met financiële situatie erflater</div>
+              <div class="ba-toggle-uitleg">Je was niet betrokken bij de financiën van erflater</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-risico="contact">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Lange tijd geen contact gehad</div>
+              <div class="ba-toggle-uitleg">Familieverhoudingen waren verbroken</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-result">
+        <div class="ba-totaal">
+          <div class="ba-totaal-label">Saldo nalatenschap (bekend)</div>
+          <div class="ba-totaal-waarde" id="ba-saldo">€0</div>
+          <div class="ba-totaal-sub" id="ba-saldo-sub">—</div>
+        </div>
+
+        <div class="ba-tabel">
+          <div class="ba-tabel-titel">Risico inschatting verborgen schulden</div>
+          <div class="ba-risico-balk"><div class="ba-risico-fill" id="ba-risico-fill" style="width: 0%;"></div><div class="ba-risico-label" id="ba-risico-label">LAAG RISICO</div></div>
+          <div style="font-size:0.72rem; color:#6a5e64; text-align:center;" id="ba-risico-tekst">Op basis van de aangevinkte risicosignalen</div>
+        </div>
+
+        <div class="ba-uitleg">
+          <div class="ba-uitleg-label">🔍 Eerste analyse</div>
+          <div class="ba-uitleg-tekst" id="ba-check-uitleg">Vul de schulden en risico's in om advies te krijgen.</div>
+        </div>
+
+        <div class="ba-info-box warning"><strong>Verborgen schulden komen vaak later boven:</strong> bedrijfsschulden, fiscale naheffingen, borgstellingen, schadeclaims uit lopende geschillen. Bij twijfel altijd <strong>beneficiair aanvaarden</strong> als veilig vangnet.</div>
+
+        <div class="ba-info-box"><strong>Doe ook deze checks:</strong> BKR-registratie, openstaande post laatste 6 maanden bekijken, lopende abonnementen, e-mail bij banken en verzekeraars, borgstelling navragen bij familie, bij eigen bedrijf jaarrekeningen opvragen.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== BESLISBOOM ========== -->
+  <div class="ba-pane" data-pane="boom">
+    <div class="ba-body">
+      <div class="ba-input">
+        <div class="ba-info-box"><strong>Deze beslisboom</strong> baseert zich op de gegevens uit de "Schuldencheck" tab plus aanvullende vragen hieronder.</div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-kop"><div class="ba-blok-titel"><div class="ba-blok-titel-icoon">❓</div> Aanvullende vragen</div></div>
+          <div class="ba-toggle-rij" data-bb="schenkingen">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Erflater heeft kort voor overlijden grote giften gedaan</div>
+              <div class="ba-toggle-uitleg">Mogelijk verdacht — wijst soms op vermijding van schuldeisers</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-bb="beheer">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Ik ben zelf executeur of beheerder</div>
+              <div class="ba-toggle-uitleg">Dan extra voorzichtig zijn met daden van aanvaarding</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-bb="urgent">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Tijd dringt (deadline van 3 maanden bijna voorbij)</div>
+              <div class="ba-toggle-uitleg">Bij onzekerheid eerder beneficiair als verzekering</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-bb="overige">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Er zijn andere erfgenamen die zuiver willen aanvaarden</div>
+              <div class="ba-toggle-uitleg">Jouw keuze geldt alleen voor jezelf, niet voor anderen</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-bb="prive">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Ik heb zelf substantieel privévermogen te beschermen</div>
+              <div class="ba-toggle-uitleg">Extra reden om risico van schulden te vermijden</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-result">
+        <div class="ba-resultaat" id="ba-advies">
+          <div class="ba-resultaat-label">Onderbouwd advies</div>
+          <div class="ba-resultaat-keuze" id="ba-advies-keuze">—</div>
+          <div class="ba-resultaat-sub" id="ba-advies-sub">Vul de schuldencheck en aanvullende vragen in.</div>
+        </div>
+
+        <div class="ba-keuze-grid">
+          <div class="ba-keuze-blok" id="ba-k-zuiver">
+            <div class="ba-keuze-icoon">✓</div>
+            <div class="ba-keuze-titel">Zuiver aanvaarden</div>
+            <div class="ba-keuze-sub">Alle bezittingen en alle schulden, ook privé aansprakelijk voor tekort.</div>
+            <div class="ba-keuze-detail">
+              <div class="ba-keuze-detail-rij">Geen formele actie nodig</div>
+              <div class="ba-keuze-detail-rij">Privé aansprakelijk bij tekort</div>
+              <div class="ba-keuze-detail-rij">Direct beschikking over bezit</div>
+              <div class="ba-keuze-detail-rij">Geen kosten</div>
+            </div>
+          </div>
+          <div class="ba-keuze-blok" id="ba-k-beneficiair">
+            <div class="ba-keuze-icoon">🛡️</div>
+            <div class="ba-keuze-titel">Beneficiair aanvaarden</div>
+            <div class="ba-keuze-sub">Erven alleen tot waarde nalatenschap. Geen privé risico, formele procedure.</div>
+            <div class="ba-keuze-detail">
+              <div class="ba-keuze-detail-rij">Registratie bij rechtbank</div>
+              <div class="ba-keuze-detail-rij">Griffierecht 165 euro</div>
+              <div class="ba-keuze-detail-rij">Vereffening nodig met openbare aankondiging</div>
+              <div class="ba-keuze-detail-rij">Bescherming tegen privé risico</div>
+            </div>
+          </div>
+          <div class="ba-keuze-blok" id="ba-k-verwerpen">
+            <div class="ba-keuze-icoon">✕</div>
+            <div class="ba-keuze-titel">Verwerpen</div>
+            <div class="ba-keuze-sub">Niets erven, ook geen schulden. Plaatsvervulling treedt op.</div>
+            <div class="ba-keuze-detail">
+              <div class="ba-keuze-detail-rij">Registratie bij rechtbank</div>
+              <div class="ba-keuze-detail-rij">Griffierecht 165 euro</div>
+              <div class="ba-keuze-detail-rij">Eigen kinderen erven dan (plaatsvervulling)</div>
+              <div class="ba-keuze-detail-rij">Onomkeerbaar</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ba-uitleg">
+          <div class="ba-uitleg-label">⚖️ Toelichting</div>
+          <div class="ba-uitleg-tekst" id="ba-bb-uitleg">—</div>
+        </div>
+
+        <div class="ba-info-box danger"><strong>Let op — daden van zuivere aanvaarding:</strong> als je goederen uit de nalatenschap meeneemt, vakanties betaalt uit het saldo of bezittingen verkoopt, geldt dat als <em>zuiver aanvaarden</em>. Dan kun je niet meer beneficiair aanvaarden of verwerpen.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== STAPPENPLAN ========== -->
+  <div class="ba-pane" data-pane="stappen">
+    <div class="ba-body">
+      <div class="ba-input">
+        <div class="ba-info-box"><strong>Stappenplan beneficiair aanvaarden</strong> bij de rechtbank. Doorlooptijd: 1-2 weken voor registratie. Vereffening duurt langer (3-12 maanden afhankelijk van complexiteit).</div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-kop"><div class="ba-blok-titel"><div class="ba-blok-titel-icoon">📍</div> Bij welke rechtbank?</div></div>
+          <div style="font-size:0.78rem; color:#4a4046; padding:8px 0;">Bij de rechtbank waar de erflater het laatst woonde. Niet bij jouw woonplaats. Voorbeeld: erflater woonde in Eindhoven, dan rechtbank Oost-Brabant in Den Bosch.</div>
+        </div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-kop"><div class="ba-blok-titel"><div class="ba-blok-titel-icoon">💸</div> Kosten 2026</div></div>
+          <div class="ba-tabel-rij"><span class="ba-tabel-naam">Griffierecht aanvaarden of verwerpen</span><span class="ba-tabel-waarde">€165</span></div>
+          <div class="ba-tabel-rij"><span class="ba-tabel-naam">Advertentie openbare aankondiging</span><span class="ba-tabel-waarde">€100-€300</span></div>
+          <div class="ba-tabel-rij"><span class="ba-tabel-naam">Eventuele boedelnotaris (uurtarief)</span><span class="ba-tabel-waarde">€200-€350/u</span></div>
+          <div class="ba-tabel-rij"><span class="ba-tabel-naam">Verklaring van erfrecht (apart)</span><span class="ba-tabel-waarde">€300-€1.000</span></div>
+        </div>
+
+        <div class="ba-info-box warning"><strong>Procedure verloopt vaak via notaris:</strong> de notaris kan namens jou de verklaring opstellen en bij de rechtbank indienen. Veiliger maar duurder (€100-€300 extra).</div>
+      </div>
+
+      <div class="ba-result">
+        <div class="ba-stappen">
+          <div class="ba-stap-rij">
+            <div class="ba-stap-num">1</div>
+            <div><div class="ba-stap-info-titel">Verklaring opstellen</div><div class="ba-stap-info-sub">Schriftelijke verklaring "ik aanvaard beneficiair de nalatenschap van [naam erflater], overleden op [datum]". Bevat NAW-gegevens jezelf en erflater.</div></div>
+            <div class="ba-stap-tijd">1 dag</div>
+          </div>
+          <div class="ba-stap-rij">
+            <div class="ba-stap-num">2</div>
+            <div><div class="ba-stap-info-titel">Documenten verzamelen</div><div class="ba-stap-info-sub">Akte van overlijden, identiteitsbewijs, eventuele verklaring van erfrecht. Bij minderjarige erfgenamen kantonrechter goedkeuring.</div></div>
+            <div class="ba-stap-tijd">1-3 dagen</div>
+          </div>
+          <div class="ba-stap-rij">
+            <div class="ba-stap-num">3</div>
+            <div><div class="ba-stap-info-titel">Indienen bij rechtbank</div><div class="ba-stap-info-sub">Verklaring, documenten en griffierecht van 165 euro. Indienen kan persoonlijk, per post of via notaris.</div></div>
+            <div class="ba-stap-tijd">Direct</div>
+          </div>
+          <div class="ba-stap-rij">
+            <div class="ba-stap-num">4</div>
+            <div><div class="ba-stap-info-titel">Registratie en bevestiging</div><div class="ba-stap-info-sub">De rechtbank registreert je beneficiaire aanvaarding in het boedelregister. Je krijgt een bevestiging.</div></div>
+            <div class="ba-stap-tijd">5-10 werkdagen</div>
+          </div>
+          <div class="ba-stap-rij">
+            <div class="ba-stap-num">5</div>
+            <div><div class="ba-stap-info-titel">Vereffening starten</div><div class="ba-stap-info-sub">Erfgenamen worden samen vereffenaars (tenzij notaris of professional aangewezen). Schuldeisers oproepen via advertentie.</div></div>
+            <div class="ba-stap-tijd">Direct na bevestiging</div>
+          </div>
+          <div class="ba-stap-rij">
+            <div class="ba-stap-num">6</div>
+            <div><div class="ba-stap-info-titel">Boedelbeschrijving opstellen</div><div class="ba-stap-info-sub">Volledige lijst bezittingen en schulden. Indienen bij rechtbank binnen redelijke termijn (vaak 4 maanden).</div></div>
+            <div class="ba-stap-tijd">1-4 maanden</div>
+          </div>
+          <div class="ba-stap-rij">
+            <div class="ba-stap-num">7</div>
+            <div><div class="ba-stap-info-titel">Schulden betalen uit nalatenschap</div><div class="ba-stap-info-sub">In volgorde van wettelijke voorrang: preferente schuldeisers eerst (Belastingdienst, hypotheek), daarna concurrent.</div></div>
+            <div class="ba-stap-tijd">2-6 maanden</div>
+          </div>
+          <div class="ba-stap-rij">
+            <div class="ba-stap-num">8</div>
+            <div><div class="ba-stap-info-titel">Eindafrekening en verdeling</div><div class="ba-stap-info-sub">Wat resteert wordt verdeeld onder erfgenamen volgens erfdelen. Sluit boedelregister af bij rechtbank.</div></div>
+            <div class="ba-stap-tijd">6-12 maanden</div>
+          </div>
+        </div>
+
+        <div class="ba-info-box success"><strong>Hou rekening met:</strong> tijdens vereffening mag je niet zomaar bezittingen verkopen. Alles moet via gestructureerd proces. De rechtbank kan een professioneel vereffenaar benoemen bij complexe boedels.</div>
+
+        <div class="ba-info-box"><strong>Negatieve nalatenschap:</strong> als er na alle schulden te weinig overblijft, ontvang je niets. Maar je hoeft ook niets bij te leggen vanuit privé. Dat is de hele bescherming van beneficiair aanvaarden.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TERMIJN ========== -->
+  <div class="ba-pane" data-pane="termijn">
+    <div class="ba-body">
+      <div class="ba-input">
+        <div class="ba-stap">
+          <div class="ba-stap-label"><span class="ba-stap-nr">1</span> Datum overlijden</div>
+          <input type="date" class="ba-input-text" id="ba-t-datum">
+        </div>
+
+        <div class="ba-info-box warning"><strong>De wettelijke beslistermijn van 3 maanden</strong> begint te lopen vanaf het moment dat je <em>op de hoogte bent</em> van het overlijden EN dat je erfgenaam bent. Voor de meeste mensen is dat de overlijdensdatum, maar bij vertraagde communicatie kan dit later zijn.</div>
+
+        <div class="ba-info-box"><strong>Geen actie = zuiver aanvaarden:</strong> als je niets doet binnen 3 maanden, geldt dat automatisch als zuiver aanvaarden (BW 4:192). Daarna is verandering niet meer mogelijk.</div>
+
+        <div class="ba-info-box danger"><strong>Speciale verlenging</strong> mogelijk via kantonrechter als er bijzondere omstandigheden zijn (complexe boedel, internationaal, twijfel over erfgenaamschap). Termijn verlenging tijdig aanvragen.</div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-kop"><div class="ba-blok-titel"><div class="ba-blok-titel-icoon">⚠</div> Speciale situaties</div></div>
+          <div class="ba-toggle-rij" data-tm="minderjarig">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Minderjarige erfgenaam</div>
+              <div class="ba-toggle-uitleg">Wettelijke vertegenwoordiger MOET beneficiair aanvaarden (geen keuze)</div>
+            </div>
+          </div>
+          <div class="ba-toggle-rij" data-tm="curator">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info">
+              <div class="ba-toggle-naam">Onder curatele of bewind</div>
+              <div class="ba-toggle-uitleg">Kantonrechter goedkeuring nodig voor elke keuze</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-result">
+        <div class="ba-termijn-card" id="ba-termijn-card">
+          <div class="ba-termijn-label">Resterende dagen voor beslissing</div>
+          <div class="ba-termijn-dagen" id="ba-termijn-dagen">—</div>
+          <div class="ba-termijn-uitleg" id="ba-termijn-uitleg">Voer de datum overlijden in</div>
+          <div class="ba-termijn-datum" id="ba-termijn-datum"></div>
+        </div>
+
+        <div class="ba-tabel">
+          <div class="ba-tabel-titel">Belangrijke data</div>
+          <div class="ba-tabel-rij"><span class="ba-tabel-naam">Datum overlijden</span><span class="ba-tabel-waarde" id="ba-t-d-overlijden">—</span></div>
+          <div class="ba-tabel-rij"><span class="ba-tabel-naam">Aanvang termijn 3 maanden</span><span class="ba-tabel-waarde" id="ba-t-d-aanvang">—</span></div>
+          <div class="ba-tabel-rij"><span class="ba-tabel-naam">Voorzichtigheid vanaf</span><span class="ba-tabel-waarde" id="ba-t-d-voorzichtig">—</span></div>
+          <div class="ba-tabel-rij belangrijk"><span class="ba-tabel-naam">DEADLINE beslissing</span><span class="ba-tabel-waarde neg" id="ba-t-d-deadline">—</span></div>
+          <div class="ba-tabel-rij"><span class="ba-tabel-naam">Aangifte erfbelasting (apart)</span><span class="ba-tabel-waarde" id="ba-t-d-aangifte">—</span></div>
+        </div>
+
+        <div class="ba-uitleg">
+          <div class="ba-uitleg-label">⏰ Tijdslijn advies</div>
+          <div class="ba-uitleg-tekst" id="ba-termijn-advies">—</div>
+        </div>
+
+        <div class="ba-info-box"><strong>Als deadline overschreden is</strong> en je hebt niets gedaan, geldt zuiver aanvaarden. Bij grote schulden kan je nog wel een verzoek doen tot 'gerechtelijke vereffening' (BW 4:204), een ingewikkelde procedure die alleen werkt bij bijzondere omstandigheden.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DOCS ========== -->
+  <div class="ba-pane" data-pane="docs">
+    <div class="ba-body">
+      <div class="ba-input">
+        <div class="ba-info-box"><strong>Voor beneficiair aanvaarden bij de rechtbank</strong> heb je deze documenten nodig. Klik om af te vinken, je voortgang wordt onthouden.</div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-titel" style="margin-bottom:10px;"><div class="ba-blok-titel-icoon">📋</div> Voor de rechtbank</div>
+          <div id="ba-docs-rechtbank"></div>
+        </div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-titel" style="margin-bottom:10px;"><div class="ba-blok-titel-icoon">🔍</div> Voor je eigen onderzoek</div>
+          <div id="ba-docs-onderzoek"></div>
+        </div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-titel" style="margin-bottom:10px;"><div class="ba-blok-titel-icoon">📞</div> Wie te informeren</div>
+          <div id="ba-docs-informeren"></div>
+        </div>
+      </div>
+
+      <div class="ba-result">
+        <div class="ba-totaal">
+          <div class="ba-totaal-label">Documenten voortgang</div>
+          <div class="ba-totaal-waarde" id="ba-docs-pct">0%</div>
+          <div class="ba-totaal-sub" id="ba-docs-sub">Klik documenten aan zodra je ze hebt</div>
+        </div>
+
+        <div class="ba-uitleg">
+          <div class="ba-uitleg-label">📄 Tips voor het verzamelen</div>
+          <div class="ba-uitleg-tekst">
+            <strong>Begin direct met de rechtbank-documenten.</strong> De andere documenten kunnen tijdens de termijn. De akte van overlijden krijg je van de gemeente, vraag direct 5 originelen aan want je hebt ze later vaker nodig.
+          </div>
+        </div>
+
+        <div class="ba-info-box success"><strong>Verklaring van erfrecht nodig of niet?</strong> Voor beneficiair aanvaarden bij rechtbank is geen verklaring van erfrecht nodig. Wel nodig voor banken en verzekeraars om transacties te doen. Pas aanvragen na beslissing aanvaarden of beneficiair.</div>
+
+        <div class="ba-info-box warning"><strong>Wacht met daden van aanvaarding:</strong> tijdens onderzoek niet de woning leegruimen, geen bezittingen verkopen, geen vakanties betalen uit het saldo. Dat zou per ongeluk zuivere aanvaarding opleveren.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="ba-footer">
+    <span>Indicatief advies, geen juridisch bindend. Bij twijfel notaris of advocaat raadplegen. <a href="https://uitvaart-platform.nl/nalatenschap-erfrecht" class="ba-footer-link" target="_top">Meer info</a></span>
+    <div class="ba-actions">
+      <button class="ba-action-btn secondary" onclick="window.print()">🖨️ PDF</button>
+      <button class="ba-action-btn" onclick="if(confirm('Reset alle invoer?')) location.reload()">🔄 Reset</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  function fEuro(n) { n = Math.round(n); return '€' + n.toLocaleString('nl-NL'); }
+  function fDatum(iso) {
+    if (!iso) return '—';
+    var d = new Date(iso);
+    var m = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    return d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function addDays(iso, days) {
+    var d = new Date(iso);
+    d.setDate(d.getDate() + days);
+    return d.toISOString().split('T')[0];
+  }
+  function daysBetween(iso1, iso2) {
+    return Math.round((new Date(iso2) - new Date(iso1)) / 86400000);
+  }
+
+  function setPrintDatum() {
+    var d = new Date();
+    var m = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+    document.getElementById('ba-print-datum').textContent = 'Gegenereerd op ' + d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  setPrintDatum();
+
+  document.getElementById('ba-tabs').addEventListener('click', function(e) {
+    var btn = e.target.closest('.ba-tab');
+    if (!btn) return;
+    document.querySelectorAll('.ba-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.ba-pane').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelector('[data-pane="' + btn.dataset.tab + '"]').classList.add('active');
+  });
+
+  // ======== STATE ========
+  var state = {
+    bezit: { woning: 0, spaargeld: 0, beleggingen: 0, inboedel: 0 },
+    schuld: { hypotheek: 0, krediet: 0, facturen: 0, uitvaart: 8000, belasting: 0 },
+    risicos: {},
+    bb: {},
+    datum: '',
+    tm: {},
+    docs: {}
+  };
+
+  // ======== SCHULDENCHECK ========
+  document.querySelectorAll('[data-bezit]').forEach(function(input) {
+    input.addEventListener('input', function() {
+      state.bezit[input.dataset.bezit] = parseInt(input.value, 10) || 0;
+      updateCheck();
+      updateBB();
+    });
+  });
+  document.querySelectorAll('[data-schuld]').forEach(function(input) {
+    input.addEventListener('input', function() {
+      state.schuld[input.dataset.schuld] = parseInt(input.value, 10) || 0;
+      updateCheck();
+      updateBB();
+    });
+  });
+  document.querySelectorAll('[data-risico]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var k = row.dataset.risico;
+      state.risicos[k] = !state.risicos[k];
+      row.classList.toggle('active', !!state.risicos[k]);
+      updateCheck();
+      updateBB();
+    });
+  });
+
+  function updateCheck() {
+    var bezit = 0;
+    Object.keys(state.bezit).forEach(function(k) { bezit += state.bezit[k]; });
+    var schuld = 0;
+    Object.keys(state.schuld).forEach(function(k) { schuld += state.schuld[k]; });
+    var saldo = bezit - schuld;
+
+    document.getElementById('ba-bezit-totaal').textContent = fEuro(bezit);
+    document.getElementById('ba-schuld-totaal').textContent = '-' + fEuro(schuld);
+    document.getElementById('ba-saldo').textContent = fEuro(saldo);
+
+    var risicoScore = 0;
+    Object.keys(state.risicos).forEach(function(k) { if (state.risicos[k]) risicoScore++; });
+    var risicoPct = Math.min(100, risicoScore * 15);
+    document.getElementById('ba-risico-fill').style.width = risicoPct + '%';
+
+    var label, tekst;
+    if (risicoScore === 0) { label = 'LAAG RISICO'; tekst = 'Geen bijzondere risicosignalen aangegeven'; }
+    else if (risicoScore <= 2) { label = 'MATIG RISICO'; tekst = risicoScore + ' risicosignalen, overweeg beneficiair'; }
+    else if (risicoScore <= 4) { label = 'HOOG RISICO'; tekst = risicoScore + ' risicosignalen, beneficiair sterk aangeraden'; }
+    else { label = 'ZEER HOOG RISICO'; tekst = risicoScore + ' risicosignalen, beneficiair of verwerpen overwegen'; }
+    document.getElementById('ba-risico-label').textContent = label;
+    document.getElementById('ba-risico-tekst').textContent = tekst;
+
+    document.getElementById('ba-saldo-sub').textContent = saldo > 0 ? 'Positief saldo (bekend)' : saldo < 0 ? 'Negatief saldo (bekend)' : 'Geen gegevens';
+
+    var uitleg = '';
+    if (bezit === 0 && schuld === 0) {
+      uitleg = 'Vul de bekende bezittingen en schulden in voor een eerste analyse.';
+    } else if (saldo > 50000 && risicoScore <= 1) {
+      uitleg = '<strong>Positief saldo en weinig risicos.</strong> Bij <span class="highlight">zekerheid</span> kan zuiver aanvaarden. Bij twijfel altijd beneficiair.';
+    } else if (saldo < 0) {
+      uitleg = '<strong>Negatieve nalatenschap</strong> al bij bekende cijfers. Sterk overwegen om te <span class="highlight">verwerpen</span>, tenzij sentimentele bezittingen.';
+    } else if (risicoScore >= 3) {
+      uitleg = '<strong>Veel risicosignalen.</strong> Verborgen schulden zijn waarschijnlijk. <span class="highlight">Beneficiair aanvaarden</span> is hier verstandig.';
+    } else {
+      uitleg = '<strong>Gemiddeld profiel.</strong> Bekijk de Beslisboom voor een onderbouwd advies.';
+    }
+    document.getElementById('ba-check-uitleg').innerHTML = uitleg;
+  }
+  updateCheck();
+
+  // ======== BESLISBOOM ========
+  document.querySelectorAll('[data-bb]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var k = row.dataset.bb;
+      state.bb[k] = !state.bb[k];
+      row.classList.toggle('active', !!state.bb[k]);
+      updateBB();
+    });
+  });
+
+  function updateBB() {
+    var bezit = 0;
+    Object.keys(state.bezit).forEach(function(k) { bezit += state.bezit[k]; });
+    var schuld = 0;
+    Object.keys(state.schuld).forEach(function(k) { schuld += state.schuld[k]; });
+    var saldo = bezit - schuld;
+    var risicoScore = 0;
+    Object.keys(state.risicos).forEach(function(k) { if (state.risicos[k]) risicoScore++; });
+    var bbScore = 0;
+    Object.keys(state.bb).forEach(function(k) { if (state.bb[k]) bbScore++; });
+
+    var advies, sub, klasse, uitleg;
+
+    if (saldo < -20000 || (saldo < 0 && (risicoScore >= 2 || bbScore >= 2))) {
+      advies = 'VERWERPEN';
+      sub = 'De nalatenschap heeft naar verwachting een fors negatief saldo. Verwerpen voorkomt elk risico en plaatsvervulling treedt op.';
+      klasse = 'verwerpen';
+      uitleg = '<strong>Verwerpen is hier de meest verstandige keuze.</strong> Met een negatief saldo of substantiele schulden plus risicos heeft aanvaarden geen meerwaarde. <span class="highlight">Let op</span>: bij verwerpen erven je eigen kinderen (plaatsvervulling). Bespreek dat met hen voordat je verwerpt, anders krijgen zij hetzelfde probleem.';
+    } else if (risicoScore >= 3 || bbScore >= 2 || (saldo < 50000 && (risicoScore >= 2 || bbScore >= 1))) {
+      advies = 'BENEFICIAIR AANVAARDEN';
+      sub = 'Voldoende risicosignalen om voorzichtig te zijn. Beneficiair beschermt je privé vermogen volledig.';
+      klasse = 'beneficiair';
+      uitleg = '<strong>Beneficiair aanvaarden is hier de veiligste keuze.</strong> Je profiteert van eventuele positieve waarde, maar wordt beschermd tegen verborgen schulden. <span class="highlight">Kosten</span>: 165 euro griffierecht plus eventueel notariskosten. Termijn 3 maanden vanaf overlijden.';
+    } else if (saldo > 100000 && risicoScore === 0 && bbScore === 0) {
+      advies = 'ZUIVER AANVAARDEN';
+      sub = 'Geen risicosignalen, ruim positief saldo, bekende boedel. Zuiver aanvaarden is hier passend en kosteloos.';
+      klasse = 'zuiver';
+      uitleg = '<strong>Zuiver aanvaarden kan veilig.</strong> Geen risicosignalen aanwezig en het saldo is ruim positief. Geen formele actie nodig, geen kosten. <span class="highlight">Wees alert</span> op nieuwe info tijdens de 3 maanden, als er onverwachte schulden opduiken kun je nog beneficiair worden.';
+    } else if (saldo > 0 && risicoScore <= 1) {
+      advies = 'NEUTRAAL — voorzichtigheid past';
+      sub = 'Geen duidelijke voorkeur. Beneficiair als verzekering is een redelijke optie voor de zekerheid.';
+      klasse = '';
+      uitleg = 'Op basis van de input kan zowel zuiver als beneficiair. <strong>Vuistregel</strong>: als de extra zekerheid van beneficiair (165 euro plus tijd) opweegt tegen het risico, kies beneficiair. Bij volledige zekerheid over de boedel: zuiver aanvaarden.';
+    } else {
+      advies = 'BENEFICIAIR AANVAARDEN';
+      sub = 'Standaard advies bij onzekerheid. Beperkte kosten, maximale bescherming.';
+      klasse = 'beneficiair';
+      uitleg = '<strong>Beneficiair is hier veilig.</strong> Bij twijfel altijd kiezen voor bescherming.';
+    }
+
+    document.getElementById('ba-advies-keuze').textContent = advies;
+    document.getElementById('ba-advies-sub').textContent = sub;
+    document.getElementById('ba-advies').className = 'ba-resultaat ' + klasse;
+    document.getElementById('ba-bb-uitleg').innerHTML = uitleg;
+
+    document.querySelectorAll('.ba-keuze-blok').forEach(function(b) {
+      b.classList.remove('aanbevolen', 'afgeraden');
+      var badges = b.querySelectorAll('.ba-keuze-badge');
+      badges.forEach(function(x) { x.remove(); });
+    });
+
+    var idMap = {
+      'ZUIVER AANVAARDEN': 'ba-k-zuiver',
+      'BENEFICIAIR AANVAARDEN': 'ba-k-beneficiair',
+      'VERWERPEN': 'ba-k-verwerpen'
+    };
+    if (idMap[advies]) {
+      var el = document.getElementById(idMap[advies]);
+      el.classList.add('aanbevolen');
+      var badge = document.createElement('div');
+      badge.className = 'ba-keuze-badge';
+      badge.textContent = '✓ Aanbevolen';
+      el.appendChild(badge);
+    }
+    if (advies === 'VERWERPEN') {
+      document.getElementById('ba-k-zuiver').classList.add('afgeraden');
+      var gevaar = document.createElement('div');
+      gevaar.className = 'ba-keuze-badge gevaar';
+      gevaar.textContent = '⚠ Risicovol';
+      document.getElementById('ba-k-zuiver').appendChild(gevaar);
+    }
+  }
+  updateBB();
+
+  // ======== TERMIJN ========
+  document.getElementById('ba-t-datum').addEventListener('input', function(e) {
+    state.datum = e.target.value;
+    updateTermijn();
+  });
+  document.querySelectorAll('[data-tm]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var k = row.dataset.tm;
+      state.tm[k] = !state.tm[k];
+      row.classList.toggle('active', !!state.tm[k]);
+      updateTermijn();
+    });
+  });
+
+  function updateTermijn() {
+    if (!state.datum) {
+      document.getElementById('ba-termijn-dagen').textContent = '—';
+      document.getElementById('ba-termijn-uitleg').textContent = 'Voer de datum overlijden in';
+      document.getElementById('ba-termijn-datum').textContent = '';
+      document.getElementById('ba-termijn-card').className = 'ba-termijn-card';
+      ['overlijden','aanvang','voorzichtig','deadline','aangifte'].forEach(function(k) {
+        document.getElementById('ba-t-d-' + k).textContent = '—';
+      });
+      document.getElementById('ba-termijn-advies').innerHTML = 'Voer eerst de datum overlijden in.';
+      return;
+    }
+
+    var deadline = addDays(state.datum, 90);
+    var voorzichtig = addDays(state.datum, 60);
+    var aangifte = addDays(state.datum, 608);
+    var nu = new Date().toISOString().split('T')[0];
+    var dagenTot = daysBetween(nu, deadline);
+
+    document.getElementById('ba-termijn-dagen').textContent = dagenTot >= 0 ? dagenTot : Math.abs(dagenTot) + ' over';
+    document.getElementById('ba-termijn-datum').textContent = 'Deadline: ' + fDatum(deadline);
+    document.getElementById('ba-t-d-overlijden').textContent = fDatum(state.datum);
+    document.getElementById('ba-t-d-aanvang').textContent = fDatum(state.datum);
+    document.getElementById('ba-t-d-voorzichtig').textContent = fDatum(voorzichtig);
+    document.getElementById('ba-t-d-deadline').textContent = fDatum(deadline);
+    document.getElementById('ba-t-d-aangifte').textContent = fDatum(aangifte);
+
+    var card = document.getElementById('ba-termijn-card');
+    var advies;
+    if (dagenTot < 0) {
+      card.className = 'ba-termijn-card overschreden';
+      document.getElementById('ba-termijn-uitleg').textContent = 'Termijn is overschreden, automatisch zuiver aanvaard';
+      advies = '<strong>De wettelijke termijn van 3 maanden is overschreden.</strong> Dat betekent dat je <span class="highlight">automatisch zuiver hebt aanvaard</span>. Bij grote schulden kun je nog beroep doen op gerechtelijke vereffening (BW 4:204). Neem direct contact op met een notaris of advocaat.';
+    } else if (dagenTot < 14) {
+      card.className = 'ba-termijn-card kritiek';
+      document.getElementById('ba-termijn-uitleg').textContent = 'Kritieke termijn, onmiddellijk beslissen';
+      advies = '<strong>Minder dan 14 dagen tot deadline.</strong> Bij elke twijfel: <span class="highlight">beneficiair aanvaarden</span> als verzekering. Veilig en omkeerbaar later niet meer mogelijk. Notaris bezoeken kan binnen 1 week geregeld worden.';
+    } else if (dagenTot < 30) {
+      card.className = 'ba-termijn-card urgent';
+      document.getElementById('ba-termijn-uitleg').textContent = 'Urgente termijn, plan beslissing in';
+      advies = '<strong>Minder dan een maand resterend.</strong> Maak nu een afspraak met de notaris of begin met je eigen verklaring. Het indienen bij de rechtbank duurt 5-10 werkdagen.';
+    } else if (dagenTot < 60) {
+      card.className = 'ba-termijn-card urgent';
+      document.getElementById('ba-termijn-uitleg').textContent = 'Genoeg tijd, onderzoek nu de boedel';
+      advies = 'Nog ' + dagenTot + ' dagen. Gebruik deze tijd om de boedel goed te onderzoeken: bankafschriften 6 maanden terug, post bekijken, navragen bij familie. Dan onderbouwd kunnen beslissen.';
+    } else {
+      card.className = 'ba-termijn-card';
+      document.getElementById('ba-termijn-uitleg').textContent = 'Ruim binnen termijn, neem tijd voor onderzoek';
+      advies = '<strong>Ruim de tijd.</strong> Gebruik de eerste maand voor verzamelen van financiele gegevens. Tweede maand voor beslissing. Begin niet aan zaken die als zuivere aanvaarding kunnen gelden (verkopen, geld opnemen).';
+    }
+    document.getElementById('ba-termijn-advies').innerHTML = advies;
+  }
+  updateTermijn();
+
+  // ======== DOCUMENTEN ========
+  var DOCS_RECHTBANK = [
+    { id: 'akte', titel: 'Akte van overlijden', sub: 'Bij gemeente, vraag 5 originelen', tag: 'ORIGINEEL' },
+    { id: 'id', titel: 'Identiteitsbewijs jezelf', sub: 'Kopie voorzijde' },
+    { id: 'verklaring', titel: 'Schriftelijke verklaring beneficiair', sub: 'Eigen verklaring of via notaris' },
+    { id: 'griffierecht', titel: 'Betalingsbewijs griffierecht 165 euro', sub: 'IBAN rechtbank' },
+    { id: 'testament', titel: 'Testament (indien aanwezig)', sub: 'Notaris of Centraal Testamentenregister', tag: 'ORIGINEEL' }
+  ];
+  var DOCS_ONDERZOEK = [
+    { id: 'bank', titel: 'Bankafschriften laatste 12 maanden', sub: 'Alle rekeningen erflater' },
+    { id: 'bkr', titel: 'BKR-registratie erflater', sub: 'Via bkr.nl' },
+    { id: 'post', titel: 'Openstaande post laatste 6 maanden', sub: 'Mogelijke schuldeisers' },
+    { id: 'belasting', titel: 'Belastingaanslagen laatste 3 jaar', sub: 'IB, eventueel BTW' },
+    { id: 'verzekeringen', titel: 'Verzekeringspolissen', sub: 'Levensverzekering, uitvaart, opstal' },
+    { id: 'pensioen', titel: 'Pensioenoverzicht', sub: 'mijnpensioenoverzicht.nl' }
+  ];
+  var DOCS_INFORMEREN = [
+    { id: 'banken', titel: 'Banken erflater', sub: 'Blokkering rekeningen, opvragen overzicht' },
+    { id: 'verzekeraars', titel: 'Verzekeraars', sub: 'Uitvaart, leven, opstal, inboedel' },
+    { id: 'pensioenfondsen', titel: 'Pensioenfondsen', sub: 'Stopzetten ouderdomspensioen, activeren partnerpensioen' },
+    { id: 'werkgever', titel: 'Werkgever (indien actief)', sub: 'Salaris stopzetten, eindafrekening' },
+    { id: 'belastingdienst', titel: 'Belastingdienst', sub: 'Aanslagen, toeslagen stoppen' },
+    { id: 'svb', titel: 'SVB voor AOW en Anw', sub: 'AOW stopzetten, Anw aanvragen' },
+    { id: 'gemeente', titel: 'Gemeente', sub: 'Voor akte van overlijden' }
+  ];
+
+  function renderDocs() {
+    function renderGroep(items, containerId, prefix) {
+      var html = '';
+      items.forEach(function(d) {
+        var key = prefix + '_' + d.id;
+        var gedaan = !!state.docs[key];
+        html += '<div class="ba-doc' + (gedaan ? ' gedaan' : '') + '" data-doc="' + key + '">';
+        html += '<div class="ba-doc-check"></div>';
+        html += '<div class="ba-doc-info">' + d.titel + (d.tag ? ' <span class="ba-doc-tag">' + d.tag + '</span>' : '');
+        html += '<div class="ba-doc-sub">' + d.sub + '</div></div>';
+        html += '</div>';
+      });
+      document.getElementById(containerId).innerHTML = html;
+    }
+    renderGroep(DOCS_RECHTBANK, 'ba-docs-rechtbank', 'rb');
+    renderGroep(DOCS_ONDERZOEK, 'ba-docs-onderzoek', 'oz');
+    renderGroep(DOCS_INFORMEREN, 'ba-docs-informeren', 'inf');
+
+    var totaal = DOCS_RECHTBANK.length + DOCS_ONDERZOEK.length + DOCS_INFORMEREN.length;
+    var gedaan = 0;
+    Object.keys(state.docs).forEach(function(k) { if (state.docs[k]) gedaan++; });
+    var pct = totaal > 0 ? Math.round((gedaan / totaal) * 100) : 0;
+    document.getElementById('ba-docs-pct').textContent = pct + '%';
+    document.getElementById('ba-docs-sub').textContent = gedaan + ' van ' + totaal + ' documenten verzameld';
+  }
+
+  ['ba-docs-rechtbank','ba-docs-onderzoek','ba-docs-informeren'].forEach(function(id) {
+    document.getElementById(id).addEventListener('click', function(e) {
+      var row = e.target.closest('[data-doc]');
+      if (!row) return;
+      var key = row.dataset.doc;
+      state.docs[key] = !state.docs[key];
+      renderDocs();
+    });
+  });
+  renderDocs();
+})();
+</script>
+</body>
+</html>
