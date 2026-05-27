@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nabestaanden Financieel Cockpit PRO 2026 - Uitvaart-Platform.nl</title>
+<meta name="description" content="Complete financiele check na overlijden partner. Anw uitkering, partnerpensioen, hypotheek scenario en belasting overgang in een tool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { padding: 16px; min-height: 100vh; }
+.nb-app { max-width: 1300px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; }
+.nb-print-cover { display: none; }
+.nb-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; }
+.nb-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.nb-header-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.nb-titel { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; }
+.nb-subtitel { font-size: 0.78rem; color: #fcd9c4; margin-top: 2px; }
+.nb-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(232,131,74,0.25); color: #fff; border-radius: 14px; font-size: 0.7rem; font-weight: 700; }
+.nb-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.nb-tabs { background: #2e0f29; padding: 0 20px; display: flex; gap: 2px; overflow-x: auto; }
+.nb-tab { background: transparent; border: none; padding: 14px; font-family: inherit; font-size: 0.78rem; font-weight: 600; color: #b09cae; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.nb-tab:hover { color: #fcd9c4; }
+.nb-tab.active { color: #fff; border-bottom-color: #e8834a; }
+.nb-pane { display: none; }
+.nb-pane.active { display: block; }
+
+.nb-body { display: grid; grid-template-columns: 1fr 1.1fr; min-height: 600px; }
+@media (max-width: 1000px) { .nb-body { grid-template-columns: 1fr; } }
+.nb-input { padding: 22px 26px; border-right: 1px solid #f0eae7; max-height: 920px; overflow-y: auto; }
+.nb-result { padding: 22px 26px; background: linear-gradient(135deg, #faf7f2 0%, #fff 100%); max-height: 920px; overflow-y: auto; }
+@media (max-width: 1000px) { .nb-input { border-right: none; border-bottom: 1px solid #f0eae7; max-height: none; } .nb-result { max-height: none; } }
+
+.nb-stap { margin-bottom: 18px; }
+.nb-stap-label { display: flex; align-items: center; gap: 10px; font-size: 0.62rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #e8834a; margin-bottom: 10px; }
+.nb-stap-nr { width: 22px; height: 22px; background: #4a1942; color: #e8834a; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; }
+
+.nb-blok { background: #faf7f2; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
+.nb-blok-kop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.nb-blok-titel { font-size: 0.86rem; font-weight: 700; color: #4a1942; display: flex; align-items: center; gap: 8px; }
+.nb-blok-titel-icoon { width: 26px; height: 26px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #e8834a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; }
+
+.nb-veld { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #e2d9e0; }
+.nb-veld:last-child { border-bottom: none; }
+.nb-veld-icoon { width: 28px; height: 28px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+.nb-veld-info { flex: 1; }
+.nb-veld-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; line-height: 1.2; }
+.nb-veld-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 1px; line-height: 1.3; }
+.nb-veld-input { width: 130px; border: 1.5px solid #e2d9e0; background: #fff; border-radius: 8px; padding: 7px 10px; font-family: inherit; font-size: 0.84rem; font-weight: 700; color: #4a1942; text-align: right; font-variant-numeric: tabular-nums; outline: none; }
+.nb-veld-input:focus { border-color: #e8834a; }
+.nb-veld-input::-webkit-outer-spin-button, .nb-veld-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.nb-toggle-rij { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: #fff; border: 1.5px solid #e2d9e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-bottom: 6px; }
+.nb-toggle-rij:hover { border-color: #e8834a; }
+.nb-toggle-rij.active { border-color: #e8834a; background: #fff7ef; }
+.nb-toggle-check { width: 20px; height: 20px; border: 2px solid #d3c8cd; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.nb-toggle-rij.active .nb-toggle-check { background: #e8834a; border-color: #e8834a; }
+.nb-toggle-rij.active .nb-toggle-check::after { content: "✓"; color: #fff; font-size: 0.8rem; font-weight: 800; }
+.nb-toggle-info { flex: 1; }
+.nb-toggle-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; }
+.nb-toggle-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 2px; line-height: 1.3; }
+
+.nb-select { width: 100%; border: 1.5px solid #e2d9e0; background: #fff; border-radius: 10px; padding: 10px 14px; font-family: inherit; font-size: 0.86rem; font-weight: 600; color: #4a1942; cursor: pointer; outline: none; }
+.nb-select:focus { border-color: #e8834a; }
+
+.nb-bedrag-wrap { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 14px; padding: 16px 18px; }
+.nb-bedrag-row { display: flex; align-items: center; gap: 4px; background: #faf7f2; border: 2px solid #e2d9e0; border-radius: 10px; padding: 4px 14px; }
+.nb-bedrag-row:focus-within { border-color: #e8834a; }
+.nb-bedrag-prefix { font-size: 1.2rem; font-weight: 700; color: #4a1942; }
+.nb-bedrag-input { flex: 1; border: none; outline: none; font-family: inherit; font-size: 1.3rem; font-weight: 700; color: #4a1942; padding: 12px 0; background: transparent; font-variant-numeric: tabular-nums; }
+.nb-slider { width: 100%; margin-top: 14px; -webkit-appearance: none; appearance: none; height: 6px; background: #e2d9e0; border-radius: 3px; outline: none; }
+.nb-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); border-radius: 50%; cursor: pointer; }
+.nb-slider::-moz-range-thumb { width: 22px; height: 22px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); border-radius: 50%; cursor: pointer; border: none; }
+
+.nb-totaal { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.nb-totaal::before { content: ""; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.nb-totaal-label { font-size: 0.66rem; color: #fcd9c4; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; position: relative; }
+.nb-totaal-waarde { font-size: 1.8rem; font-weight: 800; color: #e8834a; line-height: 1; margin-top: 4px; position: relative; font-variant-numeric: tabular-nums; }
+.nb-totaal-sub { font-size: 0.76rem; color: #ede0eb; margin-top: 4px; position: relative; }
+
+.nb-vergelijk { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+@media (max-width: 600px) { .nb-vergelijk { grid-template-columns: 1fr; } }
+.nb-vergelijk-blok { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; }
+.nb-vergelijk-blok.voor { border-left: 4px solid #6b9a7f; }
+.nb-vergelijk-blok.na { border-left: 4px solid #c4666c; }
+.nb-vergelijk-titel { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6a5e64; margin-bottom: 10px; }
+.nb-vergelijk-bedrag { font-size: 1.4rem; font-weight: 800; color: #4a1942; line-height: 1; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+.nb-vergelijk-sub { font-size: 0.7rem; color: #6a5e64; font-weight: 600; }
+
+.nb-uitleg { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.nb-uitleg::before { content: ""; position: absolute; top: -50px; right: -50px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.nb-uitleg-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #fcd9c4; margin-bottom: 6px; position: relative; }
+.nb-uitleg-tekst { font-size: 0.84rem; color: #ede0eb; line-height: 1.65; position: relative; }
+.nb-uitleg-tekst strong { color: #fff; font-weight: 700; }
+.nb-uitleg-tekst .highlight { color: #e8834a; font-weight: 800; }
+
+.nb-tabel { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+.nb-tabel-titel { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6a5e64; margin-bottom: 8px; }
+.nb-tabel-rij { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.78rem; border-bottom: 1px dashed #e2d9e0; }
+.nb-tabel-rij:last-child { border-bottom: none; }
+.nb-tabel-rij.belangrijk { font-weight: 700; padding-top: 8px; border-top: 2px solid #4a1942; border-bottom: none; margin-top: 4px; }
+.nb-tabel-naam { color: #4a4046; }
+.nb-tabel-waarde { font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
+.nb-tabel-waarde.pos { color: #6b9a7f; }
+.nb-tabel-waarde.neg { color: #c4666c; }
+
+.nb-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+@media (max-width: 600px) { .nb-detail-grid { grid-template-columns: 1fr; } }
+.nb-detail-blok { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 12px 14px; }
+.nb-detail-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #6a5e64; margin-bottom: 4px; }
+.nb-detail-value { font-size: 1.1rem; font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
+.nb-detail-sub { font-size: 0.66rem; color: #6a5e64; margin-top: 2px; }
+
+.nb-info-box { background: #faf0e7; border-left: 4px solid #e8834a; border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-size: 0.78rem; color: #4a4046; line-height: 1.6; }
+.nb-info-box strong { color: #4a1942; font-weight: 700; }
+.nb-info-box.warning { background: #fef7e8; border-color: #d4a017; color: #5a4a10; }
+.nb-info-box.success { background: #f0f7ed; border-color: #6b9a7f; color: #2e4030; }
+
+.nb-footer { padding: 14px 30px; border-top: 1px solid #f0eae7; background: #faf7f2; font-size: 0.72rem; color: #6a5e64; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.nb-footer-link { color: #4a1942; text-decoration: none; font-weight: 600; border-bottom: 2px solid #e8834a; }
+.nb-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.nb-action-btn { background: #4a1942; color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.nb-action-btn:hover { background: #6b2862; }
+.nb-action-btn.secondary { background: #fff; color: #4a1942; border: 1.5px solid #e2d9e0; }
+.nb-action-btn.secondary:hover { border-color: #e8834a; color: #e8834a; }
+
+@media print {
+  @page { margin: 1.5cm; }
+  body { background: #fff; padding: 0; }
+  .nb-app { box-shadow: none; border-radius: 0; }
+  .nb-tabs, .nb-action-btn { display: none !important; }
+  .nb-pane:not(.active) { display: none !important; }
+  .nb-input, .nb-result { max-height: none; overflow: visible; }
+  .nb-print-cover { display: block !important; padding: 60px 40px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; text-align: center; page-break-after: always; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  .nb-header { padding: 18px 20px; }
+  .nb-tabs { padding: 0 10px; }
+  .nb-tab { padding: 12px 10px; font-size: 0.72rem; }
+  .nb-input, .nb-result { padding: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="nb-print-cover">
+  <h1>Nabestaanden Financieel Rapport</h1>
+  <div class="lead">Complete financiele check na overlijden partner</div>
+  <div class="datum" id="nb-print-datum"></div>
+</div>
+
+<div class="nb-app">
+  <header class="nb-header">
+    <div class="nb-header-content">
+      <div>
+        <h1 class="nb-titel">Nabestaanden Financieel Cockpit PRO</h1>
+        <div class="nb-subtitel">2026 &middot; 5 modi &middot; Anw &middot; Pensioen &middot; Hypotheek &middot; Belasting</div>
+      </div>
+      <div class="nb-badge"><span class="nb-badge-dot"></span> Live berekening</div>
+    </div>
+  </header>
+
+  <nav class="nb-tabs" id="nb-tabs">
+    <button class="nb-tab active" data-tab="overzicht"><span>💰</span> Inkomensoverzicht</button>
+    <button class="nb-tab" data-tab="anw"><span>📊</span> Anw uitkering</button>
+    <button class="nb-tab" data-tab="pensioen"><span>👨‍💼</span> Partnerpensioen</button>
+    <button class="nb-tab" data-tab="hypotheek"><span>🏠</span> Hypotheek</button>
+    <button class="nb-tab" data-tab="belasting"><span>📑</span> Belasting</button>
+  </nav>
+
+  <!-- ========== OVERZICHT ========== -->
+  <div class="nb-pane active" data-pane="overzicht">
+    <div class="nb-body">
+      <div class="nb-input">
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">💼</div> Maandinkomen voor overlijden</div></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">👤</div><div class="nb-veld-info"><div class="nb-veld-naam">Mijn netto salaris</div><div class="nb-veld-uitleg">Per maand</div></div><input type="number" class="nb-veld-input" data-ov="ikSalaris" value="2500"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">👤</div><div class="nb-veld-info"><div class="nb-veld-naam">Partner netto salaris</div><div class="nb-veld-uitleg">Wat partner ontving</div></div><input type="number" class="nb-veld-input" data-ov="partnerSalaris" value="3200"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🏦</div><div class="nb-veld-info"><div class="nb-veld-naam">Pensioen partner</div><div class="nb-veld-uitleg">Indien partner reeds gepensioneerd</div></div><input type="number" class="nb-veld-input" data-ov="partnerPensioen" value="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">💵</div><div class="nb-veld-info"><div class="nb-veld-naam">Andere inkomsten</div><div class="nb-veld-uitleg">Huurinkomsten, dividend, etc.</div></div><input type="number" class="nb-veld-input" data-ov="overig" value="0"></div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">🏠</div> Vaste lasten per maand</div></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🏦</div><div class="nb-veld-info"><div class="nb-veld-naam">Hypotheek of huur</div></div><input type="number" class="nb-veld-input" data-ov="woonlast" value="1200"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">⚡</div><div class="nb-veld-info"><div class="nb-veld-naam">Energie en water</div></div><input type="number" class="nb-veld-input" data-ov="energie" value="250"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🛡️</div><div class="nb-veld-info"><div class="nb-veld-naam">Verzekeringen</div></div><input type="number" class="nb-veld-input" data-ov="verzek" value="350"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">📱</div><div class="nb-veld-info"><div class="nb-veld-naam">Abonnementen</div></div><input type="number" class="nb-veld-input" data-ov="abos" value="120"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🍞</div><div class="nb-veld-info"><div class="nb-veld-naam">Boodschappen huishouden</div></div><input type="number" class="nb-veld-input" data-ov="boodsch" value="600"></div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">👶</div> Persoonlijke situatie</div></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">👶</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen onder 18 thuis</div></div><input type="number" class="nb-veld-input" data-ov="kinderen" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🎂</div><div class="nb-veld-info"><div class="nb-veld-naam">Mijn leeftijd</div></div><input type="number" class="nb-veld-input" data-ov="leeftijd" value="55" min="18" max="100"></div>
+        </div>
+      </div>
+
+      <div class="nb-result">
+        <div class="nb-totaal">
+          <div class="nb-totaal-label">Inkomensverandering per maand</div>
+          <div class="nb-totaal-waarde" id="nb-ov-verschil">€0</div>
+          <div class="nb-totaal-sub" id="nb-ov-verschil-sub">Vul de andere tabs in voor exacte uitkeringen</div>
+        </div>
+
+        <div class="nb-vergelijk">
+          <div class="nb-vergelijk-blok voor">
+            <div class="nb-vergelijk-titel">Voor overlijden</div>
+            <div class="nb-vergelijk-bedrag" id="nb-ov-voor">€0</div>
+            <div class="nb-vergelijk-sub">Gezamenlijk netto inkomen</div>
+          </div>
+          <div class="nb-vergelijk-blok na">
+            <div class="nb-vergelijk-titel">Na overlijden</div>
+            <div class="nb-vergelijk-bedrag" id="nb-ov-na">€0</div>
+            <div class="nb-vergelijk-sub">Eigen inkomen + uitkeringen</div>
+          </div>
+        </div>
+
+        <div class="nb-tabel">
+          <div class="nb-tabel-titel">Geschatte inkomstenbronnen na overlijden</div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Eigen netto salaris of pensioen</span><span class="nb-tabel-waarde pos" id="nb-ov-eigen">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Anw uitkering (uit Anw tab)</span><span class="nb-tabel-waarde pos" id="nb-ov-anw">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Partnerpensioen (uit Pensioen tab)</span><span class="nb-tabel-waarde pos" id="nb-ov-pp">€0</span></div>
+          <div class="nb-tabel-rij belangrijk"><span class="nb-tabel-naam">Totaal inkomsten per maand</span><span class="nb-tabel-waarde" id="nb-ov-tot-ink">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Vaste lasten</span><span class="nb-tabel-waarde neg" id="nb-ov-vaste-lasten">€0</span></div>
+          <div class="nb-tabel-rij belangrijk"><span class="nb-tabel-naam">Beschikbaar na vaste lasten</span><span class="nb-tabel-waarde" id="nb-ov-beschikbaar">€0</span></div>
+        </div>
+
+        <div class="nb-uitleg">
+          <div class="nb-uitleg-label">📊 Wat betekent dit?</div>
+          <div class="nb-uitleg-tekst" id="nb-ov-uitleg">—</div>
+        </div>
+
+        <div class="nb-info-box"><strong>Vul ook de andere tabs in</strong> om je exacte Anw uitkering en partnerpensioen mee te nemen. De getallen verschijnen automatisch in dit overzicht.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== ANW ========== -->
+  <div class="nb-pane" data-pane="anw">
+    <div class="nb-body">
+      <div class="nb-input">
+        <div class="nb-info-box warning"><strong>Voorwaarden Anw 2026:</strong> 1) je hebt thuis een kind onder 18 jaar, OF 2) je bent voor 45% of meer arbeidsongeschikt, OF 3) je bent geboren voor 1950. Anders <strong>geen recht</strong> op Anw.</div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">✓</div> Voorwaarden check</div></div>
+          <div class="nb-toggle-rij" data-anw="kind">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Ik heb thuis een kind onder 18 jaar</div>
+              <div class="nb-toggle-uitleg">Eigen kind, adoptie, of pleegkind in zorg</div>
+            </div>
+          </div>
+          <div class="nb-toggle-rij" data-anw="ao">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Ik ben 45% of meer arbeidsongeschikt</div>
+              <div class="nb-toggle-uitleg">Vastgesteld door UWV of bedrijfsarts</div>
+            </div>
+          </div>
+          <div class="nb-toggle-rij" data-anw="ouder">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Ik ben geboren voor 1 januari 1950</div>
+              <div class="nb-toggle-uitleg">Overgangsregeling oudere Anw-ers</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">💼</div> Inkomenstoets</div></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">💰</div><div class="nb-veld-info"><div class="nb-veld-naam">Mijn bruto inkomen per maand</div><div class="nb-veld-uitleg">Salaris, pensioen, uitkering, niet vermogensinkomsten</div></div><input type="number" class="nb-veld-input" id="nb-anw-inkomen" value="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🛡️</div><div class="nb-veld-info"><div class="nb-veld-naam">Inkomen uit arbeid of anders?</div><div class="nb-veld-uitleg">Arbeid heeft vrije voet, andere bron volledig gekort</div></div>
+            <select class="nb-select" id="nb-anw-bron" style="width:150px;">
+              <option value="arbeid">Uit arbeid</option>
+              <option value="anders">Anders (pensioen)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">👶</div> Wezenuitkering kinderen</div></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">👶</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen onder 10 jaar</div><div class="nb-veld-uitleg">Wezenuitkering 534 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-jong" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🧒</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 10 tot 15 jaar</div><div class="nb-veld-uitleg">Wezenuitkering 801 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-mid" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🎓</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 16 tot 21 jaar (studie of ao)</div><div class="nb-veld-uitleg">Wezenuitkering 1068 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-oud" value="0" min="0"></div>
+        </div>
+      </div>
+
+      <div class="nb-result">
+        <div class="nb-totaal">
+          <div class="nb-totaal-label">Geschatte Anw uitkering per maand</div>
+          <div class="nb-totaal-waarde" id="nb-anw-uitkering">€0</div>
+          <div class="nb-totaal-sub" id="nb-anw-status">Vul de voorwaarden in</div>
+        </div>
+
+        <div class="nb-uitleg">
+          <div class="nb-uitleg-label">📊 Toelichting</div>
+          <div class="nb-uitleg-tekst" id="nb-anw-uitleg">—</div>
+        </div>
+
+        <div class="nb-detail-grid">
+          <div class="nb-detail-blok"><div class="nb-detail-label">Anw per jaar</div><div class="nb-detail-value" id="nb-anw-jaar">€0</div></div>
+          <div class="nb-detail-blok"><div class="nb-detail-label">Wezenuitkering totaal per maand</div><div class="nb-detail-value" id="nb-anw-wezen-tot">€0</div></div>
+        </div>
+
+        <div class="nb-tabel">
+          <div class="nb-tabel-titel">Anw 2026 cijfers</div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Maximum brutobedrag per maand</span><span class="nb-tabel-waarde">€1.668</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Maximum brutobedrag per jaar</span><span class="nb-tabel-waarde">€20.022</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Vrije voet inkomen uit arbeid</span><span class="nb-tabel-waarde">€870 p.m.</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Korting boven vrije voet</span><span class="nb-tabel-waarde">2/3 van meer</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Anders dan arbeid</span><span class="nb-tabel-waarde">Volledig gekort</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering &lt;10 jaar</span><span class="nb-tabel-waarde">€534 p.m.</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering 10-15 jaar</span><span class="nb-tabel-waarde">€801 p.m.</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering 16-21 jaar</span><span class="nb-tabel-waarde">€1.068 p.m.</span></div>
+        </div>
+
+        <div class="nb-info-box"><strong>Aanvragen:</strong> via SVB.nl binnen 2 maanden na overlijden, dan met terugwerkende kracht. Later aanvragen kan, maar dan pas vanaf aanvraagdatum. SVB bepaalt definitief recht en bedrag.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== PARTNERPENSIOEN ========== -->
+  <div class="nb-pane" data-pane="pensioen">
+    <div class="nb-body">
+      <div class="nb-input">
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">1</span> Pensioenfonds partner</div>
+          <select class="nb-select" id="nb-pp-fonds">
+            <option value="abp" selected>ABP (overheid, onderwijs)</option>
+            <option value="pme">PME (metaal en techniek)</option>
+            <option value="pfzw">PFZW (zorg en welzijn)</option>
+            <option value="bpfbouw">BPF Bouw</option>
+            <option value="metalektro">PME Metalektro</option>
+            <option value="shell">Shell pensioenfonds</option>
+            <option value="philips">Philips pensioenfonds</option>
+            <option value="rabobank">Rabobank pensioenfonds</option>
+            <option value="ing">ING pensioenfonds</option>
+            <option value="ondernemingspf">Ondernemingspensioenfonds</option>
+            <option value="anders">Ander pensioenfonds</option>
+          </select>
+        </div>
+
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">2</span> Opgebouwd ouderdomspensioen partner</div>
+          <div class="nb-bedrag-wrap">
+            <div style="font-size:0.74rem;color:#6a5e64;margin-bottom:8px;">Per JAAR. Zie laatste pensioenoverzicht (UPO) of mijnpensioenoverzicht.nl</div>
+            <div class="nb-bedrag-row">
+              <span class="nb-bedrag-prefix">€</span>
+              <input type="text" class="nb-bedrag-input" id="nb-pp-opbouw-display" value="25.000" inputmode="numeric">
+            </div>
+            <input type="range" class="nb-slider" id="nb-pp-opbouw-slider" min="0" max="100000" step="500" value="25000">
+          </div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">⚙️</div> Type partnerpensioen</div></div>
+          <div class="nb-toggle-rij active" data-pp-type="opbouw">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Opbouw basis</div>
+              <div class="nb-toggle-uitleg">Standaard pensioenregeling met levenslange uitkering</div>
+            </div>
+          </div>
+          <div class="nb-toggle-rij" data-pp-type="risico">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Risicobasis (afnemend belang)</div>
+              <div class="nb-toggle-uitleg">Sinds 2023 vaker, alleen dekking zolang partner werkt</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">3</span> Mijn leeftijd</div>
+          <div class="nb-bedrag-wrap">
+            <div class="nb-bedrag-row">
+              <input type="text" class="nb-bedrag-input" id="nb-pp-leeftijd-display" value="55" inputmode="numeric" style="text-align:center;">
+              <span class="nb-bedrag-prefix" style="font-size:0.86rem;">jaar</span>
+            </div>
+            <input type="range" class="nb-slider" id="nb-pp-leeftijd-slider" min="25" max="80" step="1" value="55">
+          </div>
+        </div>
+      </div>
+
+      <div class="nb-result">
+        <div class="nb-totaal">
+          <div class="nb-totaal-label">Geschat partnerpensioen per maand</div>
+          <div class="nb-totaal-waarde" id="nb-pp-uitkering">€0</div>
+          <div class="nb-totaal-sub" id="nb-pp-sub">—</div>
+        </div>
+
+        <div class="nb-uitleg">
+          <div class="nb-uitleg-label">👨‍💼 Hoe wordt het berekend?</div>
+          <div class="nb-uitleg-tekst" id="nb-pp-uitleg">—</div>
+        </div>
+
+        <div class="nb-tabel">
+          <div class="nb-tabel-titel">Berekening</div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Pensioenfonds</span><span class="nb-tabel-waarde" id="nb-pp-fonds-naam">—</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Opgebouwd ouderdomspensioen per jaar</span><span class="nb-tabel-waarde" id="nb-pp-opbouw-jaar">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Partnerpensioen percentage</span><span class="nb-tabel-waarde" id="nb-pp-percentage">70%</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Bruto per jaar</span><span class="nb-tabel-waarde" id="nb-pp-bruto-jaar">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Indicatieve loonheffing</span><span class="nb-tabel-waarde neg" id="nb-pp-belasting">€0</span></div>
+          <div class="nb-tabel-rij belangrijk"><span class="nb-tabel-naam">Netto per maand</span><span class="nb-tabel-waarde pos" id="nb-pp-netto">€0</span></div>
+        </div>
+
+        <div class="nb-info-box warning"><strong>Belangrijk:</strong> bij hertrouwen of nieuw geregistreerd partnerschap kan het partnerpensioen <em>stoppen</em>. Check de specifieke regeling van het pensioenfonds.</div>
+
+        <div class="nb-info-box"><strong>Aanvragen:</strong> meld het overlijden direct aan het pensioenfonds. Vaak hebben ze binnen 2 weken alle gegevens nodig om uitkering te starten. Eerste betaling vaak na 4-8 weken.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== HYPOTHEEK ========== -->
+  <div class="nb-pane" data-pane="hypotheek">
+    <div class="nb-body">
+      <div class="nb-input">
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">1</span> Woningwaarde</div>
+          <div class="nb-bedrag-wrap">
+            <div class="nb-bedrag-row"><span class="nb-bedrag-prefix">€</span><input type="text" class="nb-bedrag-input" id="nb-hyp-woning-display" value="400.000" inputmode="numeric"></div>
+            <input type="range" class="nb-slider" id="nb-hyp-woning-slider" min="0" max="2000000" step="5000" value="400000">
+          </div>
+        </div>
+
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">2</span> Resterende hypotheekschuld</div>
+          <div class="nb-bedrag-wrap">
+            <div class="nb-bedrag-row"><span class="nb-bedrag-prefix">€</span><input type="text" class="nb-bedrag-input" id="nb-hyp-schuld-display" value="250.000" inputmode="numeric"></div>
+            <input type="range" class="nb-slider" id="nb-hyp-schuld-slider" min="0" max="2000000" step="5000" value="250000">
+          </div>
+        </div>
+
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">3</span> Maandlast hypotheek</div>
+          <div class="nb-bedrag-wrap">
+            <div class="nb-bedrag-row"><span class="nb-bedrag-prefix">€</span><input type="text" class="nb-bedrag-input" id="nb-hyp-maandlast-display" value="1.200" inputmode="numeric"></div>
+            <input type="range" class="nb-slider" id="nb-hyp-maandlast-slider" min="0" max="5000" step="50" value="1200">
+          </div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">🛡️</div> Overlijdensrisicoverzekering</div></div>
+          <div class="nb-toggle-rij" data-hyp="orv">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Er is een ORV gekoppeld aan de hypotheek</div>
+              <div class="nb-toggle-uitleg">Bij overlijden lost de verzekering een deel van de hypotheek af</div>
+            </div>
+          </div>
+          <div class="nb-veld" id="nb-hyp-orv-bedrag-rij" style="display:none;"><div class="nb-veld-icoon">💰</div><div class="nb-veld-info"><div class="nb-veld-naam">ORV uitkering bij overlijden</div><div class="nb-veld-uitleg">Bedrag dat verzekeraar uitkeert</div></div><input type="number" class="nb-veld-input" id="nb-hyp-orv-bedrag" value="250000"></div>
+        </div>
+
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">5</span> Inkomen na overlijden per maand</div>
+          <div class="nb-bedrag-wrap">
+            <div style="font-size:0.74rem;color:#6a5e64;margin-bottom:8px;">Geschat netto (uit Inkomensoverzicht)</div>
+            <div class="nb-bedrag-row"><span class="nb-bedrag-prefix">€</span><input type="text" class="nb-bedrag-input" id="nb-hyp-inkomen-display" value="3.500" inputmode="numeric"></div>
+            <input type="range" class="nb-slider" id="nb-hyp-inkomen-slider" min="0" max="15000" step="100" value="3500">
+          </div>
+        </div>
+      </div>
+
+      <div class="nb-result">
+        <div class="nb-totaal">
+          <div class="nb-totaal-label">Restschuld na ORV uitkering</div>
+          <div class="nb-totaal-waarde" id="nb-hyp-restschuld">€0</div>
+          <div class="nb-totaal-sub" id="nb-hyp-restschuld-sub">—</div>
+        </div>
+
+        <div class="nb-uitleg">
+          <div class="nb-uitleg-label">🏠 Wat zijn mijn opties?</div>
+          <div class="nb-uitleg-tekst" id="nb-hyp-uitleg">—</div>
+        </div>
+
+        <div class="nb-tabel">
+          <div class="nb-tabel-titel">Overzicht</div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Woningwaarde</span><span class="nb-tabel-waarde pos" id="nb-hyp-r-woning">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Hypotheekschuld</span><span class="nb-tabel-waarde neg" id="nb-hyp-r-schuld">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">ORV uitkering</span><span class="nb-tabel-waarde pos" id="nb-hyp-r-orv">€0</span></div>
+          <div class="nb-tabel-rij belangrijk"><span class="nb-tabel-naam">Overwaarde of restschuld</span><span class="nb-tabel-waarde" id="nb-hyp-r-overwaarde">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Nieuwe maandlast (na ORV)</span><span class="nb-tabel-waarde" id="nb-hyp-r-maandlast">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Woonquote (last/inkomen)</span><span class="nb-tabel-waarde" id="nb-hyp-r-quote">0%</span></div>
+        </div>
+
+        <div class="nb-info-box warning"><strong>Bank moet opnieuw beoordelen:</strong> bij wegvallen van een partner met inkomen wordt vaak nieuwe inkomenstoets toegepast. Bij te lage inkomensgegevens kan de bank verlangen dat je verhuist of bijbetaalt.</div>
+
+        <div class="nb-info-box"><strong>Opties bij restschuld:</strong> woning verkopen, herfinancieren met lagere lasten, NHG hardheidsclausule (bij Nationale Hypotheek Garantie), erfgenamen vragen om financiering, of bij oudere woning omkeerhypotheek.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== BELASTING ========== -->
+  <div class="nb-pane" data-pane="belasting">
+    <div class="nb-body">
+      <div class="nb-input">
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">1</span> Mijn bruto jaarinkomen</div>
+          <div class="nb-bedrag-wrap">
+            <div class="nb-bedrag-row"><span class="nb-bedrag-prefix">€</span><input type="text" class="nb-bedrag-input" id="nb-bel-inkomen-display" value="35.000" inputmode="numeric"></div>
+            <input type="range" class="nb-slider" id="nb-bel-inkomen-slider" min="0" max="200000" step="500" value="35000">
+          </div>
+        </div>
+
+        <div class="nb-stap">
+          <div class="nb-stap-label"><span class="nb-stap-nr">2</span> Box 3 vermogen</div>
+          <div class="nb-bedrag-wrap">
+            <div style="font-size:0.74rem;color:#6a5e64;margin-bottom:8px;">Spaargeld en beleggingen (na erfenis)</div>
+            <div class="nb-bedrag-row"><span class="nb-bedrag-prefix">€</span><input type="text" class="nb-bedrag-input" id="nb-bel-vermogen-display" value="100.000" inputmode="numeric"></div>
+            <input type="range" class="nb-slider" id="nb-bel-vermogen-slider" min="0" max="2000000" step="5000" value="100000">
+          </div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">🎁</div> Persoonlijke situatie</div></div>
+          <div class="nb-toggle-rij" data-bel="aow">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Ik ontvang AOW</div>
+              <div class="nb-toggle-uitleg">AOW-ers betalen lagere percentages box 1</div>
+            </div>
+          </div>
+          <div class="nb-toggle-rij" data-bel="kindgebonden">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Kinderen onder 18 (kindgebonden budget)</div>
+              <div class="nb-toggle-uitleg">Hoger budget mogelijk als alleenstaande ouder</div>
+            </div>
+          </div>
+          <div class="nb-toggle-rij" data-bel="huur">
+            <div class="nb-toggle-check"></div>
+            <div class="nb-toggle-info">
+              <div class="nb-toggle-naam">Ik betaal huur (kan huurtoeslag krijgen)</div>
+              <div class="nb-toggle-uitleg">Drempelinkomen 2026 bekijken</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nb-result">
+        <div class="nb-totaal">
+          <div class="nb-totaal-label">Effectief belastingtarief</div>
+          <div class="nb-totaal-waarde" id="nb-bel-effectief">0%</div>
+          <div class="nb-totaal-sub" id="nb-bel-effectief-sub">—</div>
+        </div>
+
+        <div class="nb-uitleg">
+          <div class="nb-uitleg-label">📑 Belastingveranderingen</div>
+          <div class="nb-uitleg-tekst" id="nb-bel-uitleg">—</div>
+        </div>
+
+        <div class="nb-tabel">
+          <div class="nb-tabel-titel">Box 1 — Inkomen uit werk en woning 2026</div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Bruto inkomen</span><span class="nb-tabel-waarde" id="nb-bel-bruto">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Tarief schijf 1 (tot €38.441)</span><span class="nb-tabel-waarde">35,8%</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Tarief schijf 2 (€38.441-€76.817)</span><span class="nb-tabel-waarde">37,5%</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Tarief schijf 3 (boven €76.817)</span><span class="nb-tabel-waarde">49,5%</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Algemene heffingskorting</span><span class="nb-tabel-waarde pos" id="nb-bel-ahk">€0</span></div>
+          <div class="nb-tabel-rij belangrijk"><span class="nb-tabel-naam">Te betalen box 1</span><span class="nb-tabel-waarde neg" id="nb-bel-box1">€0</span></div>
+        </div>
+
+        <div class="nb-tabel">
+          <div class="nb-tabel-titel">Box 3 — Vermogen 2026</div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Vermogen totaal</span><span class="nb-tabel-waarde" id="nb-bel-v-tot">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Vrijstelling alleenstaand</span><span class="nb-tabel-waarde pos">€57.684</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Belastbaar vermogen</span><span class="nb-tabel-waarde" id="nb-bel-v-belast">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Forfaitair rendement (~5,88%)</span><span class="nb-tabel-waarde" id="nb-bel-v-rendement">€0</span></div>
+          <div class="nb-tabel-rij belangrijk"><span class="nb-tabel-naam">Te betalen box 3 (36%)</span><span class="nb-tabel-waarde neg" id="nb-bel-box3">€0</span></div>
+        </div>
+
+        <div class="nb-info-box warning"><strong>Belangrijk:</strong> de partner-vrijstelling box 3 (€115.368 als fiscaal partner) vervalt. Als alleenstaande val je terug naar €57.684 vrijstelling. Bij erfenis kan box 3 vermogen sterk stijgen.</div>
+
+        <div class="nb-info-box"><strong>Toeslagen:</strong> als alleenstaande verandert recht op zorgtoeslag, huurtoeslag, kindgebonden budget. Aanvragen via toeslagen.nl. Veranderingen direct doorgeven om terugbetalingen te voorkomen.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="nb-footer">
+    <span>Indicatieve berekening volgens 2026 cijfers. Voor exact advies: SVB, pensioenfonds of fiscalist. <a href="https://uitvaart-platform.nl/nabestaanden-financieel" class="nb-footer-link" target="_top">Meer info</a></span>
+    <div class="nb-actions">
+      <button class="nb-action-btn secondary" onclick="window.print()">🖨️ PDF</button>
+      <button class="nb-action-btn" onclick="if(confirm('Reset alle invoer?')) location.reload()">🔄 Reset</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ======== CONSTANTS 2026 ========
+  var ANW_MAX = 1668;
+  var ANW_VRIJE_VOET = 870;
+  var ANW_KORTING_ARBEID = 2/3;
+  var WEZEN_JONG = 534;
+  var WEZEN_MID = 801;
+  var WEZEN_OUD = 1068;
+  var IB_S1_GRENS = 38441;
+  var IB_S2_GRENS = 76817;
+  var IB_T1 = 0.358;
+  var IB_T2 = 0.375;
+  var IB_T3 = 0.495;
+  var IB_AHK_MAX = 3362;
+  var BOX3_VRIJ = 57684;
+  var BOX3_REND = 0.0588;
+  var BOX3_TARIEF = 0.36;
+
+  var PP_DATA = {
+    abp: { naam: 'ABP (overheid, onderwijs)', pct: 70, info: 'Standaard 70% van opgebouwd ouderdomspensioen partner. Levenslang.' },
+    pme: { naam: 'PME (metaal)', pct: 70, info: '70% van ouderdomspensioen. Voor pensioenovereenkomsten na 2014 vaak risicobasis.' },
+    pfzw: { naam: 'PFZW (zorg)', pct: 70, info: '70% van ouderdomspensioen. Levenslang voor partners.' },
+    bpfbouw: { naam: 'BPF Bouw', pct: 70, info: '70% van opbouw. Hoge dekking voor partner.' },
+    metalektro: { naam: 'PME Metalektro', pct: 70, info: '70% van opbouw.' },
+    shell: { naam: 'Shell pensioenfonds', pct: 70, info: 'Bedrijfspensioen, typisch 70%. Voorwaarden specifiek.' },
+    philips: { naam: 'Philips pensioenfonds', pct: 70, info: 'Standaard 70%.' },
+    rabobank: { naam: 'Rabobank pensioenfonds', pct: 70, info: 'Standaard 70% van opbouw.' },
+    ing: { naam: 'ING pensioenfonds', pct: 70, info: 'Standaard 70% van opbouw.' },
+    ondernemingspf: { naam: 'Ondernemingspensioenfonds', pct: 60, info: 'Varieert sterk per regeling. Check UPO.' },
+    anders: { naam: 'Ander fonds', pct: 70, info: 'Gemiddelde aanname 70%. Check exacte regeling bij pensioenfonds.' }
+  };
+
+  function fEuro(n) { n = Math.round(n); return '€' + n.toLocaleString('nl-NL'); }
+  function pEuro(s) { return parseInt(String(s).replace(/[^0-9-]/g, ''), 10) || 0; }
+  function fPct(n) { return Math.round(n * 10) / 10 + '%'; }
+
+  function setPrintDatum() {
+    var d = new Date();
+    var m = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+    document.getElementById('nb-print-datum').textContent = 'Gegenereerd op ' + d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  setPrintDatum();
+
+  document.getElementById('nb-tabs').addEventListener('click', function(e) {
+    var btn = e.target.closest('.nb-tab');
+    if (!btn) return;
+    document.querySelectorAll('.nb-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.nb-pane').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelector('[data-pane="' + btn.dataset.tab + '"]').classList.add('active');
+  });
+
+  // ======== STATE ========
+  var state = {
+    ov: { ikSalaris: 2500, partnerSalaris: 3200, partnerPensioen: 0, overig: 0, woonlast: 1200, energie: 250, verzek: 350, abos: 120, boodsch: 600, kinderen: 0, leeftijd: 55 },
+    anw: { kind: false, ao: false, ouder: false, inkomen: 0, bron: 'arbeid', wJong: 0, wMid: 0, wOud: 0 },
+    pp: { fonds: 'abp', opbouw: 25000, type: 'opbouw', leeftijd: 55 },
+    hyp: { woning: 400000, schuld: 250000, maandlast: 1200, orv: false, orvBedrag: 250000, inkomen: 3500 },
+    bel: { inkomen: 35000, vermogen: 100000, aow: false, kindgebonden: false, huur: false }
+  };
+
+  // ======== ANW BEREKENING ========
+  function anwBerekenUitkering() {
+    var voorwaarde = state.anw.kind || state.anw.ao || state.anw.ouder;
+    if (!voorwaarde) return 0;
+    var bruto = ANW_MAX;
+    if (state.anw.inkomen > 0) {
+      if (state.anw.bron === 'arbeid') {
+        var boven = Math.max(0, state.anw.inkomen - ANW_VRIJE_VOET);
+        bruto = Math.max(0, ANW_MAX - boven * ANW_KORTING_ARBEID);
+      } else {
+        bruto = Math.max(0, ANW_MAX - state.anw.inkomen);
+      }
+    }
+    return Math.round(bruto * 0.91);
+  }
+
+  function ppBerekenNet() {
+    var fonds = PP_DATA[state.pp.fonds];
+    if (!fonds) return 0;
+    var bruto = state.pp.opbouw * (fonds.pct / 100);
+    var brutoMaand = bruto / 12;
+    return Math.round(brutoMaand * 0.78);
+  }
+
+  // ======== OVERZICHT ========
+  function ovUpdate() {
+    var voor = state.ov.ikSalaris + state.ov.partnerSalaris + state.ov.partnerPensioen + state.ov.overig;
+    var vasteLasten = state.ov.woonlast + state.ov.energie + state.ov.verzek + state.ov.abos + state.ov.boodsch;
+    var anwUitkering = anwBerekenUitkering();
+    var ppNet = ppBerekenNet();
+    var na = state.ov.ikSalaris + anwUitkering + ppNet;
+    var verschil = na - voor;
+
+    document.getElementById('nb-ov-voor').textContent = fEuro(voor);
+    document.getElementById('nb-ov-na').textContent = fEuro(na);
+    var verschilEl = document.getElementById('nb-ov-verschil');
+    verschilEl.textContent = (verschil >= 0 ? '+' : '') + fEuro(verschil);
+    document.getElementById('nb-ov-verschil-sub').innerHTML = verschil < 0
+      ? 'Inkomensdaling van ' + fEuro(Math.abs(verschil)) + ' per maand'
+      : verschil > 0 ? 'Toename door uitkeringen' : 'Geen verschil';
+    document.getElementById('nb-ov-eigen').textContent = fEuro(state.ov.ikSalaris);
+    document.getElementById('nb-ov-anw').textContent = fEuro(anwUitkering);
+    document.getElementById('nb-ov-pp').textContent = fEuro(ppNet);
+    document.getElementById('nb-ov-tot-ink').textContent = fEuro(na);
+    document.getElementById('nb-ov-vaste-lasten').textContent = '-' + fEuro(vasteLasten);
+    document.getElementById('nb-ov-beschikbaar').textContent = fEuro(na - vasteLasten);
+
+    var uitleg;
+    if (verschil < -1000) uitleg = 'Het wegvallen van het partnerinkomen leidt tot een <span class="highlight">substantiele inkomensdaling</span> van ' + fEuro(Math.abs(verschil)) + ' per maand. Kijk goed naar mogelijkheden om vaste lasten te verlagen (hypotheek herfinancieren, abonnementen). Check ook de Anw en partnerpensioen tabs voor exact recht op uitkeringen.';
+    else if (verschil < 0) uitleg = 'Een <strong>beperkte inkomensdaling</strong> van ' + fEuro(Math.abs(verschil)) + ' per maand. De uitkeringen en eigen inkomen vangen veel op. Let op vaste lasten en eventuele aanpassingen.';
+    else uitleg = 'Het inkomen blijft <strong>stabiel of stijgt</strong> dankzij uitkeringen. Houd wel rekening met belastingveranderingen — die kunnen het netto inkomen alsnog beinvloeden.';
+    document.getElementById('nb-ov-uitleg').innerHTML = uitleg;
+  }
+
+  document.querySelectorAll('[data-ov]').forEach(function(input) {
+    input.addEventListener('input', function() {
+      state.ov[input.dataset.ov] = parseInt(input.value, 10) || 0;
+      ovUpdate();
+    });
+  });
+
+  // ======== ANW ========
+  document.querySelectorAll('[data-anw]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var k = row.dataset.anw;
+      state.anw[k] = !state.anw[k];
+      row.classList.toggle('active', !!state.anw[k]);
+      anwUpdate();
+    });
+  });
+  document.getElementById('nb-anw-inkomen').addEventListener('input', function(e) { state.anw.inkomen = parseInt(e.target.value, 10) || 0; anwUpdate(); });
+  document.getElementById('nb-anw-bron').addEventListener('change', function(e) { state.anw.bron = e.target.value; anwUpdate(); });
+  document.getElementById('nb-anw-w-jong').addEventListener('input', function(e) { state.anw.wJong = parseInt(e.target.value, 10) || 0; anwUpdate(); });
+  document.getElementById('nb-anw-w-mid').addEventListener('input', function(e) { state.anw.wMid = parseInt(e.target.value, 10) || 0; anwUpdate(); });
+  document.getElementById('nb-anw-w-oud').addEventListener('input', function(e) { state.anw.wOud = parseInt(e.target.value, 10) || 0; anwUpdate(); });
+
+  function anwUpdate() {
+    var voorwaarde = state.anw.kind || state.anw.ao || state.anw.ouder;
+    var uitkering = anwBerekenUitkering();
+    var wezenTot = state.anw.wJong * WEZEN_JONG + state.anw.wMid * WEZEN_MID + state.anw.wOud * WEZEN_OUD;
+
+    document.getElementById('nb-anw-uitkering').textContent = fEuro(uitkering);
+    document.getElementById('nb-anw-status').textContent = voorwaarde ? 'Recht op Anw' : 'Geen recht op Anw';
+    document.getElementById('nb-anw-jaar').textContent = fEuro(uitkering * 12);
+    document.getElementById('nb-anw-wezen-tot').textContent = fEuro(wezenTot);
+
+    var uitleg;
+    if (!voorwaarde) {
+      uitleg = '<strong>Geen recht op Anw.</strong> Je voldoet niet aan de voorwaarden (kind onder 18, arbeidsongeschiktheid 45%+, of geboren voor 1950). Voor andere ondersteuning kijk naar bijstand of toeslagen.';
+    } else if (state.anw.inkomen === 0) {
+      uitleg = '<strong>Volledig recht op Anw.</strong> Maximale uitkering <span class="highlight">' + fEuro(uitkering) + '</span> netto per maand. Bij eigen inkomen wordt de Anw deels of geheel gekort.';
+    } else if (state.anw.bron === 'arbeid') {
+      var boven = Math.max(0, state.anw.inkomen - ANW_VRIJE_VOET);
+      var korting = boven * ANW_KORTING_ARBEID;
+      uitleg = 'Bij eigen inkomen uit arbeid van ' + fEuro(state.anw.inkomen) + ': vrije voet ' + fEuro(ANW_VRIJE_VOET) + ', boven die voet (' + fEuro(boven) + ') wordt 2/3 = ' + fEuro(korting) + ' gekort. Netto Anw: <span class="highlight">' + fEuro(uitkering) + '</span> per maand.';
+    } else {
+      uitleg = 'Bij inkomen <strong>niet uit arbeid</strong> (pensioen, lijfrente) wordt het volledig in mindering gebracht op de Anw. Netto Anw: <span class="highlight">' + fEuro(uitkering) + '</span> per maand.';
+    }
+    if (wezenTot > 0) uitleg += ' De wezenuitkering voor de kinderen bedraagt <strong>' + fEuro(wezenTot) + '</strong> per maand extra.';
+    document.getElementById('nb-anw-uitleg').innerHTML = uitleg;
+
+    ovUpdate();
+  }
+  anwUpdate();
+
+  // ======== PARTNERPENSIOEN ========
+  function ppSetOpbouw(n) {
+    state.pp.opbouw = Math.max(0, n);
+    document.getElementById('nb-pp-opbouw-display').value = state.pp.opbouw.toLocaleString('nl-NL');
+    document.getElementById('nb-pp-opbouw-slider').value = Math.min(100000, state.pp.opbouw);
+    ppUpdate();
+  }
+  function ppSetLeeftijd(n) {
+    state.pp.leeftijd = Math.max(25, Math.min(80, n));
+    document.getElementById('nb-pp-leeftijd-display').value = state.pp.leeftijd;
+    document.getElementById('nb-pp-leeftijd-slider').value = state.pp.leeftijd;
+    ppUpdate();
+  }
+  document.getElementById('nb-pp-fonds').addEventListener('change', function(e) { state.pp.fonds = e.target.value; ppUpdate(); });
+  document.getElementById('nb-pp-opbouw-slider').addEventListener('input', function(e) { ppSetOpbouw(parseInt(e.target.value, 10)); });
+  document.getElementById('nb-pp-opbouw-display').addEventListener('input', function(e) {
+    var n = pEuro(e.target.value);
+    state.pp.opbouw = n;
+    document.getElementById('nb-pp-opbouw-slider').value = Math.min(100000, n);
+    ppUpdate();
+  });
+  document.getElementById('nb-pp-opbouw-display').addEventListener('blur', function(e) { e.target.value = state.pp.opbouw.toLocaleString('nl-NL'); });
+  document.getElementById('nb-pp-leeftijd-slider').addEventListener('input', function(e) { ppSetLeeftijd(parseInt(e.target.value, 10)); });
+  document.getElementById('nb-pp-leeftijd-display').addEventListener('input', function(e) { ppSetLeeftijd(parseInt(e.target.value, 10) || 25); });
+  document.querySelectorAll('[data-pp-type]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      document.querySelectorAll('[data-pp-type]').forEach(function(r) { r.classList.remove('active'); });
+      row.classList.add('active');
+      state.pp.type = row.dataset.ppType;
+      ppUpdate();
+    });
+  });
+
+  function ppUpdate() {
+    var fonds = PP_DATA[state.pp.fonds];
+    var brutoJaar = state.pp.opbouw * (fonds.pct / 100);
+    var brutoMaand = brutoJaar / 12;
+    var belasting = brutoMaand * 0.22;
+    var netto = brutoMaand - belasting;
+
+    document.getElementById('nb-pp-fonds-naam').textContent = fonds.naam;
+    document.getElementById('nb-pp-opbouw-jaar').textContent = fEuro(state.pp.opbouw);
+    document.getElementById('nb-pp-percentage').textContent = fonds.pct + '%';
+    document.getElementById('nb-pp-bruto-jaar').textContent = fEuro(brutoJaar);
+    document.getElementById('nb-pp-belasting').textContent = '-' + fEuro(belasting);
+    document.getElementById('nb-pp-netto').textContent = fEuro(netto);
+    document.getElementById('nb-pp-uitkering').textContent = fEuro(netto);
+    document.getElementById('nb-pp-sub').textContent = fonds.naam + ' — type ' + (state.pp.type === 'opbouw' ? 'opbouw' : 'risicobasis');
+
+    var uitleg = '<strong>' + fonds.naam + '</strong>: ' + fonds.info + ' Berekening: opgebouwd ouderdomspensioen <span class="highlight">' + fEuro(state.pp.opbouw) + '</span> × ' + fonds.pct + '% = ' + fEuro(brutoJaar) + ' bruto per jaar.';
+    if (state.pp.type === 'risico') uitleg += ' <strong>Let op</strong>: bij risicobasis stopt de dekking zodra partner stopt met werken bij dit fonds. Levenslange uitkering alleen bij opbouw.';
+    document.getElementById('nb-pp-uitleg').innerHTML = uitleg;
+
+    ovUpdate();
+  }
+  ppUpdate();
+
+  // ======== HYPOTHEEK ========
+  function hypSet(k, n) {
+    state.hyp[k] = Math.max(0, n);
+    var displayId = 'nb-hyp-' + k + '-display';
+    var sliderId = 'nb-hyp-' + k + '-slider';
+    var displayEl = document.getElementById(displayId);
+    var sliderEl = document.getElementById(sliderId);
+    if (displayEl) displayEl.value = state.hyp[k].toLocaleString('nl-NL');
+    if (sliderEl) sliderEl.value = Math.min(parseInt(sliderEl.max, 10), state.hyp[k]);
+    hypUpdate();
+  }
+  ['woning','schuld','maandlast','inkomen'].forEach(function(k) {
+    var slider = document.getElementById('nb-hyp-' + k + '-slider');
+    var display = document.getElementById('nb-hyp-' + k + '-display');
+    if (slider) slider.addEventListener('input', function(e) { hypSet(k, parseInt(e.target.value, 10)); });
+    if (display) {
+      display.addEventListener('input', function(e) {
+        var n = pEuro(e.target.value);
+        state.hyp[k] = n;
+        var s = document.getElementById('nb-hyp-' + k + '-slider');
+        if (s) s.value = Math.min(parseInt(s.max, 10), n);
+        hypUpdate();
+      });
+      display.addEventListener('blur', function(e) { e.target.value = state.hyp[k].toLocaleString('nl-NL'); });
+    }
+  });
+  document.querySelector('[data-hyp="orv"]').addEventListener('click', function() {
+    state.hyp.orv = !state.hyp.orv;
+    this.classList.toggle('active', state.hyp.orv);
+    document.getElementById('nb-hyp-orv-bedrag-rij').style.display = state.hyp.orv ? 'flex' : 'none';
+    hypUpdate();
+  });
+  document.getElementById('nb-hyp-orv-bedrag').addEventListener('input', function(e) {
+    state.hyp.orvBedrag = parseInt(e.target.value, 10) || 0;
+    hypUpdate();
+  });
+
+  function hypUpdate() {
+    var orvUitkering = state.hyp.orv ? Math.min(state.hyp.orvBedrag, state.hyp.schuld) : 0;
+    var restschuld = Math.max(0, state.hyp.schuld - orvUitkering);
+    var overwaarde = state.hyp.woning - restschuld;
+    var nieuweMaandlast = restschuld > 0 ? state.hyp.maandlast * (restschuld / state.hyp.schuld) : 0;
+    var woonquote = state.hyp.inkomen > 0 ? (nieuweMaandlast / state.hyp.inkomen) * 100 : 0;
+
+    document.getElementById('nb-hyp-restschuld').textContent = fEuro(restschuld);
+    document.getElementById('nb-hyp-restschuld-sub').textContent = state.hyp.orv ? 'Na ORV uitkering van ' + fEuro(orvUitkering) : 'Geen ORV gekoppeld';
+    document.getElementById('nb-hyp-r-woning').textContent = fEuro(state.hyp.woning);
+    document.getElementById('nb-hyp-r-schuld').textContent = '-' + fEuro(state.hyp.schuld);
+    document.getElementById('nb-hyp-r-orv').textContent = '+' + fEuro(orvUitkering);
+    document.getElementById('nb-hyp-r-overwaarde').textContent = fEuro(overwaarde);
+    document.getElementById('nb-hyp-r-maandlast').textContent = fEuro(nieuweMaandlast);
+    document.getElementById('nb-hyp-r-quote').textContent = fPct(woonquote);
+
+    var uitleg;
+    if (restschuld === 0 && state.hyp.orv) {
+      uitleg = '<strong>Hypotheek volledig afgelost</strong> door ORV uitkering. Je hebt nu een hypotheekvrije woning met overwaarde van <span class="highlight">' + fEuro(overwaarde) + '</span>. Geen maandlast meer.';
+    } else if (woonquote > 40) {
+      uitleg = '<strong>Te hoge woonquote (' + fPct(woonquote) + ').</strong> De bank zal mogelijk verlangen dat je herfinanciert of verkoopt. Overweeg lagere woning of buurt met goedkoper huren.';
+    } else if (woonquote > 30) {
+      uitleg = '<strong>Verhoogde woonquote (' + fPct(woonquote) + ').</strong> Te overzien maar krap. Check hypotheekadviseur voor herfinanciering of rentevergelijking.';
+    } else if (restschuld > 0) {
+      uitleg = '<strong>Hanteerbare situatie.</strong> Met een restschuld van ' + fEuro(restschuld) + ' en woonquote ' + fPct(woonquote) + ' kan de hypotheek doorlopen. Wel even contact met bank voor formele bevestiging.';
+    } else {
+      uitleg = 'Vul de gegevens in voor analyse.';
+    }
+    document.getElementById('nb-hyp-uitleg').innerHTML = uitleg;
+  }
+  hypUpdate();
+
+  // ======== BELASTING ========
+  function belSet(k, n) {
+    state.bel[k] = Math.max(0, n);
+    document.getElementById('nb-bel-' + k + '-display').value = state.bel[k].toLocaleString('nl-NL');
+    var sl = document.getElementById('nb-bel-' + k + '-slider');
+    if (sl) sl.value = Math.min(parseInt(sl.max, 10), state.bel[k]);
+    belUpdate();
+  }
+  ['inkomen','vermogen'].forEach(function(k) {
+    document.getElementById('nb-bel-' + k + '-slider').addEventListener('input', function(e) { belSet(k, parseInt(e.target.value, 10)); });
+    document.getElementById('nb-bel-' + k + '-display').addEventListener('input', function(e) {
+      var n = pEuro(e.target.value);
+      state.bel[k] = n;
+      document.getElementById('nb-bel-' + k + '-slider').value = Math.min(parseInt(document.getElementById('nb-bel-' + k + '-slider').max, 10), n);
+      belUpdate();
+    });
+    document.getElementById('nb-bel-' + k + '-display').addEventListener('blur', function(e) { e.target.value = state.bel[k].toLocaleString('nl-NL'); });
+  });
+  document.querySelectorAll('[data-bel]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var k = row.dataset.bel;
+      state.bel[k] = !state.bel[k];
+      row.classList.toggle('active', !!state.bel[k]);
+      belUpdate();
+    });
+  });
+
+  function belUpdate() {
+    var inkomen = state.bel.inkomen;
+    var box1Belasting = 0;
+    if (inkomen > IB_S2_GRENS) {
+      box1Belasting = IB_S1_GRENS * IB_T1 + (IB_S2_GRENS - IB_S1_GRENS) * IB_T2 + (inkomen - IB_S2_GRENS) * IB_T3;
+    } else if (inkomen > IB_S1_GRENS) {
+      box1Belasting = IB_S1_GRENS * IB_T1 + (inkomen - IB_S1_GRENS) * IB_T2;
+    } else {
+      box1Belasting = inkomen * IB_T1;
+    }
+
+    var ahk = IB_AHK_MAX;
+    if (inkomen > IB_S1_GRENS) ahk = Math.max(0, IB_AHK_MAX - (inkomen - IB_S1_GRENS) * 0.067);
+    if (state.bel.aow) ahk *= 0.5;
+
+    var box1Netto = Math.max(0, box1Belasting - ahk);
+
+    var box3Belastbaar = Math.max(0, state.bel.vermogen - BOX3_VRIJ);
+    var box3Rendement = box3Belastbaar * BOX3_REND;
+    var box3Belasting = box3Rendement * BOX3_TARIEF;
+
+    var totaal = box1Netto + box3Belasting;
+    var effectief = inkomen > 0 ? (totaal / inkomen) * 100 : 0;
+
+    document.getElementById('nb-bel-effectief').textContent = fPct(effectief);
+    document.getElementById('nb-bel-effectief-sub').textContent = 'Box 1 plus box 3 op ' + fEuro(inkomen) + ' inkomen';
+    document.getElementById('nb-bel-bruto').textContent = fEuro(inkomen);
+    document.getElementById('nb-bel-ahk').textContent = fEuro(ahk);
+    document.getElementById('nb-bel-box1').textContent = fEuro(box1Netto);
+    document.getElementById('nb-bel-v-tot').textContent = fEuro(state.bel.vermogen);
+    document.getElementById('nb-bel-v-belast').textContent = fEuro(box3Belastbaar);
+    document.getElementById('nb-bel-v-rendement').textContent = fEuro(box3Rendement);
+    document.getElementById('nb-bel-box3').textContent = fEuro(box3Belasting);
+
+    var uitleg = '<strong>Belangrijkste verandering:</strong> als alleenstaande val je terug naar enkele heffingskorting en lagere vrijstelling box 3 (€57.684 ipv €115.368 als fiscaal partner). Effectief belastingtarief: <span class="highlight">' + fPct(effectief) + '</span>.';
+    if (state.bel.vermogen > 200000) uitleg += ' Bij groot box 3 vermogen kan box 3 heffing snel oplopen.';
+    if (state.bel.kindgebonden) uitleg += ' <strong>Kindgebonden budget</strong> voor alleenstaande ouders is hoger, check toeslagen.nl.';
+    if (state.bel.huur) uitleg += ' <strong>Huurtoeslag</strong> kan ook hoger uitvallen bij eenpersoonshuishouden, check drempelinkomen.';
+    document.getElementById('nb-bel-uitleg').innerHTML = uitleg;
+  }
+  belUpdate();
+
+  // INIT
+  ovUpdate();
+})();
+</script>
+</body>
+</html>
