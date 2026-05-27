@@ -71,6 +71,14 @@ body { padding: 16px; min-height: 100vh; }
 .uk-toggle-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; }
 .uk-toggle-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 2px; line-height: 1.3; }
 .uk-toggle-prijs { font-size: 0.74rem; font-weight: 700; color: #d4733c; font-variant-numeric: tabular-nums; }
+.uk-prijs-edit { display: flex; align-items: center; gap: 2px; background: #fff7ef; border: 1.5px solid #e8834a; border-radius: 8px; padding: 3px 6px 3px 8px; flex-shrink: 0; }
+.uk-prijs-edit-euro { font-size: 0.78rem; font-weight: 700; color: #4a1942; }
+.uk-prijs-edit-input { width: 60px; border: none; outline: none; background: transparent; font-family: inherit; font-size: 0.84rem; font-weight: 700; color: #d4733c; text-align: right; font-variant-numeric: tabular-nums; padding: 2px 0; }
+.uk-prijs-edit-input::-webkit-outer-spin-button, .uk-prijs-edit-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.uk-prijs-edit-input[type=number] { -moz-appearance: textfield; }
+.uk-prijs-edit-reset { background: none; border: none; color: #6a5e64; cursor: pointer; font-size: 0.86rem; padding: 0 2px; line-height: 1; }
+.uk-prijs-edit-reset:hover { color: #4a1942; }
+.uk-prijs-edit-suffix { font-size: 0.62rem; color: #6a5e64; margin-left: 4px; font-weight: 500; }
 
 .uk-bedrag-wrap { background: #fff; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; border: 1.5px solid #e2d9e0; }
 .uk-bedrag-titel { font-size: 0.78rem; font-weight: 700; color: #4a1942; margin-bottom: 4px; }
@@ -274,6 +282,11 @@ body { padding: 16px; min-height: 100vh; }
         </div>
 
         <div class="uk-detail-grid">
+          <div class="uk-detail-blok"><div class="uk-detail-label">Vaste kosten</div><div class="uk-detail-value" id="uk-snel-vast">€0</div><div class="uk-detail-sub">Onafhankelijk van aantal gasten</div></div>
+          <div class="uk-detail-blok"><div class="uk-detail-label">Variabele kosten</div><div class="uk-detail-value" id="uk-snel-var">€0</div><div class="uk-detail-sub" id="uk-snel-var-sub">Catering per gast</div></div>
+        </div>
+
+        <div class="uk-detail-grid">
           <div class="uk-detail-blok"><div class="uk-detail-label">Laag scenario</div><div class="uk-detail-value" id="uk-snel-laag">€0</div><div class="uk-detail-sub">Sober en basic</div></div>
           <div class="uk-detail-blok"><div class="uk-detail-label">Hoog scenario</div><div class="uk-detail-value" id="uk-snel-hoog">€0</div><div class="uk-detail-sub">Uitgebreid en luxe</div></div>
         </div>
@@ -288,7 +301,7 @@ body { padding: 16px; min-height: 100vh; }
           <div class="uk-uitleg-tekst" id="uk-snel-uitleg">Pas de instellingen aan om de schatting te zien.</div>
         </div>
 
-        <div class="uk-info-box"><strong>Volledig overzicht?</strong> Ga naar de "À la carte" tab voor een item-voor-item kostenberekening met meer dan 20 posten.</div>
+        <div class="uk-info-box success"><strong>Alleen catering schaalt met gasten.</strong> De kist, crematie, uitvaartondernemer en andere kosten staan vast ongeacht het aantal gasten. Voor exacte aanpassing per post: gebruik de "À la carte" tab.</div>
       </div>
     </div>
   </div>
@@ -454,6 +467,18 @@ body { padding: 16px; min-height: 100vh; }
         </div>
 
         <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">3</span> Tarief grafrecht (aanpasbaar)</div>
+          <div class="uk-veld" style="padding:10px 14px;background:#fff;border:1.5px solid #e2d9e0;border-radius:10px;">
+            <div class="uk-veld-icoon">💰</div>
+            <div class="uk-veld-info">
+              <div class="uk-veld-naam">Eenmalig tarief eeuwig grafrecht</div>
+              <div class="uk-veld-uitleg">Standaardprijs per locatie, pas aan indien afgesproken</div>
+            </div>
+            <input type="number" class="uk-veld-input" id="uk-n-tarief-input" value="5500" step="100" min="0">
+          </div>
+        </div>
+
+        <div class="uk-stap">
           <div class="uk-stap-label"><span class="uk-stap-nr">3</span> Eeuwigdurende grafrust</div>
           <div class="uk-toggle-rij active" id="uk-n-eeuwig">
             <div class="uk-toggle-check"></div>
@@ -542,35 +567,22 @@ body { padding: 16px; min-height: 100vh; }
         </div>
 
         <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">💰</div> Basistarieven (aanpasbaar)</div></div>
+          <div class="uk-veld">
+            <div class="uk-veld-icoon">🏛️</div>
+            <div class="uk-veld-info"><div class="uk-veld-naam">Basis uitvaartkosten bestemmingsland</div><div class="uk-veld-uitleg">Standaardprijs per land, pas aan indien afgesproken</div></div>
+            <input type="number" class="uk-veld-input" id="uk-i-basis-input" value="9000" step="100" min="0">
+          </div>
+          <div class="uk-veld">
+            <div class="uk-veld-icoon">✈️</div>
+            <div class="uk-veld-info"><div class="uk-veld-naam">Transport (override)</div><div class="uk-veld-uitleg">Laat leeg voor automatische berekening op afstand</div></div>
+            <input type="number" class="uk-veld-input" id="uk-i-transport-input" placeholder="auto" step="100" min="0">
+          </div>
+        </div>
+
+        <div class="uk-blok">
           <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">📜</div> Extra's repatriëring</div></div>
-          <div class="uk-toggle-rij" data-intl-extra="balsemen">
-            <div class="uk-toggle-check"></div>
-            <div class="uk-toggle-info">
-              <div class="uk-toggle-naam">Balsemen (verplicht bij vliegtuig)</div>
-              <div class="uk-toggle-uitleg">+ €1.500 - €3.500</div>
-            </div>
-          </div>
-          <div class="uk-toggle-rij" data-intl-extra="zinkenkist">
-            <div class="uk-toggle-check"></div>
-            <div class="uk-toggle-info">
-              <div class="uk-toggle-naam">Zinken (eind)kist (verplicht in veel landen)</div>
-              <div class="uk-toggle-uitleg">+ €1.200 - €2.500</div>
-            </div>
-          </div>
-          <div class="uk-toggle-rij" data-intl-extra="consulaat">
-            <div class="uk-toggle-check"></div>
-            <div class="uk-toggle-info">
-              <div class="uk-toggle-naam">Consulaire legalisaties</div>
-              <div class="uk-toggle-uitleg">+ €300 - €800 documenten en legalisaties</div>
-            </div>
-          </div>
-          <div class="uk-toggle-rij" data-intl-extra="tolk">
-            <div class="uk-toggle-check"></div>
-            <div class="uk-toggle-info">
-              <div class="uk-toggle-naam">Tolk en lokale bijstand</div>
-              <div class="uk-toggle-uitleg">+ €500 - €1.500</div>
-            </div>
-          </div>
+          <div id="uk-i-extras-lijst"></div>
         </div>
       </div>
 
@@ -743,19 +755,44 @@ body { padding: 16px; min-height: 100vh; }
   setPrintDatum();
 
   // ======== SNEL ========
-  var BASIS_BEDRAGEN = {
-    cremeren: { basis: 5500, standaard: 8500, uitgebreid: 13000 },
-    begraven: { basis: 7500, standaard: 11000, uitgebreid: 17000 },
-    natuur: { basis: 4500, standaard: 7000, uitgebreid: 10000 }
+  // Vaste kosten per type/niveau (in euro), NIET afhankelijk van gasten
+  var FIXED_KOSTEN = {
+    cremeren: {
+      basis:      { kist: 900,  locatie: 800,  eind: 1200, sfeer: 200,  comm: 300, ondernemer: 1200 },
+      standaard:  { kist: 1500, locatie: 1400, eind: 1800, sfeer: 450,  comm: 500, ondernemer: 2000 },
+      uitgebreid: { kist: 2500, locatie: 2200, eind: 2500, sfeer: 1100, comm: 800, ondernemer: 2800 }
+    },
+    begraven: {
+      basis:      { kist: 1200, locatie: 600,  eind: 3500, sfeer: 200,  comm: 300, ondernemer: 1300 },
+      standaard:  { kist: 1800, locatie: 1100, eind: 5000, sfeer: 450,  comm: 500, ondernemer: 1800 },
+      uitgebreid: { kist: 3000, locatie: 1800, eind: 7000, sfeer: 1100, comm: 800, ondernemer: 2200 }
+    },
+    natuur: {
+      basis:      { kist: 1100, locatie: 400,  eind: 2300, sfeer: 200,  comm: 300, ondernemer: 1300 },
+      standaard:  { kist: 1500, locatie: 600,  eind: 3800, sfeer: 400,  comm: 500, ondernemer: 1350 },
+      uitgebreid: { kist: 2200, locatie: 900,  eind: 4800, sfeer: 800,  comm: 700, ondernemer: 1500 }
+    }
+  };
+
+  // Catering per gast, WEL afhankelijk van gasten
+  var CATERING_PER_GAST = { basis: 12, standaard: 18, uitgebreid: 28 };
+
+  var EIND_NAMEN = {
+    cremeren: 'Crematie',
+    begraven: 'Begraven incl. grafrechten',
+    natuur: 'Natuurgraf (eeuwig)'
   };
 
   var sState = { type: 'cremeren', niveau: 'standaard', regio: 'eindhoven', gasten: 75 };
 
   function snelUpdate() {
-    var basis = BASIS_BEDRAGEN[sState.type][sState.niveau];
+    var fixed = FIXED_KOSTEN[sState.type][sState.niveau];
+    var caterPerGast = CATERING_PER_GAST[sState.niveau];
     var regioFactor = getRegio(sState.regio).factor;
-    var gastenFactor = 1 + Math.max(0, (sState.gasten - 75)) * 0.003;
-    var totaal = basis * regioFactor * gastenFactor;
+
+    var vastTotaal = (fixed.kist + fixed.locatie + fixed.eind + fixed.sfeer + fixed.comm + fixed.ondernemer) * regioFactor;
+    var caterTotaal = caterPerGast * sState.gasten * regioFactor;
+    var totaal = vastTotaal + caterTotaal;
     var laag = totaal * 0.75;
     var hoog = totaal * 1.4;
 
@@ -763,29 +800,35 @@ body { padding: 16px; min-height: 100vh; }
     document.getElementById('uk-snel-laag').textContent = fEuro(laag);
     document.getElementById('uk-snel-hoog').textContent = fEuro(hoog);
     document.getElementById('uk-snel-gasten-val').textContent = sState.gasten;
+    document.getElementById('uk-snel-vast').textContent = fEuro(vastTotaal);
+    document.getElementById('uk-snel-var').textContent = fEuro(caterTotaal);
+    document.getElementById('uk-snel-var-sub').textContent = fEuro(caterPerGast) + ' per gast × ' + sState.gasten + ' gasten';
 
     var typenamen = { cremeren: 'crematie', begraven: 'begrafenis', natuur: 'natuurbegrafenis' };
     var niveaunamen = { basis: 'sobere', standaard: 'standaard', uitgebreid: 'uitgebreide' };
     document.getElementById('uk-snel-sub').textContent = niveaunamen[sState.niveau] + ' ' + typenamen[sState.type] + ' in ' + getRegio(sState.regio).naam;
 
-    // Verdeling
+    // Verdeling: 6 vaste posten + 1 variabele (catering)
     var verdeling = [
-      { naam: 'Kist en vervoer', pct: 0.15 },
-      { naam: 'Crematie of begraven', pct: 0.30 },
-      { naam: 'Aula / locatie ceremonie', pct: 0.15 },
-      { naam: 'Catering en condoleance', pct: 0.12 },
-      { naam: 'Communicatie en sfeer', pct: 0.10 },
-      { naam: 'Uitvaartondernemer', pct: 0.18 }
+      { naam: 'Kist en vervoer',           bedrag: fixed.kist * regioFactor,       vast: true },
+      { naam: 'Aula of locatie ceremonie', bedrag: fixed.locatie * regioFactor,    vast: true },
+      { naam: EIND_NAMEN[sState.type],     bedrag: fixed.eind * regioFactor,       vast: true },
+      { naam: 'Bloemen, muziek, sfeer',    bedrag: fixed.sfeer * regioFactor,      vast: true },
+      { naam: 'Rouwkaarten en advertentie', bedrag: fixed.comm * regioFactor,      vast: true },
+      { naam: 'Uitvaartondernemer',        bedrag: fixed.ondernemer * regioFactor, vast: true },
+      { naam: 'Catering en condoleance',   bedrag: caterTotaal,                    vast: false, sub: fEuro(caterPerGast) + ' × ' + sState.gasten + ' gasten' }
     ];
     var vHtml = '';
     verdeling.forEach(function(v) {
-      vHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + v.naam + '</span><span class="uk-tabel-waarde">' + fEuro(totaal * v.pct) + '</span></div>';
+      var tag = v.vast ? '' : ' <span class="uk-verz-tag">VARIABEL</span>';
+      var sub = v.sub ? '<div style="font-size:0.66rem;color:#6a5e64;font-weight:500;margin-top:1px;">' + v.sub + '</div>' : '';
+      vHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + v.naam + tag + sub + '</span><span class="uk-tabel-waarde">' + fEuro(v.bedrag) + '</span></div>';
     });
     vHtml += '<div class="uk-tabel-rij totaal"><span class="uk-tabel-naam">Totaal</span><span class="uk-tabel-waarde">' + fEuro(totaal) + '</span></div>';
     document.getElementById('uk-snel-verdeling').innerHTML = vHtml;
 
     var uitleg = '<strong>' + niveaunamen[sState.niveau].charAt(0).toUpperCase() + niveaunamen[sState.niveau].slice(1) + ' ' + typenamen[sState.type] + '</strong> in ' + getRegio(sState.regio).naam + ' kost gemiddeld <span class="highlight">' + fEuro(totaal) + '</span>. ';
-    if (sState.gasten > 100) uitleg += 'Met ' + sState.gasten + ' gasten is de catering een belangrijke factor. ';
+    uitleg += 'De vaste kosten (kist, locatie, uitvaartondernemer etc.) zijn <strong>' + fEuro(vastTotaal) + '</strong>, de catering voor ' + sState.gasten + ' gasten komt op <strong>' + fEuro(caterTotaal) + '</strong>. ';
     if (regioFactor > 1.05) uitleg += 'Deze regio is <strong>duurder dan gemiddeld</strong> in Nederland. ';
     if (sState.type === 'natuur') uitleg += 'Natuurbegraven heeft <strong>geen vervolgkosten</strong> (eeuwigdurende grafrust).';
     document.getElementById('uk-snel-uitleg').innerHTML = uitleg;
@@ -867,10 +910,18 @@ body { padding: 16px; min-height: 100vh; }
         var actief = bState.items[item.id] !== undefined;
         var prijs = actief ? bState.items[item.id] : item.default;
         html += '<div class="uk-toggle-rij' + (actief ? ' active' : '') + '" data-item="' + item.id + '" data-cat="' + cat + '">';
-        html += '<div class="uk-toggle-check"></div>';
-        html += '<div class="uk-toggle-info"><div class="uk-toggle-naam">' + item.naam + (item.perPersoon ? ' <span class="uk-verz-tag">PER PERSOON</span>' : '') + '</div>';
-        html += '<div class="uk-toggle-uitleg">' + fEuro(item.laag) + ' - ' + fEuro(item.hoog) + '</div></div>';
-        html += '<div class="uk-toggle-prijs">' + fEuro(prijs * (item.perPersoon ? bState.gasten : 1)) + '</div>';
+        html += '<div class="uk-toggle-check" data-toggle></div>';
+        html += '<div class="uk-toggle-info" data-toggle><div class="uk-toggle-naam">' + item.naam + (item.perPersoon ? ' <span class="uk-verz-tag">PER GAST</span>' : '') + '</div>';
+        html += '<div class="uk-toggle-uitleg">Indicatief ' + fEuro(item.laag) + ' - ' + fEuro(item.hoog) + (item.perPersoon ? ' p.p.' : '') + '</div></div>';
+        if (actief) {
+          html += '<div class="uk-prijs-edit">';
+          html += '<span class="uk-prijs-edit-euro">€</span>';
+          html += '<input type="number" class="uk-prijs-edit-input" data-prijs value="' + prijs + '" step="10" min="0" inputmode="numeric">';
+          if (prijs !== item.default) html += '<button class="uk-prijs-edit-reset" data-reset title="Reset naar standaardprijs">↺</button>';
+          html += '</div>';
+        } else {
+          html += '<div class="uk-toggle-prijs" data-toggle>' + fEuro(prijs * (item.perPersoon ? bState.gasten : 1)) + '</div>';
+        }
         html += '</div>';
       });
       document.getElementById('uk-b-cat-' + cat).innerHTML = html;
@@ -883,9 +934,10 @@ body { padding: 16px; min-height: 100vh; }
     Object.keys(BUILDER_ITEMS).forEach(function(cat) {
       BUILDER_ITEMS[cat].forEach(function(item) {
         if (bState.items[item.id] !== undefined) {
-          var prijs = bState.items[item.id] * (item.perPersoon ? bState.gasten : 1);
+          var basis = bState.items[item.id];
+          var prijs = basis * (item.perPersoon ? bState.gasten : 1);
           totaal += prijs;
-          selectie.push({ naam: item.naam, prijs: prijs });
+          selectie.push({ naam: item.naam, prijs: prijs, perPersoon: item.perPersoon, basis: basis });
         }
       });
     });
@@ -897,7 +949,8 @@ body { padding: 16px; min-height: 100vh; }
 
     var selHtml = selectie.length === 0 ? '<div style="font-size:0.78rem;color:#6a5e64;padding:8px;">Nog geen posten geselecteerd.</div>' : '';
     selectie.forEach(function(s) {
-      selHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + s.naam + '</span><span class="uk-tabel-waarde">' + fEuro(s.prijs * rFactor) + '</span></div>';
+      var label = s.naam + (s.perPersoon ? ' <span style="font-size:0.66rem;color:#6a5e64;">(' + fEuro(s.basis) + ' × ' + bState.gasten + ')</span>' : '');
+      selHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + label + '</span><span class="uk-tabel-waarde">' + fEuro(s.prijs * rFactor) + '</span></div>';
     });
     document.getElementById('uk-b-selectie').innerHTML = selHtml;
 
@@ -908,7 +961,21 @@ body { padding: 16px; min-height: 100vh; }
   document.getElementById('uk-b-regio').addEventListener('change', function(e) { bState.regio = e.target.value; bUpdate(); });
 
   ['vervoer','ceremonie','eind','comm','sfeer','divers'].forEach(function(cat) {
-    document.getElementById('uk-b-cat-' + cat).addEventListener('click', function(e) {
+    var container = document.getElementById('uk-b-cat-' + cat);
+
+    // Toggle / reset clicks (re-render OK, no input focus to lose)
+    container.addEventListener('click', function(e) {
+      var resetBtn = e.target.closest('[data-reset]');
+      if (resetBtn) {
+        var resetRow = resetBtn.closest('[data-item]');
+        var resetItemId = resetRow.dataset.item;
+        var resetItem = BUILDER_ITEMS[cat].find(function(x) { return x.id === resetItemId; });
+        if (resetItem) bState.items[resetItemId] = resetItem.default;
+        bRender(); bUpdate();
+        return;
+      }
+      var toggleArea = e.target.closest('[data-toggle]');
+      if (!toggleArea) return; // klik op input wordt hier niet getoggled
       var row = e.target.closest('[data-item]');
       if (!row) return;
       var itemId = row.dataset.item;
@@ -916,6 +983,16 @@ body { padding: 16px; min-height: 100vh; }
       if (bState.items[itemId] !== undefined) delete bState.items[itemId];
       else bState.items[itemId] = item.default;
       bRender(); bUpdate();
+    });
+
+    // Prijs-input wijzigingen: alleen totalen updaten, NIET re-renderen (focus blijft)
+    container.addEventListener('input', function(e) {
+      if (!e.target.matches('[data-prijs]')) return;
+      var row = e.target.closest('[data-item]');
+      if (!row) return;
+      var itemId = row.dataset.item;
+      bState.items[itemId] = parseInt(e.target.value, 10) || 0;
+      bUpdate();
     });
   });
   bRender(); bUpdate();
@@ -1012,16 +1089,36 @@ body { padding: 16px; min-height: 100vh; }
     { id: 'condol', naam: 'Condoleance buiten', prijs: 600 }
   ];
 
-  var nState = { type: 'bos', locatie: 'hillig', eeuwig: true, extras: { 'kist-bio': true, 'transport': true, 'ceremonie': true } };
+  var nState = { type: 'bos', locatie: 'hillig', eeuwig: true, extras: { 'kist-bio': true, 'transport': true, 'ceremonie': true }, tariefOverride: null, extraPrijzen: {} };
+
+  function nGetTarief() {
+    if (nState.tariefOverride !== null) return nState.tariefOverride;
+    return NATUUR_LOCATIES[nState.locatie].tarief;
+  }
+  function nGetExtraPrijs(id) {
+    if (nState.extraPrijzen[id] !== undefined) return nState.extraPrijzen[id];
+    var e = NATUUR_EXTRAS.find(function(x) { return x.id === id; });
+    return e ? e.prijs : 0;
+  }
 
   function nRender() {
     var html = '';
     NATUUR_EXTRAS.forEach(function(e) {
       var actief = !!nState.extras[e.id];
+      var prijs = nGetExtraPrijs(e.id);
+      var gewijzigd = nState.extraPrijzen[e.id] !== undefined && nState.extraPrijzen[e.id] !== e.prijs;
       html += '<div class="uk-toggle-rij' + (actief ? ' active' : '') + '" data-natuur-ex="' + e.id + '">';
-      html += '<div class="uk-toggle-check"></div>';
-      html += '<div class="uk-toggle-info"><div class="uk-toggle-naam">' + e.naam + '</div></div>';
-      html += '<div class="uk-toggle-prijs">' + fEuro(e.prijs) + '</div>';
+      html += '<div class="uk-toggle-check" data-toggle></div>';
+      html += '<div class="uk-toggle-info" data-toggle><div class="uk-toggle-naam">' + e.naam + '</div></div>';
+      if (actief) {
+        html += '<div class="uk-prijs-edit">';
+        html += '<span class="uk-prijs-edit-euro">€</span>';
+        html += '<input type="number" class="uk-prijs-edit-input" data-natuur-prijs value="' + prijs + '" step="10" min="0" inputmode="numeric">';
+        if (gewijzigd) html += '<button class="uk-prijs-edit-reset" data-natuur-reset title="Reset naar standaard">↺</button>';
+        html += '</div>';
+      } else {
+        html += '<div class="uk-toggle-prijs" data-toggle>' + fEuro(prijs) + '</div>';
+      }
       html += '</div>';
     });
     document.getElementById('uk-n-extras').innerHTML = html;
@@ -1029,21 +1126,31 @@ body { padding: 16px; min-height: 100vh; }
 
   function nUpdate() {
     var loc = NATUUR_LOCATIES[nState.locatie];
-    var tarief = loc.tarief;
+    var tarief = nGetTarief();
     var extras = 0;
-    NATUUR_EXTRAS.forEach(function(e) { if (nState.extras[e.id]) extras += e.prijs; });
+    NATUUR_EXTRAS.forEach(function(e) { if (nState.extras[e.id]) extras += nGetExtraPrijs(e.id); });
     var totaal = tarief + extras;
 
     document.getElementById('uk-n-totaal').textContent = fEuro(totaal);
     document.getElementById('uk-n-sub').textContent = loc.naam + ' — eeuwigdurende grafrust';
 
+    var tariefStandaard = NATUUR_LOCATIES[nState.locatie].tarief;
+    var tariefGewijzigd = nState.tariefOverride !== null && nState.tariefOverride !== tariefStandaard;
     var tHtml = '';
-    tHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Grafrecht (eeuwig)</span><span class="uk-tabel-waarde">' + fEuro(tarief) + '</span></div>';
+    tHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Grafrecht eeuwig (' + loc.naam + ')' + (tariefGewijzigd ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '') + '</span><span class="uk-tabel-waarde">' + fEuro(tarief) + '</span></div>';
     NATUUR_EXTRAS.forEach(function(e) {
-      if (nState.extras[e.id]) tHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + e.naam + '</span><span class="uk-tabel-waarde">' + fEuro(e.prijs) + '</span></div>';
+      if (nState.extras[e.id]) {
+        var pp = nGetExtraPrijs(e.id);
+        var tag = (nState.extraPrijzen[e.id] !== undefined && nState.extraPrijzen[e.id] !== e.prijs) ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '';
+        tHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + e.naam + tag + '</span><span class="uk-tabel-waarde">' + fEuro(pp) + '</span></div>';
+      }
     });
     tHtml += '<div class="uk-tabel-rij totaal"><span class="uk-tabel-naam">Totaal</span><span class="uk-tabel-waarde">' + fEuro(totaal) + '</span></div>';
     document.getElementById('uk-n-tabel').innerHTML = tHtml;
+
+    // Tarief input syncen
+    var tariefInput = document.getElementById('uk-n-tarief-input');
+    if (tariefInput && document.activeElement !== tariefInput) tariefInput.value = tarief;
 
     var uitleg = '<strong>Natuurbegraven op ' + loc.naam + '</strong> kost <span class="highlight">' + fEuro(totaal) + '</span> eenmalig voor eeuwigdurende grafrust. ' +
       'Geen vervolgkosten, geen grafsteen-onderhoud. ' +
@@ -1057,13 +1164,41 @@ body { padding: 16px; min-height: 100vh; }
       btn.classList.add('active'); nState.type = btn.dataset.natuurType; nUpdate();
     });
   });
-  document.getElementById('uk-n-locatie').addEventListener('change', function(e) { nState.locatie = e.target.value; nUpdate(); });
+  document.getElementById('uk-n-locatie').addEventListener('change', function(e) {
+    nState.locatie = e.target.value;
+    nState.tariefOverride = null; // reset tarief naar nieuwe locatie
+    nUpdate();
+  });
   document.getElementById('uk-n-extras').addEventListener('click', function(e) {
+    var resetBtn = e.target.closest('[data-natuur-reset]');
+    if (resetBtn) {
+      var resetRow = resetBtn.closest('[data-natuur-ex]');
+      var resetId = resetRow.dataset.natuurEx;
+      delete nState.extraPrijzen[resetId];
+      nRender(); nUpdate();
+      return;
+    }
+    var toggleArea = e.target.closest('[data-toggle]');
+    if (!toggleArea) return;
     var row = e.target.closest('[data-natuur-ex]');
     if (!row) return;
     var id = row.dataset.natuurEx;
     if (nState.extras[id]) delete nState.extras[id]; else nState.extras[id] = true;
     nRender(); nUpdate();
+  });
+  document.getElementById('uk-n-extras').addEventListener('input', function(e) {
+    if (!e.target.matches('[data-natuur-prijs]')) return;
+    var row = e.target.closest('[data-natuur-ex]');
+    if (!row) return;
+    var id = row.dataset.natuurEx;
+    nState.extraPrijzen[id] = parseInt(e.target.value, 10) || 0;
+    nUpdate();
+  });
+  // Tarief input handler (toegevoegd via HTML hieronder)
+  document.addEventListener('input', function(e) {
+    if (e.target.id !== 'uk-n-tarief-input') return;
+    nState.tariefOverride = parseInt(e.target.value, 10) || 0;
+    nUpdate();
   });
   nRender(); nUpdate();
 
@@ -1084,37 +1219,89 @@ body { padding: 16px; min-height: 100vh; }
     anders: { naam: 'Ander land', basis: 14000, afstand: 5000 }
   };
 
-  var iState = { overland: 'nederland', bestemming: 'nederland', transport: 'vliegtuig', extras: {} };
+  var INTL_EXTRAS = [
+    { id: 'balsemen', naam: 'Balsemen (verplicht bij vliegtuig)', prijs: 2500, range: '€1.500 - €3.500' },
+    { id: 'zinkenkist', naam: 'Zinken eindkist (verplicht veel landen)', prijs: 1800, range: '€1.200 - €2.500' },
+    { id: 'consulaat', naam: 'Consulaire legalisaties', prijs: 550, range: '€300 - €800' },
+    { id: 'tolk', naam: 'Tolk en lokale bijstand', prijs: 1000, range: '€500 - €1.500' }
+  ];
+
+  var iState = { overland: 'nederland', bestemming: 'nederland', transport: 'vliegtuig', extras: {}, basisOverride: null, transportOverride: null, extraPrijzen: {} };
+
+  function iGetBasis() {
+    if (iState.basisOverride !== null) return iState.basisOverride;
+    return INTL_LANDEN[iState.bestemming].basis;
+  }
+  function iGetExtraPrijs(id) {
+    if (iState.extraPrijzen[id] !== undefined) return iState.extraPrijzen[id];
+    var e = INTL_EXTRAS.find(function(x) { return x.id === id; });
+    return e ? e.prijs : 0;
+  }
+  function iCalcTransport() {
+    if (iState.transportOverride !== null) return iState.transportOverride;
+    var ov = INTL_LANDEN[iState.overland];
+    var be = INTL_LANDEN[iState.bestemming];
+    var isInNl = iState.overland === 'nederland' && iState.bestemming === 'nederland';
+    if (isInNl) return 0;
+    var afstand = Math.abs(ov.afstand - be.afstand);
+    if (afstand === 0) afstand = ov.afstand;
+    if (iState.transport === 'vliegtuig') return Math.round(2500 + afstand * 1.2);
+    return Math.round(afstand * 4.5);
+  }
+
+  function iRenderExtras() {
+    var html = '';
+    INTL_EXTRAS.forEach(function(e) {
+      var actief = !!iState.extras[e.id];
+      var prijs = iGetExtraPrijs(e.id);
+      var gewijzigd = iState.extraPrijzen[e.id] !== undefined && iState.extraPrijzen[e.id] !== e.prijs;
+      html += '<div class="uk-toggle-rij' + (actief ? ' active' : '') + '" data-intl-ex="' + e.id + '">';
+      html += '<div class="uk-toggle-check" data-toggle></div>';
+      html += '<div class="uk-toggle-info" data-toggle><div class="uk-toggle-naam">' + e.naam + '</div>';
+      html += '<div class="uk-toggle-uitleg">Indicatief ' + e.range + '</div></div>';
+      if (actief) {
+        html += '<div class="uk-prijs-edit">';
+        html += '<span class="uk-prijs-edit-euro">€</span>';
+        html += '<input type="number" class="uk-prijs-edit-input" data-intl-prijs value="' + prijs + '" step="50" min="0" inputmode="numeric">';
+        if (gewijzigd) html += '<button class="uk-prijs-edit-reset" data-intl-reset title="Reset">↺</button>';
+        html += '</div>';
+      } else {
+        html += '<div class="uk-toggle-prijs" data-toggle>' + fEuro(prijs) + '</div>';
+      }
+      html += '</div>';
+    });
+    document.getElementById('uk-i-extras-lijst').innerHTML = html;
+  }
 
   function iUpdate() {
     var ov = INTL_LANDEN[iState.overland];
     var be = INTL_LANDEN[iState.bestemming];
     var isInNl = iState.overland === 'nederland' && iState.bestemming === 'nederland';
 
-    var basis = be.basis;
-    var transport = 0;
-    if (!isInNl) {
-      var afstand = Math.abs(ov.afstand - be.afstand);
-      if (afstand === 0) afstand = ov.afstand;
-      if (iState.transport === 'vliegtuig') transport = 2500 + afstand * 1.2;
-      else transport = afstand * 4.5;
-    }
+    var basis = iGetBasis();
+    var transport = iCalcTransport();
     var extras = 0;
-    var extraInfo = { balsemen: 2500, zinkenkist: 1800, consulaat: 550, tolk: 1000 };
-    Object.keys(iState.extras).forEach(function(k) { if (iState.extras[k]) extras += extraInfo[k]; });
+    Object.keys(iState.extras).forEach(function(k) { if (iState.extras[k]) extras += iGetExtraPrijs(k); });
 
     var totaal = basis + transport + extras;
 
     document.getElementById('uk-i-totaal').textContent = fEuro(totaal);
     document.getElementById('uk-i-sub').textContent = ov.naam + ' → ' + be.naam;
 
+    // Sync basis input (alleen als geen focus heeft)
+    var basisInput = document.getElementById('uk-i-basis-input');
+    if (basisInput && document.activeElement !== basisInput) basisInput.value = basis;
+
+    var basisGewijzigd = iState.basisOverride !== null && iState.basisOverride !== be.basis;
+    var transportGewijzigd = iState.transportOverride !== null;
     var html = '';
-    html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Basis uitvaart in ' + be.naam + '</span><span class="uk-tabel-waarde">' + fEuro(basis) + '</span></div>';
-    if (transport > 0) html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Transport (' + (iState.transport === 'vliegtuig' ? 'vliegtuig' : 'rouwauto') + ')</span><span class="uk-tabel-waarde">' + fEuro(transport) + '</span></div>';
-    Object.keys(iState.extras).forEach(function(k) {
-      if (iState.extras[k]) {
-        var labels = { balsemen: 'Balsemen', zinkenkist: 'Zinken eindkist', consulaat: 'Consulaat / legalisaties', tolk: 'Tolk en lokale bijstand' };
-        html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + labels[k] + '</span><span class="uk-tabel-waarde">' + fEuro(extraInfo[k]) + '</span></div>';
+    html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Basis uitvaart in ' + be.naam + (basisGewijzigd ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '') + '</span><span class="uk-tabel-waarde">' + fEuro(basis) + '</span></div>';
+    if (transport > 0) html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Transport (' + (iState.transport === 'vliegtuig' ? 'vliegtuig' : 'rouwauto') + ')' + (transportGewijzigd ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '') + '</span><span class="uk-tabel-waarde">' + fEuro(transport) + '</span></div>';
+    INTL_EXTRAS.forEach(function(e) {
+      if (iState.extras[e.id]) {
+        var pp = iGetExtraPrijs(e.id);
+        var tag = (iState.extraPrijzen[e.id] !== undefined && iState.extraPrijzen[e.id] !== e.prijs) ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '';
+        html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + e.naam + tag + '</span><span class="uk-tabel-waarde">' + fEuro(pp) + '</span></div>';
       }
     });
     html += '<div class="uk-tabel-rij totaal"><span class="uk-tabel-naam">Totaal</span><span class="uk-tabel-waarde">' + fEuro(totaal) + '</span></div>';
@@ -1127,21 +1314,55 @@ body { padding: 16px; min-height: 100vh; }
   }
 
   document.getElementById('uk-i-overland').addEventListener('change', function(e) { iState.overland = e.target.value; iUpdate(); });
-  document.getElementById('uk-i-bestemming').addEventListener('change', function(e) { iState.bestemming = e.target.value; iUpdate(); });
+  document.getElementById('uk-i-bestemming').addEventListener('change', function(e) {
+    iState.bestemming = e.target.value;
+    iState.basisOverride = null; // reset basis bij wisselen bestemming
+    iUpdate();
+  });
+  document.getElementById('uk-i-basis-input').addEventListener('input', function(e) {
+    var val = e.target.value;
+    iState.basisOverride = val === '' ? null : (parseInt(val, 10) || 0);
+    iUpdate();
+  });
+  document.getElementById('uk-i-transport-input').addEventListener('input', function(e) {
+    var val = e.target.value;
+    iState.transportOverride = val === '' ? null : (parseInt(val, 10) || 0);
+    iUpdate();
+  });
   document.querySelectorAll('[data-intl-trans]').forEach(function(btn) {
     btn.addEventListener('click', function() {
       document.querySelectorAll('[data-intl-trans]').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active'); iState.transport = btn.dataset.intlTrans; iUpdate();
-    });
-  });
-  document.querySelectorAll('[data-intl-extra]').forEach(function(row) {
-    row.addEventListener('click', function() {
-      var k = row.dataset.intlExtra;
-      iState.extras[k] = !iState.extras[k];
-      row.classList.toggle('active', iState.extras[k]);
+      btn.classList.add('active');
+      iState.transport = btn.dataset.intlTrans;
+      iState.transportOverride = null; // reset bij wisselen
+      document.getElementById('uk-i-transport-input').value = '';
       iUpdate();
     });
   });
+  document.getElementById('uk-i-extras-lijst').addEventListener('click', function(e) {
+    var resetBtn = e.target.closest('[data-intl-reset]');
+    if (resetBtn) {
+      var resetRow = resetBtn.closest('[data-intl-ex]');
+      delete iState.extraPrijzen[resetRow.dataset.intlEx];
+      iRenderExtras(); iUpdate();
+      return;
+    }
+    var toggleArea = e.target.closest('[data-toggle]');
+    if (!toggleArea) return;
+    var row = e.target.closest('[data-intl-ex]');
+    if (!row) return;
+    var id = row.dataset.intlEx;
+    iState.extras[id] = !iState.extras[id];
+    iRenderExtras(); iUpdate();
+  });
+  document.getElementById('uk-i-extras-lijst').addEventListener('input', function(e) {
+    if (!e.target.matches('[data-intl-prijs]')) return;
+    var row = e.target.closest('[data-intl-ex]');
+    if (!row) return;
+    iState.extraPrijzen[row.dataset.intlEx] = parseInt(e.target.value, 10) || 0;
+    iUpdate();
+  });
+  iRenderExtras();
   iUpdate();
 
   // ======== VERZEKERING ========
