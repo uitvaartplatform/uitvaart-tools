@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beneficiair Aanvaarden Tool 2026 - Uitvaart-Platform.nl</title>
+<title>Erfenis Keuzehulp 2026 - Uitvaart-Platform.nl</title>
 <meta name="description" content="Aanvaarden, beneficiair of verwerpen? Schuldencheck, beslisboom, stappenplan rechtbank en termijn calculator voor erfgenamen in twijfel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -126,6 +126,17 @@ body { padding: 16px; min-height: 100vh; }
 
 .ba-info-box { background: #faf0e7; border-left: 4px solid #e8834a; border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-size: 0.78rem; color: #4a4046; line-height: 1.6; }
 .ba-info-box strong { color: #4a1942; font-weight: 700; }
+.ba-intro { background: #fff; border-bottom: 1px solid #efe7ee; padding: 22px 30px 24px; }
+.ba-intro-titel { font-size: 1rem; font-weight: 800; color: #4a1942; margin-bottom: 6px; }
+.ba-intro-tekst { font-size: 0.82rem; color: #5a4f58; line-height: 1.65; max-width: 760px; margin-bottom: 16px; }
+.ba-intro-opties { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.ba-intro-optie { background: #faf7f2; border: 1px solid #efe7ee; border-radius: 12px; padding: 14px 16px; }
+.ba-intro-optie.hl { background: linear-gradient(135deg, #fff3ea, #faf0e7); border-color: #f0c4a3; box-shadow: 0 4px 14px rgba(232,131,74,0.12); }
+.ba-intro-optie-kop { font-size: 0.84rem; font-weight: 700; color: #4a1942; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+.ba-intro-optie.hl .ba-intro-optie-kop::after { content: 'Deze tool'; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: #e8834a; color: #fff; padding: 2px 7px; border-radius: 10px; }
+.ba-intro-optie-sub { font-size: 0.74rem; color: #6b6068; line-height: 1.55; }
+@media (max-width: 700px) { .ba-intro-opties { grid-template-columns: 1fr; } .ba-intro { padding: 18px 18px 20px; } }
+@media print { .ba-intro { display: none; } }
 .ba-info-box.warning { background: #fef7e8; border-color: #d4a017; color: #5a4a10; }
 .ba-info-box.danger { background: #fcecee; border-color: #c4666c; color: #8c3a40; }
 .ba-info-box.success { background: #f0f7ed; border-color: #6b9a7f; color: #2e4030; }
@@ -193,7 +204,7 @@ body { padding: 16px; min-height: 100vh; }
 <body>
 
 <div class="ba-print-cover">
-  <h1>Aanvaardingsbeslissing Rapport</h1>
+  <div style="font-size:1.9rem;font-weight:800;line-height:1.2;">Erfenis Keuzehulp &mdash; Rapport</div>
   <div class="lead">Zuiver, beneficiair of verwerpen — onderbouwde beslissing</div>
   <div class="datum" id="ba-print-datum"></div>
 </div>
@@ -202,17 +213,39 @@ body { padding: 16px; min-height: 100vh; }
   <header class="ba-header">
     <div class="ba-header-content">
       <div>
-        <h1 class="ba-titel">Beneficiair Aanvaarden Beslissingsboom PRO</h1>
-        <div class="ba-subtitel">2026 &middot; 5 modi &middot; Schuldencheck &middot; Beslisboom &middot; Termijn alert</div>
+        <div class="ba-titel">Erfenis Keuzehulp</div>
+        <div class="ba-subtitel">2026 &middot; Beneficiair aanvaarden, zuiver aanvaarden of verwerpen &middot; Schuldencheck &middot; Stappenplan</div>
       </div>
       <div class="ba-badge"><span class="ba-badge-dot"></span> Live advies</div>
     </div>
   </header>
 
+  <section class="ba-intro">
+    <div class="ba-intro-titel">Wat betekent beneficiair aanvaarden?</div>
+    <p class="ba-intro-tekst">Als je een erfenis krijgt, maak je een keuze over hoe je die aanvaardt. Er zijn drie opties. De juiste keuze is vooral belangrijk als je niet zeker weet of er schulden zijn, want bij een verkeerde keuze kun je met je eigen geld aansprakelijk worden. Deze tool helpt je onderbouwd beslissen.</p>
+    <div class="ba-intro-opties">
+      <div class="ba-intro-optie">
+        <div class="ba-intro-optie-kop">Zuiver aanvaarden</div>
+        <div class="ba-intro-optie-sub">Je krijgt alle bezittingen, maar bent ook met je eigen vermogen aansprakelijk voor eventuele schulden. Geen formele actie nodig.</div>
+      </div>
+      <div class="ba-intro-optie hl">
+        <div class="ba-intro-optie-kop">Beneficiair aanvaarden</div>
+        <div class="ba-intro-optie-sub">Je erft alleen wat er overblijft nadat de schulden zijn betaald. Je eigen vermogen loopt geen risico. De veilige tussenweg bij twijfel, via een verklaring bij de rechtbank.</div>
+      </div>
+      <div class="ba-intro-optie">
+        <div class="ba-intro-optie-kop">Verwerpen</div>
+        <div class="ba-intro-optie-sub">Je doet volledig afstand van de erfenis. Je krijgt niets, maar erft ook geen schulden. Let op: de erfenis gaat dan naar de volgende in lijn.</div>
+      </div>
+    </div>
+  </section>
+
   <nav class="ba-tabs" id="ba-tabs">
     <button class="ba-tab active" data-tab="check"><span>🔍</span> Schuldencheck</button>
     <button class="ba-tab" data-tab="boom"><span>⚖️</span> Beslisboom</button>
+    <button class="ba-tab" data-tab="daden"><span>🚫</span> Pas op</button>
     <button class="ba-tab" data-tab="stappen"><span>📋</span> Stappenplan</button>
+    <button class="ba-tab" data-tab="vereffening"><span>🧾</span> Na beneficiair</button>
+    <button class="ba-tab" data-tab="verwerpen"><span>↪️</span> Verwerpen</button>
     <button class="ba-tab" data-tab="termijn"><span>⏰</span> Termijn alert</button>
     <button class="ba-tab" data-tab="docs"><span>📄</span> Documenten</button>
   </nav>
@@ -598,6 +631,156 @@ body { padding: 16px; min-height: 100vh; }
     </div>
   </div>
 
+  <!-- ========== PAS OP: DADEN VAN AANVAARDING ========== -->
+  <div class="ba-pane" data-pane="daden">
+    <div class="ba-body">
+      <div class="ba-input">
+        <div class="ba-info-box warning"><strong>De grootste valkuil.</strong> Door bepaalde handelingen aanvaard je de erfenis per ongeluk <strong>zuiver</strong>, waardoor je met je eigen vermogen aansprakelijk wordt voor schulden, ook als je eigenlijk beneficiair wilde aanvaarden. Vink hieronder aan wat al gebeurd is, dan zie je direct het risico.</div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-titel" style="margin-bottom:10px;"><div class="ba-blok-titel-icoon">🚫</div> Risicovolle handelingen (mogelijk zuivere aanvaarding)</div>
+          <div class="ba-toggle-rij" data-daad="spullen">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info"><div class="ba-toggle-naam">Bezittingen meegenomen of verdeeld</div><div class="ba-toggle-uitleg">Sieraden, auto, meubels of andere goederen voor jezelf gehouden of onder de familie verdeeld</div></div>
+          </div>
+          <div class="ba-toggle-rij" data-daad="verkocht">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info"><div class="ba-toggle-naam">Goederen verkocht of weggegeven</div><div class="ba-toggle-uitleg">Spullen van de erflater verkocht, geschonken of naar de kringloop gebracht</div></div>
+          </div>
+          <div class="ba-toggle-rij" data-daad="rekening">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info"><div class="ba-toggle-naam">Geld van de rekening gebruikt voor jezelf</div><div class="ba-toggle-uitleg">Saldo van de erflater gebruikt voor eigen uitgaven of overgeboekt naar je eigen rekening</div></div>
+          </div>
+          <div class="ba-toggle-rij" data-daad="schulden">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info"><div class="ba-toggle-naam">Schulden selectief betaald uit eigen geld</div><div class="ba-toggle-uitleg">Bepaalde schuldeisers betaald (anders dan de uitvaart) op een manier die aanvaarding kan suggereren</div></div>
+          </div>
+          <div class="ba-toggle-rij" data-daad="opgezegd">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info"><div class="ba-toggle-naam">Contracten als eigenaar beheerd</div><div class="ba-toggle-uitleg">Bijvoorbeeld de woning verhuurd, abonnementen op eigen naam gezet of als eigenaar opgetreden</div></div>
+          </div>
+        </div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-titel" style="margin-bottom:10px;"><div class="ba-blok-titel-icoon">✅</div> Wel toegestaan (geen zuivere aanvaarding)</div>
+          <div class="ba-doc gedaan" style="cursor:default;"><div class="ba-doc-check"></div><div class="ba-doc-info">De uitvaart regelen en betalen<div class="ba-doc-sub">Mag uit het saldo van de erflater, telt niet als aanvaarding (Hoge Raad)</div></div></div>
+          <div class="ba-doc gedaan" style="cursor:default;"><div class="ba-doc-check"></div><div class="ba-doc-info">Bederfelijke waar weggooien<div class="ba-doc-sub">Eten uit de koelkast, planten water geven, normaal beheer</div></div></div>
+          <div class="ba-doc gedaan" style="cursor:default;"><div class="ba-doc-check"></div><div class="ba-doc-info">Woning afsluiten en verzekeren<div class="ba-doc-sub">Beschermen en in stand houden mag, dat is beheer</div></div></div>
+          <div class="ba-doc gedaan" style="cursor:default;"><div class="ba-doc-check"></div><div class="ba-doc-info">Post openen en administratie ordenen<div class="ba-doc-sub">Inventariseren van bezittingen en schulden is juist verstandig</div></div></div>
+          <div class="ba-doc gedaan" style="cursor:default;"><div class="ba-doc-check"></div><div class="ba-doc-info">Een dierbaar aandenken bewaren<div class="ba-doc-sub">Een foto of klein persoonlijk aandenken van geringe waarde mag meestal</div></div></div>
+        </div>
+      </div>
+
+      <div class="ba-result">
+        <div class="ba-totaal" id="ba-daden-totaal-blok">
+          <div class="ba-totaal-label">Risico op zuivere aanvaarding</div>
+          <div class="ba-totaal-waarde" id="ba-daden-status">Geen signalen</div>
+          <div class="ba-totaal-sub" id="ba-daden-sub">Je hebt nog geen risicovolle handelingen aangevinkt</div>
+        </div>
+
+        <div class="ba-uitleg">
+          <div class="ba-uitleg-label">⚖️ Het verschil: beheren mag, beschikken niet</div>
+          <div class="ba-uitleg-tekst" id="ba-daden-uitleg">
+            De wet maakt onderscheid tussen <strong>beheersdaden</strong> (de boedel beschermen en in stand houden, dat mag) en <strong>daden van beschikking</strong> (handelen alsof je al eigenaar bent, bijvoorbeeld goederen toe-eigenen of verkopen). Dat laatste geldt als zuivere aanvaarding en maakt je privé aansprakelijk voor eventuele schulden.
+          </div>
+        </div>
+
+        <div class="ba-info-box"><strong>Onbedoeld toch gedaan?</strong> Sinds de Wet bescherming erfgenamen tegen schulden (2016) kan de kantonrechter in bepaalde gevallen alsnog een machtiging geven om beneficiair te aanvaarden als er na een handeling een onverwachte schuld opduikt. Dit is maatwerk, schakel snel een notaris of advocaat in.</div>
+
+        <div class="ba-info-box success"><strong>Veilige route bij twijfel:</strong> doe zo min mogelijk tot je hebt besloten. Wil je zekerheid? Aanvaard beneficiair via de rechtbank, dan is je eigen vermogen sowieso beschermd, ongeacht eerdere twijfelgevallen.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== NA BENEFICIAIR: VEREFFENING ========== -->
+  <div class="ba-pane" data-pane="vereffening">
+    <div class="ba-body">
+      <div class="ba-input">
+        <div class="ba-info-box"><strong>Wat veel mensen niet weten:</strong> na beneficiair aanvaarden ben je verplicht de nalatenschap te <strong>vereffenen</strong>. Dat betekent dat je de bezittingen te gelde maakt en daarmee de schulden betaalt, in een vaste volgorde. Hieronder zie je welke vorm op jou van toepassing is en wat je moet doen.</div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-titel" style="margin-bottom:10px;"><div class="ba-blok-titel-icoon">🧭</div> Welke vereffening geldt voor jou?</div>
+          <div class="ba-toggle-rij" data-vef="kantonrechter">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info"><div class="ba-toggle-naam">De rechtbank heeft een vereffenaar benoemd</div><div class="ba-toggle-uitleg">Of een schuldeiser heeft hierom verzocht</div></div>
+          </div>
+          <div class="ba-toggle-rij" data-vef="insolvent">
+            <div class="ba-toggle-check"></div>
+            <div class="ba-toggle-info"><div class="ba-toggle-naam">De nalatenschap is duidelijk negatief</div><div class="ba-toggle-uitleg">De schulden zijn groter dan de bezittingen</div></div>
+          </div>
+        </div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-titel" style="margin-bottom:10px;"><div class="ba-blok-titel-icoon">📋</div> Stappen van de vereffening</div>
+          <div class="ba-stappen">
+            <div class="ba-stap-rij"><div class="ba-stap-num">1</div><div><div class="ba-stap-info-titel">Boedelbeschrijving maken</div><div class="ba-stap-info-sub">Een overzicht van alle bezittingen en schulden op de dag van overlijden. Verplicht bij beneficiaire aanvaarding.</div></div><div class="ba-stap-tijd">week 1-4</div></div>
+            <div class="ba-stap-rij"><div class="ba-stap-num">2</div><div><div class="ba-stap-info-titel">Schuldeisers informeren</div><div class="ba-stap-info-sub">Bekende schuldeisers aanschrijven. Bij zware vereffening ook een openbare oproep (advertentie) plaatsen.</div></div><div class="ba-stap-tijd">week 2-6</div></div>
+            <div class="ba-stap-rij"><div class="ba-stap-num">3</div><div><div class="ba-stap-info-titel">Bezittingen te gelde maken</div><div class="ba-stap-info-sub">Voor zover nodig om de schulden te kunnen betalen. Denk aan verkoop van de woning of beleggingen.</div></div><div class="ba-stap-tijd">variabel</div></div>
+            <div class="ba-stap-rij"><div class="ba-stap-num">4</div><div><div class="ba-stap-info-titel">Schulden betalen in de juiste volgorde</div><div class="ba-stap-info-sub">Eerst de boedelkosten en preferente schulden (zoals Belastingdienst), daarna de gewone schuldeisers.</div></div><div class="ba-stap-tijd">na oproep</div></div>
+            <div class="ba-stap-rij"><div class="ba-stap-num">5</div><div><div class="ba-stap-info-titel">Rekening en verantwoording / uitkering</div><div class="ba-stap-info-sub">Blijft er iets over, dan wordt dat onder de erfgenamen verdeeld. Bij zware vereffening legt de vereffenaar verantwoording af bij de rechtbank.</div></div><div class="ba-stap-tijd">afronding</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-result">
+        <div class="ba-totaal">
+          <div class="ba-totaal-label">Vorm van vereffening</div>
+          <div class="ba-totaal-waarde" id="ba-vef-vorm" style="font-size:1.2rem;">Lichte vereffening</div>
+          <div class="ba-totaal-sub" id="ba-vef-sub">Standaard wanneer erfgenamen samen vereffenen</div>
+        </div>
+
+        <div class="ba-uitleg">
+          <div class="ba-uitleg-label">📖 Uitleg</div>
+          <div class="ba-uitleg-tekst" id="ba-vef-uitleg">
+            Bij de <strong>lichte vereffening</strong> regelen de erfgenamen het samen, zonder tussenkomst van de rechtbank. Je maakt een boedelbeschrijving, betaalt de bekende schuldeisers en verdeelt wat overblijft. Dit is de meest voorkomende vorm.
+          </div>
+        </div>
+
+        <div class="ba-info-box warning"><strong>Persoonlijke aansprakelijkheid blijft mogelijk:</strong> ook na beneficiair aanvaarden kun je toch privé aansprakelijk worden als je de vereffening niet goed uitvoert, bijvoorbeeld door een schuldeiser te benadelen of de boedelbeschrijving niet te maken. Voer de stappen dus zorgvuldig uit.</div>
+
+        <div class="ba-info-box success"><strong>Tip:</strong> bij een ingewikkelde of grote nalatenschap is het verstandig een notaris of boedelnotaris in te schakelen. Die kan de vereffening (deels) overnemen en voorkomt fouten.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== VERWERPEN: GEVOLGEN ========== -->
+  <div class="ba-pane" data-pane="verwerpen">
+    <div class="ba-body">
+      <div class="ba-input">
+        <div class="ba-info-box warning"><strong>Verwerpen heeft een belangrijk gevolg:</strong> als jij de erfenis verwerpt, word je behandeld alsof je er nooit was. Je erfdeel (inclusief eventuele schulden) gaat dan via <strong>plaatsvervulling</strong> naar je afstammelingen, meestal je kinderen. Zij moeten dan zelf ook een keuze maken.</div>
+
+        <div class="ba-blok">
+          <div class="ba-blok-titel" style="margin-bottom:10px;"><div class="ba-blok-titel-icoon">↪️</div> Wat gebeurt er als je verwerpt</div>
+          <div class="ba-stappen">
+            <div class="ba-stap-rij"><div class="ba-stap-num">1</div><div><div class="ba-stap-info-titel">Jouw erfdeel schuift door</div><div class="ba-stap-info-sub">Je kinderen komen in jouw plaats (plaatsvervulling). Heb je geen kinderen, dan gaat het naar de volgende erfgenamen in lijn.</div></div></div>
+            <div class="ba-stap-rij"><div class="ba-stap-num">2</div><div><div class="ba-stap-info-titel">Je kinderen kiezen zelf</div><div class="ba-stap-info-sub">Zij kunnen óók zuiver aanvaarden, beneficiair aanvaarden of verwerpen. Bij schulden moeten ook zij dus actie ondernemen.</div></div></div>
+            <div class="ba-stap-rij"><div class="ba-stap-num">3</div><div><div class="ba-stap-info-titel">Minderjarige kinderen</div><div class="ba-stap-info-sub">Voor minderjarigen beslissen de ouders, maar zij kunnen alleen beneficiair aanvaarden of (met goedkeuring van de kantonrechter) verwerpen. Zuiver aanvaarden namens een minderjarige kan niet.</div></div></div>
+            <div class="ba-stap-rij"><div class="ba-stap-num">4</div><div><div class="ba-stap-info-titel">De hele lijn afgaan</div><div class="ba-stap-info-sub">Om schulden volledig te ontlopen, moet iedereen die erft door plaatsvervulling ook verwerpen. Doe dit bewust en gecoördineerd binnen de familie.</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-result">
+        <div class="ba-totaal">
+          <div class="ba-totaal-label">Verwerpen in het kort</div>
+          <div class="ba-totaal-waarde" style="font-size:1.2rem;">Volledig afstand</div>
+          <div class="ba-totaal-sub">Geen bezit, geen schuld, maar het schuift door naar je kinderen</div>
+        </div>
+
+        <div class="ba-uitleg">
+          <div class="ba-uitleg-label">⚠️ De valkuil van verwerpen</div>
+          <div class="ba-uitleg-tekst">
+            Veel mensen verwerpen een erfenis met schulden zonder te weten dat die schuld daardoor bij hun <span class="highlight">eigen (klein)kinderen</span> terechtkomt. Vergeet dus niet ook namens minderjarige kinderen tijdig actie te ondernemen. Vaak is <strong>beneficiair aanvaarden</strong> veiliger dan verwerpen: je loopt geen privérisico én de erfenis schuift niet ongemerkt door naar de volgende generatie.
+          </div>
+        </div>
+
+        <div class="ba-info-box"><strong>Hoe verwerpen?</strong> Verwerpen doe je met een verklaring bij de rechtbank van de laatste woonplaats van de erflater. Hiervoor geldt hetzelfde griffierecht (€165) als bij aanvaarden. Verwerpen is definitief en kan niet worden teruggedraaid.</div>
+
+        <div class="ba-info-box success"><strong>Twijfel je tussen verwerpen en beneficiair?</strong> Gebruik de Beslisboom en Schuldencheck in deze tool. In de meeste gevallen biedt beneficiair aanvaarden dezelfde bescherming zonder dat de erfenis doorschuift naar je kinderen.</div>
+      </div>
+    </div>
+  </div>
+
   <footer class="ba-footer">
     <span>Indicatief advies, geen juridisch bindend. Bij twijfel notaris of advocaat raadplegen. <a href="https://uitvaart-platform.nl/nalatenschap-erfrecht" class="ba-footer-link" target="_top">Meer info</a></span>
     <div class="ba-actions">
@@ -651,7 +834,9 @@ body { padding: 16px; min-height: 100vh; }
     bb: {},
     datum: '',
     tm: {},
-    docs: {}
+    docs: {},
+    daden: {},
+    vef: {}
   };
 
   // ======== SCHULDENCHECK ========
@@ -935,6 +1120,62 @@ body { padding: 16px; min-height: 100vh; }
     });
   });
   renderDocs();
+
+  // ======== PAS OP: DADEN VAN AANVAARDING ========
+  var DADEN_LABELS = {
+    spullen: 'bezittingen meegenomen of verdeeld',
+    verkocht: 'goederen verkocht of weggegeven',
+    rekening: 'geld voor jezelf gebruikt',
+    schulden: 'schulden selectief betaald',
+    opgezegd: 'als eigenaar opgetreden'
+  };
+  function updateDaden() {
+    var actief = Object.keys(state.daden).filter(function(k) { return state.daden[k]; });
+    var n = actief.length;
+    var statusEl = document.getElementById('ba-daden-status');
+    var subEl = document.getElementById('ba-daden-sub');
+    var blok = document.getElementById('ba-daden-totaal-blok');
+    if (n === 0) {
+      statusEl.textContent = 'Geen signalen';
+      subEl.textContent = 'Je hebt nog geen risicovolle handelingen aangevinkt';
+      blok.style.background = '';
+    } else {
+      statusEl.textContent = (n === 1 ? 'Let op: 1 signaal' : 'Let op: ' + n + ' signalen');
+      subEl.textContent = 'Mogelijk al zuiver aanvaard door: ' + actief.map(function(k) { return DADEN_LABELS[k]; }).join(', ') + '. Raadpleeg snel een notaris of advocaat.';
+      blok.style.background = 'linear-gradient(135deg,#fcecee,#fff4f5)';
+    }
+  }
+  document.querySelectorAll('[data-daad]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var k = row.dataset.daad;
+      state.daden[k] = !state.daden[k];
+      row.classList.toggle('active', state.daden[k]);
+      updateDaden();
+    });
+  });
+  updateDaden();
+
+  // ======== NA BENEFICIAIR: VEREFFENING ========
+  function updateVef() {
+    var zwaar = state.vef.kantonrechter || state.vef.insolvent;
+    document.getElementById('ba-vef-vorm').textContent = zwaar ? 'Zware vereffening' : 'Lichte vereffening';
+    if (zwaar) {
+      document.getElementById('ba-vef-sub').textContent = 'Met extra formele verplichtingen';
+      document.getElementById('ba-vef-uitleg').innerHTML = 'Bij de <strong>zware vereffening</strong> gelden strengere regels. Er is vaak een door de rechtbank benoemde vereffenaar, je moet schuldeisers <strong>openbaar oproepen</strong> (via een advertentie), een uitgebreide boedelbeschrijving deponeren bij de rechtbank en achteraf rekening en verantwoording afleggen. Dit geldt onder andere bij een benoemde vereffenaar of een duidelijk negatieve nalatenschap.';
+    } else {
+      document.getElementById('ba-vef-sub').textContent = 'Standaard wanneer erfgenamen samen vereffenen';
+      document.getElementById('ba-vef-uitleg').innerHTML = 'Bij de <strong>lichte vereffening</strong> regelen de erfgenamen het samen, zonder tussenkomst van de rechtbank. Je maakt een boedelbeschrijving, betaalt de bekende schuldeisers en verdeelt wat overblijft. Dit is de meest voorkomende vorm.';
+    }
+  }
+  document.querySelectorAll('[data-vef]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var k = row.dataset.vef;
+      state.vef[k] = !state.vef[k];
+      row.classList.toggle('active', state.vef[k]);
+      updateVef();
+    });
+  });
+  updateVef();
 })();
 </script>
 </body>
