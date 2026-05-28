@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nabestaanden Financieel Cockpit PRO 2026 - Uitvaart-Platform.nl</title>
+<title>Nabestaanden geldwijzer 2026 - Uitvaart-Platform.nl</title>
 <meta name="description" content="Complete financiele check na overlijden partner. Anw uitkering, partnerpensioen, hypotheek scenario en belasting overgang in een tool.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -121,12 +121,29 @@ body { padding: 16px; min-height: 100vh; }
 .nb-detail-sub { font-size: 0.66rem; color: #6a5e64; margin-top: 2px; }
 
 .nb-info-box { background: #faf0e7; border-left: 4px solid #e8834a; border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-size: 0.78rem; color: #4a4046; line-height: 1.6; }
+.nb-intro { background: #fff; border-bottom: 1px solid #efe7ee; padding: 20px 30px 22px; }
+.nb-intro-titel { font-size: 1rem; font-weight: 800; color: #4a1942; margin-bottom: 6px; }
+.nb-intro-tekst { font-size: 0.82rem; color: #5a4f58; line-height: 1.65; max-width: 820px; margin-bottom: 14px; }
+.nb-intro-punten { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.nb-intro-punt { display: flex; align-items: flex-start; gap: 9px; background: #faf7f2; border: 1px solid #efe7ee; border-radius: 10px; padding: 11px 13px; font-size: 0.76rem; color: #5a4f58; line-height: 1.45; }
+.nb-intro-punt-ico { font-size: 1.05rem; line-height: 1.2; flex-shrink: 0; }
+.nb-intro-punt strong { color: #4a1942; font-weight: 700; }
+@media (max-width: 700px) { .nb-intro-punten { grid-template-columns: 1fr; } .nb-intro { padding: 16px 18px 18px; } }
+@media print { .nb-intro { display: none; } }
 .nb-info-box strong { color: #4a1942; font-weight: 700; }
 .nb-info-box.warning { background: #fef7e8; border-color: #d4a017; color: #5a4a10; }
 .nb-info-box.success { background: #f0f7ed; border-color: #6b9a7f; color: #2e4030; }
 
 .nb-footer { padding: 14px 30px; border-top: 1px solid #f0eae7; background: #faf7f2; font-size: 0.72rem; color: #6a5e64; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .nb-footer-link { color: #4a1942; text-decoration: none; font-weight: 600; border-bottom: 2px solid #e8834a; }
+.nb-bronnen { padding: 18px 30px; border-top: 1px solid #f0eae7; background: #fff; }
+.nb-bronnen-titel { font-size: 0.84rem; font-weight: 800; color: #4a1942; margin-bottom: 6px; }
+.nb-bronnen-tekst { font-size: 0.74rem; color: #6a5e64; line-height: 1.6; margin-bottom: 12px; max-width: 880px; }
+.nb-bronnen-lijst { display: flex; flex-wrap: wrap; gap: 8px; }
+.nb-bron { display: inline-flex; align-items: center; font-size: 0.72rem; font-weight: 600; color: #4a1942; background: #faf7f2; border: 1px solid #e2d9e0; border-radius: 8px; padding: 7px 12px; text-decoration: none; transition: all 0.2s; }
+.nb-bron:hover { border-color: #e8834a; background: #faf0e7; }
+@media (max-width: 600px) { .nb-bronnen { padding: 16px 18px; } }
+@media print { .nb-bronnen { padding: 16px 0; } .nb-bron { border: none; padding: 2px 0; display: block; } }
 .nb-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 .nb-action-btn { background: #4a1942; color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
 .nb-action-btn:hover { background: #6b2862; }
@@ -155,7 +172,7 @@ body { padding: 16px; min-height: 100vh; }
 <body>
 
 <div class="nb-print-cover">
-  <h1>Nabestaanden Financieel Rapport</h1>
+  <div style="font-size:1.9rem;font-weight:800;line-height:1.2;">Nabestaanden geldwijzer &mdash; Rapport</div>
   <div class="lead">Complete financiele check na overlijden partner</div>
   <div class="datum" id="nb-print-datum"></div>
 </div>
@@ -164,19 +181,32 @@ body { padding: 16px; min-height: 100vh; }
   <header class="nb-header">
     <div class="nb-header-content">
       <div>
-        <h1 class="nb-titel">Nabestaanden Financieel Cockpit PRO</h1>
-        <div class="nb-subtitel">2026 &middot; 5 modi &middot; Anw &middot; Pensioen &middot; Hypotheek &middot; Belasting</div>
+        <div class="nb-titel">Nabestaanden geldwijzer</div>
+        <div class="nb-subtitel">2026 &middot; Inkomen, Anw, partnerpensioen, hypotheek en belasting na overlijden</div>
       </div>
       <div class="nb-badge"><span class="nb-badge-dot"></span> Live berekening</div>
     </div>
   </header>
 
+  <section class="nb-intro">
+    <div class="nb-intro-titel">Wat doet de Nabestaanden geldwijzer?</div>
+    <p class="nb-intro-tekst">Als je partner overlijdt, verandert je financiële situatie ingrijpend: een inkomen valt weg, maar er kunnen ook uitkeringen en regelingen bijkomen. Deze gratis tool helpt je in kaart te brengen wat er met je inkomen gebeurt en op welke regelingen je mogelijk recht hebt. Zo krijg je rust en overzicht, en weet je waar je op moet letten.</p>
+    <div class="nb-intro-punten">
+      <div class="nb-intro-punt"><span class="nb-intro-punt-ico">💰</span><div>Bereken je <strong>inkomen voor en na</strong> het overlijden en zie het verschil per maand.</div></div>
+      <div class="nb-intro-punt"><span class="nb-intro-punt-ico">📊</span><div>Check je recht op <strong>Anw, partnerpensioen</strong> en wat er met de hypotheek en belasting gebeurt.</div></div>
+      <div class="nb-intro-punt"><span class="nb-intro-punt-ico">🔒</span><div>Volledig <strong>privacyvriendelijk</strong> en gratis. Alle cijfers komen uit officiële bronnen.</div></div>
+    </div>
+  </section>
+
   <nav class="nb-tabs" id="nb-tabs">
     <button class="nb-tab active" data-tab="overzicht"><span>💰</span> Inkomensoverzicht</button>
     <button class="nb-tab" data-tab="anw"><span>📊</span> Anw uitkering</button>
     <button class="nb-tab" data-tab="pensioen"><span>👨‍💼</span> Partnerpensioen</button>
+    <button class="nb-tab" data-tab="uitkeringen"><span>🛡️</span> Uitkeringen & verzekeringen</button>
     <button class="nb-tab" data-tab="hypotheek"><span>🏠</span> Hypotheek</button>
     <button class="nb-tab" data-tab="belasting"><span>📑</span> Belasting</button>
+    <button class="nb-tab" data-tab="aow"><span>👵</span> AOW-toekomst</button>
+    <button class="nb-tab" data-tab="checklist"><span>📋</span> Checklist</button>
   </nav>
 
   <div class="nb-privacy-bar">
@@ -296,9 +326,10 @@ body { padding: 16px; min-height: 100vh; }
 
         <div class="nb-blok">
           <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">👶</div> Wezenuitkering kinderen</div></div>
-          <div class="nb-veld"><div class="nb-veld-icoon">👶</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen onder 10 jaar</div><div class="nb-veld-uitleg">Wezenuitkering 534 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-jong" value="0" min="0"></div>
-          <div class="nb-veld"><div class="nb-veld-icoon">🧒</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 10 tot 15 jaar</div><div class="nb-veld-uitleg">Wezenuitkering 801 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-mid" value="0" min="0"></div>
-          <div class="nb-veld"><div class="nb-veld-icoon">🎓</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 16 tot 21 jaar (studie of ao)</div><div class="nb-veld-uitleg">Wezenuitkering 1068 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-oud" value="0" min="0"></div>
+          <div class="nb-info-box warning" style="margin:8px 0 12px;"><strong>Let op, belangrijke voorwaarde:</strong> een wezenuitkering geldt alléén voor kinderen van wie <strong>beide ouders</strong> zijn overleden. Is je partner overleden maar leef jij als ouder nog? Dan hebben de kinderen <strong>geen</strong> recht op een wezenuitkering. Vul hieronder dus alleen iets in als beide ouders zijn overleden. De bedragen zijn indicatief, controleer de actuele bedragen bij de SVB.</div>
+          <div class="nb-veld"><div class="nb-veld-icoon">👶</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen onder 10 jaar</div><div class="nb-veld-uitleg">Wezenuitkering indicatief circa 534 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-jong" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🧒</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 10 tot 15 jaar</div><div class="nb-veld-uitleg">Wezenuitkering indicatief circa 801 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-mid" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🎓</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 16 tot 21 jaar (studie of ao)</div><div class="nb-veld-uitleg">Wezenuitkering indicatief circa 1068 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-oud" value="0" min="0"></div>
         </div>
       </div>
 
@@ -592,8 +623,132 @@ body { padding: 16px; min-height: 100vh; }
     </div>
   </div>
 
+  <!-- ========== UITKERINGEN & VERZEKERINGEN ========== -->
+  <div class="nb-pane" data-pane="uitkeringen">
+    <div class="nb-body">
+      <div class="nb-input">
+        <div class="nb-info-box"><strong>Eenmalige uitkeringen die vaak vergeten worden.</strong> Naast maandinkomen kan er bij overlijden een aantal eenmalige bedragen vrijkomen. Vul in wat van toepassing is, dan zie je het totaal. Twijfel je? Check de polissen van je partner en vraag het na bij werkgever en verzekeraars.</div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">🛡️</div> Eenmalige uitkeringen</div></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🛡️</div><div class="nb-veld-info"><div class="nb-veld-naam">Overlijdensrisicoverzekering (ORV)</div><div class="nb-veld-uitleg">Vaak gekoppeld aan de hypotheek, keert een vast bedrag uit</div></div><input type="number" class="nb-veld-input" id="nb-uit-orv" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">💼</div><div class="nb-veld-info"><div class="nb-veld-naam">Overlijdensuitkering werkgever</div><div class="nb-veld-uitleg">Wettelijk minimaal 1 maandsalaris, vaak meer via cao</div></div><input type="number" class="nb-veld-input" id="nb-uit-werkgever" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">⚰️</div><div class="nb-veld-info"><div class="nb-veld-naam">Uitvaartverzekering (kapitaal)</div><div class="nb-veld-uitleg">Bij een kapitaalpolis, keert geld uit in plaats van diensten</div></div><input type="number" class="nb-veld-input" id="nb-uit-uitvaart" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">📜</div><div class="nb-veld-info"><div class="nb-veld-naam">Levens- of kapitaalverzekering</div><div class="nb-veld-uitleg">Losse levensverzekering, spaar- of beleggingspolis</div></div><input type="number" class="nb-veld-input" id="nb-uit-leven" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🏦</div><div class="nb-veld-info"><div class="nb-veld-naam">Nabestaandenpensioen ineens (deel)</div><div class="nb-veld-uitleg">Sommige fondsen keren een deel eenmalig uit, optioneel</div></div><input type="number" class="nb-veld-input" id="nb-uit-pensioen" value="0" min="0"></div>
+        </div>
+      </div>
+
+      <div class="nb-result">
+        <div class="nb-totaal">
+          <div class="nb-totaal-label">Totaal eenmalige uitkeringen</div>
+          <div class="nb-totaal-waarde" id="nb-uit-totaal">€0</div>
+          <div class="nb-totaal-sub">Som van de ingevulde bedragen</div>
+        </div>
+
+        <div class="nb-uitleg">
+          <div class="nb-uitleg-label">📊 Toelichting</div>
+          <div class="nb-uitleg-tekst">Een <strong>overlijdensrisicoverzekering</strong> die aan de hypotheek is gekoppeld lost vaak (een deel van) de hypotheek af, bekijk dat samen met de Hypotheek-tab. De <strong>overlijdensuitkering van de werkgever</strong> bedraagt wettelijk minimaal het loon over de maand van overlijden plus de twee volgende maanden, en is tot drie maandsalarissen vrijgesteld van loonheffing en erfbelasting.</div>
+        </div>
+
+        <div class="nb-info-box warning"><strong>Belasting:</strong> uitkeringen uit verzekeringen kunnen onder de erfbelasting vallen, afhankelijk van wie de premie betaalde en wie begunstigde is. Een ORV is vaak zo opgezet dat er geen of weinig erfbelasting verschuldigd is. Laat dit bij twijfel checken door een notaris of fiscalist.</div>
+
+        <div class="nb-info-box success"><strong>Tip:</strong> vraag bij de werkgever van je partner na of er een aanvullende ongevallen- of overlijdensdekking was, en check of er oude (afgesloten) levensverzekeringen lopen via het verzekeringsregister.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== AOW-TOEKOMST ========== -->
+  <div class="nb-pane" data-pane="aow">
+    <div class="nb-body">
+      <div class="nb-input">
+        <div class="nb-info-box warning"><strong>Belangrijk om vooruit te kijken:</strong> de Anw-uitkering is tijdelijk. Zodra jij zelf de AOW-leeftijd bereikt, stopt de Anw en gaat je eigen AOW in. Het is verstandig te weten hoeveel jaar je nog Anw kunt ontvangen en wat er daarna verandert.</div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">👵</div> Jouw situatie</div></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🎂</div><div class="nb-veld-info"><div class="nb-veld-naam">Mijn huidige leeftijd</div><div class="nb-veld-uitleg">Om te berekenen hoeveel jaar tot je AOW</div></div><input type="number" class="nb-veld-input" id="nb-aow-leeftijd" value="0" min="0" max="100"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">📅</div><div class="nb-veld-info"><div class="nb-veld-naam">Verwachte AOW-leeftijd</div><div class="nb-veld-uitleg">Voor de meeste mensen nu 67 jaar, check svb.nl</div></div><input type="number" class="nb-veld-input" id="nb-aow-leeftijd-aow" value="67" min="65" max="72"></div>
+        </div>
+      </div>
+
+      <div class="nb-result">
+        <div class="nb-totaal">
+          <div class="nb-totaal-label">Jaar tot je AOW (en einde Anw)</div>
+          <div class="nb-totaal-waarde" id="nb-aow-jaren">—</div>
+          <div class="nb-totaal-sub" id="nb-aow-sub">Vul je leeftijd in</div>
+        </div>
+
+        <div class="nb-uitleg">
+          <div class="nb-uitleg-label">📊 Wat verandert er bij je AOW-leeftijd</div>
+          <div class="nb-uitleg-tekst" id="nb-aow-uitleg">Bij het bereiken van de AOW-leeftijd stopt een eventuele Anw-uitkering en begin je je eigen AOW te ontvangen. Een alleenstaande AOW bedraagt indicatief circa 1.450 euro netto per maand (controleer het actuele bedrag bij de SVB). Houd er rekening mee dat het wegvallen van de Anw en het ingaan van de AOW een ander bedrag kan opleveren dan je nu ontvangt.</div>
+        </div>
+
+        <div class="nb-info-box"><strong>Goed om te plannen:</strong> kijk of er in de periode tot je AOW een inkomensgat ontstaat als de Anw lager is dan je nodig hebt. Eventueel partnerpensioen loopt vaak wel levenslang door, ook na je AOW-leeftijd. Combineer dit met de tabs Anw en Partnerpensioen voor een compleet beeld.</div>
+
+        <div class="nb-info-box success"><strong>Tip:</strong> je persoonlijke AOW-leeftijd en de exacte bedragen vind je in je eigen overzicht op svb.nl en op mijnpensioenoverzicht.nl.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CHECKLIST EERSTE PERIODE ========== -->
+  <div class="nb-pane" data-pane="checklist">
+    <div class="nb-body">
+      <div class="nb-input">
+        <div class="nb-info-box"><strong>Wie moet je informeren?</strong> Na het overlijden van je partner zijn er veel instanties die je financieel moet inlichten. Vink af wat je geregeld hebt, dan houd je het overzicht. Begin met de eerste groep.</div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-titel" style="margin-bottom:10px;"><div class="nb-blok-titel-icoon">⚡</div> Eerste week</div>
+          <div class="nb-toggle-rij" data-cl="cl1"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">Gemeente: aangifte van overlijden</div><div class="nb-toggle-uitleg">Meestal via de uitvaartondernemer, vraag meerdere originele aktes aan</div></div></div>
+          <div class="nb-toggle-rij" data-cl="cl2"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">Werkgever van je partner</div><div class="nb-toggle-uitleg">Salaris stopzetten, overlijdensuitkering en eindafrekening regelen</div></div></div>
+          <div class="nb-toggle-rij" data-cl="cl3"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">Bank(en)</div><div class="nb-toggle-uitleg">Rekeningen, automatische incasso's en eventuele en/of-rekening</div></div></div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-titel" style="margin-bottom:10px;"><div class="nb-blok-titel-icoon">💶</div> Uitkeringen en pensioen</div>
+          <div class="nb-toggle-rij" data-cl="cl4"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">SVB: Anw aanvragen</div><div class="nb-toggle-uitleg">Binnen 2 maanden voor terugwerkende kracht (svb.nl)</div></div></div>
+          <div class="nb-toggle-rij" data-cl="cl5"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">Pensioenfonds(en)</div><div class="nb-toggle-uitleg">Partnerpensioen activeren, check ook oude dienstverbanden</div></div></div>
+          <div class="nb-toggle-rij" data-cl="cl6"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">Verzekeraars</div><div class="nb-toggle-uitleg">Uitvaart-, leven-, en overlijdensrisicoverzekering claimen</div></div></div>
+        </div>
+
+        <div class="nb-blok">
+          <div class="nb-blok-titel" style="margin-bottom:10px;"><div class="nb-blok-titel-icoon">📑</div> Belasting en toeslagen</div>
+          <div class="nb-toggle-rij" data-cl="cl7"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">Belastingdienst Toeslagen</div><div class="nb-toggle-uitleg">Zorg-, huur- en kindgebonden budget opnieuw laten berekenen</div></div></div>
+          <div class="nb-toggle-rij" data-cl="cl8"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">Belastingdienst: aangifte en erfbelasting</div><div class="nb-toggle-uitleg">F-biljet (overlijdensaangifte) en aangifte erfbelasting binnen 8 maanden</div></div></div>
+          <div class="nb-toggle-rij" data-cl="cl9"><div class="nb-toggle-check"></div><div class="nb-toggle-info"><div class="nb-toggle-naam">Hypotheekverstrekker</div><div class="nb-toggle-uitleg">Bij ORV gekoppeld aan de hypotheek, en om de situatie te bespreken</div></div></div>
+        </div>
+      </div>
+
+      <div class="nb-result">
+        <div class="nb-totaal">
+          <div class="nb-totaal-label">Voortgang checklist</div>
+          <div class="nb-totaal-waarde" id="nb-cl-pct">0%</div>
+          <div class="nb-totaal-sub" id="nb-cl-sub">Vink af wat je geregeld hebt</div>
+        </div>
+
+        <div class="nb-uitleg">
+          <div class="nb-uitleg-label">📋 Volgorde van aanpak</div>
+          <div class="nb-uitleg-tekst">Begin met de <strong>eerste week</strong>: gemeente, werkgever en bank. De uitkeringen en pensioenen (tweede groep) kun je in de weken erna regelen, maar wacht niet te lang met de <strong>Anw-aanvraag bij de SVB</strong>, want die kent maar 2 maanden terugwerkende kracht. Belasting en toeslagen volgen daarna.</div>
+        </div>
+
+        <div class="nb-info-box success"><strong>Tip:</strong> houd een map of digitaal mapje bij met alle aktes, polisnummers en correspondentie. Veel instanties vragen om hetzelfde overlijdensbewijs, dus vraag bij de gemeente meerdere originelen aan.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nb-bronnen">
+    <div class="nb-bronnen-titel">📚 Bronnen van de cijfers</div>
+    <p class="nb-bronnen-tekst">Alle bedragen en percentages in deze tool zijn gebaseerd op officiële Nederlandse bronnen (cijfers begin 2026). Let op: de SVB past de Anw- en wezenuitkering elk half jaar aan (1 januari en 1 juli) en de Belastingdienst de tarieven jaarlijks. Controleer voor je eigen situatie altijd de actuele bedragen via de officiële bronnen hieronder.</p>
+    <div class="nb-bronnen-lijst">
+      <a class="nb-bron" href="https://www.svb.nl/nl/anw/bedragen-en-betaaldagen/bedragen-nabestaandenuitkering" target="_blank" rel="noopener">SVB &mdash; Anw nabestaandenuitkering</a>
+      <a class="nb-bron" href="https://www.svb.nl/nl/wezenuitkering/bedragen-en-betaaldagen/bedragen-wezenuitkering" target="_blank" rel="noopener">SVB &mdash; Wezenuitkering</a>
+      <a class="nb-bron" href="https://www.belastingdienst.nl/wps/wcm/connect/nl/box-3/box-3" target="_blank" rel="noopener">Belastingdienst &mdash; Box 3 vermogen</a>
+      <a class="nb-bron" href="https://www.belastingdienst.nl/wps/wcm/connect/nl/erfbelasting/erfbelasting" target="_blank" rel="noopener">Belastingdienst &mdash; Erfbelasting</a>
+      <a class="nb-bron" href="https://www.rijksoverheid.nl/onderwerpen/algemene-nabestaandenwet-anw" target="_blank" rel="noopener">Rijksoverheid &mdash; Anw voorwaarden</a>
+    </div>
+  </div>
+
   <footer class="nb-footer">
-    <span>Indicatieve berekening volgens 2026 cijfers. Voor exact advies: SVB, pensioenfonds of fiscalist. <a href="https://uitvaart-platform.nl/nabestaanden-financieel" class="nb-footer-link" target="_top">Meer info</a></span>
+    <span>Indicatieve berekening op basis van officiele bronnen (begin 2026). Geen persoonlijk advies, bedragen kunnen wijzigen. Voor exact advies: SVB, je pensioenfonds of een fiscalist. <a href="https://uitvaart-platform.nl/nabestaanden-financieel" class="nb-footer-link" target="_top">Meer info</a></span>
     <div class="nb-actions">
       <button class="nb-action-btn secondary" onclick="window.print()">🖨️ PDF</button>
       <button class="nb-action-btn" onclick="if(confirm('Reset alle invoer?')) location.reload()">🔄 Reset</button>
@@ -607,7 +762,7 @@ body { padding: 16px; min-height: 100vh; }
 
   // ======== CONSTANTS 2026 ========
   var ANW_MAX = 1668;
-  var ANW_VRIJE_VOET = 870;
+  var ANW_VRIJE_VOET = 1147;
   var ANW_KORTING_ARBEID = 2/3;
   var WEZEN_JONG = 534;
   var WEZEN_MID = 801;
@@ -654,6 +809,7 @@ body { padding: 16px; min-height: 100vh; }
     document.querySelectorAll('.nb-pane').forEach(function(p) { p.classList.remove('active'); });
     btn.classList.add('active');
     document.querySelector('[data-pane="' + btn.dataset.tab + '"]').classList.add('active');
+    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   });
 
   // ======== STATE ========
@@ -964,6 +1120,65 @@ body { padding: 16px; min-height: 100vh; }
     document.getElementById('nb-bel-uitleg').innerHTML = uitleg;
   }
   belUpdate();
+
+  // ======== UITKERINGEN & VERZEKERINGEN ========
+  var UIT_IDS = ['orv', 'werkgever', 'uitvaart', 'leven', 'pensioen'];
+  function uitUpdate() {
+    var totaal = 0;
+    UIT_IDS.forEach(function(id) {
+      var v = parseInt(document.getElementById('nb-uit-' + id).value, 10) || 0;
+      totaal += Math.max(0, v);
+    });
+    document.getElementById('nb-uit-totaal').textContent = fEuro(totaal);
+  }
+  UIT_IDS.forEach(function(id) {
+    document.getElementById('nb-uit-' + id).addEventListener('input', uitUpdate);
+  });
+  uitUpdate();
+
+  // ======== AOW-TOEKOMST ========
+  function aowUpdate() {
+    var leeftijd = parseInt(document.getElementById('nb-aow-leeftijd').value, 10) || 0;
+    var aowLeeftijd = parseInt(document.getElementById('nb-aow-leeftijd-aow').value, 10) || 67;
+    var jarenEl = document.getElementById('nb-aow-jaren');
+    var subEl = document.getElementById('nb-aow-sub');
+    if (leeftijd <= 0) {
+      jarenEl.textContent = '—';
+      subEl.textContent = 'Vul je leeftijd in';
+      return;
+    }
+    var jaren = aowLeeftijd - leeftijd;
+    if (jaren <= 0) {
+      jarenEl.textContent = 'AOW bereikt';
+      subEl.textContent = 'Je hebt de AOW-leeftijd al bereikt, de Anw is dan niet meer van toepassing';
+    } else {
+      jarenEl.textContent = jaren + (jaren === 1 ? ' jaar' : ' jaar');
+      subEl.textContent = 'Tot je AOW-leeftijd van ' + aowLeeftijd + ' jaar. Daarna stopt de Anw en begint je AOW.';
+    }
+  }
+  document.getElementById('nb-aow-leeftijd').addEventListener('input', aowUpdate);
+  document.getElementById('nb-aow-leeftijd-aow').addEventListener('input', aowUpdate);
+  aowUpdate();
+
+  // ======== CHECKLIST ========
+  var CL_TOTAAL = 9;
+  var clState = {};
+  function clUpdate() {
+    var gedaan = 0;
+    Object.keys(clState).forEach(function(k) { if (clState[k]) gedaan++; });
+    var pct = Math.round((gedaan / CL_TOTAAL) * 100);
+    document.getElementById('nb-cl-pct').textContent = pct + '%';
+    document.getElementById('nb-cl-sub').textContent = gedaan + ' van ' + CL_TOTAAL + ' instanties geregeld';
+  }
+  document.querySelectorAll('[data-cl]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var k = row.dataset.cl;
+      clState[k] = !clState[k];
+      row.classList.toggle('active', clState[k]);
+      clUpdate();
+    });
+  });
+  clUpdate();
 
   // INIT
   ovUpdate();
