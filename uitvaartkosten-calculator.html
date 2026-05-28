@@ -677,7 +677,9 @@ body { padding: 16px; min-height: 100vh; }
 
         <div class="uk-info-box warning"><strong>Specialist nodig:</strong> repatriëring vereist een uitvaartondernemer met internationale ervaring. Documenten (overlijdensakte met apostille, exportvergunning, sanitair certificaat) verschillen per land en duren 5-14 dagen.</div>
 
-        <div class="uk-info-box"><strong>Verzekering:</strong> check of de uitvaartverzekering (DELA, Monuta etc.) repatriëring dekt. Reisverzekeringen dekken meestal alleen ziekenhuiskosten en repatriëring patient, niet overlijden in buitenland.</div>
+        <div class="uk-info-box"><strong>Verzekering:</strong> controleer of de uitvaartverzekering repatriëring dekt. Veel polissen met werelddekking dekken een deel van de kosten. Reisverzekeringen dekken meestal alleen ziekenhuiskosten en repatriëring van een patiënt, niet een overlijden in het buitenland.</div>
+
+        <div class="uk-info-box success"><strong>📊 Bron van deze cijfers:</strong> de transportbedragen zijn indicatief en gebaseerd op gepubliceerde tarieven van Nederlandse repatriëringsspecialisten (2025-2026). Volgens specialist Van der Heden Internationaal Rouwvervoer (internationaalrouwvervoer.nl), sinds 1979 actief in wereldwijd rouwvervoer, kost repatriëring naar omringende Europese landen ongeveer €2.000 tot €7.000 en nemen de kosten toe naarmate de afstand groter wordt. Repatriëringen boven €12.000 komen niet vaak voor. Ter referentie: transport naar Suriname kost volgens andere bronnen circa €3.750 tot €5.250 inclusief vlucht en afhandeling op Schiphol. De werkelijke kosten verschillen per land, gewicht, luchtvaartmaatschappij en gekozen specialist, vraag daarom altijd een offerte op maat aan. Bronnen onder andere: internationaalrouwvervoer.nl (Van der Heden IRU), soberenstijl.nl, uitvaartzorgnieuwvennep.nl en budgetcrematie.nl.</div>
       </div>
     </div>
   </div>
@@ -720,6 +722,8 @@ body { padding: 16px; min-height: 100vh; }
         </div>
 
         <div id="uk-vz-verzekeraars"></div>
+
+        <div class="uk-info-box"><strong>🔍 Onafhankelijk en zonder voorkeur:</strong> Uitvaart-Platform.nl is een onafhankelijk platform. Deze lijst staat op alfabetische volgorde en wij bevelen geen enkele verzekeraar aan boven een andere. De premies zijn indicatieve richtbedragen om je een beeld te geven, geen aanbod.</div>
 
         <div class="uk-info-box warning"><strong>Premie indicatief:</strong> echte premies hangen af van gezondheid, leeftijd bij aanvang, looptijd polis en eventuele medische selectie. Vraag altijd offertes aan bij meerdere verzekeraars.</div>
 
@@ -1323,8 +1327,11 @@ body { padding: 16px; min-height: 100vh; }
     if (isInNl) return 0;
     var afstand = Math.abs(ov.afstand - be.afstand);
     if (afstand === 0) afstand = ov.afstand;
-    if (iState.transport === 'vliegtuig') return Math.round(2500 + afstand * 1.2);
-    return Math.round(afstand * 4.5);
+    // Realistische marktcijfers: luchtvracht van een overledene schaalt niet lineair met afstand.
+    // Vliegtuig: vaste basis + beperkte afstandscomponent (bron: zie bronvermelding repatriering tab).
+    if (iState.transport === 'vliegtuig') return Math.round(2500 + afstand * 0.32);
+    // Rouwauto: alleen realistisch voor kortere afstanden binnen Europa.
+    return Math.round(900 + afstand * 1.6);
   }
 
   function iRenderExtras() {
@@ -1387,7 +1394,7 @@ body { padding: 16px; min-height: 100vh; }
 
     var uitleg;
     if (isInNl) uitleg = '<strong>Geen repatriëring nodig</strong> — overlijden en uitvaart beide in Nederland. Standaard uitvaartkosten.';
-    else uitleg = '<strong>Repatriëring vanuit ' + ov.naam + ' naar ' + be.naam + '</strong>. Doorlooptijd 7-14 dagen. Specialistisch werk. Verzekeringen zoals <strong>DELA Werelddekking</strong> of <strong>Monuta Internationale Uitvaart</strong> kunnen €5.000-€10.000 dekken.';
+    else uitleg = '<strong>Repatriëring vanuit ' + ov.naam + ' naar ' + be.naam + '</strong>. Doorlooptijd 7-14 dagen. Specialistisch werk. Uitvaartverzekeringen met werelddekking kunnen vaak €5.000-€10.000 van de kosten dekken.';
     document.getElementById('uk-i-uitleg').innerHTML = uitleg;
   }
 
@@ -1467,11 +1474,11 @@ body { padding: 16px; min-height: 100vh; }
     var basisPremie = (aanbevolen / 200) * leeftijdMult / 12; // grove maandelijkse berekening
 
     var html = '';
-    var passend = VERZEKERAARS.filter(function(v) { return v.type.indexOf(vzState.type) !== -1; });
+    var passend = VERZEKERAARS.filter(function(v) { return v.type.indexOf(vzState.type) !== -1; }).sort(function(a, b) { return a.naam.localeCompare(b.naam); });
     passend.forEach(function(v, idx) {
       var maand = basisPremie * v.premieFactor;
-      html += '<div class="uk-verz' + (idx === 0 ? ' match' : '') + '">';
-      html += '<div class="uk-verz-naam">' + v.naam + (idx === 0 ? ' <span class="uk-verz-tag match">BESTE MATCH</span>' : '') + '</div>';
+      html += '<div class="uk-verz">';
+      html += '<div class="uk-verz-naam">' + v.naam + '</div>';
       html += '<div class="uk-verz-info">' + v.info + '</div>';
       html += '<div class="uk-verz-rij"><span class="uk-tabel-naam">Indicatieve maandpremie</span><span class="uk-tabel-waarde">' + fEuro(maand) + '/m</span></div>';
       html += '<div class="uk-verz-rij"><span class="uk-tabel-naam">Over 20 jaar</span><span class="uk-tabel-waarde">' + fEuro(maand * 12 * 20) + '</span></div>';
