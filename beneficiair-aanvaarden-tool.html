@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Erfenis Keuzehulp 2026 - Uitvaart-Platform.nl</title>
+<title>Erfenis aanvaarden keuzehulp 2026 - Uitvaart-Platform.nl</title>
 <meta name="description" content="Aanvaarden, beneficiair of verwerpen? Schuldencheck, beslisboom, stappenplan rechtbank en termijn calculator voor erfgenamen in twijfel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -204,7 +204,7 @@ body { padding: 16px; min-height: 100vh; }
 <body>
 
 <div class="ba-print-cover">
-  <div style="font-size:1.9rem;font-weight:800;line-height:1.2;">Erfenis Keuzehulp &mdash; Rapport</div>
+  <div style="font-size:1.9rem;font-weight:800;line-height:1.2;">Erfenis aanvaarden keuzehulp &mdash; Rapport</div>
   <div class="lead">Zuiver, beneficiair of verwerpen — onderbouwde beslissing</div>
   <div class="datum" id="ba-print-datum"></div>
 </div>
@@ -213,7 +213,7 @@ body { padding: 16px; min-height: 100vh; }
   <header class="ba-header">
     <div class="ba-header-content">
       <div>
-        <div class="ba-titel">Erfenis Keuzehulp</div>
+        <div class="ba-titel">Erfenis aanvaarden keuzehulp</div>
         <div class="ba-subtitel">2026 &middot; Beneficiair aanvaarden, zuiver aanvaarden of verwerpen &middot; Schuldencheck &middot; Stappenplan</div>
       </div>
       <div class="ba-badge"><span class="ba-badge-dot"></span> Live advies</div>
@@ -824,6 +824,7 @@ body { padding: 16px; min-height: 100vh; }
     document.querySelectorAll('.ba-pane').forEach(function(p) { p.classList.remove('active'); });
     btn.classList.add('active');
     document.querySelector('[data-pane="' + btn.dataset.tab + '"]').classList.add('active');
+    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   });
 
   // ======== STATE ========
