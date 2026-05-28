@@ -1252,6 +1252,8 @@ body { padding: 16px; min-height: 100vh; }
 
   // ======== MODE 5: INTERNATIONAAL ========
   var BRUSSEL_IV_LANDEN = ['nederland','belgie','duitsland','frankrijk','spanje','italie','portugal','anders'];
+  var LAND_NAMEN = { nederland: 'Nederland', belgie: 'België', duitsland: 'Duitsland', frankrijk: 'Frankrijk', spanje: 'Spanje', italie: 'Italië', portugal: 'Portugal', vk: 'het Verenigd Koninkrijk', ierland: 'Ierland', denemarken: 'Denemarken', anders: 'het betreffende land' };
+  function iLandNaam(code) { return LAND_NAMEN[code] || (code ? code.charAt(0).toUpperCase() + code.slice(1) : ''); }
   var iState = { woonland: 'spanje', nationaliteit: 'nederland', rechtskeuze: false, vermogenNl: 200000, vermogenWl: 400000 };
 
   var ERFRECHT_REGELS = {
@@ -1274,14 +1276,14 @@ body { padding: 16px; min-height: 100vh; }
     var welkRecht, uitleg;
 
     if (iState.rechtskeuze && underBrusselIV) {
-      welkRecht = iState.nationaliteit + ' recht (rechtskeuze)';
-      uitleg = 'Via testament is een <strong>rechtskeuze gemaakt voor het ' + iState.nationaliteit + ' recht</strong> (Brussel IV art. 22). Dit is mogelijk als de erflater die nationaliteit heeft. Het recht van het <span class="highlight">land van nationaliteit</span> regelt de erfopvolging, ongeacht woonland.';
+      welkRecht = 'Recht van ' + iLandNaam(iState.nationaliteit) + ' (rechtskeuze)';
+      uitleg = 'Via testament is een <strong>rechtskeuze gemaakt voor het recht van ' + iLandNaam(iState.nationaliteit) + '</strong> (Brussel IV art. 22). Dit is mogelijk als de erflater die nationaliteit heeft. Het recht van het <span class="highlight">land van nationaliteit</span> regelt de erfopvolging, ongeacht woonland.';
     } else if (nietBrussel) {
       welkRecht = 'Lokaal IPR (geen Brussel IV)';
-      uitleg = 'Het woonland (' + iState.woonland + ') valt <strong>niet onder Brussel IV</strong>. Er gelden eigen internationaal privaatrechtelijke regels. Vaak geldt het recht van het woonland voor roerend vermogen en lokaal recht voor onroerend goed.';
+      uitleg = 'Het woonland (' + iLandNaam(iState.woonland) + ') valt <strong>niet onder Brussel IV</strong>. Er gelden eigen internationaal privaatrechtelijke regels. Vaak geldt het recht van het woonland voor roerend vermogen en lokaal recht voor onroerend goed.';
     } else {
-      welkRecht = iState.woonland + ' recht (woonland)';
-      uitleg = 'Hoofdregel <strong>Brussel IV art. 21</strong>: het recht van het <span class="highlight">land van gewoonlijk verblijf</span> regelt de erfopvolging. Dat is hier ' + iState.woonland + '. ' + (iState.woonland !== 'nederland' ? 'Nederlands erfrecht is dus <em>niet</em> van toepassing, ook al is de erflater Nederlander.' : 'Nederlands erfrecht is van toepassing.');
+      welkRecht = 'Recht van ' + iLandNaam(iState.woonland) + ' (woonland)';
+      uitleg = 'Hoofdregel <strong>Brussel IV art. 21</strong>: het recht van het <span class="highlight">land van gewoonlijk verblijf</span> regelt de erfopvolging. Dat is hier ' + iLandNaam(iState.woonland) + '. ' + (iState.woonland !== 'nederland' ? 'Nederlands erfrecht is dus <em>niet</em> van toepassing, ook al is de erflater Nederlander.' : 'Nederlands erfrecht is van toepassing.');
     }
 
     document.getElementById('ed-i-recht').textContent = welkRecht;
