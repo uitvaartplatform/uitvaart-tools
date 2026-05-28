@@ -194,11 +194,81 @@ body { padding: 16px; min-height: 100vh; }
 }
 
 @media (max-width: 600px) {
-  body { padding: 10px; }
-  .uk-header { padding: 18px 20px; }
-  .uk-tabs { padding: 0 10px; }
-  .uk-tab { padding: 12px 10px; font-size: 0.72rem; }
-  .uk-input, .uk-result { padding: 18px; }
+  body { padding: 6px; }
+  .uk-header { padding: 18px 18px; }
+  .uk-header-content { gap: 8px; }
+  .uk-titel { font-size: 1.1rem; }
+  .uk-subtitel { font-size: 0.72rem; }
+  .uk-badge { font-size: 0.66rem; padding: 4px 10px; }
+  .uk-tabs { padding: 0 12px; gap: 2px; }
+  .uk-tab { padding: 12px 10px; font-size: 0.74rem; gap: 5px; }
+  .uk-input, .uk-result { padding: 16px 14px; }
+  .uk-blok { padding: 14px 14px; }
+  .uk-blok-titel { font-size: 0.82rem; }
+  .uk-blok-titel-icoon { width: 24px; height: 24px; font-size: 0.74rem; }
+
+  /* VELD: stack input below label on mobile */
+  .uk-veld {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    grid-template-areas:
+      "icon info"
+      "input input";
+    column-gap: 10px;
+    row-gap: 8px;
+    align-items: center;
+    padding: 10px 0;
+  }
+  .uk-veld-icoon { grid-area: icon; }
+  .uk-veld-info { grid-area: info; min-width: 0; }
+  .uk-veld-naam { font-size: 0.86rem; line-height: 1.3; }
+  .uk-veld-uitleg { font-size: 0.7rem; line-height: 1.4; }
+  .uk-veld-input { grid-area: input; width: 100%; padding: 9px 12px; font-size: 0.9rem; }
+
+  /* TOGGLE RIJ (à la carte items, natuur extras, etc): label boven, prijs/input onder */
+  .uk-toggle-rij {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    grid-template-areas:
+      "check info"
+      "prijs prijs";
+    column-gap: 10px;
+    row-gap: 8px;
+    align-items: start;
+    padding: 12px 14px;
+  }
+  .uk-toggle-check { grid-area: check; margin-top: 4px; }
+  .uk-toggle-info { grid-area: info; min-width: 0; }
+  .uk-toggle-naam { font-size: 0.88rem; line-height: 1.35; }
+  .uk-toggle-uitleg { font-size: 0.74rem; margin-top: 4px; line-height: 1.45; }
+  .uk-toggle-prijs { grid-area: prijs; justify-self: end; font-size: 0.95rem; font-weight: 800; }
+  .uk-prijs-edit { grid-area: prijs; justify-self: stretch; }
+  .uk-prijs-edit-input { width: 100%; font-size: 0.95rem; }
+
+  /* STAP labels en selecten */
+  .uk-stap { margin-bottom: 14px; }
+  .uk-select { font-size: 0.86rem; padding: 10px 12px; }
+
+  /* KEUZE GRID 2 kolommen */
+  .uk-keuze-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .uk-keuze { padding: 12px 8px; }
+  .uk-keuze-naam { font-size: 0.72rem; }
+
+  /* INFO BOX kleiner padding */
+  .uk-info-box { padding: 12px 14px; font-size: 0.82rem; }
+
+  /* FOOTER */
+  .uk-footer { padding: 14px 18px; flex-direction: column; align-items: stretch; gap: 10px; }
+  .uk-actions { justify-content: center; }
+}
+
+@media (max-width: 380px) {
+  .uk-input, .uk-result { padding: 14px 12px; }
+  .uk-blok { padding: 12px 12px; }
+  .uk-veld { column-gap: 8px; grid-template-columns: 26px 1fr; }
+  .uk-veld-icoon { width: 26px; height: 26px; }
+  .uk-toggle-rij { column-gap: 8px; padding: 10px 12px; }
+  .uk-keuze-icoon { font-size: 1.3rem; }
 }
 </style>
 </head>
@@ -310,6 +380,8 @@ body { padding: 16px; min-height: 100vh; }
   <div class="uk-pane" data-pane="builder">
     <div class="uk-body">
       <div class="uk-input">
+        <div class="uk-info-box success" style="margin-bottom:14px;"><strong>💡 Standaardbedragen aanpasbaar.</strong> Bij elk item staat een richtprijs ingevuld. Na het selecteren van een item kunt u het bedrag zelf aanpassen naar wat met uw uitvaartondernemer of leverancier is afgesproken.</div>
+
         <div class="uk-stap">
           <div class="uk-stap-label"><span class="uk-stap-nr">1</span> Regio</div>
           <select class="uk-select" id="uk-b-regio"></select>
@@ -912,7 +984,10 @@ body { padding: 16px; min-height: 100vh; }
         html += '<div class="uk-toggle-rij' + (actief ? ' active' : '') + '" data-item="' + item.id + '" data-cat="' + cat + '">';
         html += '<div class="uk-toggle-check" data-toggle></div>';
         html += '<div class="uk-toggle-info" data-toggle><div class="uk-toggle-naam">' + item.naam + (item.perPersoon ? ' <span class="uk-verz-tag">PER GAST</span>' : '') + '</div>';
-        html += '<div class="uk-toggle-uitleg">Indicatief ' + fEuro(item.laag) + ' - ' + fEuro(item.hoog) + (item.perPersoon ? ' p.p.' : '') + '</div></div>';
+        var uitlegTekst = actief
+          ? 'Indicatief bereik ' + fEuro(item.laag) + ' - ' + fEuro(item.hoog) + (item.perPersoon ? ' p.p.' : '') + ' · zelf aanpasbaar →'
+          : 'Standaard ' + fEuro(item.default) + (item.perPersoon ? ' p.p.' : '') + ' · bereik ' + fEuro(item.laag) + ' - ' + fEuro(item.hoog) + ' · klik om te selecteren';
+        html += '<div class="uk-toggle-uitleg">' + uitlegTekst + '</div></div>';
         if (actief) {
           html += '<div class="uk-prijs-edit">';
           html += '<span class="uk-prijs-edit-euro">€</span>';
@@ -1002,7 +1077,8 @@ body { padding: 16px; min-height: 100vh; }
 
   function vUpdate() {
     var rFactor = getRegio(vState.regio).factor;
-    var basisCeremonie = 4500 + vState.gasten * 18;
+    var basisCeremonie = 4500;
+    var catering = vState.gasten * 18;
 
     // Begraven
     var grafBasis = vState.graftype === 'algemeen' ? 1800 : vState.graftype === 'eigen' ? 5000 : 7500;
@@ -1013,6 +1089,7 @@ body { padding: 16px; min-height: 100vh; }
     bDetail['Grafrechten ' + vState.grafjaren + ' jaar'] = grafKosten;
     bDetail['Grafsteen'] = vState.grafsteen;
     bDetail['Uitvaartondernemer'] = 2200;
+    bDetail['Catering en condoleance (' + vState.gasten + ' gasten)'] = catering;
     var bTotaal = 0;
     Object.values(bDetail).forEach(function(v) { bTotaal += v; });
     bTotaal *= rFactor;
@@ -1026,6 +1103,7 @@ body { padding: 16px; min-height: 100vh; }
       'Bijzetting / verstrooiing': bijzetting,
       'Uitvaartondernemer': 2200
     };
+    cDetail['Catering en condoleance (' + vState.gasten + ' gasten)'] = catering;
     var cTotaal = 0;
     Object.values(cDetail).forEach(function(v) { cTotaal += v; });
     cTotaal *= rFactor;
@@ -1204,19 +1282,19 @@ body { padding: 16px; min-height: 100vh; }
 
   // ======== INTERNATIONAAL ========
   var INTL_LANDEN = {
-    nederland: { naam: 'Nederland', basis: 9000, afstand: 0 },
-    duitsland: { naam: 'Duitsland', basis: 12000, afstand: 600 },
-    belgie: { naam: 'België', basis: 11000, afstand: 250 },
-    frankrijk: { naam: 'Frankrijk', basis: 13000, afstand: 1200 },
-    spanje: { naam: 'Spanje', basis: 14500, afstand: 2000 },
-    italie: { naam: 'Italië', basis: 14000, afstand: 1800 },
-    portugal: { naam: 'Portugal', basis: 15000, afstand: 2200 },
-    vk: { naam: 'Verenigd Koninkrijk', basis: 13500, afstand: 700 },
-    marokko: { naam: 'Marokko', basis: 11000, afstand: 2400 },
-    turkije: { naam: 'Turkije', basis: 11500, afstand: 3000 },
-    suriname: { naam: 'Suriname', basis: 13000, afstand: 7700 },
-    vs: { naam: 'Verenigde Staten', basis: 16500, afstand: 6500 },
-    anders: { naam: 'Ander land', basis: 14000, afstand: 5000 }
+    nederland: { naam: 'Nederland', basis: 7500, afstand: 0 },
+    duitsland: { naam: 'Duitsland', basis: 9500, afstand: 600 },
+    belgie: { naam: 'België', basis: 8000, afstand: 250 },
+    frankrijk: { naam: 'Frankrijk', basis: 9000, afstand: 1200 },
+    spanje: { naam: 'Spanje', basis: 8000, afstand: 2000 },
+    italie: { naam: 'Italië', basis: 8500, afstand: 1800 },
+    portugal: { naam: 'Portugal', basis: 7500, afstand: 2200 },
+    vk: { naam: 'Verenigd Koninkrijk', basis: 10500, afstand: 700 },
+    marokko: { naam: 'Marokko', basis: 5500, afstand: 2400 },
+    turkije: { naam: 'Turkije', basis: 6000, afstand: 3000 },
+    suriname: { naam: 'Suriname', basis: 7500, afstand: 7700 },
+    vs: { naam: 'Verenigde Staten', basis: 13000, afstand: 6500 },
+    anders: { naam: 'Ander land', basis: 9000, afstand: 5000 }
   };
 
   var INTL_EXTRAS = [
