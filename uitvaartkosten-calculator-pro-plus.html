@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uitvaartkosten Calculator PRO+ 2026 - Uitvaart-Platform.nl</title>
+<meta name="description" content="Bereken de werkelijke uitvaartkosten. À la carte builder, begraven vs cremeren, natuurbegraven, repatriëring en verzekering match in één tool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { padding: 16px; min-height: 100vh; }
+.uk-app { max-width: 1300px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; }
+.uk-print-cover { display: none; }
+.uk-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; }
+.uk-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.uk-header-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.uk-titel { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; letter-spacing: -0.3px; }
+.uk-subtitel { font-size: 0.78rem; color: #fcd9c4; margin-top: 2px; }
+.uk-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(232,131,74,0.25); color: #fff; border-radius: 14px; font-size: 0.7rem; font-weight: 700; }
+.uk-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.uk-tabs { background: #2e0f29; padding: 0 20px; display: flex; gap: 2px; overflow-x: auto; }
+.uk-tab { background: transparent; border: none; padding: 14px 14px; font-family: inherit; font-size: 0.78rem; font-weight: 600; color: #b09cae; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.uk-tab:hover { color: #fcd9c4; }
+.uk-tab.active { color: #fff; border-bottom-color: #e8834a; }
+.uk-pane { display: none; }
+.uk-pane.active { display: block; }
+.uk-privacy-bar { background: #f0f7ed; border-bottom: 1px solid #d4e8d4; padding: 10px 30px; font-size: 0.72rem; color: #2e4030; line-height: 1.5; display: flex; align-items: center; gap: 8px; }
+.uk-privacy-bar strong { color: #1e1520; font-weight: 700; }
+.uk-privacy-bar-icon { font-size: 1rem; flex-shrink: 0; }
+@media (max-width: 600px) { .uk-privacy-bar { padding: 10px 18px; font-size: 0.68rem; } }
+@media print { .uk-privacy-bar { display: none; } }
+
+.uk-body { display: grid; grid-template-columns: 1fr 1.1fr; gap: 0; min-height: 600px; }
+@media (max-width: 1000px) { .uk-body { grid-template-columns: 1fr; } }
+.uk-input { padding: 22px 26px; border-right: 1px solid #f0eae7; max-height: 920px; overflow-y: auto; }
+.uk-result { padding: 22px 26px; background: linear-gradient(135deg, #faf7f2 0%, #fff 100%); max-height: 920px; overflow-y: auto; }
+@media (max-width: 1000px) { .uk-input { border-right: none; border-bottom: 1px solid #f0eae7; max-height: none; } .uk-result { max-height: none; } }
+
+.uk-stap { margin-bottom: 18px; }
+.uk-stap-label { display: flex; align-items: center; gap: 10px; font-size: 0.62rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #e8834a; margin-bottom: 10px; }
+.uk-stap-nr { width: 22px; height: 22px; background: #4a1942; color: #e8834a; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; }
+
+.uk-blok { background: #faf7f2; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
+.uk-blok-kop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.uk-blok-titel { font-size: 0.86rem; font-weight: 700; color: #4a1942; display: flex; align-items: center; gap: 8px; }
+.uk-blok-titel-icoon { width: 26px; height: 26px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #e8834a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; }
+.uk-blok-sub { font-size: 0.74rem; color: #6a5e64; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.uk-keuze-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+@media (max-width: 600px) { .uk-keuze-grid { grid-template-columns: repeat(2, 1fr); } }
+.uk-keuze { background: #faf7f2; border: 2px solid transparent; border-radius: 12px; padding: 12px 10px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-family: inherit; }
+.uk-keuze:hover { background: #fff; border-color: #f0d5bc; }
+.uk-keuze.active { background: #fff; border-color: #e8834a; box-shadow: 0 4px 14px rgba(232,131,74,0.18); }
+.uk-keuze-icoon { font-size: 1.5rem; line-height: 1; }
+.uk-keuze-naam { font-size: 0.74rem; font-weight: 700; color: #4a1942; line-height: 1.2; }
+
+.uk-select { width: 100%; border: 1.5px solid #e2d9e0; background: #fff; border-radius: 10px; padding: 10px 14px; font-family: inherit; font-size: 0.86rem; font-weight: 600; color: #4a1942; cursor: pointer; outline: none; }
+.uk-select:focus { border-color: #e8834a; }
+
+.uk-toggle-rij { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: #fff; border: 1.5px solid #e2d9e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-bottom: 6px; }
+.uk-toggle-rij:hover { border-color: #e8834a; }
+.uk-toggle-rij.active { border-color: #e8834a; background: #fff7ef; }
+.uk-toggle-check { width: 20px; height: 20px; border: 2px solid #d3c8cd; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.uk-toggle-rij.active .uk-toggle-check { background: #e8834a; border-color: #e8834a; }
+.uk-toggle-rij.active .uk-toggle-check::after { content: "✓"; color: #fff; font-weight: 800; }
+.uk-toggle-info { flex: 1; }
+.uk-toggle-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; }
+.uk-toggle-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 2px; line-height: 1.3; }
+.uk-toggle-prijs { font-size: 0.74rem; font-weight: 700; color: #d4733c; font-variant-numeric: tabular-nums; }
+.uk-prijs-edit { display: flex; align-items: center; gap: 2px; background: #fff7ef; border: 1.5px solid #e8834a; border-radius: 8px; padding: 3px 6px 3px 8px; flex-shrink: 0; }
+.uk-prijs-edit-euro { font-size: 0.78rem; font-weight: 700; color: #4a1942; }
+.uk-prijs-edit-input { width: 60px; border: none; outline: none; background: transparent; font-family: inherit; font-size: 0.84rem; font-weight: 700; color: #d4733c; text-align: right; font-variant-numeric: tabular-nums; padding: 2px 0; }
+.uk-prijs-edit-input::-webkit-outer-spin-button, .uk-prijs-edit-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.uk-prijs-edit-input[type=number] { -moz-appearance: textfield; }
+.uk-prijs-edit-reset { background: none; border: none; color: #6a5e64; cursor: pointer; font-size: 0.86rem; padding: 0 2px; line-height: 1; }
+.uk-prijs-edit-reset:hover { color: #4a1942; }
+.uk-prijs-edit-suffix { font-size: 0.62rem; color: #6a5e64; margin-left: 4px; font-weight: 500; }
+
+.uk-bedrag-wrap { background: #fff; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; border: 1.5px solid #e2d9e0; }
+.uk-bedrag-titel { font-size: 0.78rem; font-weight: 700; color: #4a1942; margin-bottom: 4px; }
+.uk-bedrag-sub { font-size: 0.66rem; color: #6a5e64; margin-bottom: 10px; }
+.uk-bedrag-row { display: flex; align-items: center; gap: 10px; }
+.uk-bedrag-prijs { background: #faf0e7; color: #d4733c; padding: 4px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 90px; text-align: center; }
+.uk-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 6px; background: #e2d9e0; border-radius: 3px; outline: none; }
+.uk-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); border-radius: 50%; cursor: pointer; }
+.uk-slider::-moz-range-thumb { width: 20px; height: 20px; background: linear-gradient(135deg, #e8834a 0%, #d4733c 100%); border-radius: 50%; cursor: pointer; border: none; }
+.uk-bedrag-range { font-size: 0.62rem; color: #6a5e64; display: flex; justify-content: space-between; margin-top: 4px; }
+
+.uk-totaal { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 18px 22px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.uk-totaal::before { content: ""; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.uk-totaal-label { font-size: 0.66rem; color: #fcd9c4; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; position: relative; }
+.uk-totaal-waarde { font-size: 2rem; font-weight: 800; color: #e8834a; line-height: 1; margin-top: 4px; position: relative; font-variant-numeric: tabular-nums; }
+.uk-totaal-sub { font-size: 0.78rem; color: #ede0eb; margin-top: 4px; position: relative; }
+
+.uk-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+@media (max-width: 600px) { .uk-detail-grid { grid-template-columns: 1fr; } }
+.uk-detail-blok { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 12px 14px; }
+.uk-detail-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #6a5e64; margin-bottom: 4px; }
+.uk-detail-value { font-size: 1.1rem; font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
+.uk-detail-sub { font-size: 0.66rem; color: #6a5e64; margin-top: 2px; }
+
+.uk-tabel { background: #fff; border: 1px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+.uk-tabel-titel { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6a5e64; margin-bottom: 8px; }
+.uk-tabel-rij { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.78rem; border-bottom: 1px dashed #e2d9e0; }
+.uk-tabel-rij:last-child { border-bottom: none; }
+.uk-tabel-rij.totaal { font-weight: 800; padding-top: 8px; border-top: 2px solid #4a1942; border-bottom: none; margin-top: 4px; }
+.uk-tabel-naam { color: #4a4046; }
+.uk-tabel-waarde { font-weight: 700; color: #4a1942; font-variant-numeric: tabular-nums; }
+.uk-tabel-waarde.pos { color: #6b9a7f; }
+.uk-tabel-waarde.neg { color: #c4666c; }
+.uk-tabel-sub-rij { font-size: 0.7rem; color: #6a5e64; padding: 2px 0 2px 14px; }
+
+.uk-vergelijk { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+@media (max-width: 700px) { .uk-vergelijk { grid-template-columns: 1fr; } }
+.uk-vergelijk-blok { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; position: relative; }
+.uk-vergelijk-blok.gunstig { border-color: #6b9a7f; background: #f7fbf8; }
+.uk-vergelijk-badge { position: absolute; top: -8px; right: 10px; background: #6b9a7f; color: #fff; font-size: 0.6rem; font-weight: 700; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+.uk-vergelijk-titel { font-size: 0.86rem; font-weight: 700; color: #4a1942; margin-bottom: 4px; }
+.uk-vergelijk-sub { font-size: 0.66rem; color: #6a5e64; margin-bottom: 10px; }
+.uk-vergelijk-bedrag { font-size: 1.5rem; font-weight: 800; color: #4a1942; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+
+.uk-uitleg { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.uk-uitleg::before { content: ""; position: absolute; top: -50px; right: -50px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.uk-uitleg-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #fcd9c4; margin-bottom: 6px; position: relative; }
+.uk-uitleg-tekst { font-size: 0.84rem; color: #ede0eb; line-height: 1.65; position: relative; }
+.uk-uitleg-tekst strong { color: #fff; font-weight: 700; }
+.uk-uitleg-tekst .highlight { color: #e8834a; font-weight: 800; }
+
+.uk-info-box { background: #faf0e7; border-left: 4px solid #e8834a; border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-size: 0.78rem; color: #4a4046; line-height: 1.6; }
+.uk-info-box strong { color: #4a1942; font-weight: 700; }
+.uk-info-box.warning { background: #fef7e8; border-color: #d4a017; color: #5a4a10; }
+.uk-info-box.success { background: #f0f7ed; border-color: #6b9a7f; color: #2e4030; }
+
+.uk-veld { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #e2d9e0; }
+.uk-veld:last-child { border-bottom: none; }
+.uk-veld-icoon { width: 28px; height: 28px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+.uk-veld-info { flex: 1; }
+.uk-veld-naam { font-size: 0.82rem; font-weight: 600; color: #4a1942; line-height: 1.2; }
+.uk-veld-uitleg { font-size: 0.66rem; color: #6a5e64; margin-top: 1px; line-height: 1.3; }
+.uk-veld-input { width: 110px; border: 1.5px solid #e2d9e0; background: #fff; border-radius: 8px; padding: 7px 10px; font-family: inherit; font-size: 0.84rem; font-weight: 700; color: #4a1942; text-align: right; font-variant-numeric: tabular-nums; outline: none; }
+.uk-veld-input:focus { border-color: #e8834a; }
+.uk-veld-input::-webkit-outer-spin-button, .uk-veld-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.uk-footer { padding: 14px 30px; border-top: 1px solid #f0eae7; background: #faf7f2; font-size: 0.72rem; color: #6a5e64; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.uk-footer-link { color: #4a1942; text-decoration: none; font-weight: 600; border-bottom: 2px solid #e8834a; }
+.uk-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.uk-action-btn { background: #4a1942; color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.uk-action-btn:hover { background: #6b2862; }
+.uk-action-btn.secondary { background: #fff; color: #4a1942; border: 1.5px solid #e2d9e0; }
+.uk-action-btn.secondary:hover { border-color: #e8834a; color: #e8834a; }
+.uk-action-btn.success { background: #6b9a7f; }
+.uk-action-btn.success:hover { background: #588469; }
+
+.uk-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(46,15,41,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+.uk-modal-overlay.zichtbaar { display: flex; }
+.uk-modal { background: #fff; border-radius: 16px; max-width: 480px; width: 100%; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; }
+.uk-modal-header { padding: 18px 22px; border-bottom: 1px solid #f0eae7; display: flex; justify-content: space-between; align-items: center; }
+.uk-modal-titel { font-size: 1rem; font-weight: 700; color: #4a1942; }
+.uk-modal-close { background: none; border: none; color: #6a5e64; cursor: pointer; font-size: 1.4rem; padding: 4px 8px; }
+.uk-modal-body { padding: 18px 22px; overflow-y: auto; }
+.uk-modal-footer { padding: 14px 22px; border-top: 1px solid #f0eae7; background: #faf7f2; display: flex; gap: 8px; justify-content: flex-end; }
+.uk-modal-input { width: 100%; border: 1.5px solid #e2d9e0; border-radius: 10px; padding: 10px 14px; font-family: inherit; font-size: 0.9rem; color: #4a1942; outline: none; }
+.uk-modal-label { font-size: 0.74rem; font-weight: 600; color: #6a5e64; margin-bottom: 6px; display: block; }
+.uk-scenario-item { background: #faf7f2; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.uk-scenario-info { flex: 1; }
+.uk-scenario-naam { font-size: 0.86rem; font-weight: 700; color: #4a1942; }
+.uk-scenario-datum { font-size: 0.66rem; color: #6a5e64; }
+.uk-scenario-btn { background: #fff; border: 1px solid #e2d9e0; color: #4a1942; padding: 6px 12px; border-radius: 8px; font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer; }
+.uk-scenario-btn.del { color: #c4666c; }
+
+.uk-verz { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; }
+.uk-verz.match { border-color: #6b9a7f; }
+.uk-verz-naam { font-size: 0.92rem; font-weight: 700; color: #4a1942; margin-bottom: 4px; }
+.uk-verz-info { font-size: 0.72rem; color: #6a5e64; margin-bottom: 8px; }
+.uk-verz-rij { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.76rem; }
+.uk-verz-tag { display: inline-block; padding: 2px 8px; background: #faf0e7; color: #d4733c; border-radius: 6px; font-size: 0.62rem; font-weight: 700; margin-left: 6px; }
+.uk-verz-tag.match { background: #d4e8d4; color: #2e4030; }
+
+@media print {
+  @page { margin: 1.5cm; }
+  body { background: #fff; padding: 0; }
+  .uk-app { box-shadow: none; border-radius: 0; }
+  .uk-tabs, .uk-action-btn, .uk-modal-overlay { display: none !important; }
+  .uk-pane:not(.active) { display: none !important; }
+  .uk-input, .uk-result { max-height: none; overflow: visible; }
+  .uk-print-cover { display: block !important; padding: 60px 40px; background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; text-align: center; page-break-after: always; }
+  .uk-print-cover h1 { font-size: 2.2rem; margin-bottom: 16px; }
+  .uk-print-cover .lead { color: #fcd9c4; margin-bottom: 30px; }
+  .uk-print-cover .datum { color: #ede0eb; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); }
+}
+
+@media (max-width: 600px) {
+  body { padding: 6px; }
+  .uk-header { padding: 18px 18px; }
+  .uk-header-content { gap: 8px; }
+  .uk-titel { font-size: 1.1rem; }
+  .uk-subtitel { font-size: 0.72rem; }
+  .uk-badge { font-size: 0.66rem; padding: 4px 10px; }
+  .uk-tabs { padding: 0 12px; gap: 2px; }
+  .uk-tab { padding: 12px 10px; font-size: 0.74rem; gap: 5px; }
+  .uk-input, .uk-result { padding: 16px 14px; }
+  .uk-blok { padding: 14px 14px; }
+  .uk-blok-titel { font-size: 0.82rem; }
+  .uk-blok-titel-icoon { width: 24px; height: 24px; font-size: 0.74rem; }
+
+  /* VELD: stack input below label on mobile */
+  .uk-veld {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    grid-template-areas:
+      "icon info"
+      "input input";
+    column-gap: 10px;
+    row-gap: 8px;
+    align-items: center;
+    padding: 10px 0;
+  }
+  .uk-veld-icoon { grid-area: icon; }
+  .uk-veld-info { grid-area: info; min-width: 0; }
+  .uk-veld-naam { font-size: 0.86rem; line-height: 1.3; }
+  .uk-veld-uitleg { font-size: 0.7rem; line-height: 1.4; }
+  .uk-veld-input { grid-area: input; width: 100%; padding: 9px 12px; font-size: 0.9rem; }
+
+  /* TOGGLE RIJ (à la carte items, natuur extras, etc): label boven, prijs/input onder */
+  .uk-toggle-rij {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    grid-template-areas:
+      "check info"
+      "prijs prijs";
+    column-gap: 10px;
+    row-gap: 8px;
+    align-items: start;
+    padding: 12px 14px;
+  }
+  .uk-toggle-check { grid-area: check; margin-top: 4px; }
+  .uk-toggle-info { grid-area: info; min-width: 0; }
+  .uk-toggle-naam { font-size: 0.88rem; line-height: 1.35; }
+  .uk-toggle-uitleg { font-size: 0.74rem; margin-top: 4px; line-height: 1.45; }
+  .uk-toggle-prijs { grid-area: prijs; justify-self: end; font-size: 0.95rem; font-weight: 800; }
+  .uk-prijs-edit { grid-area: prijs; justify-self: stretch; }
+  .uk-prijs-edit-input { width: 100%; font-size: 0.95rem; }
+
+  /* STAP labels en selecten */
+  .uk-stap { margin-bottom: 14px; }
+  .uk-select { font-size: 0.86rem; padding: 10px 12px; }
+
+  /* KEUZE GRID 2 kolommen */
+  .uk-keuze-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .uk-keuze { padding: 12px 8px; }
+  .uk-keuze-naam { font-size: 0.72rem; }
+
+  /* INFO BOX kleiner padding */
+  .uk-info-box { padding: 12px 14px; font-size: 0.82rem; }
+
+  /* FOOTER */
+  .uk-footer { padding: 14px 18px; flex-direction: column; align-items: stretch; gap: 10px; }
+  .uk-actions { justify-content: center; }
+}
+
+@media (max-width: 380px) {
+  .uk-input, .uk-result { padding: 14px 12px; }
+  .uk-blok { padding: 12px 12px; }
+  .uk-veld { column-gap: 8px; grid-template-columns: 26px 1fr; }
+  .uk-veld-icoon { width: 26px; height: 26px; }
+  .uk-toggle-rij { column-gap: 8px; padding: 10px 12px; }
+  .uk-keuze-icoon { font-size: 1.3rem; }
+}
+.uk-fs-banner { display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(90deg, #e8834a 0%, #c8622a 100%); color: #fff; padding: 13px 22px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.94rem; border: none; border-radius: 14px; margin: 14px 16px; width: calc(100% - 32px); box-sizing: border-box; transition: filter 0.2s, transform 0.15s; box-shadow: 0 4px 12px rgba(200,98,42,0.28); letter-spacing: 0.2px; }
+.uk-fs-banner:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(200,98,42,0.35); }
+.uk-fs-banner-ico { font-size: 1.15rem; line-height: 1; }
+.uk-fs-banner-arr { margin-left: 6px; font-size: 1rem; opacity: 0.9; transition: transform 0.2s; }
+.uk-fs-banner:hover .uk-fs-banner-arr { transform: translateX(3px); }
+.uk-fs-exit { display: none; }
+:fullscreen .uk-fs-banner, :-webkit-full-screen .uk-fs-banner { display: none; }
+:fullscreen .uk-fs-exit, :-webkit-full-screen .uk-fs-exit { display: inline-flex; position: fixed; top: 14px; right: 14px; background: rgba(0,0,0,0.55); color: #fff; padding: 9px 16px; border-radius: 999px; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; align-items: center; gap: 6px; z-index: 99999; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background 0.2s; }
+:fullscreen .uk-fs-exit:hover, :-webkit-full-screen .uk-fs-exit:hover { background: rgba(0,0,0,0.78); }
+@media (max-width: 600px) { .uk-fs-banner { padding: 12px 16px; font-size: 0.86rem; margin: 10px; width: calc(100% - 20px); } .uk-fs-banner-arr { display: none; } }
+@media print { .uk-fs-banner, .uk-fs-exit { display: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="uk-print-cover">
+  <h1>Uitvaartkosten Rapport 2026</h1>
+  <div class="lead">Volledige kostencalculatie en verzekering match</div>
+  <div class="datum" id="uk-print-datum"></div>
+</div>
+
+<button class="uk-fs-banner" id="uk-fs-btn" type="button" aria-label="Open de calculator in volledig scherm">
+  <span class="uk-fs-banner-ico">⛶</span>
+  <span>Open de calculator in volledig scherm</span>
+  <span class="uk-fs-banner-arr">→</span>
+</button>
+<button class="uk-fs-exit" id="uk-fs-exit" type="button" aria-label="Sluit volledig scherm">
+  <span>✕</span><span>Sluit volledig scherm</span>
+</button>
+
+<div class="uk-app">
+  <header class="uk-header">
+    <div class="uk-header-content">
+      <div>
+        <h1 class="uk-titel">Uitvaartkosten Calculator PRO+</h1>
+        <div class="uk-subtitel">2026 &middot; 6 modi &middot; À la carte &middot; Verzekering match &middot; 25 regio's</div>
+      </div>
+      <div class="uk-badge"><span class="uk-badge-dot"></span> Live berekening</div>
+    </div>
+  </header>
+
+  <nav class="uk-tabs" id="uk-tabs">
+    <button class="uk-tab active" data-tab="snel"><span>⚡</span> Snel</button>
+    <button class="uk-tab" data-tab="builder"><span>🏗️</span> À la carte</button>
+    <button class="uk-tab" data-tab="vergelijk"><span>⚱️</span> Begraven vs cremeren</button>
+    <button class="uk-tab" data-tab="natuur"><span>🌿</span> Natuurbegraven</button>
+    <button class="uk-tab" data-tab="intl"><span>🌍</span> Repatriëring</button>
+    <button class="uk-tab" data-tab="verzekering"><span>🛡️</span> Verzekering match</button>
+  </nav>
+
+  <div class="uk-privacy-bar">
+    <span class="uk-privacy-bar-icon">🔒</span>
+    <span><strong>Privacy:</strong> alle ingevulde gegevens blijven uitsluitend lokaal in jouw browser. Uitvaart-Platform.nl slaat <strong>niets</strong> op en heeft geen toegang tot je gegevens.</span>
+  </div>
+
+  <!-- ========== SNEL ========== -->
+  <div class="uk-pane active" data-pane="snel">
+    <div class="uk-body">
+      <div class="uk-input">
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">1</span> Type uitvaart</div>
+          <div class="uk-keuze-grid">
+            <button class="uk-keuze active" data-snel-type="cremeren"><span class="uk-keuze-icoon">🔥</span><span class="uk-keuze-naam">Cremeren</span></button>
+            <button class="uk-keuze" data-snel-type="begraven"><span class="uk-keuze-icoon">⚰️</span><span class="uk-keuze-naam">Begraven</span></button>
+            <button class="uk-keuze" data-snel-type="natuur"><span class="uk-keuze-icoon">🌿</span><span class="uk-keuze-naam">Natuurbegraven</span></button>
+          </div>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">2</span> Niveau ceremonie</div>
+          <div class="uk-keuze-grid">
+            <button class="uk-keuze" data-snel-niveau="basis"><span class="uk-keuze-icoon">📦</span><span class="uk-keuze-naam">Basis</span></button>
+            <button class="uk-keuze active" data-snel-niveau="standaard"><span class="uk-keuze-icoon">🎯</span><span class="uk-keuze-naam">Standaard</span></button>
+            <button class="uk-keuze" data-snel-niveau="uitgebreid"><span class="uk-keuze-icoon">✨</span><span class="uk-keuze-naam">Uitgebreid</span></button>
+          </div>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">3</span> Regio</div>
+          <select class="uk-select" id="uk-snel-regio"></select>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">4</span> Aantal gasten ceremonie</div>
+          <div class="uk-bedrag-wrap">
+            <div class="uk-bedrag-row">
+              <span class="uk-bedrag-prijs"><span id="uk-snel-gasten-val">75</span></span>
+              <input type="range" class="uk-slider" id="uk-snel-gasten" min="10" max="300" step="5" value="75">
+            </div>
+            <div class="uk-bedrag-range"><span>10</span><span>300</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="uk-result">
+        <div class="uk-totaal">
+          <div class="uk-totaal-label">Geschatte totale kosten</div>
+          <div class="uk-totaal-waarde" id="uk-snel-totaal">€0</div>
+          <div class="uk-totaal-sub" id="uk-snel-sub">—</div>
+        </div>
+
+        <div class="uk-detail-grid">
+          <div class="uk-detail-blok"><div class="uk-detail-label">Vaste kosten</div><div class="uk-detail-value" id="uk-snel-vast">€0</div><div class="uk-detail-sub">Onafhankelijk van aantal gasten</div></div>
+          <div class="uk-detail-blok"><div class="uk-detail-label">Variabele kosten</div><div class="uk-detail-value" id="uk-snel-var">€0</div><div class="uk-detail-sub" id="uk-snel-var-sub">Catering per gast</div></div>
+        </div>
+
+        <div class="uk-detail-grid">
+          <div class="uk-detail-blok"><div class="uk-detail-label">Laag scenario</div><div class="uk-detail-value" id="uk-snel-laag">€0</div><div class="uk-detail-sub">Sober en basic</div></div>
+          <div class="uk-detail-blok"><div class="uk-detail-label">Hoog scenario</div><div class="uk-detail-value" id="uk-snel-hoog">€0</div><div class="uk-detail-sub">Uitgebreid en luxe</div></div>
+        </div>
+
+        <div class="uk-tabel">
+          <div class="uk-tabel-titel">Geschatte verdeling kostenposten</div>
+          <div id="uk-snel-verdeling"></div>
+        </div>
+
+        <div class="uk-uitleg">
+          <div class="uk-uitleg-label">⚡ Snelle inschatting</div>
+          <div class="uk-uitleg-tekst" id="uk-snel-uitleg">Pas de instellingen aan om de schatting te zien.</div>
+        </div>
+
+        <div class="uk-info-box success"><strong>Alleen catering schaalt met gasten.</strong> De kist, crematie, uitvaartondernemer en andere kosten staan vast ongeacht het aantal gasten. Voor exacte aanpassing per post: gebruik de "À la carte" tab.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== BUILDER ========== -->
+  <div class="uk-pane" data-pane="builder">
+    <div class="uk-body">
+      <div class="uk-input">
+        <div class="uk-info-box success" style="margin-bottom:14px;"><strong>💡 Standaardbedragen aanpasbaar.</strong> Bij elk item staat een richtprijs ingevuld. Na het selecteren van een item kunt u het bedrag zelf aanpassen naar wat met uw uitvaartondernemer of leverancier is afgesproken.</div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">1</span> Regio</div>
+          <select class="uk-select" id="uk-b-regio"></select>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">⚰️</div> Vervoer en opbaring</div></div>
+          <div id="uk-b-cat-vervoer"></div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">🏛️</div> Locatie en ceremonie</div></div>
+          <div id="uk-b-cat-ceremonie"></div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">🔥</div> Crematie of begraven</div></div>
+          <div id="uk-b-cat-eind"></div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">📰</div> Communicatie</div></div>
+          <div id="uk-b-cat-comm"></div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">🌸</div> Sfeer en catering</div></div>
+          <div id="uk-b-cat-sfeer"></div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">📋</div> Diversen</div></div>
+          <div id="uk-b-cat-divers"></div>
+        </div>
+      </div>
+
+      <div class="uk-result">
+        <div class="uk-totaal">
+          <div class="uk-totaal-label">Totale uitvaartkosten</div>
+          <div class="uk-totaal-waarde" id="uk-b-totaal">€0</div>
+          <div class="uk-totaal-sub" id="uk-b-sub">Som van alle geselecteerde posten</div>
+        </div>
+
+        <div class="uk-tabel">
+          <div class="uk-tabel-titel">Geselecteerde posten</div>
+          <div id="uk-b-selectie"></div>
+        </div>
+
+        <div class="uk-detail-grid">
+          <div class="uk-detail-blok"><div class="uk-detail-label">Eigen bijdrage indien verzekerd</div><div class="uk-detail-value" id="uk-b-eigen">€0</div><div class="uk-detail-sub">Bij €5.000 dekking</div></div>
+          <div class="uk-detail-blok"><div class="uk-detail-label">Sparen per maand voor 10 jaar</div><div class="uk-detail-value" id="uk-b-sparen">€0</div><div class="uk-detail-sub">Zonder verzekering</div></div>
+        </div>
+
+        <div class="uk-info-box"><strong>Tip:</strong> klik op een post om hem toe te voegen of te verwijderen. De prijzen zijn indicatief en gebaseerd op gemiddelde kosten 2026. Werkelijke prijzen variëren per leverancier en regio.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== VERGELIJK ========== -->
+  <div class="uk-pane" data-pane="vergelijk">
+    <div class="uk-body">
+      <div class="uk-input">
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">1</span> Regio</div>
+          <select class="uk-select" id="uk-v-regio"></select>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">2</span> Aantal gasten</div>
+          <div class="uk-bedrag-wrap">
+            <div class="uk-bedrag-row"><span class="uk-bedrag-prijs"><span id="uk-v-gasten-val">75</span></span><input type="range" class="uk-slider" id="uk-v-gasten" min="10" max="300" step="5" value="75"></div>
+          </div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">⚙️</div> Bij begraven</div></div>
+          <div class="uk-veld"><div class="uk-veld-icoon">⏱️</div><div class="uk-veld-info"><div class="uk-veld-naam">Grafhuur (jaren)</div><div class="uk-veld-uitleg">Vaak 20 of 30 jaar, daarna verlenging</div></div><input type="number" class="uk-veld-input" id="uk-v-grafjaren" value="20" min="10" max="100"></div>
+          <div class="uk-veld"><div class="uk-veld-icoon">🪦</div><div class="uk-veld-info"><div class="uk-veld-naam">Grafsteen waarde</div><div class="uk-veld-uitleg">Simpel €1.500, luxe €10.000+</div></div><input type="number" class="uk-veld-input" id="uk-v-grafsteen" value="3000"></div>
+          <div class="uk-veld"><div class="uk-veld-icoon">🏞️</div><div class="uk-veld-info"><div class="uk-veld-naam">Type graf</div><div class="uk-veld-uitleg">Algemeen, eigen of dubbel</div></div>
+            <select class="uk-select" id="uk-v-graftype" style="width:140px;">
+              <option value="algemeen">Algemeen</option>
+              <option value="eigen" selected>Eigen graf</option>
+              <option value="dubbel">Dubbel graf</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">⚙️</div> Bij cremeren</div></div>
+          <div class="uk-veld"><div class="uk-veld-icoon">⚱️</div><div class="uk-veld-info"><div class="uk-veld-naam">Bestemming as</div></div>
+            <select class="uk-select" id="uk-v-bestemming" style="width:160px;">
+              <option value="meenemen">Urn mee naar huis</option>
+              <option value="bijzetten">Bijzetten urnenmuur</option>
+              <option value="uitstrooien">Uitstrooien zee/strooiveld</option>
+              <option value="asbestemming">Asbestemming sieraad</option>
+            </select>
+          </div>
+          <div class="uk-veld"><div class="uk-veld-icoon">🪞</div><div class="uk-veld-info"><div class="uk-veld-naam">Urn waarde</div></div><input type="number" class="uk-veld-input" id="uk-v-urn" value="200"></div>
+        </div>
+      </div>
+
+      <div class="uk-result">
+        <div class="uk-vergelijk">
+          <div class="uk-vergelijk-blok" id="uk-v-b-blok">
+            <div class="uk-vergelijk-titel">⚰️ Begraven</div>
+            <div class="uk-vergelijk-sub">Inclusief grafrechten, kist, ceremonie</div>
+            <div class="uk-vergelijk-bedrag" id="uk-v-begraven">€0</div>
+            <div id="uk-v-b-detail"></div>
+          </div>
+          <div class="uk-vergelijk-blok" id="uk-v-c-blok">
+            <div class="uk-vergelijk-titel">🔥 Cremeren</div>
+            <div class="uk-vergelijk-sub">Inclusief crematie, kist, ceremonie, urn</div>
+            <div class="uk-vergelijk-bedrag" id="uk-v-cremeren">€0</div>
+            <div id="uk-v-c-detail"></div>
+          </div>
+        </div>
+
+        <div class="uk-uitleg">
+          <div class="uk-uitleg-label">⚱️ Vergelijking en verschillen</div>
+          <div class="uk-uitleg-tekst" id="uk-v-uitleg">—</div>
+        </div>
+
+        <div class="uk-info-box warning"><strong>Belangrijke factoren:</strong> begraven kost in eerste instantie meer maar grafrechten lopen vaak na 20 jaar af (verlenging mogelijk). Bij cremeren zijn er geen vervolgkosten als de as wordt meegenomen of uitgestrooid. Een urnenmuur bijzetting kost €500-€2.000 voor 20 jaar.</div>
+
+        <div class="uk-info-box"><strong>Emotionele afweging:</strong> kosten zijn maar één factor. Religieuze, culturele en familietraditie spelen vaak een grotere rol. 65% van de Nederlanders kiest tegenwoordig voor cremeren.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== NATUURBEGRAVEN ========== -->
+  <div class="uk-pane" data-pane="natuur">
+    <div class="uk-body">
+      <div class="uk-input">
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">1</span> Type natuurbegraafplaats</div>
+          <div class="uk-keuze-grid">
+            <button class="uk-keuze active" data-natuur-type="bos"><span class="uk-keuze-icoon">🌳</span><span class="uk-keuze-naam">Natuurbos</span></button>
+            <button class="uk-keuze" data-natuur-type="heide"><span class="uk-keuze-icoon">🌾</span><span class="uk-keuze-naam">Heide</span></button>
+            <button class="uk-keuze" data-natuur-type="duinen"><span class="uk-keuze-icoon">🏖️</span><span class="uk-keuze-naam">Duinen</span></button>
+          </div>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">2</span> Locatie</div>
+          <select class="uk-select" id="uk-n-locatie">
+            <option value="hillig" selected>Hillig Meer (Drenthe)</option>
+            <option value="reiderwolde">Reiderwolde (Groningen)</option>
+            <option value="heidepol">Heidepol (Gelderland)</option>
+            <option value="bergerbos">Bergerbos (Noord-Holland)</option>
+            <option value="schoorl">Schoorlse duinen (Noord-Holland)</option>
+            <option value="kemmenade">Kemmenade (Overijssel)</option>
+            <option value="maashorst">Maashorst (Brabant)</option>
+            <option value="anders">Andere locatie</option>
+          </select>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">3</span> Tarief grafrecht (aanpasbaar)</div>
+          <div class="uk-veld" style="padding:10px 14px;background:#fff;border:1.5px solid #e2d9e0;border-radius:10px;">
+            <div class="uk-veld-icoon">💰</div>
+            <div class="uk-veld-info">
+              <div class="uk-veld-naam">Eenmalig tarief eeuwig grafrecht</div>
+              <div class="uk-veld-uitleg">Standaardprijs per locatie, pas aan indien afgesproken</div>
+            </div>
+            <input type="number" class="uk-veld-input" id="uk-n-tarief-input" value="5500" step="100" min="0">
+          </div>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">3</span> Eeuwigdurende grafrust</div>
+          <div class="uk-toggle-rij active" id="uk-n-eeuwig">
+            <div class="uk-toggle-check"></div>
+            <div class="uk-toggle-info">
+              <div class="uk-toggle-naam">Eeuwigdurende grafrust (standaard)</div>
+              <div class="uk-toggle-uitleg">Geen verlengingskosten, graf blijft voor altijd, natuur neemt over</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">4</span> Toevoegingen</div>
+          <div id="uk-n-extras"></div>
+        </div>
+      </div>
+
+      <div class="uk-result">
+        <div class="uk-totaal">
+          <div class="uk-totaal-label">Natuurbegrafenis totaal</div>
+          <div class="uk-totaal-waarde" id="uk-n-totaal">€0</div>
+          <div class="uk-totaal-sub" id="uk-n-sub">Inclusief eeuwigdurende grafrust</div>
+        </div>
+
+        <div class="uk-tabel">
+          <div class="uk-tabel-titel">Kostenposten</div>
+          <div id="uk-n-tabel"></div>
+        </div>
+
+        <div class="uk-uitleg">
+          <div class="uk-uitleg-label">🌿 Natuurbegraven uitgelicht</div>
+          <div class="uk-uitleg-tekst" id="uk-n-uitleg">—</div>
+        </div>
+
+        <div class="uk-info-box success"><strong>Voordelen natuurbegraven:</strong> geen vervolgkosten ooit, geen grafsteen-onderhoud, ecologisch (afbreekbare kist verplicht), rustige omgeving, vaak eeuwigdurend grafrecht. Plek wordt weer onderdeel van de natuur.</div>
+
+        <div class="uk-info-box warning"><strong>Aandachtspunten:</strong> geen toegang per auto (bos), geen permanente grafsteen toegestaan (alleen natuurlijke markering zoals zwerfsteen), afbreekbare kist verplicht (geen lakwerk, geen ijzer), bezoek wandelt door bos/heide.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== INTERNATIONAAL ========== -->
+  <div class="uk-pane" data-pane="intl">
+    <div class="uk-body">
+      <div class="uk-input">
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">1</span> Overlijden in welk land?</div>
+          <select class="uk-select" id="uk-i-overland">
+            <option value="nederland" selected>Nederland (uitvaart in NL)</option>
+            <option value="duitsland">Duitsland</option>
+            <option value="belgie">België</option>
+            <option value="frankrijk">Frankrijk</option>
+            <option value="spanje">Spanje</option>
+            <option value="italie">Italië</option>
+            <option value="portugal">Portugal</option>
+            <option value="vk">Verenigd Koninkrijk</option>
+            <option value="marokko">Marokko</option>
+            <option value="turkije">Turkije</option>
+            <option value="suriname">Suriname</option>
+            <option value="vs">Verenigde Staten</option>
+            <option value="anders">Ander land (buiten EU)</option>
+          </select>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">2</span> Naar welk land repatriëring?</div>
+          <select class="uk-select" id="uk-i-bestemming">
+            <option value="nederland" selected>Nederland</option>
+            <option value="duitsland">Duitsland</option>
+            <option value="belgie">België</option>
+            <option value="frankrijk">Frankrijk</option>
+            <option value="spanje">Spanje</option>
+            <option value="italie">Italië</option>
+            <option value="marokko">Marokko</option>
+            <option value="turkije">Turkije</option>
+            <option value="suriname">Suriname</option>
+            <option value="anders">Ander land</option>
+          </select>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">3</span> Methode transport</div>
+          <div class="uk-keuze-grid" style="grid-template-columns:repeat(2,1fr);">
+            <button class="uk-keuze active" data-intl-trans="vliegtuig"><span class="uk-keuze-icoon">✈️</span><span class="uk-keuze-naam">Vliegtuig</span></button>
+            <button class="uk-keuze" data-intl-trans="auto"><span class="uk-keuze-icoon">🚐</span><span class="uk-keuze-naam">Rouwauto</span></button>
+          </div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">💰</div> Basistarieven (aanpasbaar)</div></div>
+          <div class="uk-veld">
+            <div class="uk-veld-icoon">🏛️</div>
+            <div class="uk-veld-info"><div class="uk-veld-naam">Basis uitvaartkosten bestemmingsland</div><div class="uk-veld-uitleg">Standaardprijs per land, pas aan indien afgesproken</div></div>
+            <input type="number" class="uk-veld-input" id="uk-i-basis-input" value="9000" step="100" min="0">
+          </div>
+          <div class="uk-veld">
+            <div class="uk-veld-icoon">✈️</div>
+            <div class="uk-veld-info"><div class="uk-veld-naam">Transport (override)</div><div class="uk-veld-uitleg">Laat leeg voor automatische berekening op afstand</div></div>
+            <input type="number" class="uk-veld-input" id="uk-i-transport-input" placeholder="auto" step="100" min="0">
+          </div>
+        </div>
+
+        <div class="uk-blok">
+          <div class="uk-blok-kop"><div class="uk-blok-titel"><div class="uk-blok-titel-icoon">📜</div> Extra's repatriëring</div></div>
+          <div id="uk-i-extras-lijst"></div>
+        </div>
+      </div>
+
+      <div class="uk-result">
+        <div class="uk-totaal">
+          <div class="uk-totaal-label">Geschatte repatriëringskosten</div>
+          <div class="uk-totaal-waarde" id="uk-i-totaal">€0</div>
+          <div class="uk-totaal-sub" id="uk-i-sub">Inclusief uitvaart bestemming</div>
+        </div>
+
+        <div class="uk-tabel">
+          <div class="uk-tabel-titel">Kostenposten</div>
+          <div id="uk-i-tabel"></div>
+        </div>
+
+        <div class="uk-uitleg">
+          <div class="uk-uitleg-label">🌍 Repatriëring uitgelicht</div>
+          <div class="uk-uitleg-tekst" id="uk-i-uitleg">—</div>
+        </div>
+
+        <div class="uk-info-box warning"><strong>Specialist nodig:</strong> repatriëring vereist een uitvaartondernemer met internationale ervaring. Documenten (overlijdensakte met apostille, exportvergunning, sanitair certificaat) verschillen per land en duren 5-14 dagen.</div>
+
+        <div class="uk-info-box"><strong>Verzekering:</strong> controleer of de uitvaartverzekering repatriëring dekt. Veel polissen met werelddekking dekken een deel van de kosten. Reisverzekeringen dekken meestal alleen ziekenhuiskosten en repatriëring van een patiënt, niet een overlijden in het buitenland.</div>
+
+        <div class="uk-info-box success"><strong>📊 Bron van deze cijfers:</strong> de transportbedragen zijn indicatief en gebaseerd op gepubliceerde tarieven van Nederlandse repatriëringsspecialisten (2025-2026). Volgens specialist Van der Heden Internationaal Rouwvervoer (internationaalrouwvervoer.nl), sinds 1979 actief in wereldwijd rouwvervoer, kost repatriëring naar omringende Europese landen ongeveer €2.000 tot €7.000 en nemen de kosten toe naarmate de afstand groter wordt. Repatriëringen boven €12.000 komen niet vaak voor. Ter referentie: transport naar Suriname kost volgens andere bronnen circa €3.750 tot €5.250 inclusief vlucht en afhandeling op Schiphol. De werkelijke kosten verschillen per land, gewicht, luchtvaartmaatschappij en gekozen specialist, vraag daarom altijd een offerte op maat aan. Bronnen onder andere: internationaalrouwvervoer.nl (Van der Heden IRU), soberenstijl.nl, uitvaartzorgnieuwvennep.nl en budgetcrematie.nl.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== VERZEKERING MATCH ========== -->
+  <div class="uk-pane" data-pane="verzekering">
+    <div class="uk-body">
+      <div class="uk-input">
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">1</span> Geschatte uitvaartkosten</div>
+          <div class="uk-bedrag-wrap">
+            <div class="uk-bedrag-row"><span class="uk-bedrag-prijs">€<span id="uk-vz-kosten-val">9.000</span></span><input type="range" class="uk-slider" id="uk-vz-kosten" min="3000" max="20000" step="250" value="9000"></div>
+            <div class="uk-bedrag-range"><span>€3.000</span><span>€20.000</span></div>
+          </div>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">2</span> Leeftijd verzekerde</div>
+          <div class="uk-bedrag-wrap">
+            <div class="uk-bedrag-row"><span class="uk-bedrag-prijs"><span id="uk-vz-leeftijd-val">55</span> jaar</span><input type="range" class="uk-slider" id="uk-vz-leeftijd" min="18" max="85" step="1" value="55"></div>
+          </div>
+        </div>
+
+        <div class="uk-stap">
+          <div class="uk-stap-label"><span class="uk-stap-nr">3</span> Wat dekt de polis?</div>
+          <div class="uk-keuze-grid" style="grid-template-columns:repeat(2,1fr);">
+            <button class="uk-keuze active" data-vz-type="kapitaal"><span class="uk-keuze-icoon">💰</span><span class="uk-keuze-naam">Kapitaalpolis</span></button>
+            <button class="uk-keuze" data-vz-type="natura"><span class="uk-keuze-icoon">📦</span><span class="uk-keuze-naam">Naturapolis</span></button>
+          </div>
+        </div>
+
+        <div class="uk-info-box"><strong>Kapitaal:</strong> verzekeraar keert een bedrag uit aan nabestaanden. Vrije keuze ondernemer. <strong>Natura:</strong> verzekeraar regelt zelf alles, vast pakket. Beperkte keuze.</div>
+      </div>
+
+      <div class="uk-result">
+        <div class="uk-totaal">
+          <div class="uk-totaal-label">Aanbevolen verzekerd bedrag</div>
+          <div class="uk-totaal-waarde" id="uk-vz-aanbevolen">€0</div>
+          <div class="uk-totaal-sub" id="uk-vz-sub">—</div>
+        </div>
+
+        <div id="uk-vz-verzekeraars"></div>
+
+        <div class="uk-info-box"><strong>🔍 Onafhankelijk en zonder voorkeur:</strong> Uitvaart-Platform.nl is een onafhankelijk platform. Deze lijst staat op alfabetische volgorde en wij bevelen geen enkele verzekeraar aan boven een andere. De premies zijn indicatieve richtbedragen om je een beeld te geven, geen aanbod.</div>
+
+        <div class="uk-info-box warning"><strong>Premie indicatief:</strong> echte premies hangen af van gezondheid, leeftijd bij aanvang, looptijd polis en eventuele medische selectie. Vraag altijd offertes aan bij meerdere verzekeraars.</div>
+
+        <div class="uk-info-box success"><strong>Tip:</strong> bij uitvaartverzekering tussentijds wisselen is meestal nadelig (verlies opbouw). Bekijk eerst of bestaande polis kan worden verhoogd ipv overstappen.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="uk-footer">
+    <span>Prijzen 2026 indicatief. Werkelijke kosten variëren per leverancier. <a href="https://uitvaart-platform.nl/uitvaartkostencalculator" class="uk-footer-link" target="_top">Meer info</a></span>
+    <div class="uk-actions">
+      <button class="uk-action-btn secondary" id="uk-load-btn">📂 Laden</button>
+      <button class="uk-action-btn success" id="uk-save-btn">💾 Opslaan</button>
+      <button class="uk-action-btn secondary" onclick="window.print()">🖨️ PDF</button>
+    </div>
+  </footer>
+</div>
+
+<div class="uk-modal-overlay" id="uk-modal-save">
+  <div class="uk-modal">
+    <div class="uk-modal-header"><div class="uk-modal-titel">💾 Opslaan</div><button class="uk-modal-close" data-close>✕</button></div>
+    <div class="uk-modal-body">
+      <label class="uk-modal-label">Naam voor berekening</label>
+      <input type="text" class="uk-modal-input" id="uk-save-naam" maxlength="60">
+    </div>
+    <div class="uk-modal-footer">
+      <button class="uk-action-btn secondary" data-close>Annuleren</button>
+      <button class="uk-action-btn success" id="uk-save-confirm">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<div class="uk-modal-overlay" id="uk-modal-load">
+  <div class="uk-modal">
+    <div class="uk-modal-header"><div class="uk-modal-titel">📂 Laden</div><button class="uk-modal-close" data-close>✕</button></div>
+    <div class="uk-modal-body"><div id="uk-load-lijst"></div></div>
+    <div class="uk-modal-footer"><button class="uk-action-btn secondary" data-close>Sluiten</button></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  function fEuro(n) { n = Math.round(n); return '€' + n.toLocaleString('nl-NL'); }
+
+  // ======== DATA ========
+  var REGIOS = [
+    { id: 'amsterdam', naam: 'Amsterdam', factor: 1.18 },
+    { id: 'rotterdam', naam: 'Rotterdam', factor: 1.08 },
+    { id: 'denhaag', naam: 'Den Haag', factor: 1.12 },
+    { id: 'utrecht', naam: 'Utrecht', factor: 1.10 },
+    { id: 'eindhoven', naam: 'Eindhoven', factor: 1.00 },
+    { id: 'groningen', naam: 'Groningen', factor: 0.92 },
+    { id: 'tilburg', naam: 'Tilburg', factor: 0.98 },
+    { id: 'almere', naam: 'Almere', factor: 1.02 },
+    { id: 'breda', naam: 'Breda', factor: 1.00 },
+    { id: 'nijmegen', naam: 'Nijmegen', factor: 0.97 },
+    { id: 'enschede', naam: 'Enschede', factor: 0.93 },
+    { id: 'haarlem', naam: 'Haarlem', factor: 1.14 },
+    { id: 'arnhem', naam: 'Arnhem', factor: 0.99 },
+    { id: 'amersfoort', naam: 'Amersfoort', factor: 1.06 },
+    { id: 'apeldoorn', naam: 'Apeldoorn', factor: 0.96 },
+    { id: 'flevoland', naam: 'Flevoland', factor: 0.98 },
+    { id: 'friesland', naam: 'Friesland', factor: 0.91 },
+    { id: 'drenthe', naam: 'Drenthe', factor: 0.90 },
+    { id: 'overijssel', naam: 'Overijssel', factor: 0.93 },
+    { id: 'gelderland', naam: 'Gelderland', factor: 0.97 },
+    { id: 'limburg', naam: 'Limburg', factor: 0.95 },
+    { id: 'zeeland', naam: 'Zeeland', factor: 0.92 },
+    { id: 'brabant', naam: 'Noord-Brabant', factor: 1.00 },
+    { id: 'noord-holland', naam: 'Noord-Holland', factor: 1.10 },
+    { id: 'zuid-holland', naam: 'Zuid-Holland', factor: 1.08 }
+  ];
+
+  function vulRegio(id) {
+    var sel = document.getElementById(id);
+    var html = '';
+    var optgroup1 = '<optgroup label="Grote steden">';
+    var optgroup2 = '<optgroup label="Provincies / regio\'s">';
+    REGIOS.forEach(function(r, i) {
+      if (i < 15) optgroup1 += '<option value="' + r.id + '"' + (r.id === 'eindhoven' ? ' selected' : '') + '>' + r.naam + '</option>';
+      else optgroup2 += '<option value="' + r.id + '">' + r.naam + '</option>';
+    });
+    sel.innerHTML = optgroup1 + '</optgroup>' + optgroup2 + '</optgroup>';
+  }
+  vulRegio('uk-snel-regio'); vulRegio('uk-b-regio'); vulRegio('uk-v-regio');
+
+  function getRegio(id) { return REGIOS.find(function(r) { return r.id === id; }) || REGIOS[4]; }
+
+  document.getElementById('uk-tabs').addEventListener('click', function(e) {
+    var btn = e.target.closest('.uk-tab');
+    if (!btn) return;
+    document.querySelectorAll('.uk-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.uk-pane').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelector('[data-pane="' + btn.dataset.tab + '"]').classList.add('active');
+  });
+
+  function setPrintDatum() {
+    var d = new Date();
+    var m = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+    document.getElementById('uk-print-datum').textContent = 'Gegenereerd op ' + d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  setPrintDatum();
+
+  // ======== SNEL ========
+  // Vaste kosten per type/niveau (in euro), NIET afhankelijk van gasten
+  var FIXED_KOSTEN = {
+    cremeren: {
+      basis:      { kist: 900,  locatie: 800,  eind: 1200, sfeer: 200,  comm: 300, ondernemer: 1200 },
+      standaard:  { kist: 1500, locatie: 1400, eind: 1800, sfeer: 450,  comm: 500, ondernemer: 2000 },
+      uitgebreid: { kist: 2500, locatie: 2200, eind: 2500, sfeer: 1100, comm: 800, ondernemer: 2800 }
+    },
+    begraven: {
+      basis:      { kist: 1200, locatie: 600,  eind: 3500, sfeer: 200,  comm: 300, ondernemer: 1300 },
+      standaard:  { kist: 1800, locatie: 1100, eind: 5000, sfeer: 450,  comm: 500, ondernemer: 1800 },
+      uitgebreid: { kist: 3000, locatie: 1800, eind: 7000, sfeer: 1100, comm: 800, ondernemer: 2200 }
+    },
+    natuur: {
+      basis:      { kist: 1100, locatie: 400,  eind: 2300, sfeer: 200,  comm: 300, ondernemer: 1300 },
+      standaard:  { kist: 1500, locatie: 600,  eind: 3800, sfeer: 400,  comm: 500, ondernemer: 1350 },
+      uitgebreid: { kist: 2200, locatie: 900,  eind: 4800, sfeer: 800,  comm: 700, ondernemer: 1500 }
+    }
+  };
+
+  // Catering per gast, WEL afhankelijk van gasten
+  var CATERING_PER_GAST = { basis: 12, standaard: 18, uitgebreid: 28 };
+
+  var EIND_NAMEN = {
+    cremeren: 'Crematie',
+    begraven: 'Begraven incl. grafrechten',
+    natuur: 'Natuurgraf (eeuwig)'
+  };
+
+  var sState = { type: 'cremeren', niveau: 'standaard', regio: 'eindhoven', gasten: 75 };
+
+  function snelUpdate() {
+    var fixed = FIXED_KOSTEN[sState.type][sState.niveau];
+    var caterPerGast = CATERING_PER_GAST[sState.niveau];
+    var regioFactor = getRegio(sState.regio).factor;
+
+    var vastTotaal = (fixed.kist + fixed.locatie + fixed.eind + fixed.sfeer + fixed.comm + fixed.ondernemer) * regioFactor;
+    var caterTotaal = caterPerGast * sState.gasten * regioFactor;
+    var totaal = vastTotaal + caterTotaal;
+    var laag = totaal * 0.75;
+    var hoog = totaal * 1.4;
+
+    document.getElementById('uk-snel-totaal').textContent = fEuro(totaal);
+    document.getElementById('uk-snel-laag').textContent = fEuro(laag);
+    document.getElementById('uk-snel-hoog').textContent = fEuro(hoog);
+    document.getElementById('uk-snel-gasten-val').textContent = sState.gasten;
+    document.getElementById('uk-snel-vast').textContent = fEuro(vastTotaal);
+    document.getElementById('uk-snel-var').textContent = fEuro(caterTotaal);
+    document.getElementById('uk-snel-var-sub').textContent = fEuro(caterPerGast) + ' per gast × ' + sState.gasten + ' gasten';
+
+    var typenamen = { cremeren: 'crematie', begraven: 'begrafenis', natuur: 'natuurbegrafenis' };
+    var niveaunamen = { basis: 'sobere', standaard: 'standaard', uitgebreid: 'uitgebreide' };
+    document.getElementById('uk-snel-sub').textContent = niveaunamen[sState.niveau] + ' ' + typenamen[sState.type] + ' in ' + getRegio(sState.regio).naam;
+
+    // Verdeling: 6 vaste posten + 1 variabele (catering)
+    var verdeling = [
+      { naam: 'Kist en vervoer',           bedrag: fixed.kist * regioFactor,       vast: true },
+      { naam: 'Aula of locatie ceremonie', bedrag: fixed.locatie * regioFactor,    vast: true },
+      { naam: EIND_NAMEN[sState.type],     bedrag: fixed.eind * regioFactor,       vast: true },
+      { naam: 'Bloemen, muziek, sfeer',    bedrag: fixed.sfeer * regioFactor,      vast: true },
+      { naam: 'Rouwkaarten en advertentie', bedrag: fixed.comm * regioFactor,      vast: true },
+      { naam: 'Uitvaartondernemer',        bedrag: fixed.ondernemer * regioFactor, vast: true },
+      { naam: 'Catering en condoleance',   bedrag: caterTotaal,                    vast: false, sub: fEuro(caterPerGast) + ' × ' + sState.gasten + ' gasten' }
+    ];
+    var vHtml = '';
+    verdeling.forEach(function(v) {
+      var tag = v.vast ? '' : ' <span class="uk-verz-tag">VARIABEL</span>';
+      var sub = v.sub ? '<div style="font-size:0.66rem;color:#6a5e64;font-weight:500;margin-top:1px;">' + v.sub + '</div>' : '';
+      vHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + v.naam + tag + sub + '</span><span class="uk-tabel-waarde">' + fEuro(v.bedrag) + '</span></div>';
+    });
+    vHtml += '<div class="uk-tabel-rij totaal"><span class="uk-tabel-naam">Totaal</span><span class="uk-tabel-waarde">' + fEuro(totaal) + '</span></div>';
+    document.getElementById('uk-snel-verdeling').innerHTML = vHtml;
+
+    var uitleg = '<strong>' + niveaunamen[sState.niveau].charAt(0).toUpperCase() + niveaunamen[sState.niveau].slice(1) + ' ' + typenamen[sState.type] + '</strong> in ' + getRegio(sState.regio).naam + ' kost gemiddeld <span class="highlight">' + fEuro(totaal) + '</span>. ';
+    uitleg += 'De vaste kosten (kist, locatie, uitvaartondernemer etc.) zijn <strong>' + fEuro(vastTotaal) + '</strong>, de catering voor ' + sState.gasten + ' gasten komt op <strong>' + fEuro(caterTotaal) + '</strong>. ';
+    if (regioFactor > 1.05) uitleg += 'Deze regio is <strong>duurder dan gemiddeld</strong> in Nederland. ';
+    if (sState.type === 'natuur') uitleg += 'Natuurbegraven heeft <strong>geen vervolgkosten</strong> (eeuwigdurende grafrust).';
+    document.getElementById('uk-snel-uitleg').innerHTML = uitleg;
+  }
+
+  document.querySelectorAll('[data-snel-type]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-snel-type]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active'); sState.type = btn.dataset.snelType; snelUpdate();
+    });
+  });
+  document.querySelectorAll('[data-snel-niveau]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-snel-niveau]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active'); sState.niveau = btn.dataset.snelNiveau; snelUpdate();
+    });
+  });
+  document.getElementById('uk-snel-regio').addEventListener('change', function(e) { sState.regio = e.target.value; snelUpdate(); });
+  document.getElementById('uk-snel-gasten').addEventListener('input', function(e) { sState.gasten = parseInt(e.target.value, 10); snelUpdate(); });
+  snelUpdate();
+
+  // ======== BUILDER ========
+  var BUILDER_ITEMS = {
+    vervoer: [
+      { id: 'rouwauto', naam: 'Rouwauto met chauffeur', laag: 350, hoog: 800, default: 500 },
+      { id: 'volgauto', naam: 'Volgauto familie (per stuk)', laag: 150, hoog: 350, default: 200 },
+      { id: 'opbaring-thuis', naam: 'Opbaring thuis (koeling)', laag: 200, hoog: 500, default: 300 },
+      { id: 'opbaring-centrum', naam: 'Opbaring in rouwcentrum (per dag)', laag: 200, hoog: 600, default: 350 },
+      { id: 'koeling-rouwauto', naam: 'Transport overledene', laag: 200, hoog: 500, default: 300 }
+    ],
+    ceremonie: [
+      { id: 'aula-crematorium', naam: 'Aula crematorium (60 min)', laag: 800, hoog: 2500, default: 1400 },
+      { id: 'aanvullende-tijd', naam: 'Extra uur ceremonie', laag: 300, hoog: 800, default: 500 },
+      { id: 'kerk', naam: 'Kerk of zaalhuur', laag: 300, hoog: 1500, default: 750 },
+      { id: 'ceremoniemeester', naam: 'Ceremoniemeester', laag: 400, hoog: 1500, default: 800 },
+      { id: 'spreker', naam: 'Externe spreker / dominee', laag: 200, hoog: 800, default: 400 }
+    ],
+    eind: [
+      { id: 'crematie', naam: 'Crematie', laag: 800, hoog: 1500, default: 1100 },
+      { id: 'urn', naam: 'Urn', laag: 50, hoog: 2000, default: 200 },
+      { id: 'bijzetting-urnenmuur', naam: 'Bijzetting urnenmuur (20 jaar)', laag: 500, hoog: 2000, default: 1000 },
+      { id: 'asbestemming', naam: 'Asverstrooiing / asbestemming', laag: 100, hoog: 800, default: 250 },
+      { id: 'grafrechten', naam: 'Grafrechten 20 jaar (algemeen)', laag: 1500, hoog: 5000, default: 2800 },
+      { id: 'grafrechten-eigen', naam: 'Eigen graf (20 jaar)', laag: 3000, hoog: 8000, default: 5000 },
+      { id: 'delven', naam: 'Delven / dichten graf', laag: 600, hoog: 1500, default: 900 },
+      { id: 'grafsteen', naam: 'Grafsteen / monument', laag: 1500, hoog: 10000, default: 3000 }
+    ],
+    comm: [
+      { id: 'advertentie', naam: 'Rouwadvertentie krant', laag: 300, hoog: 2500, default: 750 },
+      { id: 'rouwkaarten', naam: 'Rouwkaarten (100 stuks)', laag: 200, hoog: 800, default: 400 },
+      { id: 'verzending', naam: 'Verzending kaarten', laag: 50, hoog: 200, default: 100 },
+      { id: 'dankkaarten', naam: 'Bedankkaarten (50 stuks)', laag: 100, hoog: 400, default: 200 },
+      { id: 'condoleance-website', naam: 'Condoleance website', laag: 50, hoog: 250, default: 100 }
+    ],
+    sfeer: [
+      { id: 'kist', naam: 'Kist (uitvaartkist)', laag: 500, hoog: 5000, default: 1500 },
+      { id: 'bloemen-kist', naam: 'Bloemstuk op kist', laag: 100, hoog: 500, default: 200 },
+      { id: 'bloemen-aula', naam: 'Bloemen aula', laag: 150, hoog: 1500, default: 400 },
+      { id: 'muziek', naam: 'Muziek (livemuzikant)', laag: 250, hoog: 1500, default: 500 },
+      { id: 'foto-video', naam: 'Fotoreportage / video', laag: 300, hoog: 1500, default: 600 },
+      { id: 'koffietafel', naam: 'Koffietafel (per persoon)', laag: 12, hoog: 25, default: 18, perPersoon: true },
+      { id: 'borrel', naam: 'Drankarrangement (per persoon)', laag: 8, hoog: 20, default: 12, perPersoon: true }
+    ],
+    divers: [
+      { id: 'uitvaartondernemer', naam: 'Uitvaartondernemer (begeleiding)', laag: 1500, hoog: 4500, default: 2500 },
+      { id: 'aangifte-gemeente', naam: 'Aangifte gemeente / akten', laag: 15, hoog: 50, default: 25 },
+      { id: 'verklaring-erfrecht', naam: 'Verklaring van erfrecht', laag: 300, hoog: 1000, default: 500 },
+      { id: 'kleding', naam: 'Kleding en verzorging', laag: 100, hoog: 500, default: 200 },
+      { id: 'rouwsieraad', naam: 'Rouwsieraad / herinneringssieraad', laag: 100, hoog: 1000, default: 250 }
+    ]
+  };
+
+  var bState = { regio: 'eindhoven', items: {}, gasten: 75 };
+
+  function bRender() {
+    Object.keys(BUILDER_ITEMS).forEach(function(cat) {
+      var html = '';
+      BUILDER_ITEMS[cat].forEach(function(item) {
+        var actief = bState.items[item.id] !== undefined;
+        var prijs = actief ? bState.items[item.id] : item.default;
+        html += '<div class="uk-toggle-rij' + (actief ? ' active' : '') + '" data-item="' + item.id + '" data-cat="' + cat + '">';
+        html += '<div class="uk-toggle-check" data-toggle></div>';
+        html += '<div class="uk-toggle-info" data-toggle><div class="uk-toggle-naam">' + item.naam + (item.perPersoon ? ' <span class="uk-verz-tag">PER GAST</span>' : '') + '</div>';
+        var uitlegTekst = actief
+          ? 'Indicatief bereik ' + fEuro(item.laag) + ' - ' + fEuro(item.hoog) + (item.perPersoon ? ' p.p.' : '') + ' · zelf aanpasbaar →'
+          : 'Standaard ' + fEuro(item.default) + (item.perPersoon ? ' p.p.' : '') + ' · bereik ' + fEuro(item.laag) + ' - ' + fEuro(item.hoog) + ' · klik om te selecteren';
+        html += '<div class="uk-toggle-uitleg">' + uitlegTekst + '</div></div>';
+        if (actief) {
+          html += '<div class="uk-prijs-edit">';
+          html += '<span class="uk-prijs-edit-euro">€</span>';
+          html += '<input type="number" class="uk-prijs-edit-input" data-prijs value="' + prijs + '" step="10" min="0" inputmode="numeric">';
+          if (prijs !== item.default) html += '<button class="uk-prijs-edit-reset" data-reset title="Reset naar standaardprijs">↺</button>';
+          html += '</div>';
+        } else {
+          html += '<div class="uk-toggle-prijs" data-toggle>' + fEuro(prijs * (item.perPersoon ? bState.gasten : 1)) + '</div>';
+        }
+        html += '</div>';
+      });
+      document.getElementById('uk-b-cat-' + cat).innerHTML = html;
+    });
+  }
+
+  function bUpdate() {
+    var totaal = 0;
+    var selectie = [];
+    Object.keys(BUILDER_ITEMS).forEach(function(cat) {
+      BUILDER_ITEMS[cat].forEach(function(item) {
+        if (bState.items[item.id] !== undefined) {
+          var basis = bState.items[item.id];
+          var prijs = basis * (item.perPersoon ? bState.gasten : 1);
+          totaal += prijs;
+          selectie.push({ naam: item.naam, prijs: prijs, perPersoon: item.perPersoon, basis: basis });
+        }
+      });
+    });
+    var rFactor = getRegio(bState.regio).factor;
+    totaal = totaal * rFactor;
+
+    document.getElementById('uk-b-totaal').textContent = fEuro(totaal);
+    document.getElementById('uk-b-sub').textContent = selectie.length + ' geselecteerde posten, regio ' + getRegio(bState.regio).naam;
+
+    var selHtml = selectie.length === 0 ? '<div style="font-size:0.78rem;color:#6a5e64;padding:8px;">Nog geen posten geselecteerd.</div>' : '';
+    selectie.forEach(function(s) {
+      var label = s.naam + (s.perPersoon ? ' <span style="font-size:0.66rem;color:#6a5e64;">(' + fEuro(s.basis) + ' × ' + bState.gasten + ')</span>' : '');
+      selHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + label + '</span><span class="uk-tabel-waarde">' + fEuro(s.prijs * rFactor) + '</span></div>';
+    });
+    document.getElementById('uk-b-selectie').innerHTML = selHtml;
+
+    document.getElementById('uk-b-eigen').textContent = fEuro(Math.max(0, totaal - 5000));
+    document.getElementById('uk-b-sparen').textContent = fEuro(totaal / 120);
+  }
+
+  document.getElementById('uk-b-regio').addEventListener('change', function(e) { bState.regio = e.target.value; bUpdate(); });
+
+  ['vervoer','ceremonie','eind','comm','sfeer','divers'].forEach(function(cat) {
+    var container = document.getElementById('uk-b-cat-' + cat);
+
+    // Toggle / reset clicks (re-render OK, no input focus to lose)
+    container.addEventListener('click', function(e) {
+      var resetBtn = e.target.closest('[data-reset]');
+      if (resetBtn) {
+        var resetRow = resetBtn.closest('[data-item]');
+        var resetItemId = resetRow.dataset.item;
+        var resetItem = BUILDER_ITEMS[cat].find(function(x) { return x.id === resetItemId; });
+        if (resetItem) bState.items[resetItemId] = resetItem.default;
+        bRender(); bUpdate();
+        return;
+      }
+      var toggleArea = e.target.closest('[data-toggle]');
+      if (!toggleArea) return; // klik op input wordt hier niet getoggled
+      var row = e.target.closest('[data-item]');
+      if (!row) return;
+      var itemId = row.dataset.item;
+      var item = BUILDER_ITEMS[cat].find(function(x) { return x.id === itemId; });
+      if (bState.items[itemId] !== undefined) delete bState.items[itemId];
+      else bState.items[itemId] = item.default;
+      bRender(); bUpdate();
+    });
+
+    // Prijs-input wijzigingen: alleen totalen updaten, NIET re-renderen (focus blijft)
+    container.addEventListener('input', function(e) {
+      if (!e.target.matches('[data-prijs]')) return;
+      var row = e.target.closest('[data-item]');
+      if (!row) return;
+      var itemId = row.dataset.item;
+      bState.items[itemId] = parseInt(e.target.value, 10) || 0;
+      bUpdate();
+    });
+  });
+  bRender(); bUpdate();
+
+  // ======== VERGELIJK ========
+  var vState = { regio: 'eindhoven', gasten: 75, grafjaren: 20, grafsteen: 3000, graftype: 'eigen', bestemming: 'meenemen', urn: 200 };
+
+  function vUpdate() {
+    var rFactor = getRegio(vState.regio).factor;
+    var basisCeremonie = 4500;
+    var catering = vState.gasten * 18;
+
+    // Begraven
+    var grafBasis = vState.graftype === 'algemeen' ? 1800 : vState.graftype === 'eigen' ? 5000 : 7500;
+    var grafKosten = grafBasis * (vState.grafjaren / 20);
+    var bDetail = {};
+    bDetail['Basis ceremonie en kist'] = basisCeremonie;
+    bDetail['Delven en dichten'] = 900;
+    bDetail['Grafrechten ' + vState.grafjaren + ' jaar'] = grafKosten;
+    bDetail['Grafsteen'] = vState.grafsteen;
+    bDetail['Uitvaartondernemer'] = 2200;
+    bDetail['Catering en condoleance (' + vState.gasten + ' gasten)'] = catering;
+    var bTotaal = 0;
+    Object.values(bDetail).forEach(function(v) { bTotaal += v; });
+    bTotaal *= rFactor;
+
+    // Cremeren
+    var bijzetting = vState.bestemming === 'bijzetten' ? 1000 : vState.bestemming === 'asbestemming' ? 350 : 0;
+    var cDetail = {
+      'Basis ceremonie en kist': basisCeremonie,
+      'Crematie': 1100,
+      'Urn / asbestemming': vState.urn,
+      'Bijzetting / verstrooiing': bijzetting,
+      'Uitvaartondernemer': 2200
+    };
+    cDetail['Catering en condoleance (' + vState.gasten + ' gasten)'] = catering;
+    var cTotaal = 0;
+    Object.values(cDetail).forEach(function(v) { cTotaal += v; });
+    cTotaal *= rFactor;
+
+    document.getElementById('uk-v-begraven').textContent = fEuro(bTotaal);
+    document.getElementById('uk-v-cremeren').textContent = fEuro(cTotaal);
+    document.getElementById('uk-v-gasten-val').textContent = vState.gasten;
+
+    var bdHtml = '';
+    Object.keys(bDetail).forEach(function(k) {
+      bdHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + k + '</span><span class="uk-tabel-waarde">' + fEuro(bDetail[k] * rFactor) + '</span></div>';
+    });
+    document.getElementById('uk-v-b-detail').innerHTML = bdHtml;
+
+    var cdHtml = '';
+    Object.keys(cDetail).forEach(function(k) {
+      cdHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + k + '</span><span class="uk-tabel-waarde">' + fEuro(cDetail[k] * rFactor) + '</span></div>';
+    });
+    document.getElementById('uk-v-c-detail').innerHTML = cdHtml;
+
+    document.querySelectorAll('.uk-vergelijk-blok').forEach(function(b) { b.classList.remove('gunstig'); b.querySelectorAll('.uk-vergelijk-badge').forEach(function(x) { x.remove(); }); });
+    var gunstig = bTotaal < cTotaal ? 'uk-v-b-blok' : 'uk-v-c-blok';
+    var gEl = document.getElementById(gunstig);
+    gEl.classList.add('gunstig');
+    var badge = document.createElement('div'); badge.className = 'uk-vergelijk-badge'; badge.textContent = 'GOEDKOPER'; gEl.appendChild(badge);
+
+    var verschil = Math.abs(bTotaal - cTotaal);
+    var uitleg = bTotaal < cTotaal
+      ? '<strong>Begraven is in dit scenario goedkoper</strong> met <span class="highlight">' + fEuro(verschil) + '</span> verschil. Let op: grafrechten lopen meestal na 20 jaar af. Verlenging kost €1.500-€5.000 per termijn van 20 jaar.'
+      : '<strong>Cremeren is goedkoper</strong> met <span class="highlight">' + fEuro(verschil) + '</span> verschil. Bij urn meenemen of uitstrooien zijn er geen vervolgkosten.';
+    document.getElementById('uk-v-uitleg').innerHTML = uitleg;
+  }
+
+  document.getElementById('uk-v-regio').addEventListener('change', function(e) { vState.regio = e.target.value; vUpdate(); });
+  document.getElementById('uk-v-gasten').addEventListener('input', function(e) { vState.gasten = parseInt(e.target.value, 10); vUpdate(); });
+  document.getElementById('uk-v-grafjaren').addEventListener('input', function(e) { vState.grafjaren = parseInt(e.target.value, 10); vUpdate(); });
+  document.getElementById('uk-v-grafsteen').addEventListener('input', function(e) { vState.grafsteen = parseInt(e.target.value, 10) || 0; vUpdate(); });
+  document.getElementById('uk-v-graftype').addEventListener('change', function(e) { vState.graftype = e.target.value; vUpdate(); });
+  document.getElementById('uk-v-bestemming').addEventListener('change', function(e) { vState.bestemming = e.target.value; vUpdate(); });
+  document.getElementById('uk-v-urn').addEventListener('input', function(e) { vState.urn = parseInt(e.target.value, 10) || 0; vUpdate(); });
+  vUpdate();
+
+  // ======== NATUUR ========
+  var NATUUR_LOCATIES = {
+    hillig: { naam: 'Hillig Meer', tarief: 5500 },
+    reiderwolde: { naam: 'Reiderwolde', tarief: 5800 },
+    heidepol: { naam: 'Heidepol', tarief: 5900 },
+    bergerbos: { naam: 'Bergerbos', tarief: 6500 },
+    schoorl: { naam: 'Schoorlse duinen', tarief: 7200 },
+    kemmenade: { naam: 'Kemmenade', tarief: 5400 },
+    maashorst: { naam: 'Maashorst', tarief: 5600 },
+    anders: { naam: 'Andere locatie', tarief: 6000 }
+  };
+  var NATUUR_EXTRAS = [
+    { id: 'kist-bio', naam: 'Biologisch afbreekbare kist (verplicht)', prijs: 1200 },
+    { id: 'wikkel', naam: 'Biologische lijkwade i.p.v. kist', prijs: 400 },
+    { id: 'transport', naam: 'Transport rouwauto', prijs: 500 },
+    { id: 'ceremonie', naam: 'Eenvoudige ceremonie in bos', prijs: 800 },
+    { id: 'zwerfsteen', naam: 'Natuurlijke markering (zwerfsteen)', prijs: 300 },
+    { id: 'boom', naam: 'Herinneringsboom planten', prijs: 250 },
+    { id: 'condol', naam: 'Condoleance buiten', prijs: 600 }
+  ];
+
+  var nState = { type: 'bos', locatie: 'hillig', eeuwig: true, extras: { 'kist-bio': true, 'transport': true, 'ceremonie': true }, tariefOverride: null, extraPrijzen: {} };
+
+  function nGetTarief() {
+    if (nState.tariefOverride !== null) return nState.tariefOverride;
+    return NATUUR_LOCATIES[nState.locatie].tarief;
+  }
+  function nGetExtraPrijs(id) {
+    if (nState.extraPrijzen[id] !== undefined) return nState.extraPrijzen[id];
+    var e = NATUUR_EXTRAS.find(function(x) { return x.id === id; });
+    return e ? e.prijs : 0;
+  }
+
+  function nRender() {
+    var html = '';
+    NATUUR_EXTRAS.forEach(function(e) {
+      var actief = !!nState.extras[e.id];
+      var prijs = nGetExtraPrijs(e.id);
+      var gewijzigd = nState.extraPrijzen[e.id] !== undefined && nState.extraPrijzen[e.id] !== e.prijs;
+      html += '<div class="uk-toggle-rij' + (actief ? ' active' : '') + '" data-natuur-ex="' + e.id + '">';
+      html += '<div class="uk-toggle-check" data-toggle></div>';
+      html += '<div class="uk-toggle-info" data-toggle><div class="uk-toggle-naam">' + e.naam + '</div></div>';
+      if (actief) {
+        html += '<div class="uk-prijs-edit">';
+        html += '<span class="uk-prijs-edit-euro">€</span>';
+        html += '<input type="number" class="uk-prijs-edit-input" data-natuur-prijs value="' + prijs + '" step="10" min="0" inputmode="numeric">';
+        if (gewijzigd) html += '<button class="uk-prijs-edit-reset" data-natuur-reset title="Reset naar standaard">↺</button>';
+        html += '</div>';
+      } else {
+        html += '<div class="uk-toggle-prijs" data-toggle>' + fEuro(prijs) + '</div>';
+      }
+      html += '</div>';
+    });
+    document.getElementById('uk-n-extras').innerHTML = html;
+  }
+
+  function nUpdate() {
+    var loc = NATUUR_LOCATIES[nState.locatie];
+    var tarief = nGetTarief();
+    var extras = 0;
+    NATUUR_EXTRAS.forEach(function(e) { if (nState.extras[e.id]) extras += nGetExtraPrijs(e.id); });
+    var totaal = tarief + extras;
+
+    document.getElementById('uk-n-totaal').textContent = fEuro(totaal);
+    document.getElementById('uk-n-sub').textContent = loc.naam + ' — eeuwigdurende grafrust';
+
+    var tariefStandaard = NATUUR_LOCATIES[nState.locatie].tarief;
+    var tariefGewijzigd = nState.tariefOverride !== null && nState.tariefOverride !== tariefStandaard;
+    var tHtml = '';
+    tHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Grafrecht eeuwig (' + loc.naam + ')' + (tariefGewijzigd ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '') + '</span><span class="uk-tabel-waarde">' + fEuro(tarief) + '</span></div>';
+    NATUUR_EXTRAS.forEach(function(e) {
+      if (nState.extras[e.id]) {
+        var pp = nGetExtraPrijs(e.id);
+        var tag = (nState.extraPrijzen[e.id] !== undefined && nState.extraPrijzen[e.id] !== e.prijs) ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '';
+        tHtml += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + e.naam + tag + '</span><span class="uk-tabel-waarde">' + fEuro(pp) + '</span></div>';
+      }
+    });
+    tHtml += '<div class="uk-tabel-rij totaal"><span class="uk-tabel-naam">Totaal</span><span class="uk-tabel-waarde">' + fEuro(totaal) + '</span></div>';
+    document.getElementById('uk-n-tabel').innerHTML = tHtml;
+
+    // Tarief input syncen
+    var tariefInput = document.getElementById('uk-n-tarief-input');
+    if (tariefInput && document.activeElement !== tariefInput) tariefInput.value = tarief;
+
+    var uitleg = '<strong>Natuurbegraven op ' + loc.naam + '</strong> kost <span class="highlight">' + fEuro(totaal) + '</span> eenmalig voor eeuwigdurende grafrust. ' +
+      'Geen vervolgkosten, geen grafsteen-onderhoud. ' +
+      'De plek wordt natuur en is alleen te bezoeken op het uitgewezen pad of vlek.';
+    document.getElementById('uk-n-uitleg').innerHTML = uitleg;
+  }
+
+  document.querySelectorAll('[data-natuur-type]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-natuur-type]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active'); nState.type = btn.dataset.natuurType; nUpdate();
+    });
+  });
+  document.getElementById('uk-n-locatie').addEventListener('change', function(e) {
+    nState.locatie = e.target.value;
+    nState.tariefOverride = null; // reset tarief naar nieuwe locatie
+    nUpdate();
+  });
+  document.getElementById('uk-n-extras').addEventListener('click', function(e) {
+    var resetBtn = e.target.closest('[data-natuur-reset]');
+    if (resetBtn) {
+      var resetRow = resetBtn.closest('[data-natuur-ex]');
+      var resetId = resetRow.dataset.natuurEx;
+      delete nState.extraPrijzen[resetId];
+      nRender(); nUpdate();
+      return;
+    }
+    var toggleArea = e.target.closest('[data-toggle]');
+    if (!toggleArea) return;
+    var row = e.target.closest('[data-natuur-ex]');
+    if (!row) return;
+    var id = row.dataset.natuurEx;
+    if (nState.extras[id]) delete nState.extras[id]; else nState.extras[id] = true;
+    nRender(); nUpdate();
+  });
+  document.getElementById('uk-n-extras').addEventListener('input', function(e) {
+    if (!e.target.matches('[data-natuur-prijs]')) return;
+    var row = e.target.closest('[data-natuur-ex]');
+    if (!row) return;
+    var id = row.dataset.natuurEx;
+    nState.extraPrijzen[id] = parseInt(e.target.value, 10) || 0;
+    nUpdate();
+  });
+  // Tarief input handler (toegevoegd via HTML hieronder)
+  document.addEventListener('input', function(e) {
+    if (e.target.id !== 'uk-n-tarief-input') return;
+    nState.tariefOverride = parseInt(e.target.value, 10) || 0;
+    nUpdate();
+  });
+  nRender(); nUpdate();
+
+  // ======== INTERNATIONAAL ========
+  var INTL_LANDEN = {
+    nederland: { naam: 'Nederland', basis: 7500, afstand: 0 },
+    duitsland: { naam: 'Duitsland', basis: 9500, afstand: 600 },
+    belgie: { naam: 'België', basis: 8000, afstand: 250 },
+    frankrijk: { naam: 'Frankrijk', basis: 9000, afstand: 1200 },
+    spanje: { naam: 'Spanje', basis: 8000, afstand: 2000 },
+    italie: { naam: 'Italië', basis: 8500, afstand: 1800 },
+    portugal: { naam: 'Portugal', basis: 7500, afstand: 2200 },
+    vk: { naam: 'Verenigd Koninkrijk', basis: 10500, afstand: 700 },
+    marokko: { naam: 'Marokko', basis: 5500, afstand: 2400 },
+    turkije: { naam: 'Turkije', basis: 6000, afstand: 3000 },
+    suriname: { naam: 'Suriname', basis: 7500, afstand: 7700 },
+    vs: { naam: 'Verenigde Staten', basis: 13000, afstand: 6500 },
+    anders: { naam: 'Ander land', basis: 9000, afstand: 5000 }
+  };
+
+  var INTL_EXTRAS = [
+    { id: 'balsemen', naam: 'Balsemen (verplicht bij vliegtuig)', prijs: 2500, range: '€1.500 - €3.500' },
+    { id: 'zinkenkist', naam: 'Zinken eindkist (verplicht veel landen)', prijs: 1800, range: '€1.200 - €2.500' },
+    { id: 'consulaat', naam: 'Consulaire legalisaties', prijs: 550, range: '€300 - €800' },
+    { id: 'tolk', naam: 'Tolk en lokale bijstand', prijs: 1000, range: '€500 - €1.500' }
+  ];
+
+  var iState = { overland: 'nederland', bestemming: 'nederland', transport: 'vliegtuig', extras: {}, basisOverride: null, transportOverride: null, extraPrijzen: {} };
+
+  function iGetBasis() {
+    if (iState.basisOverride !== null) return iState.basisOverride;
+    return INTL_LANDEN[iState.bestemming].basis;
+  }
+  function iGetExtraPrijs(id) {
+    if (iState.extraPrijzen[id] !== undefined) return iState.extraPrijzen[id];
+    var e = INTL_EXTRAS.find(function(x) { return x.id === id; });
+    return e ? e.prijs : 0;
+  }
+  function iCalcTransport() {
+    if (iState.transportOverride !== null) return iState.transportOverride;
+    var ov = INTL_LANDEN[iState.overland];
+    var be = INTL_LANDEN[iState.bestemming];
+    var isInNl = iState.overland === 'nederland' && iState.bestemming === 'nederland';
+    if (isInNl) return 0;
+    var afstand = Math.abs(ov.afstand - be.afstand);
+    if (afstand === 0) afstand = ov.afstand;
+    // Realistische marktcijfers: luchtvracht van een overledene schaalt niet lineair met afstand.
+    // Vliegtuig: vaste basis + beperkte afstandscomponent (bron: zie bronvermelding repatriering tab).
+    if (iState.transport === 'vliegtuig') return Math.round(2500 + afstand * 0.32);
+    // Rouwauto: alleen realistisch voor kortere afstanden binnen Europa.
+    return Math.round(900 + afstand * 1.6);
+  }
+
+  function iRenderExtras() {
+    var html = '';
+    INTL_EXTRAS.forEach(function(e) {
+      var actief = !!iState.extras[e.id];
+      var prijs = iGetExtraPrijs(e.id);
+      var gewijzigd = iState.extraPrijzen[e.id] !== undefined && iState.extraPrijzen[e.id] !== e.prijs;
+      html += '<div class="uk-toggle-rij' + (actief ? ' active' : '') + '" data-intl-ex="' + e.id + '">';
+      html += '<div class="uk-toggle-check" data-toggle></div>';
+      html += '<div class="uk-toggle-info" data-toggle><div class="uk-toggle-naam">' + e.naam + '</div>';
+      html += '<div class="uk-toggle-uitleg">Indicatief ' + e.range + '</div></div>';
+      if (actief) {
+        html += '<div class="uk-prijs-edit">';
+        html += '<span class="uk-prijs-edit-euro">€</span>';
+        html += '<input type="number" class="uk-prijs-edit-input" data-intl-prijs value="' + prijs + '" step="50" min="0" inputmode="numeric">';
+        if (gewijzigd) html += '<button class="uk-prijs-edit-reset" data-intl-reset title="Reset">↺</button>';
+        html += '</div>';
+      } else {
+        html += '<div class="uk-toggle-prijs" data-toggle>' + fEuro(prijs) + '</div>';
+      }
+      html += '</div>';
+    });
+    document.getElementById('uk-i-extras-lijst').innerHTML = html;
+  }
+
+  function iUpdate() {
+    var ov = INTL_LANDEN[iState.overland];
+    var be = INTL_LANDEN[iState.bestemming];
+    var isInNl = iState.overland === 'nederland' && iState.bestemming === 'nederland';
+
+    var basis = iGetBasis();
+    var transport = iCalcTransport();
+    var extras = 0;
+    Object.keys(iState.extras).forEach(function(k) { if (iState.extras[k]) extras += iGetExtraPrijs(k); });
+
+    var totaal = basis + transport + extras;
+
+    document.getElementById('uk-i-totaal').textContent = fEuro(totaal);
+    document.getElementById('uk-i-sub').textContent = ov.naam + ' → ' + be.naam;
+
+    // Sync basis input (alleen als geen focus heeft)
+    var basisInput = document.getElementById('uk-i-basis-input');
+    if (basisInput && document.activeElement !== basisInput) basisInput.value = basis;
+
+    var basisGewijzigd = iState.basisOverride !== null && iState.basisOverride !== be.basis;
+    var transportGewijzigd = iState.transportOverride !== null;
+    var html = '';
+    html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Basis uitvaart in ' + be.naam + (basisGewijzigd ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '') + '</span><span class="uk-tabel-waarde">' + fEuro(basis) + '</span></div>';
+    if (transport > 0) html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">Transport (' + (iState.transport === 'vliegtuig' ? 'vliegtuig' : 'rouwauto') + ')' + (transportGewijzigd ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '') + '</span><span class="uk-tabel-waarde">' + fEuro(transport) + '</span></div>';
+    INTL_EXTRAS.forEach(function(e) {
+      if (iState.extras[e.id]) {
+        var pp = iGetExtraPrijs(e.id);
+        var tag = (iState.extraPrijzen[e.id] !== undefined && iState.extraPrijzen[e.id] !== e.prijs) ? ' <span class="uk-verz-tag">AANGEPAST</span>' : '';
+        html += '<div class="uk-tabel-rij"><span class="uk-tabel-naam">' + e.naam + tag + '</span><span class="uk-tabel-waarde">' + fEuro(pp) + '</span></div>';
+      }
+    });
+    html += '<div class="uk-tabel-rij totaal"><span class="uk-tabel-naam">Totaal</span><span class="uk-tabel-waarde">' + fEuro(totaal) + '</span></div>';
+    document.getElementById('uk-i-tabel').innerHTML = html;
+
+    var uitleg;
+    if (isInNl) uitleg = '<strong>Geen repatriëring nodig</strong> — overlijden en uitvaart beide in Nederland. Standaard uitvaartkosten.';
+    else uitleg = '<strong>Repatriëring vanuit ' + ov.naam + ' naar ' + be.naam + '</strong>. Doorlooptijd 7-14 dagen. Specialistisch werk. Uitvaartverzekeringen met werelddekking kunnen vaak €5.000-€10.000 van de kosten dekken.';
+    document.getElementById('uk-i-uitleg').innerHTML = uitleg;
+  }
+
+  document.getElementById('uk-i-overland').addEventListener('change', function(e) { iState.overland = e.target.value; iUpdate(); });
+  document.getElementById('uk-i-bestemming').addEventListener('change', function(e) {
+    iState.bestemming = e.target.value;
+    iState.basisOverride = null; // reset basis bij wisselen bestemming
+    iUpdate();
+  });
+  document.getElementById('uk-i-basis-input').addEventListener('input', function(e) {
+    var val = e.target.value;
+    iState.basisOverride = val === '' ? null : (parseInt(val, 10) || 0);
+    iUpdate();
+  });
+  document.getElementById('uk-i-transport-input').addEventListener('input', function(e) {
+    var val = e.target.value;
+    iState.transportOverride = val === '' ? null : (parseInt(val, 10) || 0);
+    iUpdate();
+  });
+  document.querySelectorAll('[data-intl-trans]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-intl-trans]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      iState.transport = btn.dataset.intlTrans;
+      iState.transportOverride = null; // reset bij wisselen
+      document.getElementById('uk-i-transport-input').value = '';
+      iUpdate();
+    });
+  });
+  document.getElementById('uk-i-extras-lijst').addEventListener('click', function(e) {
+    var resetBtn = e.target.closest('[data-intl-reset]');
+    if (resetBtn) {
+      var resetRow = resetBtn.closest('[data-intl-ex]');
+      delete iState.extraPrijzen[resetRow.dataset.intlEx];
+      iRenderExtras(); iUpdate();
+      return;
+    }
+    var toggleArea = e.target.closest('[data-toggle]');
+    if (!toggleArea) return;
+    var row = e.target.closest('[data-intl-ex]');
+    if (!row) return;
+    var id = row.dataset.intlEx;
+    iState.extras[id] = !iState.extras[id];
+    iRenderExtras(); iUpdate();
+  });
+  document.getElementById('uk-i-extras-lijst').addEventListener('input', function(e) {
+    if (!e.target.matches('[data-intl-prijs]')) return;
+    var row = e.target.closest('[data-intl-ex]');
+    if (!row) return;
+    iState.extraPrijzen[row.dataset.intlEx] = parseInt(e.target.value, 10) || 0;
+    iUpdate();
+  });
+  iRenderExtras();
+  iUpdate();
+
+  // ======== VERZEKERING ========
+  var VERZEKERAARS = [
+    { naam: 'DELA', type: ['kapitaal','natura'], premieFactor: 1.0, info: 'Coöperatie, voordelig, ruime keuze polissen' },
+    { naam: 'Monuta', type: ['kapitaal','natura'], premieFactor: 1.05, info: 'Grootste landelijk netwerk uitvaartondernemers' },
+    { naam: 'Yarden', type: ['kapitaal','natura'], premieFactor: 1.02, info: 'Onderdeel van DELA sinds 2021' },
+    { naam: 'Ardanta', type: ['kapitaal'], premieFactor: 0.95, info: 'Online, voordelige premies bij goede gezondheid' },
+    { naam: 'Nuvema', type: ['kapitaal'], premieFactor: 0.92, info: 'Voor jongere mensen vaak goedkoopst' },
+    { naam: 'Aegon', type: ['kapitaal'], premieFactor: 1.08, info: 'Brede ervaring, vaak gekoppeld aan andere verzekeringen' },
+    { naam: 'Centraal Beheer', type: ['kapitaal','natura'], premieFactor: 1.10, info: 'Achmea concern, makkelijke administratie' }
+  ];
+
+  var vzState = { kosten: 9000, leeftijd: 55, type: 'kapitaal' };
+
+  function vzUpdate() {
+    document.getElementById('uk-vz-kosten-val').textContent = vzState.kosten.toLocaleString('nl-NL');
+    document.getElementById('uk-vz-leeftijd-val').textContent = vzState.leeftijd;
+    var aanbevolen = Math.round(vzState.kosten / 500) * 500;
+    document.getElementById('uk-vz-aanbevolen').textContent = fEuro(aanbevolen);
+    document.getElementById('uk-vz-sub').textContent = 'Voor ' + (vzState.type === 'kapitaal' ? 'kapitaalpolis' : 'naturapolis');
+
+    var leeftijdMult = Math.pow(1.05, vzState.leeftijd - 30);
+    var basisPremie = (aanbevolen / 200) * leeftijdMult / 12; // grove maandelijkse berekening
+
+    var html = '';
+    var passend = VERZEKERAARS.filter(function(v) { return v.type.indexOf(vzState.type) !== -1; }).sort(function(a, b) { return a.naam.localeCompare(b.naam); });
+    passend.forEach(function(v, idx) {
+      var maand = basisPremie * v.premieFactor;
+      html += '<div class="uk-verz">';
+      html += '<div class="uk-verz-naam">' + v.naam + '</div>';
+      html += '<div class="uk-verz-info">' + v.info + '</div>';
+      html += '<div class="uk-verz-rij"><span class="uk-tabel-naam">Indicatieve maandpremie</span><span class="uk-tabel-waarde">' + fEuro(maand) + '/m</span></div>';
+      html += '<div class="uk-verz-rij"><span class="uk-tabel-naam">Over 20 jaar</span><span class="uk-tabel-waarde">' + fEuro(maand * 12 * 20) + '</span></div>';
+      html += '</div>';
+    });
+    document.getElementById('uk-vz-verzekeraars').innerHTML = html;
+  }
+
+  document.getElementById('uk-vz-kosten').addEventListener('input', function(e) { vzState.kosten = parseInt(e.target.value, 10); vzUpdate(); });
+  document.getElementById('uk-vz-leeftijd').addEventListener('input', function(e) { vzState.leeftijd = parseInt(e.target.value, 10); vzUpdate(); });
+  document.querySelectorAll('[data-vz-type]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-vz-type]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active'); vzState.type = btn.dataset.vzType; vzUpdate();
+    });
+  });
+  vzUpdate();
+
+  // ======== SAVE / LOAD ========
+  var STORAGE_KEY = 'uk-prosc-v1';
+  function getAlle() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; } }
+  function saveAlle(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) { alert('Opslaan mislukt'); } }
+
+  document.getElementById('uk-save-btn').addEventListener('click', function() {
+    document.getElementById('uk-save-naam').value = '';
+    document.getElementById('uk-modal-save').classList.add('zichtbaar');
+  });
+  document.getElementById('uk-save-confirm').addEventListener('click', function() {
+    var naam = document.getElementById('uk-save-naam').value.trim();
+    if (!naam) return alert('Geef naam op');
+    var arr = getAlle();
+    arr.push({ id: Date.now(), naam: naam, datum: new Date().toISOString(), state: { sState: sState, bState: bState, vState: vState, nState: nState, iState: iState, vzState: vzState } });
+    saveAlle(arr);
+    document.getElementById('uk-modal-save').classList.remove('zichtbaar');
+  });
+  document.getElementById('uk-load-btn').addEventListener('click', function() {
+    var arr = getAlle();
+    var lijst = document.getElementById('uk-load-lijst');
+    if (arr.length === 0) lijst.innerHTML = '<div style="text-align:center;padding:30px;color:#6a5e64;">Geen opgeslagen berekeningen.</div>';
+    else {
+      var html = '';
+      arr.slice().reverse().forEach(function(s) {
+        var d = new Date(s.datum);
+        html += '<div class="uk-scenario-item"><div class="uk-scenario-info"><div class="uk-scenario-naam">' + s.naam.replace(/</g,'&lt;') + '</div><div class="uk-scenario-datum">' + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + '</div></div><button class="uk-scenario-btn" data-load-id="' + s.id + '">Laden</button><button class="uk-scenario-btn del" data-del-id="' + s.id + '">✕</button></div>';
+      });
+      lijst.innerHTML = html;
+    }
+    document.getElementById('uk-modal-load').classList.add('zichtbaar');
+  });
+  document.getElementById('uk-load-lijst').addEventListener('click', function(e) {
+    var lb = e.target.closest('[data-load-id]');
+    if (lb) {
+      var s = getAlle().find(function(x) { return x.id === parseInt(lb.dataset.loadId, 10); });
+      if (s) {
+        sState = s.state.sState || sState; bState = s.state.bState || bState; vState = s.state.vState || vState;
+        nState = s.state.nState || nState; iState = s.state.iState || iState; vzState = s.state.vzState || vzState;
+        snelUpdate(); bRender(); bUpdate(); vUpdate(); nRender(); nUpdate(); iUpdate(); vzUpdate();
+        document.getElementById('uk-modal-load').classList.remove('zichtbaar');
+      }
+      return;
+    }
+    var db = e.target.closest('[data-del-id]');
+    if (db && confirm('Verwijderen?')) {
+      saveAlle(getAlle().filter(function(s) { return s.id !== parseInt(db.dataset.delId, 10); }));
+      document.getElementById('uk-load-btn').click();
+    }
+  });
+  document.querySelectorAll('[data-close]').forEach(function(b) { b.addEventListener('click', function() { b.closest('.uk-modal-overlay').classList.remove('zichtbaar'); }); });
+  document.querySelectorAll('.uk-modal-overlay').forEach(function(o) { o.addEventListener('click', function(e) { if (e.target === o) o.classList.remove('zichtbaar'); }); });
+
+  // ======== VOLLEDIG SCHERM (Fullscreen API) ========
+  var fsBtn = document.getElementById('uk-fs-btn');
+  var fsExit = document.getElementById('uk-fs-exit');
+  if (fsBtn && fsExit) {
+    function enterFullscreen() {
+      var el = document.documentElement;
+      var req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+      if (req) {
+        req.call(el).catch(function() {
+          // Fallback: open in nieuw tabblad als fullscreen geweigerd wordt (bijv. iOS Safari)
+          window.open(window.location.href, '_blank', 'noopener');
+        });
+      } else {
+        // Browser ondersteunt geen fullscreen, open in nieuw tabblad
+        window.open(window.location.href, '_blank', 'noopener');
+      }
+    }
+    function exitFullscreen() {
+      var exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+      if (exit) exit.call(document);
+    }
+    fsBtn.addEventListener('click', enterFullscreen);
+    fsExit.addEventListener('click', exitFullscreen);
+  }
+
+})();
+</script>
+</body>
+</html>
