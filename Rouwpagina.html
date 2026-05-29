@@ -228,6 +228,15 @@ body {
 .rw-nood-tel { display:inline-block; background:#fff; color:#c8622a; border-radius:8px; padding:10px 18px; font-size:0.86rem; font-weight:800; text-decoration:none; white-space:nowrap; flex-shrink:0; transition:all 0.2s; }
 .rw-nood-tel:hover { background:#faf7f2; }
 
+/* ── PRIVACY BLOK ── */
+.rw-privacy { background:linear-gradient(135deg, rgba(232,131,74,0.08) 0%, rgba(232,131,74,0.02) 100%); border:1.5px solid rgba(232,131,74,0.25); border-radius:14px; padding:18px 22px; margin-bottom:14px; display:flex; align-items:flex-start; gap:14px; position:relative; overflow:hidden; }
+.rw-privacy::before { content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px; background:radial-gradient(circle, rgba(232,131,74,0.1) 0%, transparent 70%); pointer-events:none; }
+.rw-privacy-icoon { display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; background:linear-gradient(135deg, #e8834a 0%, #c8622a 100%); border-radius:10px; font-size:1.2rem; flex-shrink:0; box-shadow:0 3px 10px rgba(200,98,42,0.25); position:relative; }
+.rw-privacy-content { flex:1; position:relative; }
+.rw-privacy-titel { font-size:0.92rem; font-weight:800; color:#4a1942; margin-bottom:5px; }
+.rw-privacy-tekst { font-size:0.78rem; color:#3a2832; line-height:1.65; font-weight:300; }
+.rw-privacy-tekst strong { font-weight:600; color:#4a1942; }
+
 /* ── KAARTEN ── */
 .rw-kaart { background:#fff; border:1px solid #e2d9e0; border-radius:16px; padding:24px 28px; margin-bottom:14px; }
 .rw-kaart-label { font-size:0.6rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:#e8834a; margin-bottom:8px; display:block; }
@@ -279,6 +288,8 @@ body {
   .rw-tabs { gap:3px; }
   .rw-tab { min-width:90px; font-size:0.7rem; padding:8px 10px; }
   .rw-nood { flex-direction:column; text-align:center; }
+  .rw-privacy { padding:16px 18px; gap:12px; }
+  .rw-privacy-icoon { width:38px; height:38px; font-size:1.1rem; }
   .rw-fasen-nav { gap:4px; }
   .rw-fase-btn { font-size:0.74rem; padding:8px 12px; }
   .rw-cta-blok { padding:28px 20px; }
@@ -374,14 +385,6 @@ body.rw-contrast .rw-wrap .rw-emotie-knop { border: 2px solid #000 !important; b
 body.rw-contrast .rw-wrap .rw-tab.actief,
 body.rw-contrast .rw-wrap .rw-fase-btn.actief { background: #000 !important; color: #fff !important; }
 
-/* ── TOEGANKELIJKHEIDS-BALK ── */
-.rw-toegang { position: sticky; top: 0; z-index: 100; background: #faf7f2; border-bottom: 1px solid #e2d9e0; padding: 8px 16px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: flex-end; margin: 0 -16px 14px; }
-.rw-toegang-label { font-size: 0.7rem; color: #6b6570; font-weight: 300; margin-right: auto; }
-.rw-toegang-btn { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 8px; padding: 6px 12px; font-size: 0.72rem; font-weight: 600; color: #4a1942; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
-.rw-toegang-btn:hover { border-color: #4a1942; background: #f0ebef; }
-.rw-toegang-btn.actief { background: #4a1942; color: #fff; border-color: #4a1942; }
-.rw-toegang-btn-icoon { font-size: 0.95rem; }
-
 /* ── PERSOONLIJKE ROUTE (intro flow) ── */
 .rw-route-wrap { background: linear-gradient(135deg, #fff 0%, #faf7f2 100%); border: 1.5px solid #e2d9e0; border-radius: 16px; padding: 28px 28px 24px; margin-bottom: 14px; position: relative; }
 .rw-route-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,131,74,0.1); border: 1px solid rgba(232,131,74,0.25); border-radius: 30px; padding: 5px 14px; margin-bottom: 14px; }
@@ -458,9 +461,6 @@ body.rw-contrast .rw-wrap .rw-fase-btn.actief { background: #000 !important; col
 
 /* responsive — features */
 @media (max-width: 600px) {
-  .rw-toegang { padding: 8px 12px; gap: 6px; }
-  .rw-toegang-btn { font-size: 0.68rem; padding: 5px 10px; }
-  .rw-toegang-label { display: none; }
   .rw-route-wrap { padding: 22px 20px 20px; }
   .rw-route-opties { grid-template-columns: 1fr 1fr; }
   .rw-tracker-grafiek { height: 110px; }
@@ -473,25 +473,6 @@ body.rw-contrast .rw-wrap .rw-fase-btn.actief { background: #000 !important; col
 
 <div class="rw-wrap">
 
-<!-- ═══════════════════════════════
-     TOEGANKELIJKHEIDSBALK
-═══════════════════════════════ -->
-<div class="rw-toegang" role="toolbar" aria-label="Toegankelijkheidsopties">
-  <span class="rw-toegang-label">Pas de pagina aan jouw behoefte aan</span>
-  <button class="rw-toegang-btn" id="btnStil" onclick="wisselStil()" aria-pressed="false" title="Schakelt animaties en felle kleuren uit voor een rustigere ervaring">
-    <span class="rw-toegang-btn-icoon" aria-hidden="true">🌙</span>
-    <span>Rustmodus</span>
-  </button>
-  <button class="rw-toegang-btn" id="btnTekst" onclick="wisselTekst()" aria-label="Tekstgrootte aanpassen" title="Maak de tekst groter of kleiner">
-    <span class="rw-toegang-btn-icoon" aria-hidden="true">🔤</span>
-    <span id="tekstLabel">Tekstgrootte</span>
-  </button>
-  <button class="rw-toegang-btn" id="btnContrast" onclick="wisselContrast()" aria-pressed="false" title="Verhoog het contrast voor betere leesbaarheid">
-    <span class="rw-toegang-btn-icoon" aria-hidden="true">◐</span>
-    <span>Hoog contrast</span>
-  </button>
-</div>
-
 <!-- NOODKNOP BOVENAAN -->
 <div class="rw-nood" role="region" aria-label="Direct hulp nodig">
   <div class="rw-nood-icoon" aria-hidden="true">💙</div>
@@ -500,6 +481,17 @@ body.rw-contrast .rw-wrap .rw-fase-btn.actief { background: #000 !important; col
     <div class="rw-nood-sub">De Luisterlijn is 24 uur per dag, 7 dagen per week bereikbaar. Gratis, anoniem en zonder oordeel.</div>
   </div>
   <a href="tel:09000767" class="rw-nood-tel" aria-label="Bel de Luisterlijn op 0900 0767, gratis">📞 0900-0767 (gratis)</a>
+</div>
+
+<!-- ═══════════════════════════════
+     PRIVACY BLOK
+═══════════════════════════════ -->
+<div class="rw-privacy" role="region" aria-label="Privacy informatie">
+  <div class="rw-privacy-icoon" aria-hidden="true">🔒</div>
+  <div class="rw-privacy-content">
+    <div class="rw-privacy-titel">Een veilige, persoonlijke ruimte</div>
+    <div class="rw-privacy-tekst">Alles wat je hier invult, kiest of bijhoudt blijft <strong>uitsluitend in jouw browser</strong>. Je dagboek, je mood-tracker, je antwoorden en je voortgang worden lokaal opgeslagen op jouw apparaat. Uitvaart-Platform.nl kan niets inzien, slaat niets op en deelt niets met derden. Je hoeft geen account aan te maken en geen gegevens achter te laten. Sluit je deze pagina en wis je je browsergeschiedenis, dan zijn ook deze gegevens weg.</div>
+  </div>
 </div>
 
 
@@ -1567,75 +1559,6 @@ function toggleFaq(btn, i) {
 // v2 — NIEUWE FUNCTIES (Claude 4.7)
 // ═══════════════════════════════════════════════════════
 
-// ── TOEGANKELIJKHEID — voorkeuren onthouden ──
-var VOORKEUR_SLEUTEL = 'rouw_voorkeuren_v1';
-function laadVoorkeuren() {
-  try {
-    var v = JSON.parse(localStorage.getItem(VOORKEUR_SLEUTEL) || '{}');
-    if (v.stil) document.body.classList.add('rw-stil');
-    if (v.tekst === 'groot') document.body.classList.add('rw-tekst-groot');
-    if (v.tekst === 'extra') document.body.classList.add('rw-tekst-extra');
-    if (v.contrast) document.body.classList.add('rw-contrast');
-    werkToegangBtnsBij();
-  } catch (e) {}
-}
-function bewaarVoorkeuren() {
-  try {
-    var v = {
-      stil: document.body.classList.contains('rw-stil'),
-      tekst: document.body.classList.contains('rw-tekst-extra') ? 'extra' :
-             document.body.classList.contains('rw-tekst-groot') ? 'groot' : 'normaal',
-      contrast: document.body.classList.contains('rw-contrast')
-    };
-    localStorage.setItem(VOORKEUR_SLEUTEL, JSON.stringify(v));
-  } catch (e) {}
-}
-function werkToegangBtnsBij() {
-  var stilBtn = document.getElementById('btnStil');
-  var contrastBtn = document.getElementById('btnContrast');
-  var tekstBtn = document.getElementById('btnTekst');
-  var tekstLabel = document.getElementById('tekstLabel');
-  if (stilBtn) {
-    var isStil = document.body.classList.contains('rw-stil');
-    stilBtn.classList.toggle('actief', isStil);
-    stilBtn.setAttribute('aria-pressed', isStil ? 'true' : 'false');
-  }
-  if (contrastBtn) {
-    var isC = document.body.classList.contains('rw-contrast');
-    contrastBtn.classList.toggle('actief', isC);
-    contrastBtn.setAttribute('aria-pressed', isC ? 'true' : 'false');
-  }
-  if (tekstBtn && tekstLabel) {
-    var isExtra = document.body.classList.contains('rw-tekst-extra');
-    var isGroot = document.body.classList.contains('rw-tekst-groot');
-    tekstBtn.classList.toggle('actief', isExtra || isGroot);
-    tekstLabel.textContent = isExtra ? 'Tekst extra groot' : isGroot ? 'Tekst groot' : 'Tekstgrootte';
-  }
-}
-function wisselStil() {
-  document.body.classList.toggle('rw-stil');
-  werkToegangBtnsBij();
-  bewaarVoorkeuren();
-}
-function wisselContrast() {
-  document.body.classList.toggle('rw-contrast');
-  werkToegangBtnsBij();
-  bewaarVoorkeuren();
-}
-function wisselTekst() {
-  if (document.body.classList.contains('rw-tekst-extra')) {
-    document.body.classList.remove('rw-tekst-extra');
-    document.body.classList.remove('rw-tekst-groot');
-  } else if (document.body.classList.contains('rw-tekst-groot')) {
-    document.body.classList.remove('rw-tekst-groot');
-    document.body.classList.add('rw-tekst-extra');
-  } else {
-    document.body.classList.add('rw-tekst-groot');
-  }
-  werkToegangBtnsBij();
-  bewaarVoorkeuren();
-}
-
 // ── PERSOONLIJKE ROUTE ──
 var ROUTE_SLEUTEL = 'rouw_route_v1';
 var routeStap = 1;
@@ -2007,7 +1930,6 @@ function werkAanwezigBij() {
 }
 
 // ══ INITIALISEER ══
-laadVoorkeuren();
 laadDagboek();
 laadZelfzorg();
 laadFaq();
