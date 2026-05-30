@@ -210,6 +210,12 @@ body { padding: 16px; min-height: 100vh; }
 .ba-badge{ margin-left:auto; }
 .ba-merk{ height:46px; width:auto; flex:0 0 auto; display:block; }
 @media (max-width:600px){ .ba-merk{ height:38px; } }
+
+/* volledig scherm op mobiel (geen cremerand) */
+@media (max-width:768px){
+  body{ padding:0 !important; }
+  .ba-app{ border-radius:0 !important; box-shadow:none !important; }
+}
 </style>
 </head>
 <body>
