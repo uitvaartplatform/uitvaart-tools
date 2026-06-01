@@ -1,0 +1,159 @@
+<!-- ====================================================== -->
+<!-- PAGINA PERSOONLIJK AANBOD (met prijzen, NIET in het menu zetten)                  -->
+<!-- Popup via CSS (:target), geen JavaScript               -->
+<!-- Plak dit volledig in de Soffie teksteditor (code <>)   -->
+<!-- ====================================================== -->
+
+<style>
+/* === ALGEMENE WRAPPER === */
+.aap-wrap, .aap-wrap * { box-sizing: border-box; }
+.aap-wrap { font-family: 'Poppins', 'Nunito Sans', sans-serif; color: #1e1520; line-height: 1.65; max-width: 1000px; margin: 0 auto; padding: 8px 4px 48px; }
+
+/* === SECTIES === */
+.aap-section { margin: 48px 0; }
+.aap-section:first-child { margin-top: 20px; }
+
+/* === TEKST === */
+.aap-p { font-size: 1rem; color: #3a2832; margin: 0 0 16px; line-height: 1.7; }
+.aap-p:last-child { margin-bottom: 0; }
+.aap-strong { color: #4a1942; font-weight: 600; }
+
+/* === PILL BADGE === */
+.aap-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); color: #fff; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 50px; box-shadow: 0 3px 10px rgba(200,98,42,0.3); }
+.aap-pill-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: aap-pulse 2s infinite; }
+@keyframes aap-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* === INTRO BLOK === */
+.aap-intro { position: relative; background: linear-gradient(135deg, #fff 0%, #faf7f2 100%); border: 2px solid rgba(232,131,74,0.25); border-radius: 22px; padding: 34px 36px; box-shadow: 0 4px 24px rgba(74,25,66,0.06); overflow: hidden; }
+.aap-intro::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(232,131,74,0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+.aap-intro-pill { margin-bottom: 16px; }
+.aap-intro-titel { font-size: clamp(1.4rem, 2.5vw, 1.7rem); font-weight: 700; color: #4a1942; margin: 0 0 16px; line-height: 1.3; position: relative; }
+.aap-intro p { position: relative; }
+
+/* === FEATURES GRID === */
+.aap-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.aap-feature { position: relative; background: #fff; border: 1px solid rgba(74,25,66,0.1); border-radius: 16px; padding: 24px 22px 22px; transition: all 0.22s; overflow: hidden; }
+.aap-feature::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #e8834a 0%, #c8622a 100%); opacity: 0; transition: opacity 0.22s; }
+.aap-feature:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(74,25,66,0.1); border-color: rgba(232,131,74,0.4); }
+.aap-feature:hover::before { opacity: 1; }
+.aap-feature-ico { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: linear-gradient(135deg, rgba(232,131,74,0.15) 0%, rgba(232,131,74,0.05) 100%); border: 1px solid rgba(232,131,74,0.25); border-radius: 12px; font-size: 1.45rem; margin-bottom: 14px; }
+.aap-feature-titel { font-size: 1.05rem; font-weight: 700; color: #4a1942; margin: 0 0 8px; }
+.aap-feature-tekst { font-size: 0.92rem; color: #5a4555; margin: 0; line-height: 1.6; }
+
+/* === CTA BLOK (PAARSE BANNER) === */
+.aap-cta-block { position: relative; text-align: center; padding: 42px 28px; background: linear-gradient(135deg, #4a1942 0%, #6b3060 100%); border-radius: 22px; margin: 40px 0; overflow: hidden; box-shadow: 0 8px 28px rgba(74,25,66,0.2); }
+.aap-cta-block::before { content: ''; position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(232,131,74,0.25) 0%, transparent 70%); pointer-events: none; }
+.aap-cta-block::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); pointer-events: none; }
+.aap-cta-pill { margin-bottom: 14px; position: relative; }
+.aap-cta-titel { font-size: clamp(1.3rem, 2.4vw, 1.6rem); font-weight: 700; color: #fff; margin: 0 0 10px; position: relative; }
+.aap-cta-sub { font-size: 0.98rem; color: rgba(255,255,255,0.82); margin: 0 0 24px; position: relative; max-width: 560px; margin-left: auto; margin-right: auto; }
+.aap-cta-meta { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 22px; position: relative; }
+.aap-cta-meta-item { display: inline-flex; align-items: center; gap: 8px; font-size: 0.86rem; color: rgba(255,255,255,0.78); font-weight: 500; }
+.aap-cta-meta-ico { color: #e8834a; font-weight: 700; }
+
+/* === POPUP (CSS-ONLY VIA :target) === */
+.aap-popup-wrap, .aap-popup-wrap * { box-sizing: border-box; }
+.aap-popup-wrap { scroll-margin-top: 9999px; }
+.aap-popup-btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); color: #fff; font-family: 'Poppins', 'Nunito Sans', sans-serif; font-weight: 700; font-size: 1.05rem; text-decoration: none; padding: 18px 36px; border-radius: 14px; cursor: pointer; letter-spacing: 0.2px; box-shadow: 0 6px 20px rgba(200,98,42,0.32); transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease; border: none; user-select: none; min-height: 56px; }
+.aap-popup-btn:hover { filter: brightness(1.06); transform: translateY(-2px); box-shadow: 0 10px 26px rgba(200,98,42,0.42); color: #fff !important; text-decoration: none; }
+.aap-popup-btn:link, .aap-popup-btn:visited, .aap-popup-btn:active { color: #fff !important; text-decoration: none; }
+.aap-popup-btn-ico { font-size: 1.3rem; line-height: 1; }
+.aap-popup-btn-arr { font-size: 1.05rem; opacity: 0.92; transition: transform 0.2s; }
+.aap-popup-btn:hover .aap-popup-btn-arr { transform: translateX(4px); }
+.aap-popup-overlay { position: fixed; inset: 0; background: rgba(20,8,18,0.78); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 99998; opacity: 0; pointer-events: none; transition: opacity 0.28s ease; display: flex; align-items: center; justify-content: center; padding: 28px; }
+.aap-popup-box { position: relative; width: 100%; max-width: 760px; height: 100%; max-height: 96vh; background: #faf7f2; border-radius: 18px; overflow: hidden; box-shadow: 0 25px 80px rgba(0,0,0,0.45); transform: scale(0.96); transition: transform 0.28s ease; display: flex; flex-direction: column; }
+.aap-popup-close { position: absolute; top: 14px; right: 14px; z-index: 10; width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,0.55); color: #fff !important; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.25rem; font-weight: 700; text-decoration: none !important; border: none; transition: background 0.18s ease, transform 0.18s ease; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.aap-popup-close:hover { background: rgba(0,0,0,0.82); transform: scale(1.06); color: #fff !important; text-decoration: none !important; }
+.aap-popup-iframe { width: 100%; height: 100%; border: none; display: block; flex: 1; background: #faf7f2; }
+.aap-popup-wrap:target .aap-popup-overlay { opacity: 1; pointer-events: auto; overscroll-behavior: contain; }
+.aap-popup-wrap:target .aap-popup-box { transform: scale(1); }
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .aap-features { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .aap-intro { padding: 26px 22px; }
+  .aap-popup-overlay { padding: 0; }
+  .aap-popup-box { max-width: 100%; border-radius: 0; height: 100vh; height: 100dvh; max-height: 100dvh; }
+  .aap-popup-iframe { height: 100dvh; min-height: 100dvh; flex: 1 0 auto; }
+  .aap-popup-btn { font-size: 1rem; padding: 16px 28px; width: 100%; }
+  .aap-popup-close { width: 38px; height: 38px; top: 10px; right: 10px; }
+}
+@media (max-width: 600px) {
+  .aap-features { grid-template-columns: 1fr; }
+  .aap-cta-meta { gap: 14px; }
+}
+@media print {
+  .aap-popup-overlay, .aap-popup-btn, .aap-cta-block { display: none !important; }
+}
+</style>
+
+<div class="aap-wrap">
+
+  <!-- INTRO -->
+  <div class="aap-section">
+    <div class="aap-intro">
+      <div class="aap-intro-pill"><span class="aap-pill"><span class="aap-pill-dot"></span>Persoonlijk aanbod</span></div>
+      <div class="aap-intro-titel">Jouw advies en aanbod op maat staan klaar</div>
+      <p class="aap-p">Fijn dat we elkaar gesproken hebben. In deze adviestool zie je in een paar minuten welk pakket het beste past bij jouw onderneming, <span class="aap-strong">inclusief de bijbehorende tarieven</span>.</p>
+      <p class="aap-p">Je beantwoordt een paar korte vragen en kiest daarna zelf je voorkeur. Helder, overzichtelijk en zonder verplichtingen.</p>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="aap-section">
+    <div class="aap-features">
+      <div class="aap-feature">
+        <div class="aap-feature-ico">&#128203;</div>
+        <div class="aap-feature-titel">Advies en tarieven</div>
+        <p class="aap-feature-tekst">Je ziet direct welk pakket past en wat het kost, overzichtelijk op een rij.</p>
+      </div>
+      <div class="aap-feature">
+        <div class="aap-feature-ico">&#127919;</div>
+        <div class="aap-feature-titel">Afgestemd op jouw doel</div>
+        <p class="aap-feature-tekst">Of je nu zichtbaarheid, meer aanvragen of autoriteit zoekt, het advies sluit aan op wat jij wilt bereiken.</p>
+      </div>
+      <div class="aap-feature">
+        <div class="aap-feature-ico">&#10003;</div>
+        <div class="aap-feature-titel">Vrijblijvend</div>
+        <p class="aap-feature-tekst">Bekijk rustig je advies. Pas als jij er klaar voor bent nemen wij persoonlijk contact met je op.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA + POPUP -->
+  <div class="aap-section">
+    <div class="aap-popup-wrap" id="open-aanbod">
+
+      <div class="aap-cta-block">
+        <div class="aap-cta-pill"><span class="aap-pill">Bekijk nu</span></div>
+        <div class="aap-cta-titel">Bekijk je advies en aanbod op maat</div>
+        <p class="aap-cta-sub">Doorloop de adviestool, kies je voorkeur en zie meteen welk pakket en welk tarief bij jouw onderneming past.</p>
+        <a href="#open-aanbod" class="aap-popup-btn">
+          <span class="aap-popup-btn-ico">&#128640;</span>
+          Bekijk je advies en aanbod
+          <span class="aap-popup-btn-arr">&#8594;</span>
+        </a>
+        <div class="aap-cta-meta">
+          <span class="aap-cta-meta-item"><span class="aap-cta-meta-ico">&#10003;</span> Klaar in een paar minuten</span>
+          <span class="aap-cta-meta-item"><span class="aap-cta-meta-ico">&#10003;</span> Zonder verplichtingen</span>
+        </div>
+      </div>
+
+      <div class="aap-popup-overlay">
+        <div class="aap-popup-box">
+          <a href="#sluit" class="aap-popup-close" aria-label="Sluit de adviestool">&#10005;</a>
+          <iframe
+            src="https://uitvaartplatform.github.io/uitvaart-tools/advertentie-advies-tool.html?p=UP2026"
+            class="aap-popup-iframe"
+            title="Advertentie adviestool"
+            loading="lazy"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,960 +1,537 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advertentie Advies Tool — Uitvaart-Platform.nl</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Persoonlijk advertentieadvies | Uitvaart-Platform.nl</title>
 <style>
-* { font-family: 'Poppins', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: #faf7f2; color: #1e1520; line-height: 1.6; overflow-x: hidden; }
-
-/* ── PROGRESS BAR ── */
-.aat-progress-wrap { background: #fff; border-bottom: 1px solid #e2d9e0; padding: 12px 24px; position: sticky; top: 0; z-index: 100; }
-.aat-progress-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.aat-progress-logo { font-size: 0.72rem; font-weight: 700; color: #4a1942; letter-spacing: 0.08em; text-transform: uppercase; }
-.aat-progress-stap { font-size: 0.7rem; color: #6b6570; font-weight: 300; }
-.aat-progress-stap span { color: #4a1942; font-weight: 700; }
-.aat-bar-track { height: 5px; background: #f0ebef; border-radius: 3px; overflow: hidden; }
-.aat-bar-fill { height: 100%; background: linear-gradient(90deg, #4a1942, #e8834a); border-radius: 3px; transition: width 0.5s ease; }
-
-/* ── HOOFD ── */
-.aat { max-width: 820px; margin: 0 auto; padding: 28px 20px 60px; }
-
-/* ── WELKOM ── */
-.aat-welkom { text-align: center; padding: 32px 20px; }
-.aat-welkom-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(74,25,66,0.07); border-radius: 30px; padding: 6px 16px; margin-bottom: 18px; }
-.aat-welkom-badge-dot { width: 8px; height: 8px; background: #e8834a; border-radius: 50%; animation: aat-pulse 2s infinite; }
-@keyframes aat-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
-.aat-welkom-badge span { font-size: 0.65rem; font-weight: 700; color: #e8834a; letter-spacing: 0.14em; text-transform: uppercase; }
-.aat-welkom h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 900; color: #4a1942; line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.02em; }
-.aat-welkom h1 em { font-style: italic; font-weight: 300; color: #6b3060; }
-.aat-welkom-sub { font-size: 0.86rem; color: #6b6570; font-weight: 300; line-height: 1.8; max-width: 520px; margin: 0 auto 24px; }
-.aat-welkom-kenmerken { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
-.aat-welkom-kenmerk { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid #e2d9e0; border-radius: 20px; padding: 5px 12px; font-size: 0.7rem; font-weight: 600; color: #4a1942; }
-.aat-stappen-preview { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
-.aat-stap-preview { background: #fff; border: 1px solid #e2d9e0; border-radius: 8px; padding: 6px 12px; font-size: 0.66rem; font-weight: 600; color: #6b6570; }
-.aat-stap-preview span { color: #e8834a; font-weight: 900; margin-right: 4px; }
-.aat-start-knop { display: inline-flex; align-items: center; gap: 10px; background: #4a1942; color: #fff; border: none; border-radius: 12px; padding: 16px 32px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 24px rgba(74,25,66,0.25); }
-.aat-start-knop:hover { background: #6b3060; transform: translateY(-2px); }
-
-/* ── VRAAG KAART ── */
-.aat-vraag { background: #fff; border: 1px solid #e2d9e0; border-radius: 16px; padding: 28px; margin-bottom: 14px; display: none; }
-.aat-vraag.actief { display: block; animation: aat-fadein 0.3s ease; }
-@keyframes aat-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.aat-vraag-cat { font-size: 0.6rem; font-weight: 700; color: #e8834a; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; display: block; }
-.aat-vraag-nr { font-size: 0.68rem; font-weight: 600; color: #6b6570; margin-bottom: 8px; display: block; }
-.aat-vraag-titel { font-size: clamp(0.96rem, 2.5vw, 1.2rem); font-weight: 900; color: #4a1942; line-height: 1.3; margin-bottom: 5px; }
-.aat-vraag-sub { font-size: 0.78rem; color: #6b6570; font-weight: 300; margin-bottom: 18px; line-height: 1.6; }
-.aat-multi-hint { font-size: 0.68rem; color: #e8834a; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 5px; background: rgba(232,131,74,0.08); border-radius: 8px; padding: 6px 12px; width: fit-content; }
-
-/* ── OPTIES ── */
-.aat-opties { display: grid; gap: 8px; }
-.aat-opties.cols2 { grid-template-columns: 1fr 1fr; }
-.aat-opties.cols3 { grid-template-columns: 1fr 1fr 1fr; }
-.aat-opties.cols1 { grid-template-columns: 1fr; }
-
-.aat-optie {
-  display: flex; align-items: flex-start; gap: 12px;
-  background: #faf7f2; border: 2px solid #e2d9e0;
-  border-radius: 11px; padding: 13px 15px;
-  cursor: pointer; transition: all 0.18s; user-select: none; position: relative;
+/* ===================== INSTELLINGEN: PAS DIT AAN ===================== */
+/* Zie het JavaScript-blok onderaan voor de PRIJS-TOKEN en de PRIJZEN.  */
+:root{
+  --plum:#4a1942; --plum2:#6b3060; --plumlogo:#6C3D5C;
+  --orange:#e8834a; --orange2:#c8622a;
+  --cream:#faf7f2; --cream2:#f3ece3; --lav:#c9bcd2;
+  --ink:#1e1520; --muted:#6b5a66; --line:#e7dde6;
+  --ok:#3f9d6e;
+  --sans:'Poppins','Nunito Sans',-apple-system,BlinkMacSystemFont,sans-serif;
 }
-.aat-optie:hover { border-color: #4a1942; background: #f0ebef; }
-.aat-optie.geselecteerd { border-color: #4a1942; background: #4a1942; }
-.aat-optie.geselecteerd .aat-optie-naam { color: #fff; }
-.aat-optie.geselecteerd .aat-optie-desc { color: rgba(255,255,255,0.6); }
-.aat-optie.geselecteerd .aat-optie-icoon-wrap { background: rgba(255,255,255,0.15); border-color: transparent; }
-.aat-optie-icoon-wrap { width: 38px; height: 38px; background: #fff; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; border: 1px solid #e2d9e0; transition: all 0.18s; }
-.aat-optie-tekst { flex: 1; min-width: 0; }
-.aat-optie-naam { font-size: 0.82rem; font-weight: 700; color: #4a1942; margin-bottom: 2px; transition: color 0.18s; line-height: 1.3; }
-.aat-optie-desc { font-size: 0.68rem; color: #6b6570; font-weight: 300; line-height: 1.4; transition: color 0.18s; }
-.aat-optie-check { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; background: #e8834a; border-radius: 50%; display: none; align-items: center; justify-content: center; }
-.aat-optie-check::after { content: '✓'; color: #fff; font-size: 0.6rem; font-weight: 900; }
-.aat-optie.geselecteerd .aat-optie-check { display: flex; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:
+  radial-gradient(1200px 600px at 50% -10%, rgba(232,131,74,.10), transparent 60%),
+  linear-gradient(160deg,#fbf8f4 0%,#f4ecf1 100%);
+  min-height:100%;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+.wrap{width:100%;max-width:780px;margin:0 auto;padding:22px 18px 60px;flex:1;display:flex;flex-direction:column}
 
-/* Compacte categorie-opties (voor bedrijvengids) */
-.aat-cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 7px; }
-.aat-cat-item {
-  display: flex; align-items: center; gap: 8px;
-  background: #faf7f2; border: 2px solid #e2d9e0;
-  border-radius: 9px; padding: 10px 12px;
-  cursor: pointer; transition: all 0.18s; user-select: none; position: relative;
-}
-.aat-cat-item:hover { border-color: #4a1942; background: #f0ebef; }
-.aat-cat-item.geselecteerd { border-color: #4a1942; background: #4a1942; }
-.aat-cat-item.geselecteerd .aat-cat-naam { color: #fff; }
-.aat-cat-item.geselecteerd .aat-cat-icoon-wrap { background: rgba(255,255,255,0.15); border-color: transparent; }
-.aat-cat-icoon-wrap { width: 30px; height: 30px; background: #fff; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; border: 1px solid #e2d9e0; }
-.aat-cat-naam { font-size: 0.74rem; font-weight: 700; color: #4a1942; line-height: 1.3; flex: 1; word-break: break-word; overflow-wrap: break-word; hyphens: auto; }
-.aat-cat-check { width: 14px; height: 14px; background: #e8834a; border-radius: 50%; display: none; align-items: center; justify-content: center; flex-shrink: 0; }
-.aat-cat-check::after { content: '✓'; color: #fff; font-size: 0.5rem; font-weight: 900; }
-.aat-cat-item.geselecteerd .aat-cat-check { display: flex; }
+/* header */
+.top{display:flex;align-items:center;gap:12px;justify-content:center;margin:6px 0 18px}
+.top .bfly{width:40px;height:40px;border-radius:11px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(74,25,66,.12)}
+.top .bfly svg{width:24px;height:24px}
+.top b{font-weight:700;color:var(--plum);font-size:1.02rem;letter-spacing:.2px}
 
-/* ── NAV ── */
-.aat-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; gap: 12px; }
-.aat-terug { background: none; border: 1.5px solid #e2d9e0; border-radius: 9px; padding: 9px 18px; font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 600; color: #6b6570; cursor: pointer; transition: all 0.2s; }
-.aat-terug:hover { border-color: #4a1942; color: #4a1942; }
-.aat-volgende { background: #4a1942; border: none; border-radius: 9px; padding: 11px 26px; font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 800; color: #fff; cursor: pointer; transition: all 0.2s; margin-left: auto; }
-.aat-volgende:hover { background: #6b3060; transform: translateY(-1px); }
-.aat-volgende:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+/* kaart */
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 50px rgba(74,25,66,.10);overflow:hidden;flex:1;display:flex;flex-direction:column}
+.pad{padding:30px 30px 26px}
+@media(max-width:560px){.pad{padding:24px 20px}}
 
-/* ── RESULTATEN ── */
-.aat-resultaat { display: none; }
-.aat-resultaat.actief { display: block; animation: aat-fadein 0.4s ease; }
+/* progress */
+.bar{height:5px;background:var(--cream2)}
+.bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--orange2));border-radius:0 4px 4px 0;transition:width .45s cubic-bezier(.22,1,.36,1)}
 
-.aat-res-header { background: linear-gradient(135deg, #2a0d24 0%, #4a1942 60%, #6b3060 100%); border-radius: 16px; padding: 28px 32px; margin-bottom: 18px; position: relative; overflow: hidden; }
-.aat-res-header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(232,131,74,0.15) 0%, transparent 55%); pointer-events: none; }
-.aat-res-header-label { font-size: 0.6rem; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 8px; display: block; position: relative; }
-.aat-res-header h2 { font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: 8px; position: relative; letter-spacing: -0.02em; }
-.aat-res-header h2 em { font-style: italic; font-weight: 300; color: rgba(255,255,255,0.5); }
-.aat-res-header-sub { font-size: 0.78rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.7; position: relative; max-width: 540px; }
-.aat-res-score-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(232,131,74,0.2); border: 1px solid rgba(232,131,74,0.4); border-radius: 30px; padding: 5px 14px; font-size: 0.72rem; font-weight: 700; color: #e8834a; position: relative; margin-top: 10px; }
+/* screens */
+.screen{display:none;animation:fade .45s ease both}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-.aat-res-sectie-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #e8834a; margin-bottom: 6px; display: block; }
-.aat-res-sectie-titel { font-size: 1rem; font-weight: 900; color: #4a1942; margin-bottom: 12px; }
+.eyebrow{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 13px;border-radius:50px;margin-bottom:16px;box-shadow:0 4px 12px rgba(200,98,42,.3)}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-size:clamp(1.5rem,3.6vw,2.05rem);line-height:1.2;color:var(--plum);letter-spacing:-.01em;margin-bottom:12px}
+h2{font-size:clamp(1.25rem,3vw,1.5rem);line-height:1.25;color:var(--plum);margin-bottom:8px;letter-spacing:-.01em}
+.lead{font-size:1.02rem;color:var(--muted);line-height:1.65;margin-bottom:18px}
+.q{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--orange2);margin-bottom:8px}
+.vraag{font-size:1.28rem;font-weight:700;color:var(--plum);line-height:1.3;margin-bottom:18px}
 
-/* Stats strip */
-.aat-res-stats { background: #4a1942; border-radius: 14px; padding: 20px 24px; margin-bottom: 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; overflow: hidden; }
-.aat-res-stats::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 30%, rgba(232,131,74,0.1) 0%, transparent 55%); pointer-events: none; }
-.aat-res-stat { text-align: center; padding: 8px 12px; border-right: 1px solid rgba(255,255,255,0.1); position: relative; }
-.aat-res-stat:last-child { border-right: none; }
-.aat-res-stat-nr { font-size: 1.3rem; font-weight: 900; color: #e8834a; display: block; line-height: 1; margin-bottom: 4px; }
-.aat-res-stat-label { font-size: 0.59rem; color: rgba(255,255,255,0.5); font-weight: 300; line-height: 1.4; }
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 4px}
+.stat{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center}
+.stat b{display:block;font-size:1.35rem;color:var(--orange2);line-height:1;margin-bottom:4px}
+.stat span{font-size:.72rem;color:var(--muted);font-weight:600}
 
-/* Pakket kaarten */
-.aat-res-pakketten { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.aat-res-pakket { background: #fff; border: 2px solid #e2d9e0; border-radius: 13px; padding: 20px; display: flex; align-items: flex-start; gap: 16px; position: relative; }
-.aat-res-pakket.top { border-color: #4a1942; }
-.aat-res-pakket.tweede { border-color: #6b3060; opacity: 0.92; }
-.aat-res-pakket.derde { opacity: 0.78; }
-.aat-res-pakket-rank { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 900; flex-shrink: 0; }
-.aat-res-pakket.top .aat-res-pakket-rank { background: #4a1942; color: #e8834a; }
-.aat-res-pakket.tweede .aat-res-pakket-rank { background: #6b3060; color: #fff; }
-.aat-res-pakket.derde .aat-res-pakket-rank { background: #faf7f2; color: #6b6570; border: 1px solid #e2d9e0; }
-.aat-res-pakket-aanbevolen { position: absolute; top: 12px; right: 12px; background: #e8834a; color: #fff; font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 7px; }
-.aat-res-pakket-naam { font-size: 0.9rem; font-weight: 900; color: #4a1942; margin-bottom: 3px; }
-.aat-res-pakket-omschrijving { font-size: 0.74rem; color: #6b6570; font-weight: 300; line-height: 1.6; margin-bottom: 10px; }
-.aat-res-pakket-features { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-.aat-res-pakket-feature { background: #faf7f2; border: 1px solid #e2d9e0; border-radius: 6px; padding: 3px 9px; font-size: 0.63rem; font-weight: 600; color: #4a1942; }
-.aat-res-score-rij { display: flex; align-items: center; gap: 8px; }
-.aat-res-score-label { font-size: 0.63rem; color: #6b6570; font-weight: 300; white-space: nowrap; }
-.aat-res-score-bar { flex: 1; height: 5px; background: #f0ebef; border-radius: 3px; overflow: hidden; }
-.aat-res-score-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #4a1942, #e8834a); }
-.aat-res-score-pct { font-size: 0.66rem; font-weight: 700; color: #4a1942; white-space: nowrap; }
+/* options */
+.opts{display:flex;flex-direction:column;gap:11px}
+.opt{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:15px;padding:15px 16px;cursor:pointer;font-family:var(--sans);font-size:1rem;color:var(--ink);transition:border-color .15s,background .15s,transform .12s,box-shadow .15s}
+.opt:hover{border-color:var(--orange);box-shadow:0 8px 20px rgba(232,131,74,.12);transform:translateY(-2px)}
+.opt.sel{border-color:var(--orange);background:linear-gradient(135deg,rgba(232,131,74,.1),rgba(232,131,74,.04))}
+.opt .ic{width:42px;height:42px;flex-shrink:0;border-radius:11px;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.opt.sel .ic{background:linear-gradient(135deg,var(--orange),var(--orange2))}
+.opt .tx{flex:1}
+.opt .tx b{display:block;font-weight:600;color:var(--plum);font-size:1.02rem}
+.opt .tx small{color:var(--muted);font-size:.85rem}
+.opt .chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.opt.sel .chk{background:var(--orange);border-color:var(--orange)}
+.opt .chk svg{width:13px;height:13px;opacity:0;transition:opacity .15s}
+.opt.sel .chk svg{opacity:1}
+.hint{font-size:.82rem;color:var(--muted);margin-top:12px;text-align:center}
 
-/* Extra aanbevelingen */
-.aat-res-extra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
-.aat-res-extra { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 12px; padding: 16px 18px; }
-.aat-res-extra.aanbevolen { border-color: #e8834a; }
-.aat-res-extra-badge { display: inline-block; background: #e8834a; color: #fff; font-size: 0.54rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 6px; margin-bottom: 6px; }
-.aat-res-extra-icoon { font-size: 1.3rem; margin-bottom: 7px; display: block; }
-.aat-res-extra-naam { font-size: 0.8rem; font-weight: 800; color: #4a1942; margin-bottom: 4px; }
-.aat-res-extra-tekst { font-size: 0.7rem; color: #6b6570; font-weight: 300; line-height: 1.55; }
+/* inputs */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.85rem;font-weight:600;color:var(--plum);margin-bottom:6px}
+.field input{width:100%;border:2px solid var(--line);border-radius:13px;padding:14px 15px;font-family:var(--sans);font-size:1rem;color:var(--ink);background:#fff;transition:border-color .15s}
+.field input:focus{outline:none;border-color:var(--orange)}
 
-/* Diensten aanbevelingen */
-.aat-res-diensten-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
-.aat-res-dienst { background: #fff; border: 1.5px solid #e2d9e0; border-radius: 12px; padding: 16px; transition: all 0.2s; }
-.aat-res-dienst:hover { border-color: #4a1942; box-shadow: 0 4px 14px rgba(74,25,66,0.08); }
-.aat-res-dienst-icoon { font-size: 1.3rem; margin-bottom: 7px; display: block; }
-.aat-res-dienst-naam { font-size: 0.78rem; font-weight: 800; color: #4a1942; margin-bottom: 4px; }
-.aat-res-dienst-tekst { font-size: 0.68rem; color: #6b6570; font-weight: 300; line-height: 1.5; margin-bottom: 8px; }
-.aat-res-dienst-link { font-size: 0.68rem; font-weight: 700; color: #e8834a; text-decoration: none; }
+/* buttons */
+.row-btns{display:flex;gap:11px;margin-top:22px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:none;cursor:pointer;font-family:var(--sans);font-weight:700;font-size:1.02rem;border-radius:14px;padding:15px 26px;transition:transform .15s,box-shadow .15s,filter .15s;position:relative;overflow:hidden}
+.btn.primary{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;box-shadow:0 8px 22px rgba(200,98,42,.32);flex:1}
+.btn.primary:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 12px 28px rgba(200,98,42,.42)}
+.btn.primary:active{transform:scale(.98)}
+.btn.primary::after{content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);animation:shine 5s ease-in-out infinite;pointer-events:none}
+@keyframes shine{0%,55%{left:-70%}78%{left:130%}100%{left:130%}}
+.btn.ghost{background:transparent;color:var(--plum2);border:2px solid var(--line);padding:15px 20px}
+.btn.ghost:hover{border-color:var(--plum2)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.big{font-size:1.1rem;padding:17px 30px;width:100%}
 
-/* CTA */
-.aat-res-cta { background: linear-gradient(135deg, #2a0d24 0%, #4a1942 50%, #6b3060 100%); border-radius: 15px; padding: 26px 30px; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; position: relative; overflow: hidden; }
-.aat-res-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 90% 30%, rgba(232,131,74,0.12) 0%, transparent 55%); pointer-events: none; }
-.aat-res-cta-tekst { position: relative; }
-.aat-res-cta h3 { font-size: 0.96rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
-.aat-res-cta p { font-size: 0.74rem; color: rgba(255,255,255,0.6); font-weight: 300; line-height: 1.6; max-width: 340px; }
-.aat-res-cta-knoppen { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; position: relative; }
-.aat-res-knop { display: inline-flex; align-items: center; gap: 6px; border-radius: 9px; padding: 10px 18px; font-size: 0.76rem; font-weight: 800; text-decoration: none; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
-.aat-res-knop.oranje { background: #e8834a; color: #fff; }
-.aat-res-knop.oranje:hover { background: #c8622a; }
-.aat-res-knop.wit { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
-.aat-res-knop.wit:hover { background: rgba(255,255,255,0.2); }
-.aat-opnieuw { display: flex; align-items: center; gap: 6px; background: none; border: 1.5px solid #e2d9e0; border-radius: 9px; padding: 8px 16px; font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 600; color: #6b6570; cursor: pointer; margin-top: 12px; transition: all 0.2s; }
-.aat-opnieuw:hover { border-color: #4a1942; color: #4a1942; }
+/* result */
+.advies-kop{text-align:center;margin-bottom:6px}
+.kicker{display:inline-flex;align-items:center;gap:7px;background:rgba(63,157,110,.12);color:var(--ok);font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:6px 13px;border-radius:50px;margin-bottom:14px}
+.pkg{border:2px solid var(--orange);border-radius:18px;padding:22px;margin:18px 0;background:linear-gradient(135deg,rgba(232,131,74,.07),rgba(232,131,74,.02));position:relative}
+.pkg .tag{position:absolute;top:-12px;left:22px;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:50px;box-shadow:0 4px 10px rgba(200,98,42,.3)}
+.pkg h3{font-size:1.3rem;color:var(--plum);margin:4px 0 2px}
+.pkg .prijs{font-size:1.05rem;font-weight:700;color:var(--orange2);margin-bottom:12px}
+.pkg.kies{border-color:var(--line);background:#fff;cursor:pointer;padding-right:52px;transition:border-color .15s,box-shadow .15s,background .15s}
+.pkg.kies:hover{border-color:var(--orange);box-shadow:0 8px 20px rgba(232,131,74,.12)}
+.pkg.kies.sel{border-color:var(--orange);background:linear-gradient(135deg,rgba(232,131,74,.08),rgba(232,131,74,.02));box-shadow:0 8px 22px rgba(232,131,74,.16)}
+.pkg-radio{position:absolute;top:18px;right:18px;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);background:#fff;transition:all .15s}
+.pkg.kies.sel .pkg-radio{border-color:var(--orange);box-shadow:inset 0 0 0 4px var(--orange)}
+.feat{display:flex;align-items:flex-start;gap:10px;margin:9px 0;font-size:.95rem;color:var(--ink);line-height:1.5}
+.feat .v{width:20px;height:20px;border-radius:50%;background:rgba(63,157,110,.15);color:var(--ok);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.feat .v svg{width:11px;height:11px}
+.addon{border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin:11px 0;background:#fff}
+.addon .h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+.addon .h b{color:var(--plum);font-size:1.02rem}
+.addon .h .p{color:var(--orange2);font-weight:700;font-size:.9rem;white-space:nowrap}
+.addon p{font-size:.88rem;color:var(--muted);line-height:1.55}
+.sectie-t{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--plum2);margin:24px 0 10px}
 
+/* why block */
+.why{background:var(--plum);border-radius:18px;padding:24px;margin:22px 0;color:#fff;position:relative;overflow:hidden}
+.why::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;background:radial-gradient(circle,rgba(232,131,74,.25),transparent 70%)}
+.why h3{color:#fff;font-size:1.15rem;margin-bottom:14px;position:relative}
+.why .pt{display:flex;gap:11px;margin:11px 0;position:relative;font-size:.93rem;line-height:1.55;color:rgba(255,255,255,.92)}
+.why .pt .e{font-size:1.1rem}
+.why .pt b{color:#fff}
 
-/* ── LEAD FORMULIER IN RESULTAAT ── */
-.aat-lead-blok {
-  background: #fff; border: 2px solid #4a1942; border-radius: 16px;
-  padding: 28px 30px; margin-top: 20px; position: relative; overflow: hidden;
-}
-.aat-lead-blok::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #4a1942, #e8834a); }
-.aat-lead-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
-.aat-lead-icoon { width: 48px; height: 48px; background: #4a1942; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-.aat-lead-titel { font-size: 1rem; font-weight: 900; color: #4a1942; margin-bottom: 4px; }
-.aat-lead-sub { font-size: 0.78rem; color: #6b6570; font-weight: 300; line-height: 1.6; }
-.aat-lead-velden { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.aat-lead-veld { display: flex; flex-direction: column; gap: 4px; }
-.aat-lead-veld.vol { grid-column: 1 / -1; }
-.aat-lead-label { font-size: 0.68rem; font-weight: 700; color: #4a1942; }
-.aat-lead-input {
-  border: 1.5px solid #e2d9e0; border-radius: 9px; padding: 10px 14px;
-  font-family: 'Poppins', sans-serif; font-size: 0.8rem; color: #1e1520;
-  background: #faf7f2; transition: border-color 0.2s; width: 100%;
-}
-.aat-lead-input:focus { outline: none; border-color: #4a1942; background: #fff; }
-.aat-lead-verzend {
-  display: block; width: 100%; background: #4a1942; color: #fff;
-  border: none; border-radius: 10px; padding: 14px;
-  font-family: 'Poppins', sans-serif; font-size: 0.86rem; font-weight: 800;
-  cursor: pointer; transition: all 0.2s; margin-bottom: 10px;
-}
-.aat-lead-verzend:hover { background: #6b3060; transform: translateY(-1px); }
-.aat-lead-verzond { display: none; background: #f0faf5; border: 1.5px solid #2e8b57; border-radius: 10px; padding: 16px 20px; text-align: center; }
-.aat-lead-verzond-icoon { font-size: 1.8rem; margin-bottom: 6px; display: block; }
-.aat-lead-verzond-titel { font-size: 0.88rem; font-weight: 800; color: #2e8b57; margin-bottom: 4px; }
-.aat-lead-verzond-sub { font-size: 0.74rem; color: #6b6570; font-weight: 300; }
-.aat-lead-disclaimer { font-size: 0.62rem; color: #aaa; font-weight: 300; text-align: center; line-height: 1.5; }
-.aat-lead-of { text-align: center; font-size: 0.7rem; color: #aaa; margin: 10px 0; }
-.aat-lead-mailto { display: block; text-align: center; background: #faf7f2; border: 1.5px solid #e2d9e0; border-radius: 9px; padding: 10px; font-size: 0.76rem; font-weight: 700; color: #4a1942; text-decoration: none; transition: all 0.2s; }
-.aat-lead-mailto:hover { border-color: #4a1942; }
-/* ── TABLET (max 768px) ── */
-@media (max-width: 768px) {
-  .aat { max-width: 100%; padding: 20px 16px 40px; }
-  .aat-welkom { padding: 24px 12px; }
-  .aat-res-pakketten .aat-res-pakket { flex-direction: row; }
-  .aat-res-stats { grid-template-columns: 1fr 1fr; }
-  .aat-res-stat:nth-child(2) { border-right: none; }
-  .aat-res-stat:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.1); }
-}
+.reassure{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin:18px 0 6px}
+.reassure span{font-size:.85rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.reassure span .v{color:var(--ok);font-weight:800}
 
-/* ── MOBIEL (max 600px) ── */
-@media (max-width: 600px) {
-  html, body { overflow-x: hidden; max-width: 100%; }
+.fineprint{font-size:.78rem;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+.footer-note{text-align:center;font-size:.78rem;color:var(--muted);margin-top:18px}
+.footer-note a{color:var(--plum2);font-weight:600;text-decoration:none}
 
-  /* Progress balk */
-  .aat-progress-wrap { padding: 10px 14px; }
-  .aat-progress-logo { font-size: 0.62rem; }
-  .aat-progress-stap { font-size: 0.62rem; }
-
-  /* Welkomscherm */
-  .aat { padding: 14px 12px 36px; }
-  .aat-welkom { padding: 20px 8px; }
-  .aat-welkom h1 { font-size: 1.3rem; }
-  .aat-welkom-sub { font-size: 0.78rem; }
-  .aat-welkom-kenmerken { gap: 6px; }
-  .aat-welkom-kenmerk { font-size: 0.66rem; padding: 4px 10px; }
-  .aat-stappen-preview { gap: 5px; }
-  .aat-stap-preview { font-size: 0.62rem; padding: 4px 9px; }
-  .aat-start-knop { font-size: 0.82rem; padding: 13px 24px; }
-
-  /* Vraag kaart */
-  .aat-vraag { padding: 18px 14px; border-radius: 12px; }
-  .aat-vraag-titel { font-size: 0.96rem; }
-  .aat-vraag-sub { font-size: 0.74rem; }
-
-  /* Categorie grid */
-  .aat-cat-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-  .aat-cat-item { padding: 8px 10px; gap: 6px; }
-  .aat-cat-naam { font-size: 0.68rem; }
-  .aat-cat-icoon-wrap { width: 26px; height: 26px; font-size: 0.78rem; }
-
-  /* Optie knoppen */
-  .aat-opties.cols3 { grid-template-columns: 1fr 1fr; gap: 7px; }
-  .aat-opties.cols2 { grid-template-columns: 1fr; gap: 7px; }
-  .aat-opties.cols1 { gap: 7px; }
-  .aat-optie { padding: 11px 13px; gap: 10px; border-radius: 9px; }
-  .aat-optie-icoon-wrap { width: 34px; height: 34px; font-size: 0.9rem; flex-shrink: 0; }
-  .aat-optie-naam { font-size: 0.78rem; }
-  .aat-optie-desc { font-size: 0.65rem; }
-
-  /* Navigatie knoppen */
-  .aat-nav { margin-top: 16px; }
-  .aat-terug { font-size: 0.72rem; padding: 8px 14px; }
-  .aat-volgende { font-size: 0.76rem; padding: 10px 20px; }
-
-  /* Resultaat header */
-  .aat-res-header { padding: 22px 20px; border-radius: 12px; }
-  .aat-res-header h2 { font-size: 1.15rem; }
-  .aat-res-header-sub { font-size: 0.74rem; }
-
-  /* Stats strip */
-  .aat-res-stats { grid-template-columns: 1fr 1fr; padding: 16px 14px; border-radius: 12px; }
-  .aat-res-stat:nth-child(2) { border-right: none; }
-  .aat-res-stat:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.1); }
-  .aat-res-stat-nr { font-size: 1.1rem; }
-  .aat-res-stat-label { font-size: 0.56rem; }
-
-  /* Pakket kaarten */
-  .aat-res-pakketten { gap: 8px; }
-  .aat-res-pakket { flex-direction: column; gap: 10px; padding: 16px; border-radius: 11px; }
-  .aat-res-pakket-naam { font-size: 0.84rem; }
-  .aat-res-pakket-omschrijving { font-size: 0.7rem; }
-  .aat-res-pakket-feature { font-size: 0.6rem; }
-
-  /* Extra en diensten grids */
-  .aat-res-extra-grid { grid-template-columns: 1fr; gap: 8px; }
-  .aat-res-diensten-grid { grid-template-columns: 1fr; gap: 8px; }
-  .aat-res-extra { padding: 14px 16px; border-radius: 10px; }
-  .aat-res-extra-naam { font-size: 0.76rem; }
-  .aat-res-extra-tekst { font-size: 0.68rem; }
-
-  /* CTA onderaan resultaat */
-  .aat-res-cta { flex-direction: column; padding: 20px 18px; border-radius: 12px; }
-  .aat-res-cta h3 { font-size: 0.88rem; }
-  .aat-res-cta p { font-size: 0.72rem; }
-  .aat-res-cta-knoppen { flex-direction: column; gap: 7px; }
-  .aat-res-knop { font-size: 0.74rem; padding: 10px 16px; width: 100%; justify-content: center; }
-
-  /* Lead blok */
-  .aat-lead-blok { padding: 18px 16px; border-radius: 12px; }
-  .aat-lead-header { gap: 10px; }
-  .aat-lead-icoon { width: 38px; height: 38px; font-size: 0.9rem; }
-  .aat-lead-titel { font-size: 0.88rem; }
-  .aat-lead-sub { font-size: 0.72rem; }
-  .aat-lead-velden { grid-template-columns: 1fr; gap: 8px; }
-  .aat-lead-verzend { font-size: 0.78rem; padding: 12px; }
-
-  /* Opnieuw knop */
-  .aat-opnieuw { font-size: 0.7rem; }
-}
-
-/* ── ZEER KLEIN (max 380px) ── */
-@media (max-width: 380px) {
-  .aat-cat-grid { grid-template-columns: 1fr; }
-  .aat-opties.cols3 { grid-template-columns: 1fr; }
-  .aat-welkom h1 { font-size: 1.15rem; }
-  .aat-stappen-preview { display: none; }
-  .aat-res-stats { grid-template-columns: 1fr 1fr; }
-}
-
-/* ── LEAD BLOK 560px ── */
-@media (max-width: 560px) {
-  </style>
+/* gate */
+.gate{max-width:440px;margin:8vh auto 0;text-align:center}
+.gate .bfly-big{width:64px;height:64px;border-radius:18px;background:#fff;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:0 8px 22px rgba(74,25,66,.14)}
+.gate .bfly-big svg{width:38px;height:38px}
+.gate .err{color:#c0392b;font-size:.88rem;margin-top:10px;min-height:18px}
+.print-hide{}
+@media print{.print-hide{display:none!important}.why{background:#4a1942!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
 </head>
 <body>
+<div class="wrap">
+  <div class="top">
+    <span class="bfly" id="logo-bfly"></span>
+    <b>Uitvaart-Platform.nl</b>
+  </div>
 
-<div class="aat-progress-wrap" id="progressWrap" style="display:none;">
-  <div class="aat-progress-top">
-    <span class="aat-progress-logo">🏛️ Uitvaart-Platform.nl — Advertentie Advies</span>
-    <span class="aat-progress-stap">Stap <span id="stapNr">1</span> van <span id="stapTotaal">11</span></span>
+  <div class="card">
+    <div class="bar"><i id="progress"></i></div>
+    <div class="pad" id="stage"><!-- schermen worden hier ingeladen --></div>
   </div>
-  <div class="aat-bar-track"><div class="aat-bar-fill" id="progressBar" style="width:0%"></div></div>
-</div>
 
-<div class="aat">
-
-<!-- ══ WELKOM ══ -->
-<div id="welkom" class="aat-welkom">
-  <div class="aat-welkom-badge"><div class="aat-welkom-badge-dot"></div><span>Gratis &amp; Vrijblijvend Advies</span></div>
-  <h1>Welk advertentiepakket past<br><em>bij jouw uitvaartbedrijf?</em></h1>
-  <p class="aat-welkom-sub">Beantwoord 5 gerichte vragen en ontvang direct een volledig persoonlijk advies op maat, inclusief de beste pakketten, aanvullende diensten en directe aanvraagmogelijkheid.</p>
-  <div class="aat-welkom-kenmerken">
-    <span class="aat-welkom-kenmerk">⚡ 3 minuten</span>
-    <span class="aat-welkom-kenmerk">🎯 Volledig op maat</span>
-    <span class="aat-welkom-kenmerk">✓ Gratis</span>
-    <span class="aat-welkom-kenmerk">🔒 Geen verplichtingen</span>
+  <div class="footer-note print-hide">
+    Persoonlijk advies van Uitvaart-Platform.nl &middot; <a href="mailto:info@uitvaart-platform.nl">info@uitvaart-platform.nl</a> &middot; 085 4852152
   </div>
-  <div class="aat-stappen-preview">
-    <div class="aat-stap-preview"><span>1</span>Jouw bedrijf</div>
-    <div class="aat-stap-preview"><span>2</span>Doelgroep</div>
-    <div class="aat-stap-preview"><span>3</span>Bereik</div>
-    <div class="aat-stap-preview"><span>4</span>Bedrijfsprofiel</div>
-    <div class="aat-stap-preview"><span>5</span>Budget</div>
-  </div>
-  <button class="aat-start-knop" onclick="start()">Start het advies →</button>
-</div>
-
-<!-- ══ VRAAG 1: Categorieën (multi) ══ -->
-<div id="vraag1" class="aat-vraag">
-  <span class="aat-vraag-cat">Jouw bedrijf</span>
-  <span class="aat-vraag-nr">Vraag 1 van 5</span>
-  <div class="aat-vraag-titel">In welke categorie(ën) is jouw bedrijf actief?</div>
-  <div class="aat-vraag-sub">Kies alle categorieën die van toepassing zijn. Dit zijn alle categorieën uit onze bedrijvengids.</div>
-  <div class="aat-multi-hint">💡 Meerdere keuzes mogelijk</div>
-  <div class="aat-cat-grid" id="cat-grid">
-    <div class="aat-cat-item" onclick="toggleCat(this,'uitvaartondernemer')"><div class="aat-cat-icoon-wrap">⚰️</div><span class="aat-cat-naam">Uitvaartonderneming</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'fotograaf')"><div class="aat-cat-icoon-wrap">📷</div><span class="aat-cat-naam">Fotograaf</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'bloemen')"><div class="aat-cat-icoon-wrap">🌸</div><span class="aat-cat-naam">Bloemen en rouwstukken</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'rouwbegeleiding')"><div class="aat-cat-icoon-wrap">💜</div><span class="aat-cat-naam">Rouwcoach</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'kisten')"><div class="aat-cat-icoon-wrap">📦</div><span class="aat-cat-naam">Kisten</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'livestreaming')"><div class="aat-cat-icoon-wrap">📹</div><span class="aat-cat-naam">Livestreaming</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'herinneringsproducten')"><div class="aat-cat-icoon-wrap">💝</div><span class="aat-cat-naam">Herinneringsproducten</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'rouwvervoer')"><div class="aat-cat-icoon-wrap">🚗</div><span class="aat-cat-naam">Rouwvervoer</span><div class="aat-cat-check"></div></div>
-    <div class="aat-cat-item" onclick="toggleCat(this,'anders')"><div class="aat-cat-icoon-wrap">💼</div><span class="aat-cat-naam">Anders</span><div class="aat-cat-check"></div></div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(1)" style="visibility:hidden">← Terug</button>
-    <button class="aat-volgende" id="btn1" onclick="volgende(1)" disabled>Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 2: Doelgroep ══ -->
-<div id="vraag2" class="aat-vraag">
-  <span class="aat-vraag-cat">Jouw bedrijf</span>
-  <span class="aat-vraag-nr">Vraag 2 van 5</span>
-  <div class="aat-vraag-titel">Op welke doelgroep richt jij jouw diensten?</div>
-  <div class="aat-vraag-sub">Dit bepaalt de beste kanalen en pakketten. Particulier gericht bereik je via de bedrijvengids en The Perfect Goodbye. Zakelijk via Uitvaart-Inside en de community.</div>
-  <div class="aat-opties cols1">
-    <div class="aat-optie" onclick="selecteer(this,'doelgroep','particulier')">
-      <div class="aat-optie-icoon-wrap">👨‍👩‍👧</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Particuliere markt — nabestaanden en families</div><div class="aat-optie-desc">Jij werkt direct met families die een uitvaart regelen of vooruitplannen. Persoonlijk contact en vertrouwen staan centraal.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'doelgroep','zakelijk')">
-      <div class="aat-optie-icoon-wrap">🏢</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Zakelijke markt — uitvaartondernemers en professionals</div><div class="aat-optie-desc">Jij levert diensten of producten aan uitvaartondernemers, rouwcentra, begraafplaatsen of andere brancheprofessionals.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'doelgroep','beiden')">
-      <div class="aat-optie-icoon-wrap">🌍</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Beide markten — particulier én zakelijk</div><div class="aat-optie-desc">Jij bereikt zowel families direct als professionals in de uitvaartbranche. Breed bereik is belangrijk voor jouw groei.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(2)">← Terug</button>
-    <button class="aat-volgende" id="btn2" onclick="volgende(2)" disabled>Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 3: Bereik ══ -->
-<div id="vraag3" class="aat-vraag">
-  <span class="aat-vraag-cat">Jouw bereik</span>
-  <span class="aat-vraag-nr">Vraag 3 van 5</span>
-  <div class="aat-vraag-titel">In welk geografisch gebied wil jij gevonden worden?</div>
-  <div class="aat-vraag-sub">Dit bepaalt het bereik van jouw vermelding in de bedrijvengids en welk pakket het meeste oplevert voor jou.</div>
-  <div class="aat-opties cols1">
-    <div class="aat-optie" onclick="selecteer(this,'bereik','lokaal')">
-      <div class="aat-optie-icoon-wrap">📍</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Lokaal — binnen 30 km rondom mijn vestiging</div><div class="aat-optie-desc">Ideaal voor ondernemers die voornamelijk in hun eigen regio werken en lokale families willen bereiken.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'bereik','provinciaal')">
-      <div class="aat-optie-icoon-wrap">🗺️</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Provinciaal — mijn gehele provincie</div><div class="aat-optie-desc">Voor bedrijven die actief zijn in een volledige provincie en regionaal marktleider willen worden.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'bereik','landelijk')">
-      <div class="aat-optie-icoon-wrap">🇳🇱</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Landelijk — heel Nederland</div><div class="aat-optie-desc">Voor landelijk opererende ondernemingen, verzekeraars en leveranciers die door heel Nederland actief zijn.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(3)">← Terug</button>
-    <button class="aat-volgende" id="btn3" onclick="volgende(3)" disabled>Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 4: Bedrijfsgrootte en doel ══ -->
-<div id="vraag4" class="aat-vraag">
-  <span class="aat-vraag-cat">Jouw bedrijf</span>
-  <span class="aat-vraag-nr">Vraag 4 van 5</span>
-  <div class="aat-vraag-titel">Hoe groot is jouw bedrijf en wat is jouw marketingdoel?</div>
-  <div class="aat-vraag-sub">Kies het profiel dat het beste bij jouw situatie past.</div>
-  <div class="aat-opties cols1">
-    <div class="aat-optie" onclick="selecteer(this,'profiel','starter')">
-      <div class="aat-optie-icoon-wrap">🌱</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">ZZP of starter — ik begin mijn online aanwezigheid op te bouwen</div><div class="aat-optie-desc">Klein bedrijf of ZZP, lokaal actief, wil goed gevonden worden en een stevige basis opbouwen.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'profiel','groei')">
-      <div class="aat-optie-icoon-wrap">📈</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Groeiend bedrijf — ik wil meer klanten aantrekken en mijn markt uitbreiden</div><div class="aat-optie-desc">2 tot 15 medewerkers, goed op weg maar wil doorgroeien en meer families bereiken in een groter gebied.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'profiel','gevestigd')">
-      <div class="aat-optie-icoon-wrap">🏢</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Gevestigd bedrijf — ik wil autoriteit uitstralen en marktleider worden</div><div class="aat-optie-desc">15 tot 50 medewerkers, meerdere vestigingen of specialisaties, streeft naar marktautoriteit en merkversterking.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'profiel','groot')">
-      <div class="aat-optie-icoon-wrap">🏦</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Grote organisatie — ik wil maximale zichtbaarheid op alle kanalen</div><div class="aat-optie-desc">50+ medewerkers of landelijk opererende organisatie. Premium aanwezigheid en merkautoriteit zijn de prioriteit.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug(4)">← Terug</button>
-    <button class="aat-volgende" id="btn4" onclick="volgende(4,'Budget')" disabled>Volgende →</button>
-  </div>
-</div>
-
-<!-- ══ VRAAG 5: Online aanwezigheid ══ -->
-<div id="vraagBudget" class="aat-vraag">
-  <span class="aat-vraag-cat">Budget</span>
-  <span class="aat-vraag-nr">Vraag 5 van 5</span>
-  <div class="aat-vraag-titel">Wat is jouw globale maandelijkse marketingbudget?</div>
-  <div class="aat-vraag-sub">Dit helpt ons pakketten aan te bevelen die aansluiten bij jouw financiële mogelijkheden. Er is voor elk budget een passende oplossing.</div>
-  <div class="aat-opties cols2">
-    <div class="aat-optie" onclick="selecteer(this,'budget','laag')">
-      <div class="aat-optie-icoon-wrap">💶</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">Tot €150 per maand</div><div class="aat-optie-desc">Gericht starten met lokale zichtbaarheid en een stevige online basis opbouwen.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'budget','midden')">
-      <div class="aat-optie-icoon-wrap">💶💶</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">€150 tot €400 per maand</div><div class="aat-optie-desc">Groeiende investering voor regionaal bereik met aanvullende zichtbaarheid.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'budget','hoog')">
-      <div class="aat-optie-icoon-wrap">💶💶💶</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">€400 tot €800 per maand</div><div class="aat-optie-desc">Serieuze investering voor landelijke zichtbaarheid en meerdere kanalen tegelijk.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-    <div class="aat-optie" onclick="selecteer(this,'budget','premium')">
-      <div class="aat-optie-icoon-wrap">🏆</div>
-      <div class="aat-optie-tekst"><div class="aat-optie-naam">€800 of meer per maand</div><div class="aat-optie-desc">Premium aanwezigheid op alle kanalen inclusief magazine, dossier en branded content.</div></div>
-      <div class="aat-optie-check"></div>
-    </div>
-  </div>
-  <div class="aat-nav">
-    <button class="aat-terug" onclick="terug('Budget',4)">← Terug</button>
-    <button class="aat-volgende" id="btnBudget" onclick="berekenAdvies()" disabled>🎯 Bekijk mijn advies op maat</button>
-  </div>
-</div>
-
-<div id="resultaat" class="aat-resultaat"></div>
-
 </div>
 
 <script>
-const antwoorden = {};
-const multiSets = { cat: new Set(), media: new Set(), extra: new Set(), publicaties: new Set() };
+/* ============================================================= */
+/* ===============  INSTELLINGEN  =============================== */
+/* ============================================================= */
 
-const TOTAAL_VRAGEN = 5;
+/* 1) GEHEIME PRIJS-TOKEN.
+      Standaard toont de tool GEEN prijzen (alles op aanvraag): de openbare versie.
+      Open je de tool met  ?p=UP2026  achter de link, dan worden de prijzen WEL
+      getoond. Zo gebruik je 1 bestand voor de openbare landingspagina en voor
+      prospects die je hebt gesproken.                          */
+var PRIJS_TOKEN = 'UP2026';
 
-function start() {
-  document.getElementById('welkom').style.display = 'none';
-  document.getElementById('progressWrap').style.display = 'block';
-  toonVraag(1);
+/* 1b) E-mailadres waar de aanvragen binnenkomen.                     */
+var NOTIFY_EMAIL = 'info@uitvaart-platform.nl';
+
+/* 2) PRIJZEN. Vul de bedragen in voor de e-mailversie.
+      Laat leeg ('') om 'op aanvraag' te tonen (publieke versie).
+      Je mag er gewoon tekst bij zetten, bijv. '495 per jaar'.   */
+var PRICES = {
+  regionaal:      '499,- excl. btw per jaar',
+  provinciaal:    '599,- excl. btw per jaar',
+  landelijk:      '699,- excl. btw per jaar',
+  banner:         '',
+  branded:        '',
+  uitvaartinside: '',
+  perfectgoodbye: '',
+  socialmedia:    '',
+  fotoshoot:      '',
+  film:           '',
+  webdesign:      '',
+  allesin_dubbel: '1.998,- excl. btw',
+  allesin_enkel:  '1.498,- excl. btw'
+};
+/* ============================================================= */
+
+var BFLY='<img src="data:image/png;base64,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" alt="Uitvaart-Platform.nl" style="width:86%;height:86%;object-fit:contain">';
+var CHK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+var CHKg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+document.getElementById('logo-bfly').innerHTML=BFLY;
+
+/* personalisatie via link: ?bedrijf=Naam (en optioneel ?naam=Voornaam) */
+var params=new URLSearchParams(location.search);
+var BEDRIJF=(params.get('bedrijf')||'').trim();
+var CONTACT=(params.get('naam')||'').trim();
+var TOONPRIJZEN=(PRIJS_TOKEN.length>0 && (params.get('p')||'').toLowerCase()===PRIJS_TOKEN.toLowerCase());
+
+var stage=document.getElementById('stage');
+var prog=document.getElementById('progress');
+
+/* ---------- VRAGEN ---------- */
+var vragen=[
+ {key:'type', q:'Wat voor onderneming heb je?', multi:false, opts:[
+   {v:'uitvaart', ic:'\u26B1\uFE0F', t:'Uitvaartonderneming', s:'Begeleiding en verzorging'},
+   {v:'rouw', ic:'\uD83E\uDD0D', t:'Rouw, nazorg of begeleiding', s:'Rouwbegeleiding, nazorg, coaching'},
+   {v:'bloem', ic:'\uD83D\uDC90', t:'Bloemen of decoratie', s:'Rouwbloemen, styling'},
+   {v:'steen', ic:'\uD83E\uDEA6', t:'Gedenktekens of steenhouwer', s:'Grafmonumenten, sieraden, urnen'},
+   {v:'juridisch', ic:'\u2696\uFE0F', t:'Notaris of juridisch', s:'Erfrecht, nalatenschap, mediation'},
+   {v:'media', ic:'\uD83D\uDCF8', t:'Fotograaf of videograaf', s:'Beeld rond afscheid'},
+   {v:'anders', ic:'\u2728', t:'Iets anders', s:'Ook welkom op het platform'}
+ ]},
+ {key:'bereik', q:'Hoe groot wil je gevonden worden?', multi:false, opts:[
+   {v:'regionaal', ic:'\uD83D\uDCCD', t:'Lokaal, rond mijn vestiging', s:'Ongeveer 30 km in de regio'},
+   {v:'provinciaal', ic:'\uD83D\uDDFA\uFE0F', t:'In mijn hele provincie', s:'Alle bezoekers uit de provincie'},
+   {v:'landelijk', ic:'\uD83C\uDDF3\uD83C\uDDF1', t:'Heel Nederland', s:'Zichtbaar in alle plaatsnamen'}
+ ]},
+ {key:'doel', q:'Wat wil je vooral bereiken?', multi:true, opts:[
+   {v:'leads', ic:'\uD83D\uDCC8', t:'Meer klanten en aanvragen', s:'Gevonden worden op het beslismoment'},
+   {v:'autoriteit', ic:'\u2B50', t:'Naamsbekendheid en autoriteit', s:'De gevestigde naam in de branche worden'},
+   {v:'online', ic:'\uD83D\uDD0D', t:'Beter online gevonden worden', s:'Sterke vindbaarheid en SEO'},
+   {v:'netwerk', ic:'\uD83E\uDD1D', t:'Netwerk en samenwerking', s:'Partners vinden in de branche'}
+ ]},
+ {key:'extern', q:'Waar wil je zichtbaar zijn?', multi:true, opts:[
+   {v:'platform', ic:'\uD83C\uDF10', t:'Zichtbaarheid op het platform', s:'In de bedrijvengids van Uitvaart-Platform.nl'},
+   {v:'uitvaartinside', ic:'\uD83D\uDCD6', t:'In magazine Uitvaart-Inside', s:'Glossy voor de consument, professionals'},
+   {v:'perfectgoodbye', ic:'\uD83D\uDC9B', t:'In The Perfect Goodbye', s:'Nabestaandendossier, direct bij de doelgroep'},
+   {v:'socialmedia', ic:'\uD83D\uDCF1', t:'Op social media', s:'Facebook, Instagram, LinkedIn'},
+   {v:'branded', ic:'\u270D\uFE0F', t:'Met een branded content artikel', s:'Jouw verhaal door onze redactie'}
+ ]},
+ {key:'diensten', q:'Interesse in aanvullende diensten?', multi:true, opts:[
+   {v:'fotoshoot', ic:'\uD83D\uDCF7', t:'Professionele bedrijfsfotoshoot', s:'Sterke uitstraling'},
+   {v:'film', ic:'\uD83C\uDFA5', t:'Bedrijfsvideo of filmproductie', s:'Vertel je verhaal in beeld'},
+   {v:'webdesign', ic:'\uD83D\uDCBB', t:'Nieuwe website', s:'Ontwerp en realisatie'},
+   {v:'social_dienst', ic:'\uD83D\uDCCA', t:'Social media beheer', s:'Wij verzorgen je kanalen'},
+   {v:'geen_d', ic:'\u2705', t:'Nee, niet nodig', s:'', solo:true}
+ ]},
+ {key:'termijn', q:'Hoe snel wil je zichtbaar zijn?', multi:false, opts:[
+   {v:'asap', ic:'\u26A1', t:'Zo snel mogelijk', s:'Het liefst deze week al'},
+   {v:'maand', ic:'\uD83D\uDCC5', t:'Binnen nu en een maand', s:'Ik wil het goed regelen'},
+   {v:'orient', ic:'\uD83D\uDC40', t:'Ik orienteer me nog', s:'Eerst alles rustig bekijken'}
+ ]}
+];
+
+var answers={};
+var step=-2; /* -2 = gate, -1 = intro, 0..n = vragen, n = resultaat */
+
+function setProgress(){
+  var total=vragen.length;
+  var p=0;
+  if(step>=0 && step<total) p=(step/total)*100;
+  else if(step>=total) p=100;
+  else p=0;
+  prog.style.width=p+'%';
 }
 
-function toonVraag(nr) {
-  document.querySelectorAll('.aat-vraag').forEach(v => v.classList.remove('actief'));
-  document.getElementById('resultaat').classList.remove('actief');
-  const id = typeof nr === 'string' && nr.startsWith('vraag') ? nr : (nr === 'Budget' ? 'vraagBudget' : 'vraag' + nr);
-  const el = document.getElementById(id);
-  if (el) el.classList.add('actief');
-  updateProgress(nr);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+/* ---------- INTRO ---------- */
+function renderIntro(){
+  setProgress();
+  stage.innerHTML=
+   '<div class="screen on">'+
+     '<span class="eyebrow"><span class="dot"></span>Persoonlijk advies op maat</span>'+
+     '<h1>'+(BEDRIJF?('Welkom, '+esc(BEDRIJF)):'Welkom')+'</h1>'+
+     '<p class="lead">In nog geen twee minuten zie je welke vorm van zichtbaarheid op Uitvaart-Platform.nl het beste bij jouw onderneming past. Een paar korte vragen, daarna een helder advies op maat.</p>'+
+     '<div class="stats">'+
+       '<div class="stat"><b>1 mln+</b><span>Bezoekers per jaar</span></div>'+
+       '<div class="stat"><b>166.000</b><span>Overlijdens per jaar in NL</span></div>'+
+       '<div class="stat"><b>40.000+</b><span>Leden op social media</span></div>'+
+     '</div>'+
+     '<p class="lead" style="margin-top:18px">Iedere bezoeker op ons platform is op dat moment bezig met afscheid, rouw of nalatenschap. Jij staat er precies op het moment dat zij een keuze maken.</p>'+
+     (BEDRIJF?'':'<div class="field"><label>Wat is je bedrijfsnaam?</label><input id="bedrijfinput" type="text" placeholder="Bijvoorbeeld Uitvaartzorg Jansen"></div>')+
+     '<button class="btn primary big" onclick="startVragen()">Start mijn advies &rarr;</button>'+
+     '<p class="hint">6 korte vragen &middot; ongeveer 2 minuten</p>'+
+   '</div>';
+}
+function startVragen(){
+  if(!BEDRIJF){ var b=document.getElementById('bedrijfinput'); if(b&&b.value.trim()) BEDRIJF=b.value.trim(); }
+  step=0; renderVraag();
 }
 
-function updateProgress(nr) {
-  document.getElementById('stapNr').textContent = nr;
-  document.getElementById('stapTotaal').textContent = TOTAAL_VRAGEN;
-  document.getElementById('progressBar').style.width = ((nr - 1) / TOTAAL_VRAGEN * 100) + '%';
-}
-
-// Enkelvoudige selectie
-function selecteer(el, sleutel, waarde) {
-  el.closest('.aat-opties').querySelectorAll('.aat-optie').forEach(o => o.classList.remove('geselecteerd'));
-  el.classList.add('geselecteerd');
-  antwoorden[sleutel] = waarde;
-  const vraagId = el.closest('.aat-vraag').id;
-  const nr = vraagId.replace('vraag','');
-  const btn = document.getElementById('btn' + nr) || document.getElementById('btnBudget');
-  if (btn) btn.disabled = false;
-}
-
-// Categorie toggle
-function toggleCat(el, waarde) {
-  el.classList.toggle('geselecteerd');
-  if (el.classList.contains('geselecteerd')) multiSets.cat.add(waarde);
-  else multiSets.cat.delete(waarde);
-  antwoorden.categorieen = Array.from(multiSets.cat);
-  document.getElementById('btn1').disabled = multiSets.cat.size === 0;
-}
-
-// Multi-select toggle (media, extra, publicaties)
-function toggleMulti(el, waarde) {
-  el.classList.toggle('geselecteerd');
-  // Bepaal welke set
-  const vraagEl = el.closest('.aat-vraag');
-  const vraagNr = parseInt(vraagEl.id.replace('vraag',''));
-  let setKey = vraagNr === 7 ? 'media' : vraagNr === 8 ? 'extra' : 'publicaties';
-
-  if (el.classList.contains('geselecteerd')) multiSets[setKey].add(waarde);
-  else multiSets[setKey].delete(waarde);
-
-  antwoorden[setKey] = Array.from(multiSets[setKey]);
-}
-
-function volgende(van, naar) { toonVraag(naar !== undefined ? naar : van + 1); }
-
-function terug(van, naar) {
-  if (van <= 1) {
-    document.getElementById('progressWrap').style.display = 'none';
-    document.getElementById('vraag1').classList.remove('actief');
-    document.getElementById('welkom').style.display = 'block';
-    return;
-  }
-  toonVraag(van - 1);
-}
-
-// ── ADVIES BEREKENING ──
-function berekenAdvies() {
-  const a = antwoorden;
-  const cats = a.categorieen || [];
-  const media = a.media || [];
-  const extra = a.extra || [];
-  const pub = a.publicaties || [];
-
-  const scores = { regionaal: 0, provinciaal: 0, landelijk: 0, banner: 0, skyscraper: 0, branded: 0, inside: 0, tpg: 0, social: 0, website: 0, foto: 0, video: 0 };
-
-  // Bereik
-  if (a.bereik === 'lokaal') { scores.regionaal += 45; }
-  if (a.bereik === 'provinciaal') { scores.provinciaal += 45; scores.regionaal += 15; }
-  if (a.bereik === 'landelijk') { scores.landelijk += 45; scores.banner += 15; scores.skyscraper += 10; }
-
-  // Doelgroep
-  if (a.doelgroep === 'particulier') { scores.regionaal += 15; scores.tpg += 20; }
-  if (a.doelgroep === 'zakelijk') { scores.inside += 25; scores.branded += 20; scores.landelijk += 10; }
-  if (a.doelgroep === 'beiden') { scores.tpg += 10; scores.inside += 15; scores.provinciaal += 10; scores.landelijk += 10; }
-
-  // Profiel
-  if (a.profiel === 'starter') { scores.regionaal += 25; scores.social += 10; }
-  if (a.profiel === 'groei') { scores.provinciaal += 20; scores.social += 15; scores.banner += 10; }
-  if (a.profiel === 'gevestigd') { scores.provinciaal += 15; scores.landelijk += 10; scores.branded += 15; scores.banner += 15; }
-  if (a.profiel === 'groot') { scores.landelijk += 25; scores.banner += 20; scores.skyscraper += 20; scores.branded += 15; scores.inside += 15; }
-
-  // Online aanwezigheid
-  if (a.online === 'geen') { scores.regionaal += 20; scores.website += 30; }
-  if (a.online === 'basis') { scores.regionaal += 10; scores.provinciaal += 10; scores.website += 15; scores.social += 15; }
-  if (a.online === 'goed') { scores.provinciaal += 10; scores.landelijk += 10; scores.banner += 10; }
-  if (a.online === 'sterk') { scores.banner += 20; scores.skyscraper += 15; scores.branded += 15; scores.inside += 15; }
-
-  // Website
-  if (a.website === 'geen') { scores.website += 40; }
-  if (a.website === 'oud') { scores.website += 30; }
-  if (a.website === 'optimalisatie') { scores.website += 20; }
-
-  // Media behoeften
-  if (media.includes('foto-bedrijf') || media.includes('foto-portret')) { scores.foto += 35; }
-  if (media.includes('video-bedrijf') || media.includes('video-social') || media.includes('video-testimonial')) { scores.video += 35; }
-
-  // Extra wensen
-  if (extra.includes('social-uitlichting')) { scores.social += 30; }
-  if (extra.includes('facebookgroep')) { scores.social += 20; scores.provinciaal += 5; }
-  if (extra.includes('banner')) { scores.banner += 35; }
-  if (extra.includes('skyscraper')) { scores.skyscraper += 35; }
-  if (extra.includes('branded')) { scores.branded += 35; }
-  if (extra.includes('nieuwsbrief')) { scores.provinciaal += 5; scores.landelijk += 5; }
-
-  // Publicaties
-  if (pub.includes('inside')) { scores.inside += 40; }
-  if (pub.includes('tpg')) { scores.tpg += 40; }
-
-  // Budget
-  if (a.budget === 'laag') { scores.regionaal += 20; }
-  if (a.budget === 'midden') { scores.provinciaal += 20; scores.regionaal += 10; scores.social += 10; }
-  if (a.budget === 'hoog') { scores.landelijk += 15; scores.banner += 15; scores.provinciaal += 10; scores.inside += 10; }
-  if (a.budget === 'premium') { scores.landelijk += 20; scores.banner += 20; scores.skyscraper += 15; scores.inside += 20; scores.tpg += 20; scores.branded += 20; }
-
-  // Prioriteit
-  if (a.prioriteit === 'prijs') { scores.regionaal += 15; }
-  if (a.prioriteit === 'bereik') { scores.landelijk += 15; scores.banner += 10; scores.skyscraper += 10; }
-  if (a.prioriteit === 'kwaliteit') { scores.inside += 15; scores.branded += 15; scores.tpg += 10; }
-  if (a.prioriteit === 'persoonlijk') { scores.regionaal += 8; scores.provinciaal += 8; }
-
-  // Categorie-specifiek
-  if (cats.includes('uitvaartondernemer') || cats.includes('rouwcentrum')) { scores.tpg += 15; scores.regionaal += 10; }
-  if (cats.includes('verzekering')) { scores.landelijk += 20; scores.tpg += 15; scores.inside += 10; }
-  if (cats.includes('rouwbegeleiding')) { scores.tpg += 15; scores.inside += 10; scores.branded += 10; }
-  if (cats.includes('erfrecht') || cats.includes('nalatenschap')) { scores.inside += 20; scores.branded += 15; }
-  if (cats.includes('grafmonument') || cats.includes('herinneringssieraden') || cats.includes('herinneringsproducten')) { scores.tpg += 20; scores.inside += 10; }
-  if (cats.includes('bloemen')) { scores.regionaal += 15; scores.tpg += 10; }
-  if (cats.includes('fotograaf') || cats.includes('livestreaming')) { scores.inside += 15; scores.branded += 10; }
-  if (cats.includes('repatriering')) { scores.landelijk += 20; }
-  if (cats.includes('rouwdrukwerk')) { scores.regionaal += 10; scores.landelijk += 10; }
-  if (cats.includes('muziek') || cats.includes('rituelen') || cats.includes('catering')) { scores.regionaal += 10; scores.tpg += 10; }
-
-  // Normaliseer hoofd-scores
-  const hoofdKeys = ['regionaal','provinciaal','landelijk'];
-  const maxHoofd = Math.max(...hoofdKeys.map(k => scores[k]));
-  const normHoofd = {};
-  hoofdKeys.forEach(k => normHoofd[k] = Math.round((scores[k] / maxHoofd) * 100));
-
-  const gesorteerd = hoofdKeys.sort((a, b) => normHoofd[b] - normHoofd[a]);
-
-  // Extra scores normaliseren
-  const extraKeys = ['banner','skyscraper','branded','inside','tpg','social'];
-  const maxExtra = Math.max(...extraKeys.map(k => scores[k])) || 1;
-  const normExtra = {};
-  extraKeys.forEach(k => normExtra[k] = Math.round((scores[k] / maxExtra) * 100));
-  const aanbevolenExtra = extraKeys.filter(k => normExtra[k] >= 40).slice(0, 4);
-
-  // Diensten
-  const aanbevolenDiensten = [];
-  if (scores.website >= 20) aanbevolenDiensten.push('website');
-  if (scores.foto >= 25) aanbevolenDiensten.push('foto');
-  if (scores.video >= 25) aanbevolenDiensten.push('video');
-  if (extra.includes('social-uitlichting') || scores.social >= 30) aanbevolenDiensten.push('social');
-
-  renderResultaat(gesorteerd, normHoofd, aanbevolenExtra, normExtra, aanbevolenDiensten, a, pub);
-}
-
-function renderResultaat(ranking, normHoofd, aanbExtra, normExtra, diensten, a, pub) {
-  const PAKKET = {
-    regionaal: { naam: 'Regionaal pakket', icoon: '📍', omschrijving: 'Prominente vermelding in de bedrijvengids van Uitvaart-Platform.nl met volledige profielpagina. Zichtbaar voor alle families binnen 30 km rondom jouw vestiging die actief zoeken naar jouw diensten.', features: ['Bedrijvengids B2C en B2B', 'Lokaal bereik 30 km', '1x social media uitlichting', 'Toegang Facebookgroep (8.500 leden)', '1x gratis nieuwsbriefvermelding'] },
-    provinciaal: { naam: 'Provinciaal pakket', icoon: '🗺️', omschrijving: 'Zichtbaarheid in jouw gehele provincie via de bedrijvengids. Bereik alle families en professionals in jouw regio en bouw een sterke provinciale reputatie op.', features: ['Bedrijvengids B2C en B2B', 'Bereik gehele provincie', '2x social media uitlichting', 'Toegang Facebookgroep (8.500 leden)', '1x gratis nieuwsbriefvermelding'] },
-    landelijk: { naam: 'Landelijk pakket', icoon: '🇳🇱', omschrijving: 'Maximale online zichtbaarheid in heel Nederland. Voor landelijk opererende ondernemingen, verzekeraars en leveranciers die marktautoriteit willen opbouwen en door heel Nederland gevonden willen worden.', features: ['Bedrijvengids B2C en B2B', 'Zichtbaar heel Nederland', '3x social media uitlichting', 'Toegang Facebookgroep (8.500 leden)', '1x gratis nieuwsbriefvermelding'] },
-  };
-
-  const EXTRA = {
-    banner: { icoon: '🖼️', naam: 'Bannerposities', tekst: 'Opvallende banners op strategische plekken: homepage, bedrijvengids, artikelpaginas en agenda. Maximale exposure voor alle platformbezoekers.' },
-    skyscraper: { icoon: '🏗️', naam: 'Skyscraper uitschuifmenu', tekst: 'De meest prominente bannerpositie op het platform — een skyscraper in het uitschuifmenu van de homepage. Zichtbaar voor elke bezoeker.' },
-    branded: { icoon: '✍️', naam: 'Branded Content', tekst: 'Professioneel redactioneel artikel over jouw bedrijf geschreven door de redactie. Positioneert jou als autoriteit en genereert langdurige zichtbaarheid via Google.' },
-    inside: { icoon: '📖', naam: 'Uitvaart-Inside magazine', tekst: 'Advertentie in het toonaangevende glossy uitvaartmagazine. 120+ paginas, bereik professionals en betrokken consumenten in een hoogwaardige gedrukte context.' },
-    tpg: { icoon: '📦', naam: 'The Perfect Goodbye', tekst: 'Advertentie in het nabestaandendossier. Direct in handen van families die een uitvaart regelen of vooruitplannen. De hoogste koopintentie van alle kanalen.' },
-    social: { icoon: '📱', naam: 'Social media uitlichting', tekst: 'Posts over jouw bedrijf op alle kanalen van Uitvaart-Platform.nl: Facebook, Instagram, LinkedIn en de besloten groep met 8.500 leden.' },
-  };
-
-  const DIENSTEN = {
-    website: { icoon: '🌐', naam: 'Website design en realisatie', tekst: 'Een professionele website die families aanspreekt en op Google vindbaar is. Volledig op maat voor uitvaartondernemers.', link: 'https://uitvaart-platform.nl/website-design' },
-    foto: { icoon: '📷', naam: 'Professionele fotoshoot', tekst: 'Bedrijfsfotografie, portretfoto\'s en productfotografie speciaal voor de uitvaartbranche. Professioneel beeld voor jouw website en bedrijvengids.', link: 'https://uitvaart-platform.nl/fotografie' },
-    video: { icoon: '🎬', naam: 'Professionele videoshoot', tekst: 'Bedrijfsfilm, testimonials en social media videoclips. Vertel jouw verhaal in beeld en creëer vertrouwen bij potentiële klanten.', link: 'https://uitvaart-platform.nl/videografie' },
-    social: { icoon: '📱', naam: 'Social media aandacht', tekst: 'Gerichte uitlichting op Facebook, Instagram en LinkedIn van Uitvaart-Platform.nl met een gecombineerd bereik van 30.000+ volgers en leden.', link: 'https://uitvaart-platform.nl/social-media' },
-  };
-
-  const bereikStats = {
-    lokaal: { bezoekers: '12.000', families: '400', community: '8.500', doelgroep: '100%' },
-    provinciaal: { bezoekers: '55.000', families: '1.800', community: '8.500', doelgroep: '100%' },
-    landelijk: { bezoekers: '166.000', families: '5.500', community: '8.500', doelgroep: '100%' },
-  };
-  const stat = bereikStats[a.bereik] || bereikStats.provinciaal;
-  const topPakket = PAKKET[ranking[0]];
-
-  let html = '';
-
-  // Header
-  html += `<div class="aat-res-header">
-    <span class="aat-res-header-label">Jouw persoonlijke advertentieadvies op maat</span>
-    <h2>Wij adviseren: <em>${topPakket.icoon} ${topPakket.naam}</em></h2>
-    <p class="aat-res-header-sub">${topPakket.omschrijving}</p>
-    <div class="aat-res-score-badge">🎯 Berekend op basis van jouw 11 antwoorden</div>
-  </div>`;
-
-  // Stats
-  html += `<div class="aat-res-stats">
-    <div class="aat-res-stat"><span class="aat-res-stat-nr">${stat.bezoekers}</span><span class="aat-res-stat-label">Relevante bezoekers per maand</span></div>
-    <div class="aat-res-stat"><span class="aat-res-stat-nr">${stat.families}</span><span class="aat-res-stat-label">Families in jouw verzorgingsgebied</span></div>
-    <div class="aat-res-stat"><span class="aat-res-stat-nr">${stat.community}</span><span class="aat-res-stat-label">Leden in de branchegemeenschap</span></div>
-    <div class="aat-res-stat"><span class="aat-res-stat-nr">${stat.doelgroep}</span><span class="aat-res-stat-label">Relevante doelgroep actief zoekend</span></div>
-  </div>`;
-
-  // Top 3 pakketten
-  html += `<span class="aat-res-sectie-label">Pakketvergelijking</span>
-  <div class="aat-res-sectie-titel">Top 3 aanbevelingen voor jouw situatie</div>
-  <div class="aat-res-pakketten">`;
-  const klassen = ['top','tweede','derde'];
-  const nrs = ['1','2','3'];
-  ranking.forEach((k, i) => {
-    const p = PAKKET[k];
-    html += `<div class="aat-res-pakket ${klassen[i]}">
-      ${i===0?'<div class="aat-res-pakket-aanbevolen">Beste match</div>':''}
-      <div class="aat-res-pakket-rank">${nrs[i]}</div>
-      <div style="flex:1;">
-        <div class="aat-res-pakket-naam">${p.icoon} ${p.naam}</div>
-        <div class="aat-res-pakket-omschrijving">${p.omschrijving}</div>
-        <div class="aat-res-pakket-features">${p.features.map(f=>`<span class="aat-res-pakket-feature">✓ ${f}</span>`).join('')}</div>
-        <div class="aat-res-score-rij" style="margin-top:10px;">
-          <span class="aat-res-score-label">Match score:</span>
-          <div class="aat-res-score-bar"><div class="aat-res-score-fill" style="width:${normHoofd[k]}%"></div></div>
-          <span class="aat-res-score-pct">${normHoofd[k]}%</span>
-        </div>
-      </div>
-    </div>`;
+/* ---------- VRAGEN ---------- */
+function renderVraag(){
+  setProgress();
+  var v=vragen[step];
+  var cur=answers[v.key]|| (v.multi?[]:null);
+  var html='<div class="screen on">';
+  html+='<div class="q">Vraag '+(step+1)+' van '+vragen.length+'</div>';
+  html+='<div class="vraag">'+v.q+'</div>';
+  html+='<div class="opts">';
+  v.opts.forEach(function(o){
+    var sel = v.multi ? (cur.indexOf(o.v)>-1) : (cur===o.v);
+    html+='<button class="opt'+(sel?' sel':'')+'" data-v="'+o.v+'" onclick="pick(\''+o.v+'\','+(o.solo?'true':'false')+')">'+
+            '<span class="ic">'+o.ic+'</span>'+
+            '<span class="tx"><b>'+o.t+'</b>'+(o.s?'<small>'+o.s+'</small>':'')+'</span>'+
+            '<span class="chk">'+CHK+'</span>'+
+          '</button>';
   });
-  html += '</div>';
-
-  // Extra aanbevelingen
-  if (aanbExtra.length > 0) {
-    html += `<span class="aat-res-sectie-label" style="margin-top:20px;display:block;">Aanvullende zichtbaarheid</span>
-    <div class="aat-res-sectie-titel">Extra aanbevelingen voor jouw situatie</div>
-    <div class="aat-res-extra-grid">`;
-    aanbExtra.forEach(k => {
-      const e = EXTRA[k];
-      html += `<div class="aat-res-extra aanbevolen">
-        <span class="aat-res-extra-badge">Aanbevolen</span>
-        <span class="aat-res-extra-icoon">${e.icoon}</span>
-        <div class="aat-res-extra-naam">${e.naam}</div>
-        <div class="aat-res-extra-tekst">${e.tekst}</div>
-      </div>`;
-    });
-    html += '</div>';
-  }
-
-  // Diensten aanbevelingen
-  if (diensten.length > 0) {
-    html += `<span class="aat-res-sectie-label" style="margin-top:20px;display:block;">Aanvullende diensten</span>
-    <div class="aat-res-sectie-titel">Op basis van jouw antwoorden bevelen wij ook aan</div>
-    <div class="aat-res-diensten-grid">`;
-    diensten.forEach(k => {
-      const d = DIENSTEN[k];
-      html += `<div class="aat-res-dienst">
-        <span class="aat-res-dienst-icoon">${d.icoon}</span>
-        <div class="aat-res-dienst-naam">${d.naam}</div>
-        <div class="aat-res-dienst-tekst">${d.tekst}</div>
-        <a href="${d.link}" class="aat-res-dienst-link" target="_blank">Meer informatie →</a>
-      </div>`;
-    });
-    html += '</div>';
-  }
-
-  // Publicaties
-  if (pub.includes('inside') || pub.includes('tpg')) {
-    html += `<span class="aat-res-sectie-label" style="margin-top:20px;display:block;">Publicaties</span>
-    <div class="aat-res-sectie-titel">Jouw interesse in onze publicaties</div>
-    <div class="aat-res-extra-grid">`;
-    if (pub.includes('inside')) {
-      html += `<div class="aat-res-extra aanbevolen">
-        <span class="aat-res-extra-badge">Jouw keuze</span>
-        <span class="aat-res-extra-icoon">📖</span>
-        <div class="aat-res-extra-naam">Uitvaart-Inside magazine</div>
-        <div class="aat-res-extra-tekst">Wij bespreken de beschikbare formaten (1 t/m 4 paginas en coverposities) en tarieven in ons persoonlijke gesprek.</div>
-      </div>`;
-    }
-    if (pub.includes('tpg')) {
-      html += `<div class="aat-res-extra aanbevolen">
-        <span class="aat-res-extra-badge">Jouw keuze</span>
-        <span class="aat-res-extra-icoon">📦</span>
-        <div class="aat-res-extra-naam">The Perfect Goodbye</div>
-        <div class="aat-res-extra-tekst">Wij bespreken de beschikbare formaten (hele pagina, dubbele pagina of branded content) en de actuele beschikbaarheid.</div>
-      </div>`;
-    }
-    html += '</div>';
-  }
-
-  // Sla advies op voor het formulier
-  window._huidigAdvies = {
-    pakket: PAKKET[ranking[0]].naam,
-    categorieen: (a.categorieen||[]).join(', '),
-    doelgroep: a.doelgroep||'-',
-    bereik: a.bereik||'-',
-    profiel: a.profiel||'-',
-    budget: a.budget||'-',
-    extra: [...(a.extra||[]), ...(a.media||[]), ...(a.publicaties||[])].join(', '),
-  };
-
-  html += `<div class="aat-lead-blok" id="leadBlok">
-    <div class="aat-lead-header">
-      <div class="aat-lead-icoon">📩</div>
-      <div>
-        <div class="aat-lead-titel">Ontvang dit advies per e-mail en wij nemen contact op</div>
-        <div class="aat-lead-sub">Vul je gegevens in en wij sturen jou het advies toe en nemen binnen 1 werkdag persoonlijk contact op voor een vrijblijvend gesprek.</div>
-      </div>
-    </div>
-    <div class="aat-lead-velden">
-      <div class="aat-lead-veld">
-        <label class="aat-lead-label">Naam *</label>
-        <input type="text" class="aat-lead-input" id="leadNaam" placeholder="Jouw naam">
-      </div>
-      <div class="aat-lead-veld">
-        <label class="aat-lead-label">Bedrijfsnaam *</label>
-        <input type="text" class="aat-lead-input" id="leadBedrijf" placeholder="Naam van jouw bedrijf">
-      </div>
-      <div class="aat-lead-veld">
-        <label class="aat-lead-label">E-mailadres *</label>
-        <input type="email" class="aat-lead-input" id="leadEmail" placeholder="info@jouwbedrijf.nl">
-      </div>
-      <div class="aat-lead-veld">
-        <label class="aat-lead-label">Telefoonnummer</label>
-        <input type="tel" class="aat-lead-input" id="leadTel" placeholder="06 - ...">
-      </div>
-    </div>
-    <button class="aat-lead-verzend" onclick="verstuurLead()">📩 Stuur mij dit advies en word gecontacteerd</button>
-    <div class="aat-lead-verzond" id="leadVerzond">
-      <span class="aat-lead-verzond-icoon">✅</span>
-      <div class="aat-lead-verzond-titel">Verzonden! Wij nemen binnen 1 werkdag contact op.</div>
-      <div class="aat-lead-verzond-sub">Jouw advies en gegevens zijn verstuurd naar info@uitvaart-platform.nl. Check ook jouw spambox.</div>
-    </div>
-    <div class="aat-lead-of">of</div>
-    <a href="https://uitvaart-platform.nl/adverteren" class="aat-lead-mailto" target="_blank">📋 Bekijk alle advertentiemogelijkheden</a>
-    <p class="aat-lead-disclaimer" style="margin-top:10px;">Jouw gegevens worden uitsluitend gebruikt voor het opnemen van contact. Geen spam, geen verplichtingen.</p>
-  </div>
-  <button class="aat-opnieuw" onclick="opnieuw()">↺ Advies opnieuw berekenen</button>`;
-
-
-  const el = document.getElementById('resultaat');
-
-  el.innerHTML = html;
-  document.querySelectorAll('.aat-vraag').forEach(v => v.classList.remove('actief'));
-  el.classList.add('actief');
-  document.getElementById('progressBar').style.width = '100%';
-  document.getElementById('stapNr').textContent = '✓';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  html+='</div>';
+  if(v.multi) html+='<p class="hint">Je mag meerdere opties kiezen</p>';
+  html+='<div class="row-btns">';
+  if(step>0) html+='<button class="btn ghost" onclick="prev()">Terug</button>';
+  html+='<button class="btn primary" id="nextbtn" onclick="next()"'+(canNext()?'':' disabled')+'>'+(step===vragen.length-1?'Bekijk mijn advies':'Volgende')+' &rarr;</button>';
+  html+='</div></div>';
+  stage.innerHTML=html;
 }
-
-async function verstuurLead() {
-  const naam = document.getElementById('leadNaam').value.trim();
-  const bedrijf = document.getElementById('leadBedrijf').value.trim();
-  const email = document.getElementById('leadEmail').value.trim();
-  const tel = document.getElementById('leadTel').value.trim();
-
-  if (!naam || !bedrijf || !email) {
-    alert('Vul naam, bedrijfsnaam en e-mailadres in.');
-    return;
-  }
-
-  // Knop in laadstatus
-  const btn = document.querySelector('.aat-lead-verzend');
-  btn.textContent = 'Verzenden...';
-  btn.disabled = true;
-
-  const adv = window._huidigAdvies || {};
-
-  const data = {
-    naam: naam,
-    bedrijf: bedrijf,
-    email: email,
-    telefoon: tel || 'niet ingevuld',
-    aanbevolen_pakket: adv.pakket || '-',
-    categorieen: adv.categorieen || '-',
-    doelgroep: adv.doelgroep || '-',
-    bereik: adv.bereik || '-',
-    bedrijfsprofiel: adv.profiel || '-',
-    budget: adv.budget || '-',
-    _subject: 'Nieuw advertentieadvies — ' + bedrijf + ' (' + (adv.pakket || '') + ')',
-    _replyto: email
-  };
-
-  try {
-    const response = await fetch('https://formspree.io/f/maqaglqq', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(data)
-    });
-
-    if (response.ok) {
-      // Succes — toon bevestiging
-      document.querySelector('.aat-lead-velden').style.display = 'none';
-      btn.style.display = 'none';
-      const ofEl = document.querySelector('.aat-lead-of');
-      if (ofEl) ofEl.style.display = 'none';
-      const mailtoEl = document.querySelector('.aat-lead-mailto');
-      if (mailtoEl) mailtoEl.style.display = 'none';
-      document.getElementById('leadVerzond').style.display = 'block';
-    } else {
-      btn.textContent = '📩 Stuur mij dit advies en word gecontacteerd';
-      btn.disabled = false;
-      alert('Er ging iets mis. Probeer het opnieuw of mail ons op info@uitvaart-platform.nl');
+function canNext(){
+  var v=vragen[step]; var cur=answers[v.key];
+  if(v.multi) return cur&&cur.length>0;
+  return !!cur;
+}
+function pick(val,solo){
+  var v=vragen[step];
+  if(v.multi){
+    var arr=answers[v.key]||[];
+    if(solo){ arr=(arr.indexOf(val)>-1)?[]:[val]; }
+    else{
+      var i=arr.indexOf(val);
+      if(i>-1) arr.splice(i,1); else arr.push(val);
+      arr=arr.filter(function(x){var o=v.opts.find(function(z){return z.v===x;});return !(o&&o.solo);});
     }
-  } catch(err) {
-    btn.textContent = '📩 Stuur dit advies en word gecontacteerd';
-    btn.disabled = false;
-    alert('Er ging iets mis. Controleer je internetverbinding en probeer opnieuw.');
+    answers[v.key]=arr;
+    renderVraag();
+  }else{
+    answers[v.key]=val;
+    renderVraag();
+    setTimeout(next,230);
   }
 }
+function next(){ if(!canNext())return; if(step<vragen.length-1){step++;renderVraag();}else{step=vragen.length;renderResultaat();} }
+function prev(){ if(step>0){step--;renderVraag();} }
 
+/* ---------- RESULTAAT ---------- */
+function prijs(key){ if(!TOONPRIJZEN) return 'Op aanvraag'; var p=PRICES[key]; return p? ('\u20AC '+p) : 'Op aanvraag'; }
 
+function renderResultaat(){
+  setProgress();
+  var bereik=answers.bereik||'regionaal';
+  var doel=answers.doel||[];
+  var ext=answers.extern||[];
+  var dn=answers.diensten||[];
+  var termijn=answers.termijn;
+  var naam=BEDRIJF||'jouw onderneming';
+  var socialCount={regionaal:1,provinciaal:2,landelijk:3}[bereik]||1;
+  var socialWoord=socialCount===1?'uitlichting':'uitlichtingen';
 
-function opnieuw() {
-  for (const k in antwoorden) delete antwoorden[k];
-  for (const s of Object.values(multiSets)) s.clear();
-  document.querySelectorAll('.aat-optie, .aat-cat-item').forEach(o => o.classList.remove('geselecteerd'));
-  document.querySelectorAll('button[id^="btn"]').forEach(b => {
-    if (b.id !== 'btn7' && b.id !== 'btn8' && b.id !== 'btn9') b.disabled = true;
+  var pkgNaam={regionaal:'Regionaal pakket',provinciaal:'Provinciaal pakket',landelijk:'Landelijk pakket'}[bereik];
+  var pkgBereik={regionaal:'Zichtbaar binnen ongeveer 30 km rondom je vestiging',provinciaal:'Zichtbaar in je hele provincie',landelijk:'Zichtbaar in alle plaatsnamen in heel Nederland'}[bereik];
+  var social={regionaal:'eenmaal',provinciaal:'tweemaal',landelijk:'driemaal'}[bereik];
+
+  var feats=[
+    'Prominente vermelding in de B2C en B2B bedrijvengids',
+    'Volledige, geoptimaliseerde profielpagina',
+    pkgBereik,
+    'Jouw bedrijf '+social+' uitgelicht op alle socialmediakanalen',
+    'Toegang tot onze besloten Facebookgroep voor commerciele berichten',
+    'Gratis vermelding in onze nieuwsbrief (twv 299 euro)'
+  ];
+
+  var html='<div class="screen on">';
+  html+='<div class="advies-kop">';
+  html+='<span class="kicker">'+CHKg+' Advies klaar</span>';
+  html+='<h2>Dit past het beste bij '+esc(naam)+'</h2>';
+  html+='<p class="lead" style="margin-bottom:4px">Op basis van je antwoorden hebben we een advies op maat samengesteld.</p>';
+  html+='</div>';
+
+  /* premium bundel relevant? */
+  var bundel = (ext.indexOf('uitvaartinside')>-1 || ext.indexOf('branded')>-1 || doel.indexOf('autoriteit')>-1 || bereik==='landelijk');
+
+  /* keuzepakketten: los platform pakket vs Alles-in-een */
+  var keuzes=[{ id:'los', tag:'Los op het platform', titel:pkgNaam, prijs:prijs(bereik), feats:feats }];
+  if(bundel){
+    keuzes.push({ id:'allesin_dubbel', tag:'Meeste impact', titel:'Alles-in-een, dubbele pagina', prijs:prijs('allesin_dubbel'),
+      feats:['Dubbele pagina branded content in Uitvaart-Inside','Prominente vermelding in onze online B2B bedrijvengids',socialCount+' gerichte social media '+socialWoord+' door onze redactie','1x gratis plaatsing in onze wekelijkse nieuwsbrief (t.w.v. 299 euro)'] });
+    keuzes.push({ id:'allesin_enkel', tag:'', titel:'Alles-in-een, enkele pagina', prijs:prijs('allesin_enkel'),
+      feats:['Enkele pagina branded content in Uitvaart-Inside','Prominente vermelding in onze online B2B bedrijvengids',socialCount+' gerichte social media '+socialWoord+' door onze redactie','1x gratis plaatsing in onze wekelijkse nieuwsbrief (t.w.v. 299 euro)'] });
+  }
+  window.KEUZES=keuzes;
+  var meerkeuze=keuzes.length>1;
+  window.KEUZE = meerkeuze ? null : 'los';
+
+  if(meerkeuze){
+    html+='<div class="sectie-t">Kies welk pakket je voorkeur heeft</div>';
+    html+='<p class="lead" style="font-size:.95rem;margin-bottom:6px">Wil je een sterke basis op het platform, of ga je voor maximale impact met Alles-in-een, inclusief een redactioneel verhaal in ons magazine Uitvaart-Inside? Tik je voorkeur aan.</p>';
+  }
+  keuzes.forEach(function(k){
+    var sel=(window.KEUZE===k.id);
+    var cls='pkg'+(meerkeuze?' kies':'')+(sel?' sel':'');
+    var click=meerkeuze?(' onclick="kies(\''+k.id+'\')"'):'';
+    html+='<div class="'+cls+'" id="pkg-'+k.id+'"'+click+'>';
+    if(meerkeuze) html+='<span class="pkg-radio"></span>';
+    if(k.tag) html+='<span class="tag">'+k.tag+'</span>';
+    html+='<h3>'+k.titel+'</h3><div class="prijs">'+k.prijs+'</div>';
+    k.feats.forEach(function(f){ html+='<div class="feat"><span class="v">'+CHKg+'</span><span>'+f+'</span></div>'; });
+    html+='</div>';
   });
-  document.getElementById('resultaat').classList.remove('actief');
-  document.getElementById('progressWrap').style.display = 'none';
-  document.getElementById('welkom').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  /* aanvullingen */
+  var addons=[];
+  if(!bundel){
+    if(doel.indexOf('autoriteit')>-1) addons.push(['branded','Branded content artikel','Jouw verhaal verteld door onze redactie. Versterkt je positie als autoriteit en levert langdurige zichtbaarheid op via Google.']);
+    if(doel.indexOf('online')>-1) addons.push(['branded','Branded content artikel','Een SEO sterke contentpagina die je structureel beter vindbaar maakt in Google.']);
+    if(ext.indexOf('uitvaartinside')>-1) addons.push(['uitvaartinside','Advertentie in Uitvaart-Inside','Onze glossy die zowel de consument als professionals in de branche bereikt. Positioneert je als serieuze speler.']);
+    if(ext.indexOf('branded')>-1) addons.push(['branded','Branded content artikel','Jouw unieke verhaal verteld door onze redactie, voor merkversterking en langdurige zichtbaarheid.']);
+  }
+  if(doel.indexOf('leads')>-1 && bereik!=='landelijk') addons.push(['banner','Bannerpositie op het platform','Extra zichtbaarheid op het beslismoment, precies waar bezoekers een keuze maken.']);
+  if(ext.indexOf('perfectgoodbye')>-1) addons.push(['perfectgoodbye','Advertentie in The Perfect Goodbye','Ons nabestaandendossier, direct bij een emotioneel betrokken doelgroep die op zoek is naar betrouwbare aanbieders.']);
+  if(ext.indexOf('socialmedia')>-1) addons.push(['socialmedia','Extra social media uitlichtingen','Social media uitlichtingen zitten al in elk pakket. Wil je vaker en gerichter uitgelicht worden, dan stellen we dat op maat samen.']);
+  if(dn.indexOf('fotoshoot')>-1) addons.push(['fotoshoot','Professionele bedrijfsfotoshoot','Sterke, professionele beelden die vertrouwen wekken bij nabestaanden.']);
+  if(dn.indexOf('film')>-1) addons.push(['film','Bedrijfsvideo of filmproductie','Vertel je verhaal in beeld en onderscheid je van de rest.']);
+  if(dn.indexOf('webdesign')>-1) addons.push(['webdesign','Nieuwe website','Ontwerp en realisatie van een website die past bij je uitstraling.']);
+  if(dn.indexOf('social_dienst')>-1 && ext.indexOf('socialmedia')<0) addons.push(['socialmedia','Social media beheer','Wij verzorgen je kanalen zodat jij je op je werk kunt richten.']);
+  if(doel.indexOf('netwerk')>-1) addons.push(['','Gratis B2B netwerkplatform','Vind samenwerkingspartners in je regio en bied nabestaanden samen een compleet pakket. Gratis registreren is de eerste stap.']);
+
+  if(addons.length){
+    html+='<div class="sectie-t">Aanbevolen aanvullingen voor jouw doel</div>';
+    addons.forEach(function(a){
+      var pr=a[0]?('<span class="p">'+prijs(a[0])+'</span>'):'<span class="p">gratis</span>';
+      html+='<div class="addon"><div class="h"><b>'+a[1]+'</b>'+pr+'</div><p>'+a[2]+'</p></div>';
+    });
+  }
+
+
+
+
+  /* waarom nu */
+  html+='<div class="why"><h3>Waarom dit voor '+esc(naam)+' de juiste stap is</h3>';
+  html+='<div class="pt"><span class="e">\uD83C\uDFAF</span><span><b>100% relevante doelgroep.</b> Geen verspild bereik. Iedere bezoeker is al bezig met afscheid of nalatenschap.</span></div>';
+  html+='<div class="pt"><span class="e">\u23F1\uFE0F</span><span><b>Het juiste moment.</b> Je staat zichtbaar op het beslismoment, niet ergens tussen ruis.</span></div>';
+  html+='<div class="pt"><span class="e">\uD83C\uDFDB\uFE0F</span><span><b>Autoriteit die afstraalt.</b> Wij zijn partner van DPG Media en worden geciteerd door de Rijksoverheid, de Eerste Kamer en de Gezondheidsraad.</span></div>';
+  html+='<div class="pt"><span class="e">\uD83D\uDCC8</span><span><b>Een groeiende markt.</b> Door de vergrijzing stijgt de vraag structureel. Jouw zichtbaarheid groeit mee.</span></div>';
+  if(termijn==='asap') html+='<div class="pt"><span class="e">\u26A1</span><span><b>Snel live.</b> Gemiddeld binnen 3 werkdagen ben je zichtbaar. We kunnen direct starten.</span></div>';
+  html+='</div>';
+
+  html+='<div class="reassure">'+
+        '<span><span class="v">\u2713</span> Vrijblijvend gesprek</span>'+
+        '<span><span class="v">\u2713</span> Voorstel op maat</span>'+
+        '<span><span class="v">\u2713</span> Gemiddeld binnen 3 werkdagen live</span>'+
+        '<span><span class="v">\u2713</span> Vast aanspreekpunt</span>'+
+        '</div>';
+
+  /* CTA + advies bundelen voor automatische verzending */
+  var aanvList = addons.map(function(a){return a[1];});
+  if(bundel) aanvList.push('Alles-in-een (dubbel '+prijs('allesin_dubbel')+' / enkel '+prijs('allesin_enkel')+')');
+  var subject='Ja, ik wil starten - '+(naam);
+  var body='Beste team van Uitvaart-Platform.nl,%0D%0A%0D%0AGraag wil ik starten. Dit is mijn advies uit de tool:%0D%0A%0D%0ABedrijf: '+enc(naam)+'%0D%0ABasispakket: '+enc((pkgNaam||'')+' ('+prijs(bereik)+')')+'%0D%0A';
+  if(aanvList.length){ body+='Aanvullingen: '+enc(aanvList.join(', '))+'%0D%0A'; }
+  body+='%0D%0AGraag ontvang ik een voorstel op maat. Jullie mogen mij bellen of mailen.%0D%0A%0D%0AMet vriendelijke groet,%0D%0A'+enc(CONTACT||'');
+  var mailto='mailto:'+NOTIFY_EMAIL+'?subject='+enc(subject)+'&body='+body;
+
+  window.ADVIES={
+    bedrijf:naam, contact:CONTACT||'',
+    type:labs('type',[answers.type]),
+    pakket:(pkgNaam||'')+' ('+prijs(bereik)+')',
+    doelen:labs('doel',doel),
+    zicht:labs('extern',ext),
+    diensten:labs('diensten',dn)||'geen',
+    allesin: bundel ? ('ja, gepresenteerd (dubbel '+prijs('allesin_dubbel')+' / enkel '+prijs('allesin_enkel')+')') : 'nee',
+    aanvullingen: aanvList.length?aanvList.join(', '):'geen',
+    termijn:labs('termijn',[answers.termijn]),
+    mailto:mailto
+  };
+
+  html+='<button class="btn primary big" id="startbtn" style="margin-top:8px" onclick="verstuurAdvies()"'+(window.KEUZE?'':' disabled')+'>Ja, ik wil starten &rarr;</button>';
+  html+='<div class="row-btns print-hide">'+
+        '<button class="btn ghost" onclick="location.href=\'tel:0854852152\'">Bel ons: 085 4852152</button>'+
+        '<button class="btn ghost" onclick="window.print()">Advies opslaan</button>'+
+        '</div>';
+  html+='<p class="fineprint">Dit advies is vrijblijvend en zonder verplichtingen. We stemmen het uiteindelijke voorstel altijd persoonlijk met je af.</p>';
+  html+='</div>';
+  stage.innerHTML=html;
+  window.scrollTo({top:0,behavior:'smooth'});
 }
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function enc(s){return encodeURIComponent(String(s));}
+function lab(key,val){var v=vragen.find(function(x){return x.key===key;});if(!v)return val||'';var o=v.opts.find(function(z){return z.v===val;});return o?o.t:(val||'');}
+function labs(key,arr){return (arr||[]).filter(Boolean).map(function(x){return lab(key,x);}).join(', ');}
+
+function kies(id){
+  window.KEUZE=id;
+  (window.KEUZES||[]).forEach(function(k){var el=document.getElementById('pkg-'+k.id);if(el)el.classList.toggle('sel',k.id===id);});
+  var b=document.getElementById('startbtn'); if(b) b.disabled=false;
+}
+
+function verstuurAdvies(){
+  var a=window.ADVIES||{};
+  var btn=document.getElementById('startbtn');
+  if(btn){ btn.disabled=true; btn.innerHTML='Bezig met versturen...'; }
+  var keuze=(window.KEUZES||[]).find(function(k){return k.id===window.KEUZE;});
+  var keuzeTxt=keuze?(keuze.titel+' ('+keuze.prijs+')'):(a.pakket||'');
+  var bericht=
+    'Nieuwe aanvraag via de advies tool.\n\n'+
+    'Bedrijf: '+(a.bedrijf||'')+'\n'+
+    'Contactpersoon: '+(a.contact||'-')+'\n'+
+    'Type onderneming: '+(a.type||'')+'\n'+
+    'GEKOZEN PAKKET (voorkeur): '+keuzeTxt+'\n'+
+    'Geadviseerd basispakket: '+(a.pakket||'')+'\n'+
+    'Doelen: '+(a.doelen||'')+'\n'+
+    'Zichtbaarheid: '+(a.zicht||'')+'\n'+
+    'Aanvullende diensten: '+(a.diensten||'')+'\n'+
+    'Alles-in-een gepresenteerd: '+(a.allesin||'')+'\n'+
+    'Aanbevolen aanvullingen: '+(a.aanvullingen||'')+'\n'+
+    'Gewenste start: '+(a.termijn||'')+'\n';
+  fetch('https://formsubmit.co/ajax/'+NOTIFY_EMAIL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({_subject:'Nieuwe adviesaanvraag: '+(a.bedrijf||''), naam:(a.contact||a.bedrijf||''), bedrijf:(a.bedrijf||''), bericht:bericht})
+  }).then(function(r){return r.json();}).then(function(){ bedankt(); })
+    .catch(function(){ if(a.mailto){ location.href=a.mailto; } else { bedankt(); } });
+}
+
+function bedankt(){
+  setProgress();
+  stage.innerHTML='<div class="screen on" style="text-align:center;padding:14px 0 8px">'+
+    '<span class="kicker" style="margin-bottom:16px">'+CHKg+' Verzonden</span>'+
+    '<h2>Bedankt'+(BEDRIJF?(', '+esc(BEDRIJF)):'')+'</h2>'+
+    '<p class="lead">We hebben je keuze ontvangen en nemen snel persoonlijk contact met je op met een voorstel op maat. Je hoeft verder niets te doen.</p>'+
+    '<div class="reassure"><span><span class="v">\u2713</span> Reactie binnen 1 werkdag</span><span><span class="v">\u2713</span> Vrijblijvend en zonder verplichtingen</span></div>'+
+    '<button class="btn ghost print-hide" style="margin-top:18px" onclick="window.print()">Mijn advies opslaan</button>'+
+    '</div>';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* start */
+step=-1; renderIntro();
 </script>
 </body>
 </html>
