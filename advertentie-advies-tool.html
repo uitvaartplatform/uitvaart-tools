@@ -476,7 +476,7 @@ function renderResultaat(){
     mailto:mailto
   };
 
-  html+='<button class="btn primary big" id="startbtn" style="margin-top:8px" onclick="verstuurAdvies()"'+(window.KEUZE?'':' disabled')+'>Ja, ik wil starten &rarr;</button>';
+  html+='<button class="btn primary big" id="startbtn" style="margin-top:8px" onclick="toonContact()"'+(window.KEUZE?'':' disabled')+'>Ja, ik wil starten &rarr;</button>';
   html+='<div class="row-btns print-hide">'+
         '<button class="btn ghost" onclick="location.href=\'tel:0854852152\'">Bel ons: 085 4852152</button>'+
         '<button class="btn ghost" onclick="window.print()">Advies opslaan</button>'+
@@ -498,8 +498,32 @@ function kies(id){
   var b=document.getElementById('startbtn'); if(b) b.disabled=false;
 }
 
+function toonContact(){
+  setProgress();
+  stage.innerHTML='<div class="screen on">'+
+    '<span class="eyebrow"><span class="dot"></span>Bijna klaar</span>'+
+    '<h2>Waar mogen we je bereiken?</h2>'+
+    '<p class="lead">Laat je gegevens achter, dan nemen we zo snel mogelijk persoonlijk contact met je op.</p>'+
+    '<div class="field"><label>Naam</label><input id="c-naam" type="text" value="'+esc(CONTACT||'')+'" placeholder="Je naam"></div>'+
+    '<div class="field"><label>E-mailadres</label><input id="c-mail" type="email" placeholder="naam@onderneming.nl"></div>'+
+    '<div class="field"><label>Telefoonnummer</label><input id="c-tel" type="tel" placeholder="Bijvoorbeeld 06 12345678"></div>'+
+    '<div class="err" id="c-err"></div>'+
+    '<button class="btn primary big" id="startbtn" style="margin-top:6px" onclick="verstuurAdvies()">Verstuur mijn aanvraag &rarr;</button>'+
+    '<p class="hint">We gebruiken je gegevens alleen om contact met je op te nemen.</p>'+
+   '</div>';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 function verstuurAdvies(){
   var a=window.ADVIES||{};
+  var elN=document.getElementById('c-naam'), elM=document.getElementById('c-mail'), elT=document.getElementById('c-tel');
+  var naam=elN?elN.value.trim():(a.contact||'');
+  var mail=elM?elM.value.trim():'';
+  var tel=elT?elT.value.trim():'';
+  if(elN && (!naam || (!mail && !tel))){
+    var er=document.getElementById('c-err'); if(er) er.textContent='Vul je naam in en een e-mailadres of telefoonnummer, zodat we contact met je kunnen opnemen.';
+    return;
+  }
   var btn=document.getElementById('startbtn');
   if(btn){ btn.disabled=true; btn.innerHTML='Bezig met versturen...'; }
   var keuze=(window.KEUZES||[]).find(function(k){return k.id===window.KEUZE;});
@@ -507,7 +531,9 @@ function verstuurAdvies(){
   var bericht=
     'Nieuwe aanvraag via de advies tool.\n\n'+
     'Bedrijf: '+(a.bedrijf||'')+'\n'+
-    'Contactpersoon: '+(a.contact||'-')+'\n'+
+    'Contactpersoon: '+(naam||'-')+'\n'+
+    'E-mailadres: '+(mail||'-')+'\n'+
+    'Telefoonnummer: '+(tel||'-')+'\n'+
     'Type onderneming: '+(a.type||'')+'\n'+
     'GEKOZEN PAKKET (voorkeur): '+keuzeTxt+'\n'+
     'Geadviseerd basispakket: '+(a.pakket||'')+'\n'+
@@ -524,8 +550,11 @@ function verstuurAdvies(){
   data.append('access_key',WEB3FORMS_KEY);
   data.append('subject','Nieuwe adviesaanvraag: '+(a.bedrijf||'onbekend'));
   data.append('from_name','Uitvaart-Platform adviestool');
+  if(mail.indexOf('@')>0) data.append('email',mail);
   data.append('Bedrijf',(a.bedrijf||''));
-  data.append('Contactpersoon',(a.contact||'-'));
+  data.append('Contactpersoon',(naam||'-'));
+  data.append('E-mailadres',(mail||'-'));
+  data.append('Telefoonnummer',(tel||'-'));
   data.append('Gekozen pakket',keuzeTxt);
   data.append('bericht',bericht);
   data.append('botcheck','');
