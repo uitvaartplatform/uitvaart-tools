@@ -510,12 +510,20 @@ function verstuurAdvies(){
     'Alles-in-een gepresenteerd: '+(a.allesin||'')+'\n'+
     'Aanbevolen aanvullingen: '+(a.aanvullingen||'')+'\n'+
     'Gewenste start: '+(a.termijn||'')+'\n';
-  fetch('https://formsubmit.co/ajax/'+NOTIFY_EMAIL,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({_subject:'Nieuwe adviesaanvraag: '+(a.bedrijf||''), naam:(a.contact||a.bedrijf||''), bedrijf:(a.bedrijf||''), bericht:bericht})
-  }).then(function(r){return r.json();}).then(function(){ bedankt(); })
-    .catch(function(){ if(a.mailto){ location.href=a.mailto; } else { bedankt(); } });
+  var data=new FormData();
+  data.append('_subject','Nieuwe adviesaanvraag: '+(a.bedrijf||''));
+  data.append('_captcha','false');
+  data.append('_template','table');
+  data.append('Bedrijf',(a.bedrijf||''));
+  data.append('Contactpersoon',(a.contact||'-'));
+  data.append('Gekozen pakket',keuzeTxt);
+  data.append('bericht',bericht);
+  var klaar=false;
+  function done(){ if(klaar) return; klaar=true; bedankt(); }
+  var t=setTimeout(done,9000);
+  fetch('https://formsubmit.co/ajax/'+NOTIFY_EMAIL,{ method:'POST', headers:{'Accept':'application/json'}, body:data })
+    .then(function(){ clearTimeout(t); done(); })
+    .catch(function(){ clearTimeout(t); done(); });
 }
 
 function bedankt(){
