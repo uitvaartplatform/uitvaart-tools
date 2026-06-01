@@ -210,6 +210,8 @@ document.getElementById('logo-bfly').innerHTML=BFLY;
 var params=new URLSearchParams(location.search);
 var BEDRIJF=(params.get('bedrijf')||'').trim();
 var CONTACT=(params.get('naam')||'').trim();
+var MAIL='';
+var TEL='';
 var TOONPRIJZEN=(PRIJS_TOKEN.length>0 && (params.get('p')||'').toLowerCase()===PRIJS_TOKEN.toLowerCase());
 
 var stage=document.getElementById('stage');
@@ -273,11 +275,15 @@ function setProgress(){
 /* ---------- INTRO ---------- */
 function renderIntro(){
   setProgress();
+  var introEyebrow = TOONPRIJZEN ? 'Naar aanleiding van ons gesprek' : 'Persoonlijk advies op maat';
+  var introLead = TOONPRIJZEN
+    ? 'Fijn dat we elkaar telefonisch hebben gesproken. We begrijpen heel goed dat je alles even rustig wilt doornemen. In deze tool zie je in een paar minuten welk pakket het beste bij jouw onderneming past, inclusief de bijbehorende tarieven. Helemaal op je eigen tempo.'
+    : 'In nog geen twee minuten zie je welke vorm van zichtbaarheid op Uitvaart-Platform.nl het beste bij jouw onderneming past. Een paar korte vragen, daarna een helder advies op maat.';
   stage.innerHTML=
    '<div class="screen on">'+
-     '<span class="eyebrow"><span class="dot"></span>Persoonlijk advies op maat</span>'+
+     '<span class="eyebrow"><span class="dot"></span>'+introEyebrow+'</span>'+
      '<h1>'+(BEDRIJF?('Welkom, '+esc(BEDRIJF)):'Welkom')+'</h1>'+
-     '<p class="lead">In nog geen twee minuten zie je welke vorm van zichtbaarheid op Uitvaart-Platform.nl het beste bij jouw onderneming past. Een paar korte vragen, daarna een helder advies op maat.</p>'+
+     '<p class="lead">'+introLead+'</p>'+
      '<div class="stats">'+
        '<div class="stat"><b>1 mln+</b><span>Bezoekers per jaar</span></div>'+
        '<div class="stat"><b>166.000</b><span>Overlijdens per jaar in NL</span></div>'+
@@ -476,7 +482,7 @@ function renderResultaat(){
     mailto:mailto
   };
 
-  html+='<button class="btn primary big" id="startbtn" style="margin-top:8px" onclick="toonContact()"'+(window.KEUZE?'':' disabled')+'>Ja, ik wil starten &rarr;</button>';
+  html+='<button class="btn primary big" id="startbtn" style="margin-top:8px" onclick="'+(TOONPRIJZEN?'verstuurAdvies()':'toonContact()')+'"'+(window.KEUZE?'':' disabled')+'>Ja, ik wil starten &rarr;</button>';
   html+='<div class="row-btns print-hide">'+
         '<button class="btn ghost" onclick="location.href=\'tel:0854852152\'">Bel ons: 085 4852152</button>'+
         '<button class="btn ghost" onclick="window.print()">Advies opslaan</button>'+
@@ -505,8 +511,8 @@ function toonContact(){
     '<h2>Waar mogen we je bereiken?</h2>'+
     '<p class="lead">Laat je gegevens achter, dan nemen we zo snel mogelijk persoonlijk contact met je op.</p>'+
     '<div class="field"><label>Naam</label><input id="c-naam" type="text" value="'+esc(CONTACT||'')+'" placeholder="Je naam"></div>'+
-    '<div class="field"><label>E-mailadres</label><input id="c-mail" type="email" placeholder="naam@onderneming.nl"></div>'+
-    '<div class="field"><label>Telefoonnummer</label><input id="c-tel" type="tel" placeholder="Bijvoorbeeld 06 12345678"></div>'+
+    '<div class="field"><label>E-mailadres</label><input id="c-mail" type="email" value="'+esc(MAIL||'')+'" placeholder="naam@onderneming.nl"></div>'+
+    '<div class="field"><label>Telefoonnummer</label><input id="c-tel" type="tel" value="'+esc(TEL||'')+'" placeholder="Bijvoorbeeld 06 12345678"></div>'+
     '<div class="err" id="c-err"></div>'+
     '<button class="btn primary big" id="startbtn" style="margin-top:6px" onclick="verstuurAdvies()">Verstuur mijn aanvraag &rarr;</button>'+
     '<p class="hint">We gebruiken je gegevens alleen om contact met je op te nemen.</p>'+
@@ -516,13 +522,17 @@ function toonContact(){
 
 function verstuurAdvies(){
   var a=window.ADVIES||{};
-  var elN=document.getElementById('c-naam'), elM=document.getElementById('c-mail'), elT=document.getElementById('c-tel');
-  var naam=elN?elN.value.trim():(a.contact||'');
-  var mail=elM?elM.value.trim():'';
-  var tel=elT?elT.value.trim():'';
-  if(elN && (!naam || (!mail && !tel))){
-    var er=document.getElementById('c-err'); if(er) er.textContent='Vul je naam in en een e-mailadres of telefoonnummer, zodat we contact met je kunnen opnemen.';
-    return;
+  var onContact=!!document.getElementById('c-naam');
+  var naam=onContact?document.getElementById('c-naam').value.trim():(CONTACT||'');
+  var mail=onContact?document.getElementById('c-mail').value.trim():MAIL;
+  var tel =onContact?document.getElementById('c-tel').value.trim():TEL;
+  if(onContact){
+    if(!naam || (!mail && !tel)){
+      var er=document.getElementById('c-err'); if(er) er.textContent='Vul je naam in en een e-mailadres of telefoonnummer, zodat we contact met je kunnen opnemen.';
+      return;
+    }
+  } else if(!TOONPRIJZEN && !mail && !tel){
+    toonContact(); return;
   }
   var btn=document.getElementById('startbtn');
   if(btn){ btn.disabled=true; btn.innerHTML='Bezig met versturen...'; }
