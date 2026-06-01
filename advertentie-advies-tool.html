@@ -170,8 +170,15 @@ h2{font-size:clamp(1.25rem,3vw,1.5rem);line-height:1.25;color:var(--plum);margin
       prospects die je hebt gesproken.                          */
 var PRIJS_TOKEN = 'UP2026';
 
-/* 1b) E-mailadres waar de aanvragen binnenkomen.                     */
+/* 1b) E-mailadres voor de mailto-terugval (mocht verzenden niet lukken). */
 var NOTIFY_EMAIL = 'info@uitvaart-platform.nl';
+
+/* 1c) WEB3FORMS SLEUTEL.
+       Maak gratis een sleutel aan op web3forms.com met het adres
+       info@uitvaart-platform.nl, en plak die sleutel hieronder tussen de
+       quotes. De aanvragen komen dan automatisch in die mailbox binnen.
+       De sleutel mag gewoon zichtbaar in de code staan.                 */
+var WEB3FORMS_KEY = '64c2e70f-cc69-4389-88da-8afb6b559720';
 
 /* 2) PRIJZEN. Vul de bedragen in voor de e-mailversie.
       Laat leeg ('') om 'op aanvraag' te tonen (publieke versie).
@@ -510,18 +517,20 @@ function verstuurAdvies(){
     'Alles-in-een gepresenteerd: '+(a.allesin||'')+'\n'+
     'Aanbevolen aanvullingen: '+(a.aanvullingen||'')+'\n'+
     'Gewenste start: '+(a.termijn||'')+'\n';
+  var klaar=false;
+  function done(){ if(klaar) return; klaar=true; bedankt(); }
+  if(!WEB3FORMS_KEY){ done(); return; }
   var data=new FormData();
-  data.append('_subject','Nieuwe adviesaanvraag: '+(a.bedrijf||''));
-  data.append('_captcha','false');
-  data.append('_template','table');
+  data.append('access_key',WEB3FORMS_KEY);
+  data.append('subject','Nieuwe adviesaanvraag: '+(a.bedrijf||'onbekend'));
+  data.append('from_name','Uitvaart-Platform adviestool');
   data.append('Bedrijf',(a.bedrijf||''));
   data.append('Contactpersoon',(a.contact||'-'));
   data.append('Gekozen pakket',keuzeTxt);
   data.append('bericht',bericht);
-  var klaar=false;
-  function done(){ if(klaar) return; klaar=true; bedankt(); }
+  data.append('botcheck','');
   var t=setTimeout(done,9000);
-  fetch('https://formsubmit.co/ajax/'+NOTIFY_EMAIL,{ method:'POST', headers:{'Accept':'application/json'}, body:data })
+  fetch('https://api.web3forms.com/submit',{ method:'POST', headers:{'Accept':'application/json'}, body:data })
     .then(function(){ clearTimeout(t); done(); })
     .catch(function(){ clearTimeout(t); done(); });
 }
