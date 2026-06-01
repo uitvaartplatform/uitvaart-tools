@@ -212,6 +212,7 @@ var BEDRIJF=(params.get('bedrijf')||'').trim();
 var CONTACT=(params.get('naam')||'').trim();
 var MAIL='';
 var TEL='';
+var WEBSITE='';
 var TOONPRIJZEN=(PRIJS_TOKEN.length>0 && (params.get('p')||'').toLowerCase()===PRIJS_TOKEN.toLowerCase());
 
 var stage=document.getElementById('stage');
@@ -482,7 +483,7 @@ function renderResultaat(){
     mailto:mailto
   };
 
-  html+='<button class="btn primary big" id="startbtn" style="margin-top:8px" onclick="'+(TOONPRIJZEN?'verstuurAdvies()':'toonContact()')+'"'+(window.KEUZE?'':' disabled')+'>Ja, ik wil starten &rarr;</button>';
+  html+='<button class="btn primary big" id="startbtn" style="margin-top:8px" onclick="toonContact()"'+(window.KEUZE?'':' disabled')+'>Ja, ik wil starten &rarr;</button>';
   html+='<div class="row-btns print-hide">'+
         '<button class="btn ghost" onclick="location.href=\'tel:0854852152\'">Bel ons: 085 4852152</button>'+
         '<button class="btn ghost" onclick="window.print()">Advies opslaan</button>'+
@@ -506,13 +507,16 @@ function kies(id){
 
 function toonContact(){
   setProgress();
+  var extra = TOONPRIJZEN
+    ? '<div class="field"><label>Website</label><input id="c-web" type="text" value="'+esc(WEBSITE||'')+'" placeholder="www.jouwonderneming.nl"></div>'
+    : '<div class="field"><label>Telefoonnummer</label><input id="c-tel" type="tel" value="'+esc(TEL||'')+'" placeholder="Bijvoorbeeld 06 12345678"></div>';
   stage.innerHTML='<div class="screen on">'+
     '<span class="eyebrow"><span class="dot"></span>Bijna klaar</span>'+
     '<h2>Waar mogen we je bereiken?</h2>'+
     '<p class="lead">Laat je gegevens achter, dan nemen we zo snel mogelijk persoonlijk contact met je op.</p>'+
-    '<div class="field"><label>Naam</label><input id="c-naam" type="text" value="'+esc(CONTACT||'')+'" placeholder="Je naam"></div>'+
+    '<div class="field"><label>Contactpersoon</label><input id="c-naam" type="text" value="'+esc(CONTACT||'')+'" placeholder="Je naam"></div>'+
     '<div class="field"><label>E-mailadres</label><input id="c-mail" type="email" value="'+esc(MAIL||'')+'" placeholder="naam@onderneming.nl"></div>'+
-    '<div class="field"><label>Telefoonnummer</label><input id="c-tel" type="tel" value="'+esc(TEL||'')+'" placeholder="Bijvoorbeeld 06 12345678"></div>'+
+    extra+
     '<div class="err" id="c-err"></div>'+
     '<button class="btn primary big" id="startbtn" style="margin-top:6px" onclick="verstuurAdvies()">Verstuur mijn aanvraag &rarr;</button>'+
     '<p class="hint">We gebruiken je gegevens alleen om contact met je op te nemen.</p>'+
@@ -522,17 +526,22 @@ function toonContact(){
 
 function verstuurAdvies(){
   var a=window.ADVIES||{};
+  function fld(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
   var onContact=!!document.getElementById('c-naam');
-  var naam=onContact?document.getElementById('c-naam').value.trim():(CONTACT||'');
-  var mail=onContact?document.getElementById('c-mail').value.trim():MAIL;
-  var tel =onContact?document.getElementById('c-tel').value.trim():TEL;
+  var naam=onContact?fld('c-naam'):(CONTACT||'');
+  var mail=onContact?fld('c-mail'):MAIL;
+  var tel =(document.getElementById('c-tel'))?fld('c-tel'):TEL;
+  var web =(document.getElementById('c-web'))?fld('c-web'):WEBSITE;
   if(onContact){
-    if(!naam || (!mail && !tel)){
-      var er=document.getElementById('c-err'); if(er) er.textContent='Vul je naam in en een e-mailadres of telefoonnummer, zodat we contact met je kunnen opnemen.';
+    if(TOONPRIJZEN){
+      if(!naam || !mail || !web){
+        var er=document.getElementById('c-err'); if(er) er.textContent='Vul je naam, e-mailadres en website in, zodat we alle gegevens bij de hand hebben.';
+        return;
+      }
+    } else if(!naam || (!mail && !tel)){
+      var er2=document.getElementById('c-err'); if(er2) er2.textContent='Vul je naam in en een e-mailadres of telefoonnummer, zodat we contact met je kunnen opnemen.';
       return;
     }
-  } else if(!TOONPRIJZEN && !mail && !tel){
-    toonContact(); return;
   }
   var btn=document.getElementById('startbtn');
   if(btn){ btn.disabled=true; btn.innerHTML='Bezig met versturen...'; }
@@ -544,6 +553,7 @@ function verstuurAdvies(){
     'Contactpersoon: '+(naam||'-')+'\n'+
     'E-mailadres: '+(mail||'-')+'\n'+
     'Telefoonnummer: '+(tel||'-')+'\n'+
+    'Website: '+(web||'-')+'\n'+
     'Type onderneming: '+(a.type||'')+'\n'+
     'GEKOZEN PAKKET (voorkeur): '+keuzeTxt+'\n'+
     'Geadviseerd basispakket: '+(a.pakket||'')+'\n'+
@@ -565,6 +575,7 @@ function verstuurAdvies(){
   data.append('Contactpersoon',(naam||'-'));
   data.append('E-mailadres',(mail||'-'));
   data.append('Telefoonnummer',(tel||'-'));
+  data.append('Website',(web||'-'));
   data.append('Gekozen pakket',keuzeTxt);
   data.append('bericht',bericht);
   data.append('botcheck','');
