@@ -196,7 +196,10 @@ var PRICES = {
   film:           '',
   webdesign:      '',
   allesin_dubbel: '1.998,- excl. btw',
-  allesin_enkel:  '1.498,- excl. btw'
+  allesin_enkel:  '1.498,- excl. btw',
+  tpg_enkel:      '998,- excl. btw',
+  tpg_zichtbaar:  '1.248,- excl. btw',
+  tpg_compleet:   '1.998,- excl. btw'
 };
 /* ============================================================= */
 
@@ -240,7 +243,7 @@ var vragen=[
    {v:'online', ic:'\uD83D\uDD0D', t:'Beter online gevonden worden', s:'Sterke vindbaarheid en SEO'},
    {v:'netwerk', ic:'\uD83E\uDD1D', t:'Netwerk en samenwerking', s:'Partners vinden in de branche'}
  ]},
- {key:'extern', q:'Waar wil je zichtbaar zijn?', multi:true, opts:[
+ {key:'extern', q:'Waar wil je zichtbaar zijn?', multi:true, def:['platform'], opts:[
    {v:'platform', ic:'\uD83C\uDF10', t:'Zichtbaarheid op het platform', s:'In de bedrijvengids van Uitvaart-Platform.nl'},
    {v:'uitvaartinside', ic:'\uD83D\uDCD6', t:'In magazine Uitvaart-Inside', s:'Glossy voor de consument, professionals'},
    {v:'perfectgoodbye', ic:'\uD83D\uDC9B', t:'In The Perfect Goodbye', s:'Nabestaandendossier, direct bij de doelgroep'},
@@ -305,7 +308,8 @@ function startVragen(){
 function renderVraag(){
   setProgress();
   var v=vragen[step];
-  var cur=answers[v.key]|| (v.multi?[]:null);
+  var cur=answers[v.key];
+  if(cur===undefined){ cur = v.def ? v.def.slice() : (v.multi?[]:null); if(v.def) answers[v.key]=cur; }
   var html='<div class="screen on">';
   html+='<div class="q">Vraag '+(step+1)+' van '+vragen.length+'</div>';
   html+='<div class="vraag">'+v.q+'</div>';
@@ -389,13 +393,24 @@ function renderResultaat(){
   /* premium bundel relevant? */
   var bundel = (ext.indexOf('uitvaartinside')>-1 || ext.indexOf('branded')>-1 || doel.indexOf('autoriteit')>-1 || bereik==='landelijk');
 
-  /* keuzepakketten: los platform pakket vs Alles-in-een */
+  /* keuzepakketten */
   var keuzes=[{ id:'los', tag:'Los op het platform', titel:pkgNaam, prijs:prijs(bereik), feats:feats }];
+  var heeftTPG = ext.indexOf('perfectgoodbye')>-1;
+  if(heeftTPG){
+    keuzes.push({ id:'tpg_enkel', tag:'', titel:'The Perfect Goodbye, 1 pagina', prijs:prijs('tpg_enkel'),
+      feats:['Een hele pagina in ons nabestaandendossier The Perfect Goodbye','Direct zichtbaar bij nabestaanden die op zoek zijn naar een betrouwbare aanbieder'] });
+    keuzes.push({ id:'tpg_zichtbaar', tag:'Aanrader', titel:'The Perfect Goodbye plus zichtbaarheid', prijs:prijs('tpg_zichtbaar'),
+      feats:['Een hele pagina in The Perfect Goodbye','Plus een vermelding op Uitvaart-Platform.nl, naar keuze tot en met landelijk (t.w.v. 699 euro)','Speciaal tarief voor het eerste jaar'] });
+  }
   if(bundel){
     keuzes.push({ id:'allesin_dubbel', tag:'Meeste impact', titel:'Alles-in-een, dubbele pagina', prijs:prijs('allesin_dubbel'),
       feats:['Dubbele pagina branded content in Uitvaart-Inside','Prominente vermelding in onze online B2B bedrijvengids',socialCount+' gerichte social media '+socialWoord+' door onze redactie','1x gratis plaatsing in onze wekelijkse nieuwsbrief (t.w.v. 299 euro)'] });
     keuzes.push({ id:'allesin_enkel', tag:'', titel:'Alles-in-een, enkele pagina', prijs:prijs('allesin_enkel'),
       feats:['Enkele pagina branded content in Uitvaart-Inside','Prominente vermelding in onze online B2B bedrijvengids',socialCount+' gerichte social media '+socialWoord+' door onze redactie','1x gratis plaatsing in onze wekelijkse nieuwsbrief (t.w.v. 299 euro)'] });
+  }
+  if(heeftTPG && (ext.indexOf('uitvaartinside')>-1 || ext.indexOf('branded')>-1)){
+    keuzes.push({ id:'tpg_compleet', tag:'Compleet', titel:'The Perfect Goodbye plus Uitvaart-Inside plus zichtbaarheid', prijs:prijs('tpg_compleet'),
+      feats:['Een hele pagina in The Perfect Goodbye','Een hele pagina in magazine Uitvaart-Inside','Plus een zichtbaarheidsvermelding op Uitvaart-Platform.nl'] });
   }
   window.KEUZES=keuzes;
   var meerkeuze=keuzes.length>1;
@@ -403,7 +418,7 @@ function renderResultaat(){
 
   if(meerkeuze){
     html+='<div class="sectie-t">Kies welk pakket je voorkeur heeft</div>';
-    html+='<p class="lead" style="font-size:.95rem;margin-bottom:6px">Wil je een sterke basis op het platform, of ga je voor maximale impact met Alles-in-een, inclusief een redactioneel verhaal in ons magazine Uitvaart-Inside? Tik je voorkeur aan.</p>';
+    html+='<p class="lead" style="font-size:.95rem;margin-bottom:6px">Wil je een sterke basis op het platform, of kies je voor meer impact met een combinatie? Tik je voorkeur aan, dan stemmen wij het daarop af.</p>';
   }
   keuzes.forEach(function(k){
     var sel=(window.KEUZE===k.id);
@@ -426,7 +441,6 @@ function renderResultaat(){
     if(ext.indexOf('branded')>-1) addons.push(['branded','Branded content artikel','Jouw unieke verhaal verteld door onze redactie, voor merkversterking en langdurige zichtbaarheid.']);
   }
   if(doel.indexOf('leads')>-1 && bereik!=='landelijk') addons.push(['banner','Bannerpositie op het platform','Extra zichtbaarheid op het beslismoment, precies waar bezoekers een keuze maken.']);
-  if(ext.indexOf('perfectgoodbye')>-1) addons.push(['perfectgoodbye','Advertentie in The Perfect Goodbye','Ons nabestaandendossier, direct bij een emotioneel betrokken doelgroep die op zoek is naar betrouwbare aanbieders.']);
   if(ext.indexOf('socialmedia')>-1) addons.push(['socialmedia','Extra social media uitlichtingen','Social media uitlichtingen zitten al in elk pakket. Wil je vaker en gerichter uitgelicht worden, dan stellen we dat op maat samen.']);
   if(dn.indexOf('fotoshoot')>-1) addons.push(['fotoshoot','Professionele bedrijfsfotoshoot','Sterke, professionele beelden die vertrouwen wekken bij nabestaanden.']);
   if(dn.indexOf('film')>-1) addons.push(['film','Bedrijfsvideo of filmproductie','Vertel je verhaal in beeld en onderscheid je van de rest.']);

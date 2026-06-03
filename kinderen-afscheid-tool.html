@@ -146,6 +146,11 @@ h1,h2,h3,.kop{ font-family:var(--kop); }
 .ka-knop.licht{ background:#fff; color:var(--paars); border:2px solid var(--lijn); box-shadow:var(--sch-s); }
 .ka-terug{ background:none; border:none; cursor:pointer; font-family:var(--kop); font-weight:500; color:var(--zacht); font-size:1rem; padding:10px 6px; }
 .ka-terug:hover{ color:var(--paars); }
+/* stap-navigatie binnen een halte (terug naar de vorige halte) */
+.ka-acties.ka-stappen{ justify-content:space-between; }
+.ka-stappen-links{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.ka-terug.ka-mini{ font-size:.92rem; opacity:.8; }
+.ka-terug.ka-mini:hover{ opacity:1; }
 
 /* invoer */
 .ka-input{ width:100%; font-family:var(--tekst); font-size:1.05rem; padding:14px 18px; border-radius:16px;
@@ -478,6 +483,20 @@ RENDER.thuis = function(){
  '<div class="ka-acties"><button class="ka-knop paars" data-act="naar" data-val="klaar">Ik ben klaar, laat het zien aan een grote <span>💜</span></button></div>';
 };
 
+/* voettekst met stap-navigatie voor elke halte; vorige = id van de vorige halte (of null bij de eerste) */
+function halteFooter(halte, vorige){
+ var links = vorige
+   ? '<div class="ka-stappen-links">'+
+       '<button class="ka-terug" data-act="naar" data-val="'+vorige+'">← Vorige</button>'+
+       '<button class="ka-terug ka-mini" data-act="naar" data-val="thuis">🗺️ kaart</button>'+
+     '</div>'
+   : '<button class="ka-terug" data-act="naar" data-val="thuis">← Terug naar de kaart</button>';
+ return '<div class="ka-acties ka-stappen">'+
+   links+
+   '<button class="ka-knop groen" data-act="klaarhalte" data-val="'+halte+'">Klaar met deze halte ✓</button>'+
+ '</div>';
+}
+
 function gevoelGridHTML(){
  return GEVOELENS.map(function(g){
    var aan = S.gevoel[g.id]!=null;
@@ -493,7 +512,7 @@ RENDER.gevoel = function(){
  '<div class="ka-vraag">Hoe voel je je?</div>'+
  '<p class="ka-uitleg">Tik op alle gevoelens die kloppen. Kies daarna met de hartjes hoeveel: een beetje of heel veel. Alle gevoelens mogen er zijn, ook blij zijn mag.</p>'+
  '<div class="ka-grid k4" id="gevoelGrid">'+gevoelGridHTML()+'</div>'+
- '<div class="ka-acties"><button class="ka-terug" data-act="naar" data-val="thuis">← Terug naar de kaart</button><button class="ka-knop groen" data-act="klaarhalte" data-val="gevoel">Klaar met deze halte ✓</button></div>';
+ halteFooter('gevoel', null);
 };
 
 function begripListHTML(){
@@ -508,7 +527,7 @@ RENDER.begrip = function(){
  '<div class="ka-vraag">Een paar vraagjes 🤔</div>'+
  '<p class="ka-uitleg">Er zijn geen foute antwoorden. Tik gewoon wat voor jou klopt. '+esc(S.maatjeNaam||'Je maatje')+' blijft de hele tijd bij je.</p>'+
  '<div id="begripList">'+begripListHTML()+'</div>'+
- '<div class="ka-acties"><button class="ka-terug" data-act="naar" data-val="thuis">← Terug naar de kaart</button><button class="ka-knop groen" data-act="klaarhalte" data-val="begrip">Klaar met deze halte ✓</button></div>';
+ halteFooter('begrip', 'gevoel');
 };
 
 function verderListHTML(){
@@ -523,7 +542,7 @@ RENDER.verder = function(){
  '<div class="ka-vraag">Hoe gaat het met jou? 🌈</div>'+
  '<p class="ka-uitleg">Nog een paar laatste vraagjes over hoe het nu met je gaat. Tik maar wat voor jou klopt.</p>'+
  '<div id="verderList">'+verderListHTML()+'</div>'+
- '<div class="ka-acties"><button class="ka-terug" data-act="naar" data-val="thuis">← Terug naar de kaart</button><button class="ka-knop groen" data-act="klaarhalte" data-val="verder">Klaar met deze halte ✓</button></div>';
+ halteFooter('verder', 'helpt');
 };
 
 RENDER.vragen = function(){
@@ -535,7 +554,7 @@ RENDER.vragen = function(){
  '</div>'+
  '<label class="ka-veldlabel">Heb je zelf nog een vraag?</label>'+
  '<textarea class="ka-input" id="inEigenVraag" placeholder="Schrijf hier je eigen vraag...">'+esc(S.eigenVraag)+'</textarea>'+
- '<div class="ka-acties"><button class="ka-terug" data-act="naar" data-val="thuis">← Terug naar de kaart</button><button class="ka-knop groen" data-act="klaarhalte" data-val="vragen">Klaar met deze halte ✓</button></div>';
+ halteFooter('vragen', 'begrip');
 };
 
 RENDER.herinnering = function(){
@@ -560,7 +579,7 @@ RENDER.herinnering = function(){
      '<button class="ka-pen" data-act="wis" title="Alles wissen">🗑️</button>'+
    '</div>'+
  '</div>'+
- '<div class="ka-acties"><button class="ka-terug" data-act="naar" data-val="thuis">← Terug naar de kaart</button><button class="ka-knop groen" data-act="klaarhalte" data-val="herinnering">Klaar met deze halte ✓</button></div>';
+ halteFooter('herinnering', 'vragen');
 };
 
 RENDER.helpt = function(){
@@ -576,7 +595,7 @@ RENDER.helpt = function(){
  '</div>'+
  '<label class="ka-veldlabel">Nog iemand anders?</label>'+
  '<input class="ka-input" id="inMensAnders" placeholder="Naam" value="'+esc(S.mensenAnders)+'">'+
- '<div class="ka-acties"><button class="ka-terug" data-act="naar" data-val="thuis">← Terug naar de kaart</button><button class="ka-knop groen" data-act="klaarhalte" data-val="helpt">Klaar met deze halte ✓</button></div>';
+ halteFooter('helpt', 'herinnering');
 };
 
 RENDER.klaar = function(){
