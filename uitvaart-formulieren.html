@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uitvaart Formulieren Zoeker - Uitvaart-Platform.nl</title>
+<meta name="description" content="Doorzoekbare database met 50+ officiële formulieren bij een overlijden in Nederland. Met directe links naar SVB, Belastingdienst, RDW, gemeenten en notaris.">
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { padding: 16px; min-height: 100vh; }
+
+.ufa-app { max-width: 1300px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; display: flex; flex-direction: column; min-height: calc(100vh - 32px); }
+
+/* ── HEADER ── */
+.ufa-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; flex-shrink: 0; }
+.ufa-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.ufa-header-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.ufa-header-info { flex: 1; min-width: 0; }
+.ufa-titel { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; letter-spacing: -0.3px; margin: 0; }
+.ufa-subtitel { font-size: 0.78rem; color: #fcd9c4; margin-top: 2px; }
+.ufa-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(232,131,74,0.25); color: #fff; border-radius: 14px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px; }
+.ufa-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; box-shadow: 0 0 8px #e8834a; animation: ufa-pulse 2s infinite; }
+@keyframes ufa-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* ── SEARCH BAR ── */
+.ufa-search-zone { background: #2e0f29; padding: 14px 30px; position: relative; flex-shrink: 0; }
+.ufa-search-wrap { position: relative; max-width: 720px; margin: 0 auto; }
+.ufa-search-input { width: 100%; padding: 13px 16px 13px 46px; border: none; border-radius: 10px; font-size: 0.95rem; font-family: inherit; color: #1e1520; background: #fff; outline: none; box-shadow: 0 4px 14px rgba(0,0,0,0.18); }
+.ufa-search-input:focus { box-shadow: 0 0 0 3px rgba(232,131,74,0.5); }
+.ufa-search-input::placeholder { color: #9a8c93; }
+.ufa-search-ico { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #4a1942; font-size: 1.05rem; pointer-events: none; }
+.ufa-search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #f0e8e0; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; color: #4a1942; display: none; align-items: center; justify-content: center; font-family: inherit; padding: 0; line-height: 1; }
+.ufa-search-clear.actief { display: flex; }
+.ufa-search-clear:hover { background: #e8834a; color: #fff; }
+
+/* ── CATEGORIE CHIPS ── */
+.ufa-chips-zone { background: #fff; padding: 14px 30px; border-bottom: 1px solid #f0eae7; overflow-x: auto; scrollbar-width: thin; flex-shrink: 0; }
+.ufa-chips-zone::-webkit-scrollbar { height: 4px; }
+.ufa-chips-zone::-webkit-scrollbar-thumb { background: #d3c8cd; border-radius: 2px; }
+.ufa-chips { display: flex; gap: 8px; min-width: max-content; }
+.ufa-chip { background: #faf7f2; border: 1px solid transparent; border-radius: 20px; padding: 7px 14px; font-size: 0.78rem; font-weight: 600; color: #4a4046; cursor: pointer; white-space: nowrap; font-family: inherit; transition: all 0.18s ease; display: flex; align-items: center; gap: 7px; }
+.ufa-chip:hover { background: #f0e8e0; color: #4a1942; }
+.ufa-chip.actief { background: linear-gradient(135deg, #4a1942 0%, #6b3060 100%); color: #fff; border-color: #4a1942; box-shadow: 0 3px 10px rgba(74,25,66,0.25); }
+.ufa-chip-aantal { background: rgba(0,0,0,0.08); border-radius: 10px; padding: 1px 7px; font-size: 0.7rem; font-weight: 700; }
+.ufa-chip.actief .ufa-chip-aantal { background: rgba(255,255,255,0.22); }
+
+/* ── PRIVACY BAR ── */
+.ufa-privacy-bar { background: #f0f7ed; border-bottom: 1px solid #d4e8d4; padding: 10px 30px; font-size: 0.72rem; color: #2e4030; line-height: 1.5; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.ufa-privacy-bar strong { color: #1e1520; font-weight: 700; }
+.ufa-privacy-bar-ico { font-size: 1rem; flex-shrink: 0; }
+
+/* ── BODY: 2 PANE LAYOUT ── */
+.ufa-body { display: grid; grid-template-columns: 1fr 1.1fr; gap: 0; flex: 1; min-height: 0; }
+.ufa-lijst-zone { padding: 22px 26px; border-right: 1px solid #f0eae7; overflow-y: auto; }
+.ufa-detail-zone { padding: 22px 26px; background: linear-gradient(135deg, #faf7f2 0%, #fff 100%); overflow-y: auto; }
+.ufa-lijst-zone::-webkit-scrollbar, .ufa-detail-zone::-webkit-scrollbar { width: 6px; }
+.ufa-lijst-zone::-webkit-scrollbar-thumb, .ufa-detail-zone::-webkit-scrollbar-thumb { background: #d3c8cd; border-radius: 3px; }
+
+/* ── STATUS REGEL ── */
+.ufa-status { font-size: 0.78rem; color: #6e5e68; font-weight: 500; margin-bottom: 14px; }
+.ufa-status strong { color: #4a1942; font-weight: 700; }
+
+/* ── FORMULIER LIJST ── */
+.ufa-lijst { display: flex; flex-direction: column; gap: 10px; }
+.ufa-card { background: #fff; border: 1px solid #ece4dc; border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.16s ease; display: flex; gap: 14px; align-items: flex-start; }
+.ufa-card:hover { border-color: #e8834a; box-shadow: 0 3px 12px rgba(232,131,74,0.12); transform: translateX(2px); }
+.ufa-card.actief { border-color: #4a1942; background: linear-gradient(135deg, rgba(232,131,74,0.04) 0%, rgba(74,25,66,0.02) 100%); box-shadow: 0 4px 14px rgba(74,25,66,0.1); }
+.ufa-card.actief::before { content: ""; position: absolute; }
+.ufa-card-ico { font-size: 1.4rem; flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, #faf7f2 0%, #f5f1ec 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.ufa-card.actief .ufa-card-ico { background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); }
+.ufa-card-body { flex: 1; min-width: 0; }
+.ufa-card-instantie { font-size: 0.66rem; color: #8a7a85; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+.ufa-card-titel { font-size: 0.92rem; font-weight: 700; color: #1e1520; line-height: 1.3; margin-bottom: 3px; }
+.ufa-card.actief .ufa-card-titel { color: #4a1942; }
+.ufa-card-omschr { font-size: 0.78rem; color: #5a4a55; line-height: 1.45; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.ufa-card-pijl { color: #b8a8b0; font-size: 1.1rem; flex-shrink: 0; align-self: center; }
+.ufa-card:hover .ufa-card-pijl, .ufa-card.actief .ufa-card-pijl { color: #e8834a; }
+
+/* ── LEEG STATE ── */
+.ufa-leeg { text-align: center; padding: 50px 20px; color: #8a7a85; }
+.ufa-leeg-ico { font-size: 3rem; margin-bottom: 14px; opacity: 0.4; }
+.ufa-leeg-titel { font-size: 1.05rem; font-weight: 700; color: #4a1942; margin-bottom: 8px; }
+.ufa-leeg-tekst { font-size: 0.86rem; line-height: 1.6; max-width: 320px; margin: 0 auto; }
+
+/* ── DETAIL VIEW ── */
+.ufa-detail-leeg { text-align: center; padding: 50px 20px; color: #8a7a85; }
+.ufa-detail-leeg-ico { font-size: 3.5rem; margin-bottom: 16px; opacity: 0.5; }
+.ufa-detail-leeg-titel { font-size: 1.15rem; font-weight: 700; color: #4a1942; margin-bottom: 8px; }
+.ufa-detail-leeg-tekst { font-size: 0.9rem; line-height: 1.65; max-width: 360px; margin: 0 auto; }
+
+.ufa-detail-header { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid #ece4dc; }
+.ufa-detail-ico { font-size: 2.2rem; width: 60px; height: 60px; background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; box-shadow: 0 4px 14px rgba(200,98,42,0.3); }
+.ufa-detail-titels { flex: 1; min-width: 0; }
+.ufa-detail-cat { display: inline-block; background: rgba(232,131,74,0.12); color: #c8622a; padding: 3px 10px; border-radius: 12px; font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.ufa-detail-titel { font-size: 1.25rem; font-weight: 800; color: #4a1942; line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 5px; }
+.ufa-detail-instantie { font-size: 0.84rem; color: #6b6570; font-weight: 500; }
+
+.ufa-detail-omschr { font-size: 0.92rem; line-height: 1.7; color: #3a2832; margin-bottom: 20px; }
+.ufa-detail-omschr strong { color: #4a1942; font-weight: 700; }
+
+.ufa-detail-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+.ufa-detail-meta-item { background: #fff; border: 1px solid #ece4dc; border-radius: 10px; padding: 12px 14px; }
+.ufa-detail-meta-label { font-size: 0.58rem; color: #e8834a; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+.ufa-detail-meta-waarde { font-size: 0.82rem; color: #2e2128; font-weight: 500; line-height: 1.5; }
+
+.ufa-detail-tip { background: linear-gradient(135deg, rgba(232,131,74,0.08) 0%, rgba(74,25,66,0.04) 100%); border-left: 3px solid #e8834a; border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 20px; font-size: 0.86rem; color: #4a4046; line-height: 1.65; }
+.ufa-detail-tip strong { color: #c8622a; font-weight: 700; }
+
+.ufa-detail-cta { display: flex; flex-direction: column; gap: 10px; }
+.ufa-detail-knop { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; border-radius: 10px; text-decoration: none; font-size: 0.92rem; font-weight: 700; transition: all 0.18s ease; font-family: inherit; border: none; cursor: pointer; }
+.ufa-detail-knop-primair { background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); color: #fff; box-shadow: 0 4px 14px rgba(200,98,42,0.32); }
+.ufa-detail-knop-primair:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(200,98,42,0.45); filter: brightness(1.05); }
+.ufa-detail-knop-secundair { background: transparent; color: #4a1942; border: 1.5px solid #d9c9d4; }
+.ufa-detail-knop-secundair:hover { background: #faf7f2; border-color: #4a1942; }
+.ufa-detail-geen-link { background: #f5f1ec; border-radius: 10px; padding: 14px 18px; font-size: 0.84rem; color: #6e5e68; text-align: center; line-height: 1.55; border: 1px dashed #d9c9d4; }
+
+/* ── FOOTER ── */
+.ufa-footer { background: #faf7f2; border-top: 1px solid #ece4dc; padding: 12px 30px; font-size: 0.72rem; color: #8a7a85; text-align: center; flex-shrink: 0; }
+.ufa-footer a { color: #4a1942; font-weight: 600; text-decoration: none; }
+.ufa-footer a:hover { text-decoration: underline; color: #e8834a; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1000px) {
+  .ufa-body { grid-template-columns: 1fr; }
+  .ufa-lijst-zone { border-right: none; border-bottom: 1px solid #f0eae7; max-height: 50vh; }
+  .ufa-detail-zone { max-height: 50vh; }
+}
+@media (max-width: 700px) {
+  body { padding: 8px; }
+  .ufa-app { border-radius: 14px; }
+  .ufa-header { padding: 18px 22px; }
+  .ufa-search-zone { padding: 12px 22px; }
+  .ufa-chips-zone { padding: 12px 22px; }
+  .ufa-privacy-bar { padding: 10px 22px; font-size: 0.68rem; }
+  .ufa-lijst-zone, .ufa-detail-zone { padding: 18px 22px; }
+  .ufa-detail-meta { grid-template-columns: 1fr; }
+  .ufa-detail-titel { font-size: 1.1rem; }
+}
+@media (max-width: 480px) {
+  body { padding: 0; }
+  .ufa-app { border-radius: 0; min-height: 100vh; }
+}
+</style>
+</head>
+<body>
+
+<div class="ufa-app">
+
+  <!-- HEADER -->
+  <div class="ufa-header">
+    <div class="ufa-header-content">
+      <div class="ufa-header-info">
+        <h1 class="ufa-titel">Uitvaart Formulieren Zoeker</h1>
+        <div class="ufa-subtitel">Alle officiële formulieren bij een overlijden in Nederland</div>
+      </div>
+      <span class="ufa-badge"><span class="ufa-badge-dot"></span>50+ formulieren</span>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="ufa-search-zone">
+    <div class="ufa-search-wrap">
+      <span class="ufa-search-ico">🔍</span>
+      <input type="text" class="ufa-search-input" id="ufaZoek" placeholder="Zoek op naam, instantie of trefwoord, bijvoorbeeld AOW of auto..." autocomplete="off">
+      <button type="button" class="ufa-search-clear" id="ufaClear" aria-label="Zoekopdracht wissen">✕</button>
+    </div>
+  </div>
+
+  <!-- CATEGORIE CHIPS -->
+  <div class="ufa-chips-zone">
+    <div class="ufa-chips" id="ufaChips"></div>
+  </div>
+
+  <!-- PRIVACY BAR -->
+  <div class="ufa-privacy-bar">
+    <span class="ufa-privacy-bar-ico">🔒</span>
+    <span><strong>Privacy:</strong> deze tool slaat niets op. Alle links openen op de officiële site van de betreffende instantie. Bij twijfel of complexe situaties: raadpleeg een notaris of belastingadviseur.</span>
+  </div>
+
+  <!-- BODY: 2 PANE -->
+  <div class="ufa-body">
+
+    <!-- LINKS: LIJST -->
+    <div class="ufa-lijst-zone">
+      <div class="ufa-status" id="ufaStatus"></div>
+      <div class="ufa-lijst" id="ufaLijst"></div>
+    </div>
+
+    <!-- RECHTS: DETAIL -->
+    <div class="ufa-detail-zone" id="ufaDetail">
+      <div class="ufa-detail-leeg">
+        <div class="ufa-detail-leeg-ico">📋</div>
+        <div class="ufa-detail-leeg-titel">Selecteer een formulier</div>
+        <p class="ufa-detail-leeg-tekst">Klik op een formulier in de lijst links om alle details te zien: wie het invult, wanneer, in welke vorm, deadlines en de directe link naar de officiële instantie.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="ufa-footer">
+    Onderdeel van <a href="https://uitvaart-platform.nl" target="_blank" rel="noopener">Uitvaart-Platform.nl</a> · Onafhankelijke gids voor uitvaart, rouw en afscheid in Nederland
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   FORMULIEREN DATABASE
+   50+ officiële formulieren in 15 categorieën
+   ════════════════════════════════════════════════════════ */
+
+const CATEGORIEEN = [
+  { id: 'all',         naam: 'Alle',         ico: '📋' },
+  { id: 'medisch',     naam: 'Medisch',      ico: '🩺' },
+  { id: 'gemeente',    naam: 'Gemeente',     ico: '🏛️' },
+  { id: 'belasting',   naam: 'Belastingdienst', ico: '💶' },
+  { id: 'svb',         naam: 'SVB',          ico: '👥' },
+  { id: 'uwv',         naam: 'UWV',          ico: '💼' },
+  { id: 'duo',         naam: 'DUO',          ico: '🎓' },
+  { id: 'erfrecht',    naam: 'Erfrecht',     ico: '⚖️' },
+  { id: 'pensioen',    naam: 'Pensioen',     ico: '🏦' },
+  { id: 'verzekering', naam: 'Verzekering',  ico: '🛡️' },
+  { id: 'bank',        naam: 'Bank',         ico: '💳' },
+  { id: 'rdw',         naam: 'RDW auto',     ico: '🚗' },
+  { id: 'registers',   naam: 'Registers',    ico: '📑' },
+  { id: 'abonnement',  naam: 'Abonnementen', ico: '📧' },
+  { id: 'werkgever',   naam: 'Werkgever',    ico: '🤝' },
+  { id: 'buitenland',  naam: 'Buitenland',   ico: '🌍' }
+];
+
+const FORMULIEREN = [
+  // ═══ MEDISCH ═══
+  { id: 'a-formulier', cat: 'medisch', ico: '🩺',
+    titel: 'A formulier verklaring van overlijden',
+    instantie: 'Behandelend arts',
+    omschr: 'Verklaring van natuurlijk overlijden, direct na het overlijden door de behandelend arts ingevuld. Wettelijk vereist (artikel 7 Wet op de Lijkbezorging) voor aangifte bij de gemeente en het verlof tot begraven of cremeren.',
+    wie: 'Arts of gemeentelijk lijkschouwer',
+    wanneer: 'Direct na overlijden',
+    vorm: 'Altijd op papier',
+    tip: 'Bij een niet natuurlijke dood (ongeval, geweld, suïcide) mag de behandelend arts géén A formulier afgeven. Dan moet eerst de gemeentelijk lijkschouwer komen en kan justitie betrokken raken.',
+    link: 'https://wetten.overheid.nl/BWBR0005009/',
+    linkLabel: 'Wet op de Lijkbezorging artikel 7' },
+  { id: 'b-formulier', cat: 'medisch', ico: '🩺',
+    titel: 'B formulier doodsoorzakenverklaring',
+    instantie: 'Arts naar CBS',
+    omschr: 'Vertrouwelijke verklaring met de medische doodsoorzaak. Wordt tegelijk met het A formulier ingevuld door dezelfde arts en gaat anoniem naar het CBS voor de landelijke doodsoorzakenstatistiek.',
+    wie: 'Arts vult in',
+    wanneer: 'Tegelijk met A formulier',
+    vorm: 'Gesloten envelop',
+    tip: 'Nabestaanden krijgen dit formulier niet te zien. Het wordt volledig anoniem verwerkt voor wetenschappelijk en beleidsmatig onderzoek.',
+    link: 'https://www.cbs.nl/nl-nl/onze-diensten/methoden/dataverzameling/aanvullende-onderzoeksgegevens/doodsoorzakenstatistiek',
+    linkLabel: 'CBS doodsoorzakenstatistiek' },
+
+  // ═══ GEMEENTE ═══
+  { id: 'aangifte', cat: 'gemeente', ico: '🏛️',
+    titel: 'Aangifte van overlijden',
+    instantie: 'Gemeente waar overlijden plaatsvond',
+    omschr: 'Wettelijk verplichte aangifte bij de Burgerlijke Stand van de gemeente waar de persoon is overleden (niet noodzakelijk de woongemeente). Pas na aangifte mag de uitvaart plaatsvinden. Meestal door de uitvaartondernemer geregeld.',
+    wie: 'Uitvaartondernemer of nabestaande',
+    wanneer: 'Binnen 6 werkdagen',
+    vorm: 'Loket of digitaal',
+    tip: 'Uitvaartondernemers kunnen met eHerkenning digitaal aangifte doen. Nabestaanden moeten persoonlijk naar het loket. Neem A formulier, ID en eventueel trouwboekje mee.',
+    link: 'https://www.rijksoverheid.nl/onderwerpen/overlijden/vraag-en-antwoord/hoe-doe-ik-aangifte-van-overlijden',
+    linkLabel: 'Rijksoverheid aangifte overlijden' },
+  { id: 'verlof', cat: 'gemeente', ico: '🏛️',
+    titel: 'Verlof tot begraven of cremeren',
+    instantie: 'Burgerlijke Stand',
+    omschr: 'Officiële toestemming voor de uitvaart die direct na aangifte wordt verstrekt. Zonder verlof mag een lichaam niet begraven of gecremeerd worden. De uitvaartondernemer overlegt dit aan de begraafplaats of crematorium.',
+    wie: 'Wordt automatisch verstrekt',
+    wanneer: 'Na aangifte',
+    vorm: 'Papier of digitaal',
+    tip: 'Naast verlof tot begraven of cremeren bestaat ook verlof tot ontleding, voor wanneer het lichaam aan de wetenschap wordt gegeven.',
+    link: 'https://ondernemersplein.overheid.nl/wetten-en-regels/aangifte-en-akte-van-overlijden/',
+    linkLabel: 'Ondernemersplein aangifte en akte' },
+  { id: 'akte', cat: 'gemeente', ico: '🏛️',
+    titel: 'Uittreksel akte van overlijden',
+    instantie: 'Gemeente',
+    omschr: 'Officieel bewijs van overlijden, nodig voor banken, verzekeraars, pensioenfondsen, notaris en talloze andere instanties. De originele akte blijft bij de gemeente; nabestaanden krijgen uittreksels.',
+    wie: 'Nabestaande met legitimatie',
+    wanneer: 'Na aangifte',
+    vorm: 'Loket of digitaal',
+    tip: 'Vraag minimaal 5 tot 10 uittreksels aan. Elk uittreksel kost ongeveer 14 euro. Voor het buitenland is een internationaal uittreksel of een met apostille legalisatie nodig.',
+    link: 'https://www.rijksoverheid.nl/onderwerpen/overlijden/vraag-en-antwoord/uittreksel-akte-overlijden-aanvragen',
+    linkLabel: 'Rijksoverheid uittreksel aanvragen' },
+  { id: 'paspoort', cat: 'gemeente', ico: '🏛️',
+    titel: 'Paspoort, ID kaart en rijbewijs inleveren',
+    instantie: 'Gemeente Burgerzaken',
+    omschr: 'Identiteitsdocumenten van de overledene moeten worden ingeleverd of vernietigd om identiteitsfraude te voorkomen. Het paspoort wordt automatisch geannuleerd bij aangifte van overlijden.',
+    wie: 'Nabestaande',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Aan loket gemeente',
+    tip: 'De gemeente kan het paspoort doorknippen en teruggeven als aandenken. Bewaar een fotokopie voor eventuele claims bij verzekeraars.',
+    link: 'https://www.rijksoverheid.nl/onderwerpen/paspoort-en-identiteitskaart',
+    linkLabel: 'Rijksoverheid identiteitsdocumenten' },
+
+  // ═══ BELASTINGDIENST ═══
+  { id: 'f-biljet', cat: 'belasting', ico: '💶',
+    titel: 'F biljet aangifte inkomstenbelasting',
+    instantie: 'Belastingdienst',
+    omschr: 'Speciale aangifte inkomstenbelasting voor het belastingjaar waarin iemand is overleden. Hiermee worden de inkomsten tot de overlijdensdatum verantwoord. De Belastingdienst stuurt automatisch een F biljet (papier) naar de erfgenamen.',
+    wie: 'Erfgenamen of executeur',
+    wanneer: 'Binnen 8 maanden',
+    vorm: 'Papier of digitaal',
+    tip: 'Voor digitale aangifte via Mijn Belastingdienst is een nabestaandenmachtiging nodig. Papieren aangifte is mogelijk zonder verklaring van erfrecht. Bel 0800 235 8354 voor gratis hulp.',
+    link: 'https://www.belastingdienst.nl/wps/wcm/connect/nl/na-een-overlijden/na-een-overlijden',
+    linkLabel: 'Belastingdienst na een overlijden' },
+  { id: 'erfbelasting', cat: 'belasting', ico: '💶',
+    titel: 'Aangifte erfbelasting',
+    instantie: 'Belastingdienst',
+    omschr: 'Verplichte aangifte over de erfenis als erfgenamen boven de vrijstellingsgrens komen. Voor 2026 geldt voor partners ongeveer 805.000 euro vrijstelling en voor kinderen 25.500 euro per persoon.',
+    wie: 'Erfgenamen gezamenlijk',
+    wanneer: 'Binnen 8 maanden',
+    vorm: 'Digitaal of papier',
+    tip: 'Vanaf 8 maanden na overlijden loopt belastingrente. Dien aangifte in vóór 5 maanden en vraag een voorlopige aanslag aan om rente te voorkomen. Tarief is 10% (eerste schijf) tot 40% afhankelijk van relatie en bedrag.',
+    link: 'https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/relatie_familie_en_gezondheid/erfenis/aangifte_erfbelasting_doen',
+    linkLabel: 'Belastingdienst aangifte erfbelasting' },
+  { id: 'machtiging', cat: 'belasting', ico: '💶',
+    titel: 'Nabestaandenmachtiging Belastingdienst',
+    instantie: 'Belastingdienst',
+    omschr: 'Volmacht waarmee een nabestaande digitaal toegang krijgt tot Mijn Belastingdienst van de overledene. Hiermee kun je aangifte inkomstenbelasting doen en toeslagen wijzigen.',
+    wie: 'Een van de erfgenamen of executeur',
+    wanneer: 'Bij behoefte aan digitale aangifte',
+    vorm: 'Online aanvraag',
+    tip: 'Als er een testament is, heb je een verklaring van erfrecht of verklaring van executele nodig. De aanvraag duurt enkele werkdagen tot weken.',
+    link: 'https://www.belastingdienst.nl/wps/wcm/connect/nl/na-een-overlijden/na-een-overlijden',
+    linkLabel: 'Belastingdienst nabestaandenmachtiging' },
+  { id: 'voorlopige-aanslag', cat: 'belasting', ico: '💶',
+    titel: 'Voorlopige aanslag erfbelasting aanvragen',
+    instantie: 'Belastingdienst',
+    omschr: 'Door alvast een voorlopige aanslag aan te vragen voorkom je belastingrente die start 8 maanden na overlijden. Erfgenamen betalen een schatting; bij definitieve aanslag wordt verrekend.',
+    wie: 'Erfgenamen',
+    wanneer: 'Vóór 5 maanden na overlijden',
+    vorm: 'Papieren formulier of digitaal',
+    tip: 'Bij grotere nalatenschappen kan rentebesparing oplopen tot honderden euro\'s per maand. Goed om hier proactief mee te zijn.',
+    link: 'https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/relatie_familie_en_gezondheid/erfenis/aangifte_erfbelasting_doen',
+    linkLabel: 'Belastingdienst voorlopige aanslag' },
+  { id: 'contactpersoon', cat: 'belasting', ico: '💶',
+    titel: 'Contactpersoon nabestaanden doorgeven',
+    instantie: 'Belastingdienst',
+    omschr: 'Aanmelden van één contactpersoon voor alle correspondentie van de Belastingdienst over de overledene en de nalatenschap. Voorkomt dat brieven naar het oude adres gaan.',
+    wie: 'Een van de erfgenamen',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Online of telefonisch',
+    tip: 'Vooral handig als de erfgenamen verspreid wonen of één persoon de afwikkeling op zich neemt.',
+    link: 'https://www.belastingdienst.nl/wps/wcm/connect/nl/na-een-overlijden/content/contactpersoon-namens-nabestaanden-doorgeven',
+    linkLabel: 'Belastingdienst contactpersoon aanmelden' },
+  { id: 'teruggave', cat: 'belasting', ico: '💶',
+    titel: 'Teruggave loonheffing en voorlopige teruggaaf',
+    instantie: 'Belastingdienst',
+    omschr: 'Vaak hebben werknemers in het overlijdensjaar te veel loonheffing betaald. Een teruggave kan oplopen tot duizenden euro\'s. Ook lopende voorlopige teruggaven moeten worden stopgezet.',
+    wie: 'Erfgenamen via F biljet',
+    wanneer: 'Bij aangifte F biljet',
+    vorm: 'Via aangifte',
+    tip: 'Stop lopende voorlopige teruggaven (zoals voor hypotheekrenteaftrek) om terugbetalingsverplichting te voorkomen. Doe altijd aangifte als je teruggave verwacht, ook zonder F biljet.',
+    link: 'https://www.belastingdienst.nl/wps/wcm/connect/nl/na-een-overlijden/na-een-overlijden',
+    linkLabel: 'Belastingdienst loonheffing' },
+
+  // ═══ SVB ═══
+  { id: 'aow', cat: 'svb', ico: '👥',
+    titel: 'AOW overlijden doorgeven',
+    instantie: 'SVB (Sociale Verzekeringsbank)',
+    omschr: 'Stopzetten van de AOW uitkering. Bij overlijden in Nederland gaat dit automatisch via de gemeente. Bij overlijden in het buitenland moet je het zelf binnen 4 tot 6 weken doorgeven.',
+    wie: 'Nabestaande (alleen bij buitenland)',
+    wanneer: 'Binnen 4 tot 6 weken bij buitenland',
+    vorm: 'Digitaal of telefonisch',
+    tip: 'De SVB betaalt automatisch een overlijdensuitkering AOW uit aan de partner: 1 maand AOW plus vakantiegeld. Er hoeft niets voor te worden gedaan.',
+    link: 'https://www.svb.nl/nl/aow/iemand-met-aow-is-overleden',
+    linkLabel: 'SVB AOW na overlijden' },
+  { id: 'anw-aanvraag', cat: 'svb', ico: '👥',
+    titel: 'Anw nabestaandenuitkering aanvragen',
+    instantie: 'SVB',
+    omschr: 'Nabestaandenuitkering voor partners zonder AOW met een kind onder 18 of 45% arbeidsongeschikt. Plus wezenuitkering voor kinderen onder 16 (soms 21). Moet zelf actief worden aangevraagd.',
+    wie: 'Achterblijvende partner of voogd',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Online met DigiD',
+    tip: 'De voorwaarden zijn streng. Test op svb.nl of je in aanmerking komt. Eigen inkomen wordt verrekend. Bij verlies van beide ouders verdubbelt de wezenuitkering in veel regelingen.',
+    link: 'https://www.svb.nl/nl/anw',
+    linkLabel: 'SVB Anw nabestaandenuitkering' },
+  { id: 'anw-stop', cat: 'svb', ico: '👥',
+    titel: 'Anw uitkering stoppen bij overlijden',
+    instantie: 'SVB',
+    omschr: 'Als iemand met een Anw uitkering zelf overlijdt, stopt deze op de dag na overlijden. Bij overlijden in Nederland gaat dit automatisch; bij overlijden in het buitenland binnen 4 weken zelf melden.',
+    wie: 'Nabestaande (alleen bij buitenland)',
+    wanneer: 'Binnen 4 weken bij buitenland',
+    vorm: 'Telefonisch of digitaal',
+    tip: 'Het opgebouwde vakantiegeld (mei tot dag overlijden) wordt nog uitgekeerd aan de erfgenamen.',
+    link: 'https://www.svb.nl/nl/anw/nabestaandenuitkering-stopt/iemand-met-een-nabestaandenuitkering-is-overleden',
+    linkLabel: 'SVB Anw bij overlijden' },
+  { id: 'pgb', cat: 'svb', ico: '👥',
+    titel: 'PGB afhandelen na overlijden budgethouder',
+    instantie: 'SVB en zorgkantoor of gemeente',
+    omschr: 'Persoonsgebonden budget moet worden afgewikkeld. De zorgovereenkomst stopt op de dag van overlijden. Laatste declaraties van zorgverleners moeten binnen 6 weken zijn afgehandeld.',
+    wie: 'Vertegenwoordiger of nabestaande',
+    wanneer: 'Declareren binnen 6 weken',
+    vorm: 'Via zorgkantoor of gemeente',
+    tip: 'Zorgverleners hebben soms recht op een eenmalige uitkering wegens plots inkomensverlies. Neem hierover contact op met het zorgkantoor of de gemeente.',
+    link: 'https://www.svb.nl/nl/pgb/wijziging-doorgeven/overlijden',
+    linkLabel: 'SVB PGB bij overlijden' },
+
+  // ═══ UWV ═══
+  { id: 'uwv-melden', cat: 'uwv', ico: '💼',
+    titel: 'Overlijden doorgeven aan UWV',
+    instantie: 'UWV',
+    omschr: 'Stopzetten van WW, WIA, Wajong, Ziektewet of andere UWV uitkeringen. Bij overlijden in Nederland gaat dit automatisch via de BRP. Bij overlijden in het buitenland zelf contact opnemen.',
+    wie: 'Nabestaande (bij buitenland)',
+    wanneer: 'Direct bij buitenland',
+    vorm: 'Online via Mijn UWV',
+    tip: 'UWV stuurt automatisch een brief naar het adres van de overledene met informatie over de overlijdensuitkering. Wacht met aanvragen tot je deze brief hebt ontvangen.',
+    link: 'https://www.uwv.nl/nl/overlijden',
+    linkLabel: 'UWV overlijden melden' },
+  { id: 'uwv-uitkering', cat: 'uwv', ico: '💼',
+    titel: 'Overlijdensuitkering UWV aanvragen',
+    instantie: 'UWV',
+    omschr: 'Eenmalige uitkering van 1 maand bruto UWV uitkering plus opgebouwd vakantiegeld voor partner, kinderen of huisgenoten van de overledene. Volledig vrij van belasting en premies.',
+    wie: 'Partner, kinderen of huisgenoten',
+    wanneer: 'Na ontvangst UWV brief',
+    vorm: 'Online aanvragen',
+    tip: 'Vraag de uitkering pas aan na ontvangst van de UWV brief. Als de uitkering nog enige tijd is doorbetaald na overlijden, wordt dit verrekend met de overlijdensuitkering.',
+    link: 'https://www.uwv.nl/nl/overlijden',
+    linkLabel: 'UWV overlijdensuitkering' },
+
+  // ═══ DUO ═══
+  { id: 'duo-stop', cat: 'duo', ico: '🎓',
+    titel: 'Studiefinanciering stopzetten',
+    instantie: 'DUO',
+    omschr: 'Lopende studiefinanciering en OV chipkaart studentenproduct stoppen automatisch zodra DUO de overlijdensmelding via de BRP ontvangt. Neem voor de zekerheid contact op voor eventuele verrekening.',
+    wie: 'Automatisch via BRP',
+    wanneer: 'Automatisch',
+    vorm: 'Geen actie vereist',
+    tip: 'Eventuele teveel ontvangen studiefinanciering wordt verrekend met de nalatenschap. Voor de OV chipkaart studentenproduct loopt aparte afhandeling.',
+    link: 'https://duo.nl/particulier/overlijden.jsp',
+    linkLabel: 'DUO bij overlijden' },
+  { id: 'duo-schuld', cat: 'duo', ico: '🎓',
+    titel: 'Studieschuld kwijtschelden bij overlijden',
+    instantie: 'DUO',
+    omschr: 'Een studieschuld bij DUO wordt bij overlijden volledig kwijtgescholden en nooit doorberekend aan erfgenamen. Het is wel verstandig om DUO actief te informeren zodat eventuele incassobureaus stoppen.',
+    wie: 'Automatisch maar melden aan te raden',
+    wanneer: 'Automatisch',
+    vorm: 'Brief met akte van overlijden',
+    tip: 'Bewaar de akte van overlijden om kwijtschelding te kunnen bewijzen aan eventuele schuldeisers of incassobureaus.',
+    link: 'https://duo.nl/particulier/overlijden.jsp',
+    linkLabel: 'DUO studieschuld kwijtschelden' },
+
+  // ═══ ERFRECHT ═══
+  { id: 'verklaring-erfrecht', cat: 'erfrecht', ico: '⚖️',
+    titel: 'Verklaring van erfrecht',
+    instantie: 'Notaris',
+    omschr: 'Notarieel document dat aantoont wie de erfgenamen zijn. Vaak nodig voor banken (tegoed boven 100.000 euro), woningverkoop en digitale aangifte inkomstenbelasting. Notaris doet onderzoek bij CTR en burgerlijke stand.',
+    wie: 'Erfgenamen via notaris',
+    wanneer: 'Bij vraag van bank of instantie',
+    vorm: 'Notariële akte',
+    tip: 'Kosten liggen tussen 300 en 700 euro. Bij banktegoeden onder 100.000 euro vragen veel banken er niet om. Voor aangifte erfbelasting is hij niet verplicht. Bel eerst de instantie om te vragen of het echt nodig is.',
+    link: 'https://www.rijksoverheid.nl/onderwerpen/erven/vraag-en-antwoord/wat-is-een-verklaring-van-erfrecht-en-wanneer-heb-ik-deze-nodig',
+    linkLabel: 'Rijksoverheid verklaring van erfrecht' },
+  { id: 'verklaring-executele', cat: 'erfrecht', ico: '⚖️',
+    titel: 'Verklaring van executele',
+    instantie: 'Notaris',
+    omschr: 'Bewijs dat een executeur door de overledene is aangewezen in het testament en gemachtigd is om de nalatenschap af te wikkelen. Sneller en goedkoper dan een volledige verklaring van erfrecht.',
+    wie: 'Executeur via notaris',
+    wanneer: 'Bij start afwikkeling',
+    vorm: 'Notariële akte',
+    tip: 'Alleen mogelijk als er een executeur is benoemd in het testament. De executeur kan dan zelfstandig handelen zonder dat alle erfgenamen apart hoeven te machtigen.',
+    link: 'https://www.knb.nl/notaris-vinden',
+    linkLabel: 'KNB notaris vinden' },
+  { id: 'aanvaarden', cat: 'erfrecht', ico: '⚖️',
+    titel: 'Aanvaarden of verwerpen nalatenschap',
+    instantie: 'Rechtbank',
+    omschr: 'Een erfenis kan zuiver worden aanvaard (alles inclusief schulden), beneficiair (alleen als bezit groter is dan schuld) of verworpen (helemaal niets). Beneficiair en verwerpen via rechtbank.',
+    wie: 'Iedere erfgenaam apart',
+    wanneer: 'Snel handelen, vóór gebruik spullen',
+    vorm: 'Verklaring bij rechtbank',
+    tip: 'Bij twijfel over schulden: kies altijd beneficiair aanvaarden (kost slechts 145 euro). Pas op: in de auto rijden of spullen gebruiken betekent al feitelijke zuivere aanvaarding.',
+    link: 'https://www.rechtspraak.nl/Onderwerpen/erfrecht/Paginas/erfenis-aanvaarden-verwerpen.aspx',
+    linkLabel: 'Rechtspraak aanvaarden of verwerpen' },
+  { id: 'ctr', cat: 'erfrecht', ico: '⚖️',
+    titel: 'Testament opvragen bij CTR',
+    instantie: 'Centraal Testamentenregister',
+    omschr: 'Controleren of de overledene een testament heeft opgesteld en zo ja, bij welke notaris. Het CTR registreert alleen wáár het testament ligt, niet de inhoud. Gratis opvraagbaar.',
+    wie: 'Nabestaande of notaris',
+    wanneer: 'Bij start nalatenschap',
+    vorm: 'Online met akte van overlijden',
+    tip: 'Het CTR is dus geen plek om de inhoud van het testament te zien; daarvoor moet je naar de notaris waar het testament ligt. De opvraging is wel gratis.',
+    link: 'https://www.centraaltestamentenregister.nl',
+    linkLabel: 'Centraal Testamentenregister' },
+  { id: 'kadaster', cat: 'erfrecht', ico: '⚖️',
+    titel: 'Verklaring van erfrecht inschrijven Kadaster',
+    instantie: 'Kadaster via notaris',
+    omschr: 'Bij overdracht van onroerend goed uit de nalatenschap moet de verklaring van erfrecht worden ingeschreven in het Kadaster. Zonder inschrijving kan de woning niet worden verkocht of overgedragen.',
+    wie: 'Notaris regelt inschrijving',
+    wanneer: 'Bij eigendomsoverdracht',
+    vorm: 'Via notaris',
+    tip: 'In het Kadaster staat de overledene nog als eigenaar van het onroerend goed. Inschrijving is dus essentieel voor een correcte juridische status.',
+    link: 'https://www.kadaster.nl/zakelijk/registratie/inschrijven-stukken',
+    linkLabel: 'Kadaster inschrijven stukken' },
+
+  // ═══ PENSIOEN ═══
+  { id: 'mijnpensioen', cat: 'pensioen', ico: '🏦',
+    titel: 'Mijnpensioenoverzicht.nl raadplegen',
+    instantie: 'Stichting Pensioenregister',
+    omschr: 'Centrale website voor het pensioenoverzicht in Nederland. Een nabestaande kan met DigiD nagaan welke pensioenregelingen de overledene had en wat het te verwachten partner of wezenpensioen is.',
+    wie: 'Nabestaande met DigiD',
+    wanneer: 'Direct na overlijden',
+    vorm: 'Online via DigiD',
+    tip: 'Login met de DigiD van de overledene (als die nog actief is) of via nabestaandenmachtiging. Geeft direct inzicht in alle pensioenfondsen waar nog rechten liggen.',
+    link: 'https://www.mijnpensioenoverzicht.nl',
+    linkLabel: 'Mijnpensioenoverzicht.nl' },
+  { id: 'partnerpensioen', cat: 'pensioen', ico: '🏦',
+    titel: 'Partnerpensioen aanvragen',
+    instantie: 'Pensioenfondsen',
+    omschr: 'Per pensioenfonds van de overledene moet partnerpensioen (vroeger nabestaandenpensioen) actief worden aangevraagd. Rechten verschillen per fonds: sommige 70% van ouderdomspensioen, andere een vast bedrag.',
+    wie: 'Achterblijvende partner',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Per fonds',
+    tip: 'Bij meerdere pensioenfondsen (zoals ABP, PFZW, PMT, BPFBouw) moet je bij elk apart aanvragen. Stuur een kopie van de akte van overlijden mee. Partnerpensioen is belast als regulier pensioen.',
+    link: 'https://www.mijnpensioenoverzicht.nl',
+    linkLabel: 'Mijnpensioenoverzicht alle fondsen' },
+  { id: 'wezenpensioen', cat: 'pensioen', ico: '🏦',
+    titel: 'Wezenpensioen aanvragen',
+    instantie: 'Pensioenfondsen',
+    omschr: 'Voor kinderen jonger dan 18 (soms 21 of 27 indien studerend) van overleden werknemers. Wordt niet automatisch toegekend; aanvraag verloopt via het pensioenfonds.',
+    wie: 'Voogd of jong volwassene',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Per fonds',
+    tip: 'Bij verlies van beide ouders verdubbelt het wezenpensioen in veel regelingen. Wezenpensioen stopt automatisch bij 18 jaar, tenzij studie of arbeidsongeschiktheid van toepassing is.',
+    link: 'https://www.mijnpensioenoverzicht.nl',
+    linkLabel: 'Mijnpensioenoverzicht wezen' },
+
+  // ═══ VERZEKERINGEN ═══
+  { id: 'uitvaartverz', cat: 'verzekering', ico: '🛡️',
+    titel: 'Uitvaartverzekering claimen',
+    instantie: 'Uitvaartverzekeraar',
+    omschr: 'Direct na het overlijden de uitvaartverzekeraar informeren. Veel verzekeraars willen vóór de uitvaart al weten dat er geclaimd wordt, soms is gebruik van specifieke uitvaartondernemers verplicht.',
+    wie: 'Nabestaande of uitvaartondernemer',
+    wanneer: 'Direct',
+    vorm: 'Telefonisch of online',
+    tip: 'Bij natura polissen (zoals DELA, Yarden) gelden vaak beperkingen in keuze van uitvaartondernemer. Controleer dit vóór het maken van afspraken om dubbele kosten te voorkomen.',
+    link: 'https://uitvaart-platform.nl/uitvaartverzekeringen',
+    linkLabel: 'Vergelijk uitvaartverzekeraars' },
+  { id: 'levensverz', cat: 'verzekering', ico: '🛡️',
+    titel: 'Levensverzekering uitkering aanvragen',
+    instantie: 'Levensverzekeraar',
+    omschr: 'Een levensverzekering keert een vooraf bepaald bedrag uit aan de begunstigde(n). Stuur akte van overlijden plus polis mee. De uitkering is vrijgesteld van inkomstenbelasting.',
+    wie: 'Begunstigde uit polis',
+    wanneer: 'Geen wettelijke termijn',
+    vorm: 'Schriftelijk of digitaal',
+    tip: 'De uitkering telt wel mee voor de erfbelasting tenzij goed geregeld via kruislingse premiebetaling. Bij twijfel over bestaan van polissen: check via Verbond van Verzekeraars vermissingsregister.',
+    link: 'https://www.verzekeraars.nl',
+    linkLabel: 'Verbond van Verzekeraars' },
+  { id: 'zorgverz', cat: 'verzekering', ico: '🛡️',
+    titel: 'Zorgverzekering beëindigen',
+    instantie: 'Zorgverzekeraar',
+    omschr: 'De meeste zorgverzekeraars worden automatisch geïnformeerd via de gemeente. Toch is actief contact verstandig: stopzetten incasso, teruggave vooruitbetaalde premie, claim openstaande rekeningen.',
+    wie: 'Nabestaande',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Schriftelijk of telefonisch',
+    tip: 'Premie wordt verrekend tot de overlijdensdatum. Stuur akte van overlijden of uittreksel mee. Voor aanvullende verzekeringen geldt vaak een opzegtermijn.',
+    link: 'https://uitvaart-platform.nl/uitvaart-formulieren',
+    linkLabel: 'Meer info zorgverzekering' },
+  { id: 'inboedel', cat: 'verzekering', ico: '🛡️',
+    titel: 'Inboedel, opstal en aansprakelijkheid',
+    instantie: 'Schadeverzekeraar',
+    omschr: 'Schadeverzekeringen (inboedel, opstal, aansprakelijkheid) worden niet automatisch beëindigd. Bij alleenwonende overledene blijft de woning verzekerd totdat de polis is opgezegd of overgedragen.',
+    wie: 'Nabestaande of erfgenaam',
+    wanneer: 'Binnen 30 dagen',
+    vorm: 'Schriftelijk of telefonisch',
+    tip: 'Niet direct opzeggen zonder zekerheid: bij brand of inbraak tijdens leegstand blijft dekking belangrijk. Sommige verzekeraars verlagen dekking bij onbewoonde stand langer dan 60 dagen.',
+    link: 'https://uitvaart-platform.nl/uitvaart-formulieren',
+    linkLabel: 'Meer info schadeverzekeringen' },
+  { id: 'reisverz', cat: 'verzekering', ico: '🛡️',
+    titel: 'Reisverzekering en doorlopende polissen',
+    instantie: 'Reisverzekeraar',
+    omschr: 'Doorlopende reisverzekeringen en annuleringsverzekeringen voor geboekte reizen. Bij annulering wegens overlijden van een familielid (eerste graad) wordt vrijwel altijd uitgekeerd.',
+    wie: 'Nabestaande',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Telefonisch of schriftelijk',
+    tip: 'Bij overlijden tijdens reis: bel direct de alarmcentrale van de reisverzekering voor repatriëring. Stuur akte van overlijden plus boekingsbevestiging mee voor annuleringsclaim.',
+    link: 'https://uitvaart-platform.nl/uitvaart-formulieren',
+    linkLabel: 'Repatriëring reisverzekering' },
+
+  // ═══ BANK ═══
+  { id: 'bank-melden', cat: 'bank', ico: '💳',
+    titel: 'Overlijden melden bij banken',
+    instantie: 'Bank van overledene',
+    omschr: 'Banken worden niet automatisch geïnformeerd. Bij melding worden persoonlijke rekeningen geblokkeerd; gemeenschappelijke rekeningen blijven werken. Lopende incasso\'s lopen nog enige tijd door.',
+    wie: 'Nabestaande',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Online formulier of loket',
+    tip: 'Bij banktegoed boven 100.000 euro vragen banken vaak een verklaring van erfrecht. Onder die grens meestal niet. Creditcards worden direct geblokkeerd.',
+    link: 'https://www.nvb.nl',
+    linkLabel: 'NVB bij overlijden' },
+  { id: 'hypotheek', cat: 'bank', ico: '💳',
+    titel: 'Hypotheek bij overlijden',
+    instantie: 'Hypotheekverstrekker',
+    omschr: 'Veel hypotheken hebben een gekoppelde overlijdensrisicoverzekering die de hypotheek (deels) aflost. Onderzoek dit direct. De hypotheekverstrekker stopt niet automatisch met incasso\'s.',
+    wie: 'Achterblijvende partner of erfgenamen',
+    wanneer: 'Binnen enkele maanden',
+    vorm: 'Bank gesprek',
+    tip: 'Controleer de polisvoorwaarden van de gekoppelde levensverzekering vóór het maken van financiële beslissingen. Vermijd betalingsachterstand door direct contact op te nemen.',
+    link: 'https://www.nvb.nl',
+    linkLabel: 'NVB hypotheek na overlijden' },
+  { id: 'digid', cat: 'bank', ico: '💳',
+    titel: 'DigiD beëindigen',
+    instantie: 'Logius',
+    omschr: 'DigiD wordt automatisch geblokkeerd zodra een overlijdensmelding binnenkomt via de BRP. Hierdoor kan niet meer worden ingelogd op overheidsplatforms namens de overledene.',
+    wie: 'Automatisch via BRP',
+    wanneer: 'Automatisch',
+    vorm: 'Geen actie vereist',
+    tip: 'Voor digitale aangifte namens een overledene is daarom een nabestaandenmachtiging nodig (via Belastingdienst). Wacht met definitieve actie tot je alle nodige zaken hebt geregeld.',
+    link: 'https://www.digid.nl/contact/overlijden',
+    linkLabel: 'DigiD bij overlijden' },
+
+  // ═══ RDW ═══
+  { id: 'rdw-overschrijven', cat: 'rdw', ico: '🚗',
+    titel: 'Voertuig overschrijven na overlijden',
+    instantie: 'RDW',
+    omschr: 'Wilt u het voertuig houden, dan moet u het binnen 5 weken op uw naam laten overschrijven. Bij RDW kentekenloket met kentekencard, tenaamstellingscode, ID en verklaring van erfrecht.',
+    wie: 'Erfgenaam',
+    wanneer: 'Binnen 5 weken',
+    vorm: 'RDW loket of postkantoor',
+    tip: 'Kosten overschrijving ongeveer 11,50 euro (2026). Sluit zelf direct een autoverzekering af op de nieuwe naam. Zonder verzekering rijden is strafbaar.',
+    link: 'https://www.rdw.nl/particulier/voertuigen/auto/bij-overlijden/een-voertuig-overschrijven-na-overlijden-eigenaar',
+    linkLabel: 'RDW voertuig overschrijven' },
+  { id: 'rdw-erven', cat: 'rdw', ico: '🚗',
+    titel: 'Voertuig erven en wat te doen',
+    instantie: 'RDW',
+    omschr: 'Erfgenamen hebben 5 weken om te kiezen: overschrijven op eigen naam, verkopen, of als nalatenschap laten staan. Zolang voertuig op naam overledene staat, blijven verzekering en motorrijtuigenbelasting verplicht.',
+    wie: 'Erfgenamen',
+    wanneer: 'Binnen 5 weken',
+    vorm: 'Via RDW kentekenloket',
+    tip: 'In de auto rijden zonder overschrijving betekent feitelijke aanvaarding van de erfenis. Wilt u beneficiair aanvaarden of verwerpen, gebruik de auto dan niet. Schorsen kan pas ná overschrijving.',
+    link: 'https://www.rdw.nl/particulier/voertuigen/auto/bij-overlijden/een-voertuig-erven',
+    linkLabel: 'RDW voertuig erven' },
+  { id: 'rdw-verkopen', cat: 'rdw', ico: '🚗',
+    titel: 'Voertuig verkopen na overlijden',
+    instantie: 'RDW',
+    omschr: 'Eén erfgenaam moet eerst de overschrijving op zijn naam regelen, waarna de auto binnen een week aan de koper kan worden overgeschreven. Bij meerdere erfgenamen: gezamenlijk besluit nodig.',
+    wie: 'Erfgenamen met volmacht',
+    wanneer: 'Snel om kosten te beperken',
+    vorm: 'Vrijwaringsbewijs via RDW',
+    tip: 'Bij gezamenlijke erfgenamen moet iedereen instemmen met verkoop en verkoopprijs. Eén erfgenaam kan via volmacht handelen namens de anderen.',
+    link: 'https://www.rdw.nl/particulier/voertuigen/auto/bij-overlijden',
+    linkLabel: 'RDW voertuig verkopen' },
+
+  // ═══ REGISTERS ═══
+  { id: 'donor', cat: 'registers', ico: '📑',
+    titel: 'Donorregister bij overlijden',
+    instantie: 'CIBG Donorregister',
+    omschr: 'Het ziekenhuis raadpleegt direct na overlijden automatisch het Donorregister. Stond de overledene als donor geregistreerd, dan worden mogelijke orgaan en weefseldonatie besproken met nabestaanden.',
+    wie: 'Arts of ziekenhuis raadpleegt',
+    wanneer: 'Direct',
+    vorm: 'Automatische raadpleging',
+    tip: 'Tijd is cruciaal: organen kunnen alleen worden uitgenomen in beperkte tijd na overlijden. De wilsbeschikking in het Donorregister wordt gerespecteerd, ook tegen wens van familie in.',
+    link: 'https://www.donorregister.nl',
+    linkLabel: 'Donorregister' },
+  { id: 'bkr', cat: 'registers', ico: '📑',
+    titel: 'BKR check op schulden overledene',
+    instantie: 'BKR',
+    omschr: 'Het Bureau Kredietregistratie registreert alle leningen en kredieten in Nederland. Erfgenamen kunnen een BKR rapport opvragen om verborgen schulden boven water te krijgen.',
+    wie: 'Erfgenamen via notaris',
+    wanneer: 'Bij start nalatenschap',
+    vorm: 'Aanvraag via BKR',
+    tip: 'Vraag eerst BKR overzicht aan, dan beslissen over aanvaarden of verwerpen. Kosten van een BKR rapport bedragen ongeveer 4 euro voor één persoon (2026).',
+    link: 'https://www.bkr.nl',
+    linkLabel: 'BKR informatie' },
+  { id: 'kvk', cat: 'registers', ico: '📑',
+    titel: 'Bedrijf van overledene afmelden of overdragen',
+    instantie: 'KvK',
+    omschr: 'Was de overledene zzp\'er, eenmanszaak of vennoot? Eenmanszaak stopt automatisch bij overlijden. Bij BV of VOF moet de nalatenschap actief worden afgewikkeld; aandelen gaan over op erfgenamen.',
+    wie: 'Erfgenamen of zaakwaarnemer',
+    wanneer: 'Binnen 1 week',
+    vorm: 'KvK formulier of online',
+    tip: 'Bedrijfsoverdracht of voortzetting heeft fiscale consequenties. Raadpleeg een accountant of belastingadviseur voor specifieke situaties.',
+    link: 'https://www.kvk.nl',
+    linkLabel: 'KvK bij overlijden' },
+  { id: 'slapend', cat: 'registers', ico: '📑',
+    titel: 'Slapende tegoeden opsporen',
+    instantie: 'Banken via NVB',
+    omschr: 'Bij de Nederlandse Vereniging van Banken bestaat een centraal punt voor het opsporen van vergeten bankrekeningen waarop 7+ jaar geen activiteit was. Alleen erfgenamen kunnen aanvragen.',
+    wie: 'Erfgenamen',
+    wanneer: 'Wanneer vermoeden bestaat',
+    vorm: 'Online aanvraag',
+    tip: 'Vergeten rekeningen bestaan vaak: oude spaarrekeningen, buitenlandse rekeningen die nooit zijn opgeheven, of beleggingsrekeningen. Een check kan duizenden euro\'s opleveren.',
+    link: 'https://www.nvb.nl',
+    linkLabel: 'NVB slapende tegoeden' },
+
+  // ═══ ABONNEMENTEN ═══
+  { id: 'energie', cat: 'abonnement', ico: '📧',
+    titel: 'Energiecontract opzeggen of overschrijven',
+    instantie: 'Energieleverancier',
+    omschr: 'Stond de overledene als hoofdbewoner geregistreerd? Dan moet de energieleverancier op de hoogte worden gesteld. Vaak vooraf betaald, dus mogelijk teruggave. Bij leegstand of verkoop: meterstand opnemen.',
+    wie: 'Erfgenaam of nabestaande',
+    wanneer: 'Binnen 30 dagen',
+    vorm: 'Telefonisch of online',
+    tip: 'Energieleveranciers vragen vaak een kopie van de akte van overlijden. Bij verhuizing naar verzorgingstehuis: ook energiecontract op het oude adres controleren.',
+    link: 'https://uitvaart-platform.nl/uitvaart-formulieren',
+    linkLabel: 'Meer info energie' },
+  { id: 'telecom', cat: 'abonnement', ico: '📧',
+    titel: 'Telefoon en internet abonnement opzeggen',
+    instantie: 'Telecomproviders',
+    omschr: 'Alle grote providers (KPN, VodafoneZiggo, Odido, Tele2, Lebara) hebben een speciale overlijdensprocedure. Vaak kan een abonnement direct worden beëindigd zonder de gebruikelijke 1 maand opzegtermijn.',
+    wie: 'Nabestaande',
+    wanneer: 'Binnen 30 dagen',
+    vorm: 'Schriftelijk of telefonisch',
+    tip: 'Vergeet niet sim only abonnementen, mobiele data en gezamenlijke familieabonnementen. Vraag of het abonnement kosteloos kan stoppen of moet worden overgenomen.',
+    link: 'https://uitvaart-platform.nl/uitvaart-formulieren',
+    linkLabel: 'Meer info telecom' },
+  { id: 'streaming', cat: 'abonnement', ico: '📧',
+    titel: 'Streaming en online accounts',
+    instantie: 'Diverse aanbieders',
+    omschr: 'Netflix, Spotify, Disney+, HBO Max, Apple, Google, Microsoft, Adobe en sociale media accounts. Veel zijn niet zomaar te annuleren zonder inloggegevens. Bewaar wachtwoorden tot alles is afgehandeld.',
+    wie: 'Nabestaande',
+    wanneer: 'Geen termijn',
+    vorm: 'Per platform verschillend',
+    tip: 'Facebook biedt een herdenkingsstand voor accounts. Apple en Google hebben digitale erfgenaam mogelijkheid. Overweeg een digitaal testament als onderdeel van nalatenschapsplanning.',
+    link: 'https://uitvaart-platform.nl/uitvaart-formulieren',
+    linkLabel: 'Digitale nalatenschap' },
+  { id: 'ov', cat: 'abonnement', ico: '📧',
+    titel: 'OV chipkaart en saldo',
+    instantie: 'Translink',
+    omschr: 'Het saldo op de OV chipkaart kan worden teruggevorderd door erfgenamen. Stuur het kaartnummer plus een kopie van de akte van overlijden naar Translink. Studentenproduct apart via DUO.',
+    wie: 'Nabestaande',
+    wanneer: 'Geen termijn',
+    vorm: 'Online aanvraag',
+    tip: 'Saldo wordt teruggestort op de rekening van de overledene. Eventuele OV abonnementen of studentenproducten worden apart afgehandeld.',
+    link: 'https://www.ov-chipkaart.nl',
+    linkLabel: 'OV chipkaart na overlijden' },
+  { id: 'lidmaatschap', cat: 'abonnement', ico: '📧',
+    titel: 'Lidmaatschappen opzeggen',
+    instantie: 'Diverse verenigingen',
+    omschr: 'ANWB, vakbond, politieke partij, sportclub, koor, vrijwilligersorganisatie. Loop alle bankafschriften door op terugkerende incasso\'s en zeg ze met akte van overlijden op.',
+    wie: 'Nabestaande',
+    wanneer: 'Binnen 30 dagen',
+    vorm: 'Schriftelijk',
+    tip: 'Veel verenigingen hanteren een opzegtermijn maar maken die ongedaan bij overlijden. Bekijk minimaal 12 maanden bankafschriften om alle terugkerende incasso\'s te vinden.',
+    link: 'https://uitvaart-platform.nl/uitvaart-formulieren',
+    linkLabel: 'Stappenplan opzeggingen' },
+
+  // ═══ WERKGEVER ═══
+  { id: 'werkgever', cat: 'werkgever', ico: '🤝',
+    titel: 'Werkgever van overledene informeren',
+    instantie: 'Werkgever HR',
+    omschr: 'Stuur een rouwbrief of bel personeelszaken. De werkgever start dan de procedure voor: laatste loon en vakantiegeld, overlijdensuitkering (vaak 1 maand bruto), eindafrekening en aanmelding bij collectieve verzekeringen.',
+    wie: 'Nabestaande',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Telefonisch en schriftelijk',
+    tip: 'Voor partners is dit ook belangrijk om aanspraak te maken op het bedrijfspensioen. Vraag werkgever om overzicht van alle collectieve verzekeringen en aanspraken.',
+    link: 'https://uitvaart-platform.nl/uitvaart-formulieren',
+    linkLabel: 'Informatie werkgever' },
+  { id: 'bedrijfspensioen', cat: 'werkgever', ico: '🤝',
+    titel: 'Bedrijfspensioen of collectieve verzekering claimen',
+    instantie: 'Pensioenfonds via werkgever',
+    omschr: 'Veel werkgevers hebben een collectieve overlijdensrisicoverzekering of een gekoppeld partner en wezenpensioen. Werkgever meldt het overlijden aan het pensioenfonds, maar aanvraag verloopt via nabestaande.',
+    wie: 'Partner of erfgenamen',
+    wanneer: 'Binnen 6 weken',
+    vorm: 'Via werkgever HR',
+    tip: 'Vraag werkgever expliciet om een overzicht van alle pensioen en verzekeringsregelingen waar de overledene aan deelnam. Deze worden niet altijd zichtbaar op mijnpensioenoverzicht.nl.',
+    link: 'https://www.mijnpensioenoverzicht.nl',
+    linkLabel: 'Pensioenoverzicht bedrijfspensioen' },
+
+  // ═══ BUITENLAND ═══
+  { id: 'repatriering', cat: 'buitenland', ico: '🌍',
+    titel: 'Repatriëring van lichaam vanuit buitenland',
+    instantie: 'Reisverzekeraar en uitvaartondernemer',
+    omschr: 'Bij overlijden in het buitenland en wens tot uitvaart in Nederland: repatriëring via reisverzekering. Nodig zijn: internationaal lijkpaspoort, laissez passer, zegelverklaringen en vaak een apostille.',
+    wie: 'Nabestaande via alarmcentrale',
+    wanneer: 'Zo snel mogelijk',
+    vorm: 'Via reisverzekering',
+    tip: 'Bel direct de alarmcentrale van de reisverzekering. Zij regelen meestal alle papierwerk en transport. Kosten kunnen tienduizenden euro\'s zijn zonder verzekering.',
+    link: 'https://www.nederlandwereldwijd.nl/diensten/overlijden-buitenland',
+    linkLabel: 'Nederland Wereldwijd overlijden buitenland' },
+  { id: 'apostille', cat: 'buitenland', ico: '🌍',
+    titel: 'Internationaal uittreksel en apostille',
+    instantie: 'Gemeente en rechtbank',
+    omschr: 'Voor afhandeling van zaken in het buitenland is een internationaal uittreksel van de akte van overlijden nodig, en voor sommige landen apostille of legalisatie. Apostille is geregeld in het Apostilleverdrag (1961).',
+    wie: 'Nabestaande',
+    wanneer: 'Bij internationale afhandeling',
+    vorm: 'Gemeente plus rechtbank',
+    tip: 'Voor EU landen meestal voldoende met meertalig uittreksel. Buiten EU vaak apostille of legalisatie vereist. Apostille wordt afgegeven door de rechtbank.',
+    link: 'https://www.rechtspraak.nl/Naar-de-rechter/Documenten-uit-buitenland/Apostille-of-legalisatie',
+    linkLabel: 'Rechtspraak apostille of legalisatie' },
+  { id: 'svb-buitenland', cat: 'buitenland', ico: '🌍',
+    titel: 'Overlijden buiten NL doorgeven aan SVB en UWV',
+    instantie: 'SVB, UWV, gemeente',
+    omschr: 'Bij overlijden buiten Nederland moeten nabestaanden zelf binnen 4 tot 6 weken SVB, UWV, Belastingdienst en gemeente informeren. De automatische doorgifte via BRP werkt niet bij buitenland.',
+    wie: 'Nabestaande',
+    wanneer: 'Binnen 4 tot 6 weken',
+    vorm: 'Via Nederlandse ambassade',
+    tip: 'Ambassade of consulaat helpt bij doorgeven aan Nederlandse instanties en bij internationale documenten. Bij doorbetaling moet het bedrag worden teruggestort.',
+    link: 'https://www.nederlandwereldwijd.nl/diensten/overlijden-buitenland',
+    linkLabel: 'Overlijden buitenland' }
+];
+
+/* ════════════════════════════════════════════════════════
+   APP LOGICA
+   ════════════════════════════════════════════════════════ */
+
+let activeCat = 'all';
+let zoekTerm = '';
+let activeId = null;
+
+const zoekEl = document.getElementById('ufaZoek');
+const clearEl = document.getElementById('ufaClear');
+const chipsEl = document.getElementById('ufaChips');
+const lijstEl = document.getElementById('ufaLijst');
+const statusEl = document.getElementById('ufaStatus');
+const detailEl = document.getElementById('ufaDetail');
+
+function renderChips() {
+  chipsEl.innerHTML = CATEGORIEEN.map(c => {
+    const aantal = c.id === 'all' ? FORMULIEREN.length : FORMULIEREN.filter(f => f.cat === c.id).length;
+    if (aantal === 0 && c.id !== 'all') return '';
+    return `<button class="ufa-chip ${c.id === activeCat ? 'actief' : ''}" data-cat="${c.id}"><span>${c.ico}</span><span>${c.naam}</span><span class="ufa-chip-aantal">${aantal}</span></button>`;
+  }).join('');
+}
+
+function renderLijst() {
+  const term = zoekTerm.toLowerCase().trim();
+  const resultaat = FORMULIEREN.filter(f => {
+    const matchCat = activeCat === 'all' || f.cat === activeCat;
+    if (!matchCat) return false;
+    if (!term) return true;
+    return f.titel.toLowerCase().includes(term) || f.instantie.toLowerCase().includes(term) || f.omschr.toLowerCase().includes(term);
+  });
+
+  if (term) {
+    statusEl.innerHTML = `<strong>${resultaat.length}</strong> ${resultaat.length === 1 ? 'formulier' : 'formulieren'} gevonden voor "${zoekTerm}"`;
+  } else if (activeCat !== 'all') {
+    const cat = CATEGORIEEN.find(c => c.id === activeCat);
+    statusEl.innerHTML = `<strong>${resultaat.length}</strong> formulieren in <strong>${cat.naam}</strong>`;
+  } else {
+    statusEl.innerHTML = `<strong>${resultaat.length}</strong> officiële formulieren bij een overlijden`;
+  }
+
+  if (resultaat.length === 0) {
+    lijstEl.innerHTML = `<div class="ufa-leeg"><div class="ufa-leeg-ico">🔍</div><div class="ufa-leeg-titel">Geen formulieren gevonden</div><div class="ufa-leeg-tekst">Probeer een andere zoekterm of categorie. Bijvoorbeeld "AOW", "auto" of "notaris".</div></div>`;
+    return;
+  }
+
+  lijstEl.innerHTML = resultaat.map(f => `
+    <div class="ufa-card ${f.id === activeId ? 'actief' : ''}" data-id="${f.id}">
+      <div class="ufa-card-ico">${f.ico}</div>
+      <div class="ufa-card-body">
+        <div class="ufa-card-instantie">${f.instantie}</div>
+        <div class="ufa-card-titel">${f.titel}</div>
+        <div class="ufa-card-omschr">${f.omschr}</div>
+      </div>
+      <div class="ufa-card-pijl">›</div>
+    </div>
+  `).join('');
+}
+
+function renderDetail(id) {
+  activeId = id;
+  const f = FORMULIEREN.find(x => x.id === id);
+  if (!f) return;
+  const cat = CATEGORIEEN.find(c => c.id === f.cat);
+
+  detailEl.innerHTML = `
+    <div class="ufa-detail-header">
+      <div class="ufa-detail-ico">${f.ico}</div>
+      <div class="ufa-detail-titels">
+        <span class="ufa-detail-cat">${cat.ico} ${cat.naam}</span>
+        <div class="ufa-detail-titel">${f.titel}</div>
+        <div class="ufa-detail-instantie">${f.instantie}</div>
+      </div>
+    </div>
+    <p class="ufa-detail-omschr">${f.omschr}</p>
+    <div class="ufa-detail-meta">
+      <div class="ufa-detail-meta-item"><div class="ufa-detail-meta-label">Wie</div><div class="ufa-detail-meta-waarde">${f.wie}</div></div>
+      <div class="ufa-detail-meta-item"><div class="ufa-detail-meta-label">Wanneer</div><div class="ufa-detail-meta-waarde">${f.wanneer}</div></div>
+      <div class="ufa-detail-meta-item"><div class="ufa-detail-meta-label">Vorm</div><div class="ufa-detail-meta-waarde">${f.vorm}</div></div>
+    </div>
+    ${f.tip ? `<div class="ufa-detail-tip"><strong>💡 Praktische tip:</strong> ${f.tip}</div>` : ''}
+    <div class="ufa-detail-cta">
+      ${f.link ? `
+        <a href="${f.link}" target="_blank" rel="noopener" class="ufa-detail-knop ufa-detail-knop-primair">
+          <span>↗</span><span>${f.linkLabel || 'Open officiële pagina'}</span>
+        </a>
+      ` : `<div class="ufa-detail-geen-link">Geen aparte officiële downloadpagina. Wordt door arts of instantie verstrekt.</div>`}
+      <a href="https://uitvaart-platform.nl/uitvaart-formulieren" target="_blank" rel="noopener" class="ufa-detail-knop ufa-detail-knop-secundair">
+        Volledige uitleg op Uitvaart-Platform.nl
+      </a>
+    </div>
+  `;
+  renderLijst();
+}
+
+zoekEl.addEventListener('input', e => {
+  zoekTerm = e.target.value;
+  clearEl.classList.toggle('actief', !!zoekTerm);
+  renderLijst();
+});
+
+clearEl.addEventListener('click', () => {
+  zoekEl.value = '';
+  zoekTerm = '';
+  clearEl.classList.remove('actief');
+  renderLijst();
+  zoekEl.focus();
+});
+
+chipsEl.addEventListener('click', e => {
+  const btn = e.target.closest('.ufa-chip');
+  if (!btn) return;
+  activeCat = btn.dataset.cat;
+  renderChips();
+  renderLijst();
+});
+
+lijstEl.addEventListener('click', e => {
+  const card = e.target.closest('.ufa-card');
+  if (!card) return;
+  renderDetail(card.dataset.id);
+  if (window.innerWidth <= 1000) {
+    document.querySelector('.ufa-detail-zone').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+});
+
+renderChips();
+renderLijst();
+</script>
+</body>
+</html>
