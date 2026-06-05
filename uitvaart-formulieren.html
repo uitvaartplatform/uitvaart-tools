@@ -11,10 +11,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-body { padding: 16px; min-height: 100vh; }
+html, body { height: 100%; font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { padding: 16px; min-height: 100%; height: 100%; }
 
-.ufa-app { max-width: 1300px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; display: flex; flex-direction: column; min-height: calc(100vh - 32px); }
+.ufa-app { max-width: 1300px; height: 100%; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
 
 /* ── HEADER ── */
 .ufa-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; flex-shrink: 0; }
@@ -213,7 +213,7 @@ mark { background: rgba(232,131,74,0.32); color: inherit; border-radius: 3px; pa
 }
 @media (max-width: 480px) {
   body { padding: 0; }
-  .ufa-app { border-radius: 0; min-height: 100vh; }
+  .ufa-app { border-radius: 0; height: 100%; min-height: 0; }
 }
 
 /* ── PRINT WEERGAVE (dedicated checklist) ── */
