@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uitvaart Draaiboek Pro - Uitvaart-Platform.nl</title>
+<meta name="description" content="Het meest complete digitale uitvaartdraaiboek voor professionals. Van eerste intake tot nazorg. Opslaan, hergebruiken, exporteren en afdrukken.">
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; background: #faf7f2; color: #1e1520; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { padding: 16px; min-height: 100vh; }
+
+.udb-app { max-width: 1340px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(74,25,66,0.08); overflow: hidden; display: flex; flex-direction: column; min-height: calc(100vh - 32px); }
+
+/* ── HEADER ── */
+.udb-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 18px 26px; position: relative; overflow: hidden; flex-shrink: 0; }
+.udb-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
+.udb-header-row { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+.udb-merk { display: flex; align-items: center; gap: 14px; }
+.udb-logo { flex-shrink: 0; display: flex; align-items: center; }
+.udb-logo svg { width: 40px; height: 35px; display: block; }
+.udb-titel { font-size: clamp(1.05rem, 2.4vw, 1.4rem); font-weight: 800; letter-spacing: -0.3px; }
+.udb-subtitel { font-size: 0.74rem; color: #fcd9c4; margin-top: 1px; }
+.udb-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 13px; background: rgba(232,131,74,0.25); color: #fff; border-radius: 14px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.4px; }
+.udb-badge-dot { width: 6px; height: 6px; background: #e8834a; border-radius: 50%; box-shadow: 0 0 8px #e8834a; animation: udb-pulse 2s infinite; }
+@keyframes udb-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* ── DOSSIER BALK ── */
+.udb-dossierbalk { background: #2e0f29; padding: 11px 26px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex-shrink: 0; }
+.udb-dossier-actief { flex: 1; min-width: 180px; display: flex; align-items: center; gap: 10px; }
+.udb-dossier-ico { width: 34px; height: 34px; background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
+.udb-dossier-naam { font-size: 0.92rem; font-weight: 700; color: #fff; line-height: 1.2; }
+.udb-dossier-meta { font-size: 0.66rem; color: #b09cae; margin-top: 1px; }
+.udb-saveind { font-size: 0.66rem; color: #8fbf8f; display: inline-flex; align-items: center; gap: 5px; }
+.udb-saveind.bezig { color: #e8b04a; }
+.udb-acties { display: flex; gap: 7px; flex-wrap: wrap; }
+.udb-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); color: #fff; border-radius: 9px; padding: 8px 13px; font-size: 0.74rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.16s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.udb-btn:hover { background: rgba(255,255,255,0.2); }
+.udb-btn-oranje { background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); border-color: transparent; }
+.udb-btn-oranje:hover { filter: brightness(1.08); background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); }
+
+/* ── VOORTGANG ── */
+.udb-progress-zone { background: #fff; padding: 12px 26px; border-bottom: 1px solid #f0eae7; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.udb-progress-bar-wrap { flex: 1; height: 8px; background: #f0e8e0; border-radius: 5px; overflow: hidden; }
+.udb-progress-bar { height: 100%; background: linear-gradient(90deg, #e8834a 0%, #c8622a 100%); border-radius: 5px; width: 0%; transition: width 0.4s ease; }
+.udb-progress-tekst { font-size: 0.76rem; font-weight: 700; color: #4a1942; white-space: nowrap; }
+.udb-deadline { font-size: 0.72rem; color: #8a7a85; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
+.udb-deadline strong { color: #c8622a; }
+
+/* ── PRIVACY STRIP ── */
+.udb-privacy-strip { background: #faf7f2; border-bottom: 1px solid #f0eae7; padding: 9px 26px; display: flex; align-items: center; justify-content: center; gap: 9px; font-size: 0.76rem; color: #6e5e68; flex-shrink: 0; text-align: center; line-height: 1.4; }
+.udb-privacy-strip-ico { font-size: 0.95rem; flex-shrink: 0; }
+.udb-privacy-strip strong { color: #4a1942; font-weight: 700; }
+
+/* ── BODY ── */
+.udb-body { display: grid; grid-template-columns: 248px 1fr; flex: 1; min-height: 0; }
+
+/* ── SECTIE NAV ── */
+.udb-nav { background: #faf7f2; border-right: 1px solid #f0eae7; overflow-y: auto; padding: 10px; }
+.udb-nav::-webkit-scrollbar { width: 5px; }
+.udb-nav::-webkit-scrollbar-thumb { background: #d3c8cd; border-radius: 3px; }
+.udb-nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 11px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #5a4a55; transition: all 0.14s; margin-bottom: 2px; }
+.udb-nav-item:hover { background: #f0e8e0; color: #4a1942; }
+.udb-nav-item.actief { background: linear-gradient(135deg, #4a1942 0%, #6b3060 100%); color: #fff; box-shadow: 0 3px 10px rgba(74,25,66,0.22); }
+.udb-nav-ico { font-size: 1.05rem; flex-shrink: 0; width: 22px; text-align: center; }
+.udb-nav-tekst { flex: 1; line-height: 1.25; }
+.udb-nav-vink { width: 17px; height: 17px; border-radius: 50%; border: 2px solid #d4c4cf; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; }
+.udb-nav-vink.vol { background: #5d9d4a; border-color: #5d9d4a; color: #fff; }
+.udb-nav-vink.deels { border-color: #e8834a; }
+.udb-nav-vink.deels::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #e8834a; }
+.udb-nav-item.actief .udb-nav-vink { border-color: rgba(255,255,255,0.5); }
+.udb-nav-item.actief .udb-nav-vink.vol { background: #fff; border-color: #fff; color: #4a8a3a; }
+
+/* ── INVULGEBIED ── */
+.udb-content { overflow-y: auto; padding: 24px 30px 40px; }
+.udb-content::-webkit-scrollbar { width: 6px; }
+.udb-content::-webkit-scrollbar-thumb { background: #d3c8cd; border-radius: 3px; }
+
+.udb-sectie-kop { display: flex; align-items: center; gap: 13px; margin-bottom: 6px; }
+.udb-sectie-ico { width: 46px; height: 46px; background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(200,98,42,0.3); }
+.udb-sectie-titel { font-size: 1.3rem; font-weight: 800; color: #4a1942; letter-spacing: -0.02em; line-height: 1.2; }
+.udb-sectie-nr { font-size: 0.7rem; color: #8a7a85; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.udb-sectie-intro { font-size: 0.86rem; color: #6e5e68; margin: 4px 0 22px; line-height: 1.6; max-width: 720px; }
+
+/* ── VELDEN ── */
+.udb-velden { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
+.udb-veld { display: flex; flex-direction: column; }
+.udb-veld.full { grid-column: 1 / -1; }
+.udb-veld-label { font-size: 0.78rem; font-weight: 700; color: #4a1942; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+.udb-veld-hint { font-size: 0.72rem; color: #9a8c93; font-weight: 400; margin-top: 4px; line-height: 1.45; }
+.udb-input, .udb-textarea, .udb-select { width: 100%; padding: 9px 12px; border: 1px solid #e0d6dc; border-radius: 9px; font-size: 0.86rem; font-family: inherit; color: #1e1520; background: #fff; outline: none; transition: border-color 0.16s, box-shadow 0.16s; }
+.udb-input:focus, .udb-textarea:focus, .udb-select:focus { border-color: #e8834a; box-shadow: 0 0 0 3px rgba(232,131,74,0.13); }
+.udb-textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+.udb-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a1942' d='M6 8L2 4h8z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 30px; }
+
+/* radio / keuze pills */
+.udb-radio-rij { display: flex; gap: 8px; flex-wrap: wrap; }
+.udb-radio { flex: 1; min-width: 90px; border: 1.5px solid #e0d6dc; border-radius: 10px; padding: 11px 14px; font-size: 0.84rem; font-weight: 600; color: #5a4a55; cursor: pointer; text-align: center; transition: all 0.16s; background: #fff; }
+.udb-radio:hover { border-color: #e8834a; }
+.udb-radio.aan { background: linear-gradient(135deg, #4a1942 0%, #6b3060 100%); border-color: #4a1942; color: #fff; }
+
+/* checkbox */
+.udb-check-rij { display: flex; align-items: flex-start; gap: 9px; cursor: pointer; padding: 4px 0; }
+.udb-check-box { width: 22px; height: 22px; border: 2px solid #d4c4cf; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.16s; background: #fff; margin-top: 1px; }
+.udb-check-box.aan { background: linear-gradient(135deg, #5d9d4a 0%, #4a8a3a 100%); border-color: #4a8a3a; }
+.udb-check-box.aan::after { content: '✓'; color: #fff; font-size: 0.78rem; font-weight: 800; }
+.udb-check-label { font-size: 0.84rem; color: #3a2832; line-height: 1.5; padding-top: 2px; }
+
+/* waarschuwing */
+.udb-waarschuwing { grid-column: 1 / -1; background: rgba(232,131,74,0.1); border-left: 3px solid #e8834a; border-radius: 0 10px 10px 0; padding: 12px 16px; font-size: 0.82rem; color: #9a4a1a; line-height: 1.55; display: none; align-items: flex-start; gap: 9px; }
+.udb-waarschuwing.toon { display: flex; }
+.udb-waarschuwing strong { color: #c8622a; }
+.udb-waarschuwing-ico { font-size: 1.1rem; flex-shrink: 0; }
+
+/* subkop binnen sectie */
+.udb-subkop { grid-column: 1 / -1; font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #c8622a; margin: 10px 0 -4px; padding-top: 8px; border-top: 1px dashed #ece4dc; }
+.udb-subkop:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+
+/* sectie navigatie onderaan */
+.udb-sectie-foot { display: flex; justify-content: space-between; gap: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0eae7; }
+.udb-foot-btn { background: #faf7f2; border: 1px solid #e0d6dc; border-radius: 10px; padding: 11px 18px; font-size: 0.82rem; font-weight: 600; color: #4a1942; cursor: pointer; font-family: inherit; transition: all 0.16s; display: inline-flex; align-items: center; gap: 7px; }
+.udb-foot-btn:hover { border-color: #e8834a; background: #fff; }
+.udb-foot-btn.primair { background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); border-color: transparent; color: #fff; }
+.udb-foot-btn.primair:hover { filter: brightness(1.07); }
+.udb-foot-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* ── MODAL (dossiers) ── */
+.udb-modal-overlay { position: fixed; inset: 0; background: rgba(20,8,18,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; }
+.udb-modal-overlay.toon { display: flex; }
+.udb-modal { background: #fff; border-radius: 18px; width: 100%; max-width: 560px; max-height: 86vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 80px rgba(0,0,0,0.4); }
+.udb-modal-kop { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; }
+.udb-modal-titel { font-size: 1.05rem; font-weight: 700; }
+.udb-modal-close { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+.udb-modal-close:hover { background: rgba(255,255,255,0.28); }
+.udb-modal-body { padding: 20px 24px; overflow-y: auto; }
+.udb-dossier-lijst { display: flex; flex-direction: column; gap: 9px; }
+.udb-dossier-kaart { border: 1px solid #ece4dc; border-radius: 11px; padding: 13px 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.16s; }
+.udb-dossier-kaart:hover { border-color: #e8834a; background: #faf7f2; }
+.udb-dossier-kaart.actief { border-color: #4a1942; background: linear-gradient(135deg, rgba(232,131,74,0.05) 0%, rgba(74,25,66,0.02) 100%); }
+.udb-dossier-kaart-body { flex: 1; min-width: 0; }
+.udb-dossier-kaart-naam { font-size: 0.9rem; font-weight: 700; color: #4a1942; }
+.udb-dossier-kaart-meta { font-size: 0.7rem; color: #8a7a85; margin-top: 2px; }
+.udb-dossier-kaart-acties { display: flex; gap: 5px; }
+.udb-mini-btn { background: #f5f1ec; border: none; border-radius: 7px; width: 30px; height: 30px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; color: #6e5e68; transition: all 0.14s; }
+.udb-mini-btn:hover { background: #e8834a; color: #fff; }
+.udb-mini-btn.verwijder:hover { background: #c0392b; }
+.udb-modal-voet { padding: 14px 24px; border-top: 1px solid #f0eae7; display: flex; gap: 10px; }
+
+/* ── FOOTER ── */
+.udb-footer { background: #faf7f2; border-top: 1px solid #ece4dc; padding: 11px 26px; font-size: 0.72rem; color: #8a7a85; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.udb-footer a { color: #4a1942; font-weight: 600; text-decoration: none; }
+.udb-footer a:hover { text-decoration: underline; color: #e8834a; }
+.udb-footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
+.udb-pro-cta { display: inline-flex; align-items: center; gap: 7px; background: linear-gradient(135deg, rgba(232,131,74,0.13) 0%, rgba(232,131,74,0.06) 100%); border: 1px solid rgba(232,131,74,0.35); color: #c8622a !important; padding: 7px 14px; border-radius: 9px; font-size: 0.72rem; font-weight: 600; text-decoration: none !important; transition: all 0.18s ease; white-space: nowrap; }
+.udb-pro-cta:hover { background: linear-gradient(135deg, #e8834a 0%, #c8622a 100%); border-color: transparent; color: #fff !important; text-decoration: none !important; }
+.udb-pro-cta strong { font-weight: 700; }
+.udb-pro-cta-arr { transition: transform 0.18s ease; }
+.udb-pro-cta:hover .udb-pro-cta-arr { transform: translateX(3px); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 980px) {
+  .udb-body { grid-template-columns: 1fr; }
+  .udb-nav { display: none; }
+  .udb-nav.mobiel-open { display: block; position: fixed; inset: 0; z-index: 900; background: #faf7f2; padding: 16px; }
+  .udb-velden { grid-template-columns: 1fr; }
+  .udb-mobiel-menu { display: inline-flex !important; }
+}
+.udb-mobiel-menu { display: none; }
+@media (max-width: 600px) {
+  body { padding: 6px; }
+  .udb-app { border-radius: 12px; }
+  .udb-header, .udb-dossierbalk, .udb-progress-zone, .udb-privacy-strip, .udb-content, .udb-footer { padding-left: 16px; padding-right: 16px; }
+  .udb-content { padding-top: 18px; }
+}
+@media (max-width: 460px) {
+  body { padding: 0; }
+  .udb-app { border-radius: 0; min-height: 100vh; }
+}
+
+/* ── PRINT ── */
+.udb-print-zone { display: none; }
+@media print {
+  body { padding: 0; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .udb-app { display: none !important; }
+  .udb-print-zone { display: block !important; padding: 0; color: #1e1520; font-family: 'Poppins', sans-serif; }
+  .udb-pr-kop { border-bottom: 3px solid #4a1942; padding-bottom: 12px; margin-bottom: 14px; }
+  .udb-pr-titel { font-size: 1.7rem; font-weight: 800; color: #4a1942; }
+  .udb-pr-sub { font-size: 0.82rem; color: #555; margin-top: 3px; }
+  .udb-pr-sectie { break-inside: avoid; margin-bottom: 16px; }
+  .udb-pr-sectie-titel { font-size: 1rem; font-weight: 800; color: #fff; background: #4a1942; padding: 7px 12px; border-radius: 6px; margin-bottom: 8px; }
+  .udb-pr-rij { display: flex; gap: 10px; padding: 5px 4px; border-bottom: 1px solid #eee; break-inside: avoid; font-size: 0.82rem; }
+  .udb-pr-label { width: 38%; color: #777; flex-shrink: 0; }
+  .udb-pr-waarde { flex: 1; color: #1e1520; font-weight: 500; white-space: pre-wrap; }
+  .udb-pr-leeg { color: #bbb; font-style: italic; font-weight: 400; }
+  .udb-pr-foot { margin-top: 20px; padding-top: 10px; border-top: 1px solid #ccc; font-size: 0.68rem; color: #888; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="udb-app">
+
+  <div class="udb-header">
+    <div class="udb-header-row">
+      <div class="udb-merk">
+        <span class="udb-logo" aria-label="Uitvaart-Platform.nl">
+          <svg viewBox="0 0 40 35" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
+            <g clip-path="url(#udbwing)">
+              <path fill="#ffffff" d="M13.22 3.78s-3.4.78-2.83-2.42c0 0 1-3.06 4.32 0 3.33 3.06 4.39 10.88 4.39 10.88s-2.4-7.82-5.88-8.46Z" opacity=".5"/>
+              <path fill="#ffffff" d="M17.9 22.62c-3.47-7.11-7.01-7.75-9.13-11.24C6.64 7.9 6.93 6.7 7.35 5.84c.36-.71 1.94-.63 2.58-.42l.02-.01A9.62 9.62 0 0 0 2.9 3.78c-4.67.7-2.33 6.11-2.12 6.47.21.35 1.13 2.77 4.88 5.97a110.6 110.6 0 0 1 6.73 6.25s3.96 3.27 4.24 7.26c0 0 0 2.63-.85 3.34 0 0 5.6-3.34 2.12-10.45Z"/>
+              <path stroke="#ffffff" stroke-miterlimit="10" stroke-width=".2" d="M9.9 5.4s3.34.58 7.22 8.76 1.8 13.95 1.8 13.95"/>
+              <path fill="#ffffff" d="M5.58 16.15s-4.17 4.9-3.68 9.74c.5 4.83 3.47 6.9 3.47 6.9s.85.85 2.62 1.49 2.55 1.06 5.59.35c0 0 1.63-.64 2.2-1.56 0 0-1.35 2.06-5.1-.29-3.75-2.34-1.91-8.39-1.91-8.39s.42-1.99 1.9-3.62l-5.09-4.62ZM26.5 3.78s3.4.78 2.83-2.42c0 0-1-3.06-4.32 0-3.33 3.06-4.39 10.88-4.39 10.88s2.4-7.82 5.87-8.46Z" opacity=".5"/>
+              <path fill="#ffffff" d="M21.82 22.62c3.47-7.11 7.01-7.75 9.13-11.24 2.13-3.48 1.84-4.69 1.42-5.54-.36-.71-1.94-.63-2.58-.42l-.02-.01a9.62 9.62 0 0 1 7.06-1.63c4.67.7 2.33 6.11 2.12 6.47-.21.35-1.13 2.77-4.88 5.97-3.75 3.2-6.73 6.25-6.73 6.25s-3.96 3.27-4.24 7.26c0 0 0 2.63.85 3.34 0 0-5.6-3.34-2.13-10.45Z"/>
+              <path stroke="#ffffff" stroke-miterlimit="10" stroke-width=".2" d="M29.82 5.4s-3.34.58-7.22 8.76-1.8 13.95-1.8 13.95"/>
+              <path fill="#ffffff" d="M34.14 16.15s4.17 4.9 3.68 9.74c-.5 4.83-3.47 6.9-3.47 6.9s-.85.85-2.62 1.49-2.55 1.06-5.59.35c0 0-1.63-.64-2.2-1.56 0 0 1.35 2.06 5.1-.29 3.75-2.34 1.91-8.39 1.91-8.39s-.42-1.99-1.9-3.62l5.09-4.62Z" opacity=".5"/>
+            </g>
+            <defs><clipPath id="udbwing"><path fill="#fff" d="M0 0h39.72v35H0z"/></clipPath></defs>
+          </svg>
+        </span>
+        <div>
+          <div class="udb-titel">Uitvaart Draaiboek Pro</div>
+          <div class="udb-subtitel">Het complete draaiboek voor uitvaartprofessionals, van intake tot nazorg</div>
+        </div>
+      </div>
+      <span class="udb-badge"><span class="udb-badge-dot"></span>18 onderdelen</span>
+    </div>
+  </div>
+
+  <div class="udb-dossierbalk">
+    <div class="udb-dossier-actief">
+      <div class="udb-dossier-ico">📋</div>
+      <div>
+        <div class="udb-dossier-naam" id="udbDossierNaam">Nieuw draaiboek</div>
+        <div class="udb-dossier-meta"><span id="udbSaveInd" class="udb-saveind">●&nbsp; Automatisch opgeslagen</span></div>
+      </div>
+    </div>
+    <div class="udb-acties">
+      <button class="udb-btn udb-mobiel-menu" id="udbMobielMenu">☰ Onderdelen</button>
+      <button class="udb-btn" id="udbDossiers">🗂️ Dossiers</button>
+      <button class="udb-btn" id="udbNieuw">＋ Nieuw</button>
+      <button class="udb-btn" id="udbExport">⬇️ Export</button>
+      <button class="udb-btn udb-btn-oranje" id="udbPrint">🖨️ Afdrukken</button>
+    </div>
+  </div>
+
+  <div class="udb-progress-zone">
+    <div class="udb-progress-tekst" id="udbProgressTekst">0% ingevuld</div>
+    <div class="udb-progress-bar-wrap"><div class="udb-progress-bar" id="udbProgressBar"></div></div>
+    <div class="udb-deadline" id="udbDeadline"></div>
+  </div>
+
+  <div class="udb-privacy-strip">
+    <span class="udb-privacy-strip-ico">🔒</span>
+    <span>Jouw gegevens blijven <strong>100% op je eigen apparaat</strong>. Uitvaart-Platform.nl bewaart niets en kan niet meekijken in wat je invult.</span>
+  </div>
+
+  <div class="udb-body">
+    <nav class="udb-nav" id="udbNav"></nav>
+    <div class="udb-content" id="udbContent"></div>
+  </div>
+
+  <div class="udb-footer">
+    <div class="udb-footer-links">
+      <a href="https://uitvaart-platform.nl/uitvaart-formulieren" target="_blank" rel="noopener">📋 Formulieren bij overlijden</a>
+      <a href="https://uitvaart-platform.nl/woordenlijst" target="_blank" rel="noopener">📖 Woordenlijst</a>
+      <a href="https://uitvaart-platform.nl/bedrijven" target="_blank" rel="noopener">🔍 Bedrijvengids</a>
+    </div>
+    <a href="https://uitvaart-platform.nl/adverteren" target="_blank" rel="noopener" class="udb-pro-cta">
+      <span>🎯</span><span>Ondernemer? <strong>Word gevonden door nabestaanden</strong></span><span class="udb-pro-cta-arr">→</span>
+    </a>
+  </div>
+
+</div>
+
+<!-- DOSSIER MODAL -->
+<div class="udb-modal-overlay" id="udbModal">
+  <div class="udb-modal">
+    <div class="udb-modal-kop">
+      <div class="udb-modal-titel">🗂️ Mijn draaiboeken</div>
+      <button class="udb-modal-close" id="udbModalClose">✕</button>
+    </div>
+    <div class="udb-modal-body">
+      <div class="udb-dossier-lijst" id="udbDossierLijst"></div>
+    </div>
+    <div class="udb-modal-voet">
+      <button class="udb-btn udb-btn-oranje" id="udbModalNieuw" style="background:linear-gradient(135deg,#e8834a,#c8622a)">＋ Nieuw draaiboek</button>
+      <button class="udb-btn" id="udbImport" style="background:#f5f1ec;color:#4a1942;border-color:#e0d6dc">⬆️ Importeer uit bestand</button>
+      <input type="file" id="udbImportFile" accept=".json" style="display:none">
+    </div>
+  </div>
+</div>
+
+<!-- PRINT ZONE -->
+<div class="udb-print-zone" id="udbPrintZone"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   UITVAART DRAAIBOEK PRO - DATAMODEL
+   Veldtypes: text, tel, email, date, time, number, textarea,
+              select, radio, check, subkop
+   Veld props: id, label, type, opties?, hint?, full?, waarschuwing?
+   Sectie props: id, ico, titel, intro, toonAls?, velden[]
+   ════════════════════════════════════════════════════════ */
+
+const SECTIES = [
+  {
+    id: 'intake', ico: '📞', titel: 'Intake & eerste contact',
+    intro: 'De eerste melding en het inplannen van het kennismakingsgesprek met de familie.',
+    velden: [
+      { id: 'melding_datum', label: 'Datum melding', type: 'date' },
+      { id: 'melding_tijd', label: 'Tijd melding', type: 'time' },
+      { id: 'melder_naam', label: 'Naam melder', type: 'text' },
+      { id: 'melder_relatie', label: 'Relatie tot overledene', type: 'text', hint: 'Bijv. partner, kind, broer' },
+      { id: 'melder_tel', label: 'Telefoon melder', type: 'tel' },
+      { id: 'melder_email', label: 'E-mail melder', type: 'email' },
+      { id: 'plaats_overledene', label: 'Waar bevindt de overledene zich?', type: 'select', opties: ['', 'Thuis', 'Ziekenhuis', 'Hospice', 'Verpleeghuis / verzorgingshuis', 'Mortuarium', 'Elders / openbare ruimte'] },
+      { id: 'plaats_adres', label: 'Adres / afdeling overledene', type: 'text' },
+      { id: 'al_verzorgd', label: 'Is de overledene al verzorgd?', type: 'radio', opties: ['Nog niet', 'Deels', 'Volledig'] },
+      { id: 'eerste_afspraak_datum', label: 'Eerste familiegesprek, datum', type: 'date' },
+      { id: 'eerste_afspraak_tijd', label: 'Eerste familiegesprek, tijd', type: 'time' },
+      { id: 'eerste_afspraak_locatie', label: 'Locatie familiegesprek', type: 'text', hint: 'Bij familie thuis, op kantoor, etc.' },
+      { id: 'intake_bijzonderheden', label: 'Eerste bijzonderheden / aandachtspunten', type: 'textarea', full: true, hint: 'Eerste indruk, urgentie, bijzondere wensen of omstandigheden' }
+    ]
+  },
+  {
+    id: 'overledene', ico: '🕊️', titel: 'Gegevens overledene',
+    intro: 'Alle persoonsgegevens van de overledene. Let op de medische bijzonderheden onderaan, die zijn cruciaal voor crematie.',
+    velden: [
+      { id: 'ov_voornamen', label: 'Voornamen (voluit)', type: 'text' },
+      { id: 'ov_roepnaam', label: 'Roepnaam', type: 'text' },
+      { id: 'ov_tussenvoegsel', label: 'Tussenvoegsel', type: 'text' },
+      { id: 'ov_achternaam', label: 'Achternaam', type: 'text' },
+      { id: 'ov_meisjesnaam', label: 'Geboortenaam / meisjesnaam', type: 'text' },
+      { id: 'ov_geslacht', label: 'Geslacht', type: 'select', opties: ['', 'Man', 'Vrouw', 'Anders / X'] },
+      { id: 'ov_geboortedatum', label: 'Geboortedatum', type: 'date' },
+      { id: 'ov_geboorteplaats', label: 'Geboorteplaats', type: 'text' },
+      { id: 'ov_bsn', label: 'BSN', type: 'text', hint: 'Burgerservicenummer, nodig voor aangifte' },
+      { id: 'ov_nationaliteit', label: 'Nationaliteit', type: 'text' },
+      { id: 'ov_overlijdensdatum', label: 'Overlijdensdatum', type: 'date', hint: 'Bepaalt de uiterste uitvaartdatum (6 werkdagen)' },
+      { id: 'ov_overlijdenstijd', label: 'Tijd van overlijden', type: 'time' },
+      { id: 'ov_overlijdensplaats', label: 'Plaats van overlijden', type: 'text' },
+      { id: 'ov_adres', label: 'Laatste woonadres', type: 'text', full: true },
+      { id: 'ov_postcode', label: 'Postcode', type: 'text' },
+      { id: 'ov_woonplaats', label: 'Woonplaats', type: 'text' },
+      { id: 'ov_burgerlijke_staat', label: 'Burgerlijke staat', type: 'select', opties: ['', 'Gehuwd', 'Geregistreerd partnerschap', 'Samenwonend', 'Ongehuwd', 'Gescheiden', 'Weduwe / weduwnaar'] },
+      { id: 'ov_partner', label: 'Naam partner (indien van toepassing)', type: 'text' },
+      { id: 'ov_beroep', label: 'Laatste beroep', type: 'text' },
+      { id: 'ov_religie', label: 'Religie / levensovertuiging', type: 'text', hint: 'Bepalend voor rituelen en voorganger' },
+      { id: 'sub_medisch', label: 'Medische bijzonderheden', type: 'subkop' },
+      { id: 'ov_pacemaker', label: 'Pacemaker of ICD aanwezig?', type: 'radio', opties: ['Nee', 'Ja', 'Onbekend'], waarschuwing: 'Een pacemaker of ICD MOET vóór crematie worden verwijderd, anders ontstaat explosiegevaar in de oven. Regel verwijdering door arts of mortuarium en leg dit schriftelijk vast.' },
+      { id: 'ov_implantaten', label: 'Andere implantaten / prothesen', type: 'text', hint: 'Heupen, knieën, etc. Bij crematie melden i.v.m. metaalresten' },
+      { id: 'ov_besmettelijk', label: 'Besmettelijke ziekte?', type: 'radio', opties: ['Nee', 'Ja', 'Onbekend'], waarschuwing: 'Bij een besmettelijke ziekte gelden extra voorzorgsmaatregelen voor verzorging en vervoer. Overleg met de arts en volg de richtlijnen.' },
+      { id: 'ov_donor', label: 'Donorregistratie / orgaandonatie', type: 'select', opties: ['', 'Geen', 'Donor, reeds afgehandeld', 'Lichaam ter beschikking wetenschap', 'Onbekend'] },
+      { id: 'ov_radioactief', label: 'Recente radioactieve behandeling?', type: 'radio', opties: ['Nee', 'Ja', 'Onbekend'], hint: 'Bijv. bestraling met implantaat; van belang voor verzorging' }
+    ]
+  },
+  {
+    id: 'opdrachtgever', ico: '👥', titel: 'Opdrachtgever & nabestaanden',
+    intro: 'Wie geeft formeel opdracht, wie zijn de contactpersonen en hoe ziet de naaste familie eruit.',
+    velden: [
+      { id: 'og_naam', label: 'Naam opdrachtgever', type: 'text' },
+      { id: 'og_relatie', label: 'Relatie tot overledene', type: 'text' },
+      { id: 'og_adres', label: 'Adres opdrachtgever', type: 'text', full: true },
+      { id: 'og_tel', label: 'Telefoon', type: 'tel' },
+      { id: 'og_email', label: 'E-mail', type: 'email' },
+      { id: 'og_bsn', label: 'BSN opdrachtgever', type: 'text', hint: 'Soms nodig voor facturatie of verzekering' },
+      { id: 'og_iban', label: 'IBAN (voor verrekening verzekering)', type: 'text' },
+      { id: 'og_2e_contact', label: 'Tweede contactpersoon', type: 'text' },
+      { id: 'og_2e_tel', label: 'Telefoon tweede contact', type: 'tel' },
+      { id: 'og_beslissers', label: 'Wie nemen de beslissingen?', type: 'textarea', full: true, hint: 'Bij meerdere kinderen of complexe familie: noteer wie eindverantwoordelijk is en wie meebeslist' },
+      { id: 'og_familie', label: 'Naaste familie / nabestaanden (overzicht)', type: 'textarea', full: true, hint: 'Namen, relaties en eventueel telefoonnummers van partner, kinderen, ouders, broers en zussen' },
+      { id: 'og_gevoeligheden', label: 'Onderlinge gevoeligheden / aandachtspunten', type: 'textarea', full: true, hint: 'Gescheiden ouders, conflicten, samengestelde gezinnen, etc. Discreet noteren' }
+    ]
+  },
+  {
+    id: 'type', ico: '⚱️', titel: 'Type uitvaart & planning',
+    intro: 'De kernkeuze begraven of cremeren, de gewenste datum en of er vastgelegde wensen zijn.',
+    velden: [
+      { id: 'tu_type', label: 'Begrafenis of crematie?', type: 'radio', opties: ['Begrafenis', 'Crematie', 'Nog onbekend'] },
+      { id: 'tu_wensen_vastgelegd', label: 'Zijn er uitvaartwensen vastgelegd?', type: 'select', opties: ['', 'Nee, nog niets bekend', 'Ja, codicil / wensenboek', 'Ja, in testament', 'Ja, mondeling besproken', 'Ja, uitvaartwensen bij verzekeraar'] },
+      { id: 'tu_wensen_waar', label: 'Waar zijn de wensen te vinden?', type: 'text', full: true },
+      { id: 'tu_datum', label: 'Gewenste uitvaartdatum', type: 'date' },
+      { id: 'tu_tijd', label: 'Gewenste aanvangstijd', type: 'time' },
+      { id: 'tu_uitstel', label: 'Uitstel buiten 6 werkdagen nodig?', type: 'radio', opties: ['Nee', 'Ja, verlof aanvragen'], hint: 'Bij uitstel is toestemming van de burgemeester nodig (artikel 17 Wlb)' },
+      { id: 'tu_sfeer', label: 'Gewenste sfeer / karakter', type: 'textarea', full: true, hint: 'Sober, religieus, persoonlijk, feestelijk, in besloten kring, etc.' },
+      { id: 'tu_besloten', label: 'Besloten of openbaar?', type: 'radio', opties: ['Openbaar', 'Besloten', 'Deels besloten'] },
+      { id: 'tu_genodigden_aantal', label: 'Verwacht aantal aanwezigen', type: 'number' }
+    ]
+  },
+  {
+    id: 'verzorging', ico: '🤲', titel: 'Verzorging & opbaring',
+    intro: 'De laatste verzorging, opbaring en de momenten waarop nabestaanden afscheid kunnen nemen.',
+    velden: [
+      { id: 'vz_opbaarlocatie', label: 'Plaats van opbaring', type: 'select', opties: ['', 'Thuis', 'Rouwcentrum / uitvaartcentrum', 'Mortuarium ziekenhuis', '24-uurs kamer', 'Elders'] },
+      { id: 'vz_opbaaradres', label: 'Adres opbaring', type: 'text', full: true },
+      { id: 'vz_thanatopraxie', label: 'Thanatopraxie (lichte balseming)?', type: 'radio', opties: ['Nee', 'Ja', 'Bespreken'], hint: 'Verlengt natuurlijke aanblik, handig bij langere opbaring of warm weer' },
+      { id: 'vz_koeling', label: 'Koeling', type: 'select', opties: ['', 'Koeling in centrum', 'Koeltechniek thuis (koelplaat)', 'Niet van toepassing'] },
+      { id: 'vz_kleding', label: 'Kleding overledene', type: 'textarea', full: true, hint: 'Welke kleding, door wie aangeleverd, eventueel eigen kleding meenemen' },
+      { id: 'vz_sieraden', label: 'Sieraden', type: 'textarea', full: true, hint: 'Welke sieraden blijven om, welke worden teruggegeven aan wie. Leg dit zorgvuldig vast' },
+      { id: 'vz_verzorging_door', label: 'Verzorging door', type: 'text', hint: 'Eigen verzorger, familie betrekken, etc.' },
+      { id: 'vz_familie_helpt', label: 'Familie helpt mee met verzorging?', type: 'radio', opties: ['Nee', 'Ja', 'Wil erbij zijn'] },
+      { id: 'vz_persoonlijk', label: 'Persoonlijke voorwerpen mee in de kist', type: 'textarea', full: true, hint: 'Brief, foto, knuffel, etc. Let op: bij crematie geen verboden materialen' },
+      { id: 'vz_bezoek', label: 'Bezoek / afscheidsmomenten', type: 'textarea', full: true, hint: 'Wanneer kan de familie langskomen, op afspraak of vrij, condoleance aan huis' }
+    ]
+  },
+  {
+    id: 'kist', ico: '⚰️', titel: 'Kist, wade & benodigdheden',
+    intro: 'De keuze van kist of wade en bijbehorende benodigdheden.',
+    velden: [
+      { id: 'ki_type', label: 'Kist of wade?', type: 'radio', opties: ['Kist', 'Wade', 'Mandje / anders'] },
+      { id: 'ki_model', label: 'Model / uitvoering', type: 'text', hint: 'Naam of typenummer van de kist' },
+      { id: 'ki_materiaal', label: 'Materiaal', type: 'select', opties: ['', 'Spaanplaat gefineerd', 'Massief hout', 'Karton / duurzaam', 'Wilgentenen / riet', 'Wol / katoen (wade)', 'Anders'] },
+      { id: 'ki_bekleding', label: 'Binnenbekleding', type: 'text' },
+      { id: 'ki_naamplaat', label: 'Naamplaatje', type: 'select', opties: ['', 'Geen', 'Standaard', 'Gegraveerd', 'Persoonlijk ontwerp'] },
+      { id: 'ki_naamplaat_tekst', label: 'Tekst naamplaatje', type: 'text', full: true },
+      { id: 'ki_handvatten', label: 'Type handvatten / dragerbeslag', type: 'text' },
+      { id: 'ki_dek', label: 'Kistdek / bovenkleed', type: 'text', hint: 'Bloemdek, kleed, vlag, etc.' },
+      { id: 'ki_levering', label: 'Levering kist, datum/tijd', type: 'text' },
+      { id: 'ki_bijzonderheden', label: 'Bijzonderheden kist', type: 'textarea', full: true }
+    ]
+  },
+  {
+    id: 'ceremonie', ico: '🕯️', titel: 'Ceremonie & afscheidsdienst',
+    intro: 'De inhoud en opbouw van de afscheidsdienst zelf.',
+    velden: [
+      { id: 'ce_locatie', label: 'Locatie afscheidsdienst', type: 'text', hint: 'Kerk, aula, crematorium, eigen locatie' },
+      { id: 'ce_adres', label: 'Adres locatie', type: 'text', full: true },
+      { id: 'ce_datum', label: 'Datum dienst', type: 'date' },
+      { id: 'ce_aanvang', label: 'Aanvangstijd', type: 'time' },
+      { id: 'ce_duur', label: 'Beschikbare tijd / duur', type: 'text', hint: 'Bijv. 45 minuten, of dubbele tijd gereserveerd' },
+      { id: 'ce_voorganger', label: 'Voorganger / spreker / ceremoniemeester', type: 'text' },
+      { id: 'ce_voorganger_tel', label: 'Telefoon voorganger', type: 'tel' },
+      { id: 'ce_religieus', label: 'Religieuze of levensbeschouwelijke dienst?', type: 'select', opties: ['', 'Nee, niet-religieus', 'Rooms-katholiek', 'Protestants', 'Islamitisch', 'Joods', 'Hindoe', 'Boeddhistisch', 'Humanistisch', 'Anders'] },
+      { id: 'ce_sprekers', label: 'Sprekers namens familie', type: 'textarea', full: true, hint: 'Wie spreekt, in welke volgorde, hoeveel tijd per spreker' },
+      { id: 'ce_programma', label: 'Programma / volgorde van de dienst', type: 'textarea', full: true, hint: 'Binnenkomst, welkom, spreekmomenten, muziek, gedicht, slot, uitdragen' },
+      { id: 'ce_kinderen', label: 'Rol voor kinderen / kleinkinderen', type: 'textarea', full: true },
+      { id: 'ce_rituelen', label: 'Bijzondere rituelen / symbolen', type: 'textarea', full: true, hint: 'Kaarsen, gedenktafel, vlinder, ballonnen, duiven, etc.' },
+      { id: 'ce_techniek', label: 'Beeld / techniek', type: 'textarea', full: true, hint: 'Fotopresentatie, livestream, beamer, microfoons' }
+    ]
+  },
+  {
+    id: 'dagplanning', ico: '⏱️', titel: 'Dagplanning / tijdpad',
+    intro: 'Het uur-voor-uur draaiboek van de uitvaartdag zelf. Dit is het hart van het draaiboek.',
+    velden: [
+      { id: 'dp_opstellen', label: 'Tijd opstellen / verzamelen', type: 'text', hint: 'Bijv. 09:30 verzamelen bij de familie' },
+      { id: 'dp_ophalen_overledene', label: 'Ophalen overledene, tijd & adres', type: 'text' },
+      { id: 'dp_aankomst_familie', label: 'Aankomst bij familie, tijd', type: 'text' },
+      { id: 'dp_vertrek_stoet', label: 'Vertrek rouwstoet, tijd', type: 'text' },
+      { id: 'dp_aankomst_locatie', label: 'Aankomst op locatie, tijd', type: 'text' },
+      { id: 'dp_aanvang_dienst', label: 'Aanvang dienst, tijd', type: 'text' },
+      { id: 'dp_einde_dienst', label: 'Einde dienst, tijd', type: 'text' },
+      { id: 'dp_condoleance', label: 'Condoleance / samenzijn, tijd', type: 'text' },
+      { id: 'dp_einde_dag', label: 'Verwacht einde, tijd', type: 'text' },
+      { id: 'dp_volledig', label: 'Volledig minuut-draaiboek', type: 'textarea', full: true, hint: 'Schrijf hier het complete tijdpad uit, bijv: 13:00 binnenkomst gasten - 13:30 welkomstwoord - 13:35 muziek 1 - 13:40 eerste spreker ... Kopieer dit naar de print voor je team' }
+    ]
+  },
+  {
+    id: 'muziek', ico: '🎵', titel: 'Muziek & geluid',
+    intro: 'Alle muziekkeuzes en geluidstechniek. Vergeet de rechten niet.',
+    velden: [
+      { id: 'mz_type', label: 'Live muziek of opnames?', type: 'radio', opties: ['Opnames', 'Live', 'Combinatie'] },
+      { id: 'mz_binnenkomst', label: 'Muziek bij binnenkomst', type: 'text', full: true, hint: 'Titel en artiest' },
+      { id: 'mz_tijdens', label: 'Muziek tijdens de dienst', type: 'textarea', full: true, hint: 'Per moment: titel, artiest en wanneer in het programma' },
+      { id: 'mz_uitdragen', label: 'Muziek bij uitdragen / slot', type: 'text', full: true },
+      { id: 'mz_musici', label: 'Live musici / DJ / koor', type: 'textarea', full: true, hint: 'Naam, contact, wat ze spelen, aankomsttijd, geluidscheck' },
+      { id: 'mz_aanlevering', label: 'Aanlevering muziekbestanden', type: 'select', opties: ['', 'Door familie aangeleverd', 'Door ons verzameld', 'Via locatie / crematorium', 'Streamingdienst ter plaatse'] },
+      { id: 'mz_rechten', label: 'Muziekrechten (Buma/Stemra) geregeld?', type: 'radio', opties: ['Via locatie', 'Zelf regelen', 'Niet van toepassing'], hint: 'Crematoria en kerken hebben vaak een collectieve regeling' },
+      { id: 'mz_techniek', label: 'Geluidstechniek / check', type: 'textarea', full: true, hint: 'Wie test het geluid en wanneer, reservebestanden, microfoons' }
+    ]
+  },
+  {
+    id: 'vervoer', ico: '🚗', titel: 'Vervoer & dragers',
+    intro: 'Rouwvervoer, volgauto\'s, de route en de dragers.',
+    velden: [
+      { id: 've_rouwauto', label: 'Type rouwauto', type: 'text', hint: 'Klassiek, modern, rouwbus, anders' },
+      { id: 've_volgautos', label: 'Aantal volgauto\'s', type: 'number' },
+      { id: 've_bijzonder_vervoer', label: 'Bijzonder vervoer', type: 'text', full: true, hint: 'Motor, koets met paarden, boot, eigen auto, fietsen, etc.' },
+      { id: 've_ophaaladres', label: 'Ophaaladres overledene', type: 'text', full: true },
+      { id: 've_ophaaltijd', label: 'Ophaaltijd', type: 'time' },
+      { id: 've_opstapadres', label: 'Opstapadres familie', type: 'text', full: true },
+      { id: 've_route', label: 'Route / bijzondere passage', type: 'textarea', full: true, hint: 'Langs het oude huis, geboorteplaats, favoriete plek, etc.' },
+      { id: 've_dragers_aantal', label: 'Aantal dragers', type: 'number' },
+      { id: 've_dragers_wie', label: 'Dragers door', type: 'radio', opties: ['Eigen dragers', 'Familie', 'Combinatie'] },
+      { id: 've_dragers_namen', label: 'Namen dragers (bij familie)', type: 'textarea', full: true },
+      { id: 've_parkeren', label: 'Parkeren / verkeer', type: 'textarea', full: true, hint: 'Parkeergelegenheid, verkeersregelaars, afzettingen' }
+    ]
+  },
+  {
+    id: 'bloemen', ico: '💐', titel: 'Bloemen & decoratie',
+    intro: 'Bloemwerk en aankleding van locatie en kist.',
+    velden: [
+      { id: 'bl_kistdek', label: 'Kiststuk / bloemdek', type: 'textarea', full: true, hint: 'Soort, kleur, stijl, door welke bloemist' },
+      { id: 'bl_losse', label: 'Losse boeketten / stukken', type: 'textarea', full: true },
+      { id: 'bl_voorkeur', label: 'Bloemvoorkeuren / kleuren', type: 'text', full: true },
+      { id: 'bl_geen_bloemen', label: 'Geen bloemen, liever donatie?', type: 'radio', opties: ['Bloemen welkom', 'Liever donatie goed doel', 'Beide'] },
+      { id: 'bl_goed_doel', label: 'Goed doel (indien donatie)', type: 'text', full: true },
+      { id: 'bl_bloemist', label: 'Bloemist / contact', type: 'text' },
+      { id: 'bl_bestemming_bloemen', label: 'Bestemming bloemen na afloop', type: 'text', hint: 'Mee naar huis, op het graf, naar verzorgingshuis' },
+      { id: 'bl_decoratie', label: 'Decoratie / aankleding locatie', type: 'textarea', full: true, hint: 'Gedenktafel, foto\'s, kaarsen, kleden, persoonlijke spullen' }
+    ]
+  },
+  {
+    id: 'drukwerk', ico: '✉️', titel: 'Drukwerk & communicatie',
+    intro: 'Rouwkaarten, advertenties, programmaboekje en online communicatie.',
+    velden: [
+      { id: 'dr_kaart', label: 'Rouwkaart', type: 'radio', opties: ['Ja', 'Nee', 'Alleen digitaal'] },
+      { id: 'dr_kaart_oplage', label: 'Oplage rouwkaarten', type: 'number' },
+      { id: 'dr_kaart_ontwerp', label: 'Ontwerp / stijl kaart', type: 'text', full: true },
+      { id: 'dr_kaart_tekst', label: 'Tekst rouwkaart', type: 'textarea', full: true, hint: 'Volledige tekst of verwijzing naar concept' },
+      { id: 'dr_drukker', label: 'Drukker / leverancier', type: 'text' },
+      { id: 'dr_deadline_druk', label: 'Deadline drukwerk', type: 'date' },
+      { id: 'dr_adressen', label: 'Adressenlijst / verzending', type: 'textarea', full: true, hint: 'Wie verzorgt adressen, aantal, postzegels, posten' },
+      { id: 'dr_advertentie', label: 'Advertentie', type: 'select', opties: ['', 'Geen', 'Lokale krant', 'Landelijke krant', 'Online', 'Krant + online'] },
+      { id: 'dr_advertentie_detail', label: 'Advertentie, welke media & datum', type: 'textarea', full: true },
+      { id: 'dr_programmaboekje', label: 'Programmaboekje / liturgie', type: 'radio', opties: ['Ja', 'Nee'] },
+      { id: 'dr_online_gedenk', label: 'Online gedenkplaats / rouwpagina', type: 'text', full: true, hint: 'Link of platform voor condoleances en herinneringen' },
+      { id: 'dr_condoleanceregister', label: 'Condoleanceregister', type: 'radio', opties: ['Ja', 'Nee', 'Digitaal'] },
+      { id: 'dr_bedankkaart', label: 'Bedankkaarten (na afloop)', type: 'radio', opties: ['Ja', 'Nee', 'Later bespreken'] }
+    ]
+  },
+  {
+    id: 'begraven', ico: '🪦', titel: 'Begraven', toonAls: { veld: 'tu_type', waarde: 'Begrafenis' },
+    intro: 'Specifieke gegevens voor een begrafenis. Deze sectie verschijnt omdat je voor begraven hebt gekozen.',
+    velden: [
+      { id: 'bg_begraafplaats', label: 'Begraafplaats', type: 'text' },
+      { id: 'bg_adres', label: 'Adres begraafplaats', type: 'text', full: true },
+      { id: 'bg_grafsoort', label: 'Soort graf', type: 'select', opties: ['', 'Eigen graf / particulier', 'Algemeen graf', 'Familiegraf bestaand', 'Natuurgraf', 'Keldergraf', 'Urnengraf'] },
+      { id: 'bg_nieuw_bestaand', label: 'Nieuw of bestaand graf?', type: 'radio', opties: ['Nieuw graf', 'Bestaand graf'] },
+      { id: 'bg_grafnummer', label: 'Grafnummer / vak', type: 'text' },
+      { id: 'bg_grafrechten', label: 'Grafrechten geregeld?', type: 'select', opties: ['', 'Aanvragen', 'Bestaand recht, te verlengen', 'Geregeld', 'Onbekend'] },
+      { id: 'bg_grafrechten_jaar', label: 'Duur grafrechten', type: 'text', hint: 'Bijv. 10, 20 jaar of onbepaald' },
+      { id: 'bg_delven', label: 'Grafdelven / openen geregeld?', type: 'radio', opties: ['Door begraafplaats', 'Apart regelen', 'Geregeld'] },
+      { id: 'bg_dalen', label: 'Laten dalen', type: 'select', opties: ['', 'Mechanisch tijdens dienst', 'Handmatig door dragers', 'Na vertrek familie', 'Familie wil erbij zijn'] },
+      { id: 'bg_grafmonument', label: 'Grafmonument / steen', type: 'textarea', full: true, hint: 'Wel/niet, leverancier, ontwerp, later bespreken' },
+      { id: 'bg_bijzonderheden', label: 'Bijzonderheden begraven', type: 'textarea', full: true }
+    ]
+  },
+  {
+    id: 'cremeren', ico: '🔥', titel: 'Cremeren & asbestemming', toonAls: { veld: 'tu_type', waarde: 'Crematie' },
+    intro: 'Specifieke gegevens voor een crematie en de bestemming van de as. Deze sectie verschijnt omdat je voor crematie hebt gekozen.',
+    velden: [
+      { id: 'cr_pacemaker_check', label: 'Pacemaker / ICD verwijderd?', type: 'radio', opties: ['Niet van toepassing', 'Ja, verwijderd', 'Moet nog gebeuren'], waarschuwing: 'Controleer dit absoluut vóór de crematie. Een niet-verwijderde pacemaker of ICD kan in de oven exploderen. Leg de verwijdering schriftelijk vast.' },
+      { id: 'cr_crematorium', label: 'Crematorium', type: 'text' },
+      { id: 'cr_adres', label: 'Adres crematorium', type: 'text', full: true },
+      { id: 'cr_aula', label: 'Aula / zaal', type: 'text' },
+      { id: 'cr_tijdslot', label: 'Gereserveerd tijdslot', type: 'text' },
+      { id: 'cr_bijwonen', label: 'Familie woont crematie bij?', type: 'select', opties: ['', 'Nee', 'Ja, invoeren kist', 'Ja, technische ruimte', 'Bespreken'] },
+      { id: 'cr_asbestemming', label: 'Bestemming van de as', type: 'select', opties: ['', 'Nog onbekend / later beslissen', 'Urn mee naar huis', 'Bijzetten urnenmuur / nis', 'Urnengraf', 'Verstrooien op zee', 'Verstrooien op strooiveld', 'Verstrooien eigen locatie', 'Assieraad / gedenksieraad', 'Verdelen onder nabestaanden'] },
+      { id: 'cr_asbestemming_detail', label: 'Toelichting asbestemming', type: 'textarea', full: true },
+      { id: 'cr_urn', label: 'Urn / asbus', type: 'text', full: true, hint: 'Type, model, of mini-urnen voor verdeling' },
+      { id: 'cr_termijn', label: 'Wettelijke wachttijd as', type: 'text', hint: 'As mag pas na 1 maand worden meegegeven, tenzij anders geregeld' },
+      { id: 'cr_bijzonderheden', label: 'Bijzonderheden crematie', type: 'textarea', full: true }
+    ]
+  },
+  {
+    id: 'catering', ico: '☕', titel: 'Catering & condoleance',
+    intro: 'Het samenzijn na de plechtigheid.',
+    velden: [
+      { id: 'ca_locatie', label: 'Locatie samenzijn / condoleance', type: 'text', full: true },
+      { id: 'ca_aantal', label: 'Verwacht aantal personen', type: 'number' },
+      { id: 'ca_koffietafel', label: 'Koffietafel / catering', type: 'select', opties: ['', 'Koffie / thee met cake', 'Koffie met broodjes', 'Uitgebreide lunch', 'Borrel / hapjes', 'Geen catering'] },
+      { id: 'ca_dieet', label: 'Dieetwensen / allergieën', type: 'text', full: true },
+      { id: 'ca_drank', label: 'Drankarrangement', type: 'text', full: true },
+      { id: 'ca_cateraar', label: 'Cateraar / locatie contact', type: 'text' },
+      { id: 'ca_bijzonderheden', label: 'Bijzonderheden samenzijn', type: 'textarea', full: true, hint: 'Toespraak, fotopresentatie, muziek, kindvriendelijke hoek' }
+    ]
+  },
+  {
+    id: 'financieel', ico: '💶', titel: 'Financieel & administratie',
+    intro: 'Kostenraming, verzekering en de officiële administratie. Vergeet de aangifte en uittreksels niet.',
+    velden: [
+      { id: 'fi_verzekering', label: 'Uitvaartverzekering aanwezig?', type: 'select', opties: ['', 'Nee', 'Ja, kapitaalpolis', 'Ja, naturapolis', 'Onbekend, uitzoeken'] },
+      { id: 'fi_maatschappij', label: 'Verzekeringsmaatschappij', type: 'text' },
+      { id: 'fi_polisnummer', label: 'Polisnummer', type: 'text' },
+      { id: 'fi_dekking', label: 'Dekking / verzekerd bedrag', type: 'text' },
+      { id: 'fi_natura_beperking', label: 'Naturabeperkingen gecontroleerd?', type: 'radio', opties: ['Niet van toepassing', 'Ja', 'Nog doen'], hint: 'Sommige naturapolissen verplichten een eigen ondernemer; controleer vooraf' },
+      { id: 'fi_begroting', label: 'Kostenbegroting / offerte', type: 'textarea', full: true, hint: 'Korte opsomming van de belangrijkste posten en het totaal' },
+      { id: 'fi_voorschot', label: 'Voorschot / aanbetaling', type: 'text' },
+      { id: 'fi_facturatie', label: 'Facturatie naar', type: 'text', full: true },
+      { id: 'sub_admin', label: 'Officiële administratie', type: 'subkop' },
+      { id: 'fi_aangifte', label: 'Aangifte overlijden gemeente', type: 'radio', opties: ['Wij regelen', 'Familie regelt', 'Geregeld'] },
+      { id: 'fi_verlof', label: 'Verlof tot begraven/cremeren ontvangen?', type: 'radio', opties: ['Nog niet', 'Ja'] },
+      { id: 'fi_uittreksels', label: 'Aantal uittreksels akte van overlijden', type: 'number', hint: 'Reken op 5 tot 10 stuks voor banken, verzekeraars, notaris' },
+      { id: 'fi_aktes_voor', label: 'Uittreksels nodig voor', type: 'textarea', full: true, hint: 'Banken, pensioenfondsen, verzekeraars, notaris, buitenland' }
+    ]
+  },
+  {
+    id: 'taken', ico: '✅', titel: 'Taken & verantwoordelijkheden',
+    intro: 'Wie doet wat en wanneer. Houd hier de regie over alle losse acties.',
+    velden: [
+      { id: 'ta_regie', label: 'Eindverantwoordelijke uitvaartleider', type: 'text' },
+      { id: 'ta_team', label: 'Teamleden & rollen', type: 'textarea', full: true, hint: 'Wie is ceremoniemeester, wie chauffeur, wie aanspreekpunt familie' },
+      { id: 'ta_voor_dag', label: 'Taken vóór de uitvaartdag', type: 'textarea', full: true, hint: 'Per taak: wat, wie, deadline. Bijv. kaarten drukken / Jan / dinsdag' },
+      { id: 'ta_dag_zelf', label: 'Taken op de dag zelf', type: 'textarea', full: true, hint: 'Sleutels, geluid testen, bloemen plaatsen, gasten ontvangen' },
+      { id: 'ta_na_afloop', label: 'Taken na afloop', type: 'textarea', full: true, hint: 'Bedankkaarten, factuur, materiaal ophalen, nazorgafspraak' },
+      { id: 'ta_externe', label: 'Externe partijen & contacten', type: 'textarea', full: true, hint: 'Crematorium, begraafplaats, bloemist, drukker, cateraar, musici met telefoonnummers' }
+    ]
+  },
+  {
+    id: 'nazorg', ico: '🌿', titel: 'Nazorg',
+    intro: 'De zorg voor nabestaanden na de uitvaart en de administratieve afwikkeling. Verwijs nabestaanden gerust naar onze formulieren-tool.',
+    velden: [
+      { id: 'nz_gesprek', label: 'Nazorggesprek gepland?', type: 'radio', opties: ['Nog niet', 'Ja, datum afgesproken', 'Niet gewenst'] },
+      { id: 'nz_gesprek_datum', label: 'Datum nazorggesprek', type: 'date' },
+      { id: 'nz_bedankkaarten', label: 'Bedankkaarten status', type: 'select', opties: ['', 'Nog te doen', 'In productie', 'Verzonden'] },
+      { id: 'nz_rouwbegeleiding', label: 'Rouwbegeleiding doorverwezen?', type: 'radio', opties: ['Niet nodig', 'Ja, doorverwezen', 'Folder meegegeven'] },
+      { id: 'nz_monument', label: 'Grafmonument nabespreken', type: 'radio', opties: ['Niet van toepassing', 'Afspraak volgt', 'Doorverwezen'] },
+      { id: 'nz_formulieren', label: 'Formulieren / instanties uitgelegd?', type: 'radio', opties: ['Nog doen', 'Ja, overzicht gegeven'], hint: 'Verwijs naar de Formulieren bij overlijden tool van Uitvaart-Platform.nl' },
+      { id: 'nz_aandachtspunten', label: 'Aandachtspunten nazorg', type: 'textarea', full: true, hint: 'Kwetsbare nabestaande, eenzaamheid, kinderen, praktische hulp nodig' },
+      { id: 'nz_evaluatie', label: 'Interne evaluatie', type: 'textarea', full: true, hint: 'Wat ging goed, wat kan beter, leerpunten voor het team' }
+    ]
+  }
+];
+
+
+/* ════════════════════════════════════════════════════════
+   UITVAART DRAAIBOEK PRO - APP LOGICA
+   ════════════════════════════════════════════════════════ */
+
+const STORE_KEY = 'udb-dossiers-v1';
+const ACTIEF_KEY = 'udb-actief-v1';
+
+let dossiers = [];      // [{id, naam, aangemaakt, gewijzigd, data:{}}]
+let actiefId = null;
+let actieveSectie = SECTIES[0].id;
+let saveTimer = null;
+
+/* ── Opslag ── */
+function laad() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) dossiers = JSON.parse(raw);
+    actiefId = localStorage.getItem(ACTIEF_KEY);
+  } catch (e) { dossiers = []; }
+  if (!dossiers.length) { maakDossier('Nieuw draaiboek'); }
+  if (!actiefId || !dossiers.find(d => d.id === actiefId)) actiefId = dossiers[0].id;
+}
+function bewaar() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(dossiers));
+    localStorage.setItem(ACTIEF_KEY, actiefId);
+  } catch (e) { /* iframe storage geblokkeerd: in-memory fallback */ }
+}
+function actief() { return dossiers.find(d => d.id === actiefId); }
+
+function maakDossier(naam, data) {
+  const d = { id: 'd' + Date.now() + Math.floor(Math.random()*1000), naam: naam || 'Nieuw draaiboek', aangemaakt: Date.now(), gewijzigd: Date.now(), data: data || {} };
+  dossiers.unshift(d);
+  actiefId = d.id;
+  return d;
+}
+
+/* ── Veldwaarde ── */
+function getVal(id) { const d = actief(); return d && d.data[id] !== undefined ? d.data[id] : ''; }
+function setVal(id, v) {
+  const d = actief();
+  if (!d) return;
+  d.data[id] = v;
+  d.gewijzigd = Date.now();
+  // dossiernaam autom. afleiden van naam overledene
+  if (id === 'ov_achternaam' || id === 'ov_voornamen' || id === 'ov_roepnaam') {
+    const vn = d.data['ov_roepnaam'] || d.data['ov_voornamen'] || '';
+    const an = d.data['ov_achternaam'] || '';
+    const samen = (vn + ' ' + (d.data['ov_tussenvoegsel']||'') + ' ' + an).replace(/\s+/g,' ').trim();
+    if (samen) d.naam = samen;
+  }
+  toonSaveBezig();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { bewaar(); toonSaveKlaar(); updateNa(); }, 600);
+}
+
+/* ── Save indicator ── */
+const saveIndEl = () => document.getElementById('udbSaveInd');
+function toonSaveBezig() { const e = saveIndEl(); if (e){ e.textContent = '●  Bezig met opslaan...'; e.classList.add('bezig'); } }
+function toonSaveKlaar() { const e = saveIndEl(); if (e){ e.textContent = '●  Automatisch opgeslagen'; e.classList.remove('bezig'); } }
+
+/* ── Sectie zichtbaar? (conditioneel) ── */
+function sectieZichtbaar(s) {
+  if (!s.toonAls) return true;
+  return getVal(s.toonAls.veld) === s.toonAls.waarde;
+}
+function zichtbareSecties() { return SECTIES.filter(sectieZichtbaar); }
+
+/* ── Voortgang ── */
+function sectieVoortgang(s) {
+  const velden = s.velden.filter(v => v.type !== 'subkop');
+  if (!velden.length) return { ingevuld: 0, totaal: 0, pct: 0 };
+  let ingevuld = 0;
+  velden.forEach(v => { const val = getVal(v.id); if (val !== '' && val !== undefined && val !== null) ingevuld++; });
+  return { ingevuld, totaal: velden.length, pct: Math.round(ingevuld / velden.length * 100) };
+}
+function totaalVoortgang() {
+  let i = 0, t = 0;
+  zichtbareSecties().forEach(s => { const vp = sectieVoortgang(s); i += vp.ingevuld; t += vp.totaal; });
+  return t ? Math.round(i / t * 100) : 0;
+}
+
+/* ── Werkdagen-deadline ── */
+function berekenDeadline() {
+  const od = getVal('ov_overlijdensdatum');
+  if (!od) return null;
+  const start = new Date(od + 'T00:00:00');
+  if (isNaN(start)) return null;
+  let dagen = 0, d = new Date(start);
+  while (dagen < 6) {
+    d.setDate(d.getDate() + 1);
+    const dow = d.getDay(); // 0 zo, 6 za
+    if (dow !== 0 && dow !== 6) dagen++;
+  }
+  return d;
+}
+function fmtDatum(d) {
+  return d.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+/* ════════════════════════════════════════════════════════
+   RENDER
+   ════════════════════════════════════════════════════════ */
+const navEl = document.getElementById('udbNav');
+const contentEl = document.getElementById('udbContent');
+
+function renderNav() {
+  navEl.innerHTML = zichtbareSecties().map((s, i) => {
+    const vp = sectieVoortgang(s);
+    const vinkCls = vp.pct === 100 ? 'vol' : (vp.ingevuld > 0 ? 'deels' : '');
+    const vinkInner = vp.pct === 100 ? '✓' : '';
+    return `<div class="udb-nav-item ${s.id === actieveSectie ? 'actief' : ''}" data-sectie="${s.id}">
+      <span class="udb-nav-ico">${s.ico}</span>
+      <span class="udb-nav-tekst">${s.titel}</span>
+      <span class="udb-nav-vink ${vinkCls}">${vinkInner}</span>
+    </div>`;
+  }).join('');
+}
+
+function veldHtml(v) {
+  if (v.type === 'subkop') return `<div class="udb-subkop">${v.label}</div>`;
+  const val = getVal(v.id);
+  const fullCls = (v.full || v.type === 'textarea' || v.type === 'radio') ? 'full' : '';
+  let inner = '';
+  const esc = s => String(s).replace(/"/g,'&quot;');
+
+  if (v.type === 'textarea') {
+    inner = `<textarea class="udb-textarea" data-veld="${v.id}" placeholder="">${val ? String(val).replace(/</g,'&lt;') : ''}</textarea>`;
+  } else if (v.type === 'select') {
+    inner = `<select class="udb-select" data-veld="${v.id}">${v.opties.map(o => `<option value="${esc(o)}" ${o===val?'selected':''}>${o || 'Maak een keuze...'}</option>`).join('')}</select>`;
+  } else if (v.type === 'radio') {
+    inner = `<div class="udb-radio-rij">${v.opties.map(o => `<div class="udb-radio ${o===val?'aan':''}" data-radio="${v.id}" data-waarde="${esc(o)}">${o}</div>`).join('')}</div>`;
+  } else {
+    const t = ['date','time','number','tel','email'].includes(v.type) ? v.type : 'text';
+    inner = `<input class="udb-input" type="${t}" data-veld="${v.id}" value="${esc(val)}">`;
+  }
+
+  const waarschuwing = v.waarschuwing ? `<div class="udb-waarschuwing ${heeftWaarschuwing(v) ? 'toon' : ''}" data-waarschuwing="${v.id}"><span class="udb-waarschuwing-ico">⚠️</span><span>${v.waarschuwing}</span></div>` : '';
+  const hint = v.hint ? `<div class="udb-veld-hint">${v.hint}</div>` : '';
+
+  return `<div class="udb-veld ${fullCls}">
+    <label class="udb-veld-label">${v.label}</label>
+    ${inner}${hint}
+  </div>${waarschuwing}`;
+}
+
+function heeftWaarschuwing(v) {
+  const val = getVal(v.id);
+  // toon waarschuwing bij 'Ja' of bij 'Moet nog gebeuren'
+  return val === 'Ja' || val === 'Moet nog gebeuren';
+}
+
+function renderSectie() {
+  const zicht = zichtbareSecties();
+  const s = zicht.find(x => x.id === actieveSectie) || zicht[0];
+  actieveSectie = s.id;
+  const idx = zicht.indexOf(s);
+  const nr = SECTIES.indexOf(s) + 1;
+
+  contentEl.innerHTML = `
+    <div class="udb-sectie-kop">
+      <div class="udb-sectie-ico">${s.ico}</div>
+      <div>
+        <div class="udb-sectie-nr">Onderdeel ${nr} van ${SECTIES.length}</div>
+        <div class="udb-sectie-titel">${s.titel}</div>
+      </div>
+    </div>
+    <p class="udb-sectie-intro">${s.intro}</p>
+    <div class="udb-velden">
+      ${s.velden.map(veldHtml).join('')}
+    </div>
+    <div class="udb-sectie-foot">
+      <button class="udb-foot-btn" id="udbVorige" ${idx===0?'disabled':''}>← Vorige</button>
+      <button class="udb-foot-btn primair" id="udbVolgende" ${idx===zicht.length-1?'disabled':''}>Volgende →</button>
+    </div>
+  `;
+  contentEl.scrollTop = 0;
+  bindVelden();
+  const vorige = document.getElementById('udbVorige');
+  const volgende = document.getElementById('udbVolgende');
+  if (vorige) vorige.addEventListener('click', () => { if (idx>0){ actieveSectie = zicht[idx-1].id; renderSectie(); renderNav(); } });
+  if (volgende) volgende.addEventListener('click', () => { if (idx<zicht.length-1){ actieveSectie = zicht[idx+1].id; renderSectie(); renderNav(); } });
+}
+
+function bindVelden() {
+  contentEl.querySelectorAll('[data-veld]').forEach(el => {
+    el.addEventListener('input', e => {
+      setVal(el.dataset.veld, el.value);
+      if (el.tagName === 'SELECT') reactieOpWijziging(el.dataset.veld);
+    });
+    if (el.tagName === 'SELECT') el.addEventListener('change', () => reactieOpWijziging(el.dataset.veld));
+  });
+  contentEl.querySelectorAll('[data-radio]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.radio, w = el.dataset.waarde;
+      setVal(id, w);
+      contentEl.querySelectorAll(`[data-radio="${id}"]`).forEach(r => r.classList.toggle('aan', r === el));
+      // waarschuwing tonen/verbergen
+      const waar = contentEl.querySelector(`[data-waarschuwing="${id}"]`);
+      if (waar) waar.classList.toggle('toon', w === 'Ja' || w === 'Moet nog gebeuren');
+      reactieOpWijziging(id);
+    });
+  });
+}
+
+// reageer op wijzigingen die de structuur beïnvloeden (type uitvaart -> secties)
+function reactieOpWijziging(id) {
+  if (id === 'tu_type') {
+    renderNav();
+    updateDossierKop();
+  }
+  updateVoortgangUI();
+  updateNa();
+}
+
+function updateNa() {
+  renderNav();
+  updateVoortgangUI();
+  updateDeadline();
+}
+
+function updateVoortgangUI() {
+  const pct = totaalVoortgang();
+  document.getElementById('udbProgressBar').style.width = pct + '%';
+  document.getElementById('udbProgressTekst').textContent = pct + '% ingevuld';
+}
+
+function updateDeadline() {
+  const el = document.getElementById('udbDeadline');
+  const dl = berekenDeadline();
+  const uitstel = getVal('tu_uitstel') === 'Ja, verlof aanvragen';
+  if (!dl) { el.innerHTML = ''; return; }
+  if (uitstel) { el.innerHTML = `<span>⏱️ Uitstel aangevraagd buiten de 6 werkdagen</span>`; return; }
+  el.innerHTML = `<span>⏱️ Uiterste wettelijke datum: <strong>${fmtDatum(dl)}</strong></span>`;
+}
+
+function updateDossierKop() {
+  const d = actief();
+  document.getElementById('udbDossierNaam').textContent = d ? d.naam : 'Nieuw draaiboek';
+}
+
+/* ── Navigatie events ── */
+navEl.addEventListener('click', e => {
+  const item = e.target.closest('[data-sectie]');
+  if (!item) return;
+  actieveSectie = item.dataset.sectie;
+  renderSectie(); renderNav();
+  navEl.classList.remove('mobiel-open');
+});
+
+/* ════════════════════════════════════════════════════════
+   DOSSIER MODAL
+   ════════════════════════════════════════════════════════ */
+const modal = document.getElementById('udbModal');
+function openModal() { renderDossierLijst(); modal.classList.add('toon'); }
+function sluitModal() { modal.classList.remove('toon'); }
+
+function renderDossierLijst() {
+  const lijst = document.getElementById('udbDossierLijst');
+  if (!dossiers.length) { lijst.innerHTML = '<p style="color:#8a7a85;font-size:0.85rem">Nog geen draaiboeken.</p>'; return; }
+  lijst.innerHTML = dossiers.map(d => {
+    const pctData = (() => { const tmp = actiefId; actiefId = d.id; const p = totaalVoortgang(); actiefId = tmp; return p; })();
+    const dt = new Date(d.gewijzigd).toLocaleDateString('nl-NL', { day:'numeric', month:'short', year:'numeric' });
+    return `<div class="udb-dossier-kaart ${d.id===actiefId?'actief':''}" data-open="${d.id}">
+      <div class="udb-dossier-ico" style="width:38px;height:38px">📋</div>
+      <div class="udb-dossier-kaart-body">
+        <div class="udb-dossier-kaart-naam">${d.naam || 'Naamloos'}</div>
+        <div class="udb-dossier-kaart-meta">${pctData}% ingevuld · gewijzigd ${dt}</div>
+      </div>
+      <div class="udb-dossier-kaart-acties">
+        <button class="udb-mini-btn" data-dup="${d.id}" title="Dupliceren als sjabloon">⧉</button>
+        <button class="udb-mini-btn verwijder" data-del="${d.id}" title="Verwijderen">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  lijst.querySelectorAll('[data-open]').forEach(el => el.addEventListener('click', e => {
+    if (e.target.closest('[data-dup]') || e.target.closest('[data-del]')) return;
+    actiefId = el.dataset.open; bewaar(); herstart(); sluitModal();
+  }));
+  lijst.querySelectorAll('[data-dup]').forEach(el => el.addEventListener('click', e => {
+    e.stopPropagation();
+    const bron = dossiers.find(d => d.id === el.dataset.dup);
+    if (bron) { maakDossier((bron.naam || 'Draaiboek') + ' (kopie)', JSON.parse(JSON.stringify(bron.data))); bewaar(); herstart(); renderDossierLijst(); }
+  }));
+  lijst.querySelectorAll('[data-del]').forEach(el => el.addEventListener('click', e => {
+    e.stopPropagation();
+    const d = dossiers.find(x => x.id === el.dataset.del);
+    if (d && confirm(`Draaiboek "${d.naam}" definitief verwijderen?`)) {
+      dossiers = dossiers.filter(x => x.id !== el.dataset.del);
+      if (!dossiers.length) maakDossier('Nieuw draaiboek');
+      if (actiefId === el.dataset.del) actiefId = dossiers[0].id;
+      bewaar(); herstart(); renderDossierLijst();
+    }
+  }));
+}
+
+function herstart() {
+  actieveSectie = zichtbareSecties()[0].id;
+  updateDossierKop(); renderNav(); renderSectie(); updateVoortgangUI(); updateDeadline(); toonSaveKlaar();
+}
+
+/* ── Toolbar events ── */
+document.getElementById('udbDossiers').addEventListener('click', openModal);
+document.getElementById('udbModalClose').addEventListener('click', sluitModal);
+modal.addEventListener('click', e => { if (e.target === modal) sluitModal(); });
+document.getElementById('udbNieuw').addEventListener('click', () => { maakDossier('Nieuw draaiboek'); bewaar(); herstart(); });
+document.getElementById('udbModalNieuw').addEventListener('click', () => { maakDossier('Nieuw draaiboek'); bewaar(); herstart(); sluitModal(); });
+document.getElementById('udbMobielMenu').addEventListener('click', () => navEl.classList.toggle('mobiel-open'));
+
+/* ── Export / Import JSON ── */
+document.getElementById('udbExport').addEventListener('click', () => {
+  const d = actief();
+  if (!d) return;
+  const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'draaiboek-' + (d.naam || 'export').replace(/[^a-z0-9]+/gi,'-').toLowerCase() + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+document.getElementById('udbImport').addEventListener('click', () => document.getElementById('udbImportFile').click());
+document.getElementById('udbImportFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const obj = JSON.parse(reader.result);
+      if (obj && obj.data) {
+        maakDossier((obj.naam || 'Geïmporteerd') , obj.data);
+        bewaar(); herstart(); renderDossierLijst();
+        alert('Draaiboek geïmporteerd.');
+      } else alert('Dit bestand bevat geen geldig draaiboek.');
+    } catch (err) { alert('Kon het bestand niet lezen.'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+/* ════════════════════════════════════════════════════════
+   PRINT
+   ════════════════════════════════════════════════════════ */
+function bouwPrint() {
+  const d = actief();
+  if (!d) return;
+  const datum = new Date().toLocaleDateString('nl-NL', { day:'numeric', month:'long', year:'numeric' });
+  const dl = berekenDeadline();
+  const pct = totaalVoortgang();
+
+  let html = `<div class="udb-pr-kop">
+    <div class="udb-pr-titel">Uitvaartdraaiboek${d.naam && d.naam !== 'Nieuw draaiboek' ? ' — ' + d.naam : ''}</div>
+    <div class="udb-pr-sub">Afgedrukt op ${datum} · ${pct}% ingevuld${dl && getVal('tu_uitstel') !== 'Ja, verlof aanvragen' ? ' · Uiterste datum: ' + fmtDatum(dl) : ''}</div>
+  </div>`;
+
+  zichtbareSecties().forEach(s => {
+    const velden = s.velden.filter(v => v.type !== 'subkop');
+    // alleen secties met minstens 1 ingevuld veld printen? Nee, toon alles voor compleetheid maar markeer leeg.
+    html += `<div class="udb-pr-sectie"><div class="udb-pr-sectie-titel">${s.ico} ${s.titel}</div>`;
+    velden.forEach(v => {
+      const val = getVal(v.id);
+      html += `<div class="udb-pr-rij">
+        <div class="udb-pr-label">${v.label}</div>
+        <div class="udb-pr-waarde ${val ? '' : 'udb-pr-leeg'}">${val ? String(val).replace(/</g,'&lt;') : '—'}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `<div class="udb-pr-foot">Gemaakt met Uitvaart Draaiboek Pro · Uitvaart-Platform.nl · Dit document bevat vertrouwelijke gegevens, behandel het zorgvuldig.</div>`;
+  document.getElementById('udbPrintZone').innerHTML = html;
+}
+document.getElementById('udbPrint').addEventListener('click', () => { bouwPrint(); window.print(); });
+
+/* ════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════ */
+laad();
+herstart();
+
+</script>
+</body>
+</html>
