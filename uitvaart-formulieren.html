@@ -20,6 +20,9 @@ body { padding: 16px; min-height: 100vh; }
 .ufa-header { background: linear-gradient(135deg, #4a1942 0%, #6b2862 100%); color: #fff; padding: 22px 30px; position: relative; overflow: hidden; flex-shrink: 0; }
 .ufa-header::before { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232,131,74,0.3) 0%, rgba(232,131,74,0) 65%); border-radius: 50%; }
 .ufa-header-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.ufa-merk { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+.ufa-logo { flex-shrink: 0; display: flex; align-items: center; }
+.ufa-logo svg { width: 40px; height: 35px; display: block; }
 .ufa-header-info { flex: 1; min-width: 0; }
 .ufa-titel { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; letter-spacing: -0.3px; margin: 0; }
 .ufa-subtitel { font-size: 0.78rem; color: #fcd9c4; margin-top: 2px; }
@@ -249,9 +252,25 @@ mark { background: rgba(232,131,74,0.32); color: inherit; border-radius: 3px; pa
   <!-- HEADER -->
   <div class="ufa-header">
     <div class="ufa-header-content">
-      <div class="ufa-header-info">
-        <h1 class="ufa-titel">Uitvaart Formulieren Zoeker</h1>
-        <div class="ufa-subtitel">Alle officiële formulieren bij een overlijden in Nederland</div>
+      <div class="ufa-merk">
+        <span class="ufa-logo" aria-label="Uitvaart-Platform.nl">
+          <svg viewBox="0 0 40 35" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
+            <g clip-path="url(#ufawing)">
+              <path fill="#ffffff" d="M13.22 3.78s-3.4.78-2.83-2.42c0 0 1-3.06 4.32 0 3.33 3.06 4.39 10.88 4.39 10.88s-2.4-7.82-5.88-8.46Z" opacity=".5"/>
+              <path fill="#ffffff" d="M17.9 22.62c-3.47-7.11-7.01-7.75-9.13-11.24C6.64 7.9 6.93 6.7 7.35 5.84c.36-.71 1.94-.63 2.58-.42l.02-.01A9.62 9.62 0 0 0 2.9 3.78c-4.67.7-2.33 6.11-2.12 6.47.21.35 1.13 2.77 4.88 5.97a110.6 110.6 0 0 1 6.73 6.25s3.96 3.27 4.24 7.26c0 0 0 2.63-.85 3.34 0 0 5.6-3.34 2.12-10.45Z"/>
+              <path stroke="#ffffff" stroke-miterlimit="10" stroke-width=".2" d="M9.9 5.4s3.34.58 7.22 8.76 1.8 13.95 1.8 13.95"/>
+              <path fill="#ffffff" d="M5.58 16.15s-4.17 4.9-3.68 9.74c.5 4.83 3.47 6.9 3.47 6.9s.85.85 2.62 1.49 2.55 1.06 5.59.35c0 0 1.63-.64 2.2-1.56 0 0-1.35 2.06-5.1-.29-3.75-2.34-1.91-8.39-1.91-8.39s.42-1.99 1.9-3.62l-5.09-4.62ZM26.5 3.78s3.4.78 2.83-2.42c0 0-1-3.06-4.32 0-3.33 3.06-4.39 10.88-4.39 10.88s2.4-7.82 5.87-8.46Z" opacity=".5"/>
+              <path fill="#ffffff" d="M21.82 22.62c3.47-7.11 7.01-7.75 9.13-11.24 2.13-3.48 1.84-4.69 1.42-5.54-.36-.71-1.94-.63-2.58-.42l-.02-.01a9.62 9.62 0 0 1 7.06-1.63c4.67.7 2.33 6.11 2.12 6.47-.21.35-1.13 2.77-4.88 5.97-3.75 3.2-6.73 6.25-6.73 6.25s-3.96 3.27-4.24 7.26c0 0 0 2.63.85 3.34 0 0-5.6-3.34-2.13-10.45Z"/>
+              <path stroke="#ffffff" stroke-miterlimit="10" stroke-width=".2" d="M29.82 5.4s-3.34.58-7.22 8.76-1.8 13.95-1.8 13.95"/>
+              <path fill="#ffffff" d="M34.14 16.15s4.17 4.9 3.68 9.74c-.5 4.83-3.47 6.9-3.47 6.9s-.85.85-2.62 1.49-2.55 1.06-5.59.35c0 0-1.63-.64-2.2-1.56 0 0 1.35 2.06 5.1-.29 3.75-2.34 1.91-8.39 1.91-8.39s-.42-1.99-1.9-3.62l5.09-4.62Z" opacity=".5"/>
+            </g>
+            <defs><clipPath id="ufawing"><path fill="#fff" d="M0 0h39.72v35H0z"/></clipPath></defs>
+          </svg>
+        </span>
+        <div class="ufa-header-info">
+          <h1 class="ufa-titel">Uitvaart Formulieren Zoeker</h1>
+          <div class="ufa-subtitel">Alle officiële formulieren bij een overlijden in Nederland</div>
+        </div>
       </div>
       <div class="ufa-header-acties">
         <span class="ufa-badge"><span class="ufa-badge-dot"></span>53 formulieren</span>
