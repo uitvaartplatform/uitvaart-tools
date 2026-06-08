@@ -32,7 +32,7 @@ body{font-family:var(--sans);color:var(--ink);background:
 
 /* kaart */
 .card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 50px rgba(74,25,66,.10);overflow:hidden;flex:1;display:flex;flex-direction:column}
-.pad{padding:30px 30px 26px;flex:1;display:flex;flex-direction:column;overflow-y:auto}
+.pad{padding:30px 30px 26px}
 @media(max-width:560px){.pad{padding:24px 20px}}
 
 /* progress */
@@ -41,7 +41,7 @@ body{font-family:var(--sans);color:var(--ink);background:
 
 /* screens */
 .screen{display:none;animation:fade .45s ease both}
-.screen.on{display:flex;flex-direction:column;margin:auto 0}
+.screen.on{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 .eyebrow{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 13px;border-radius:50px;margin-bottom:16px;box-shadow:0 4px 12px rgba(200,98,42,.3)}
@@ -217,6 +217,7 @@ var MAIL='';
 var TEL='';
 var WEBSITE='';
 var TOONPRIJZEN=(PRIJS_TOKEN.length>0 && (params.get('p')||'').toLowerCase()===PRIJS_TOKEN.toLowerCase());
+function twv(b){ return TOONPRIJZEN ? (' (t.w.v. '+b+')') : ''; }
 
 var stage=document.getElementById('stage');
 var prog=document.getElementById('progress');
@@ -380,7 +381,7 @@ function renderResultaat(){
     pkgBereik,
     'Jouw bedrijf '+social+' uitgelicht op alle socialmediakanalen',
     'Toegang tot onze besloten Facebookgroep voor commerciele berichten',
-    'Gratis vermelding in onze nieuwsbrief (twv 299 euro)'
+    'Gratis vermelding in onze nieuwsbrief'+twv('299 euro')
   ];
 
   var html='<div class="screen on">';
@@ -400,13 +401,13 @@ function renderResultaat(){
     keuzes.push({ id:'tpg_enkel', tag:'', titel:'The Perfect Goodbye, 1 pagina', prijs:prijs('tpg_enkel'),
       feats:['Een hele pagina in ons nabestaandendossier The Perfect Goodbye','Direct zichtbaar bij nabestaanden die op zoek zijn naar een betrouwbare aanbieder'] });
     keuzes.push({ id:'tpg_zichtbaar', tag:'Aanrader', titel:'The Perfect Goodbye plus zichtbaarheid', prijs:prijs('tpg_zichtbaar'),
-      feats:['Een hele pagina in The Perfect Goodbye','Plus een vermelding op Uitvaart-Platform.nl, naar keuze tot en met landelijk (t.w.v. 699 euro)','Speciaal tarief voor het eerste jaar'] });
+      feats:['Een hele pagina in The Perfect Goodbye','Plus een vermelding op Uitvaart-Platform.nl, naar keuze tot en met landelijk'+twv('699 euro'),'Speciaal tarief voor het eerste jaar'] });
   }
   if(bundel){
     keuzes.push({ id:'allesin_dubbel', tag:'Meeste impact', titel:'Alles-in-een, dubbele pagina', prijs:prijs('allesin_dubbel'),
-      feats:['Dubbele pagina branded content in Uitvaart-Inside','Prominente vermelding in onze online B2B bedrijvengids',socialCount+' gerichte social media '+socialWoord+' door onze redactie','1x gratis plaatsing in onze wekelijkse nieuwsbrief (t.w.v. 299 euro)'] });
+      feats:['Dubbele pagina branded content in Uitvaart-Inside','Prominente vermelding in onze online B2B bedrijvengids',socialCount+' gerichte social media '+socialWoord+' door onze redactie','1x gratis plaatsing in onze wekelijkse nieuwsbrief'+twv('299 euro')] });
     keuzes.push({ id:'allesin_enkel', tag:'', titel:'Alles-in-een, enkele pagina', prijs:prijs('allesin_enkel'),
-      feats:['Enkele pagina branded content in Uitvaart-Inside','Prominente vermelding in onze online B2B bedrijvengids',socialCount+' gerichte social media '+socialWoord+' door onze redactie','1x gratis plaatsing in onze wekelijkse nieuwsbrief (t.w.v. 299 euro)'] });
+      feats:['Enkele pagina branded content in Uitvaart-Inside','Prominente vermelding in onze online B2B bedrijvengids',socialCount+' gerichte social media '+socialWoord+' door onze redactie','1x gratis plaatsing in onze wekelijkse nieuwsbrief'+twv('299 euro')] });
   }
   if(heeftTPG && (ext.indexOf('uitvaartinside')>-1 || ext.indexOf('branded')>-1)){
     keuzes.push({ id:'tpg_compleet', tag:'Compleet', titel:'The Perfect Goodbye plus Uitvaart-Inside plus zichtbaarheid', prijs:prijs('tpg_compleet'),
