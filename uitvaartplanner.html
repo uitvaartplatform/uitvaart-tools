@@ -3682,7 +3682,12 @@ function upv4BerekenSparen() {
 
   document.getElementById('upv4SparenToekomstig').textContent = '€ ' + Math.round(toekomstigeKosten).toLocaleString('nl-NL');
   document.getElementById('upv4SparenMaand').textContent = '€ ' + Math.round(maandBedrag).toLocaleString('nl-NL');
-  document.getElementById('upv4SparenJaarTotaal').textContent = '€ ' + Math.round(maandBedrag * 12).toLocaleString('nl-NL');
+  // CORRECTIE A: het element upv4SparenJaarTotaal bestaat niet in de DOM.
+  // Zonder deze controle brak de functie hier af, waardoor de twee
+  // ondertitels hieronder nooit werden gevuld. De correctie brengt het
+  // jaartotaal NIET zichtbaar terug; zij voorkomt alleen het afbreken.
+  var jt = document.getElementById('upv4SparenJaarTotaal');
+  if (jt) jt.textContent = '€ ' + Math.round(maandBedrag * 12).toLocaleString('nl-NL');
   document.getElementById('upv4SparenSubToekomst').textContent = 'Bij ' + inflatie + '% inflatie';
   document.getElementById('upv4SparenSubMaand').textContent = 'om ' + jaren + ' jaar te sparen';
 }

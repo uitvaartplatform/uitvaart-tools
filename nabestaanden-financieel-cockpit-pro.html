@@ -283,7 +283,8 @@ body { padding: 16px; min-height: 100vh; }
         <div class="nb-tabel">
           <div class="nb-tabel-titel">Geschatte inkomstenbronnen na overlijden</div>
           <div class="nb-tabel-rij"><span class="nb-tabel-naam">Eigen netto salaris of pensioen</span><span class="nb-tabel-waarde pos" id="nb-ov-eigen">€0</span></div>
-          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Anw uitkering (uit Anw tab)</span><span class="nb-tabel-waarde pos" id="nb-ov-anw">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Anw-uitkering, BRUTO, niet meegeteld in het totaal</span><span class="nb-tabel-waarde" id="nb-ov-anw">€0</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Het nettobedrag van de Anw hangt af van de loonheffing en van het wel of niet toepassen van de loonheffingskorting. Kijk voor uw persoonlijke nettobedrag op uw SVB-specificatie.</span><span class="nb-tabel-waarde">—</span></div>
           <div class="nb-tabel-rij"><span class="nb-tabel-naam">Partnerpensioen (uit Pensioen tab)</span><span class="nb-tabel-waarde pos" id="nb-ov-pp">€0</span></div>
           <div class="nb-tabel-rij belangrijk"><span class="nb-tabel-naam">Totaal inkomsten per maand</span><span class="nb-tabel-waarde" id="nb-ov-tot-ink">€0</span></div>
           <div class="nb-tabel-rij"><span class="nb-tabel-naam">Vaste lasten</span><span class="nb-tabel-waarde neg" id="nb-ov-vaste-lasten">€0</span></div>
@@ -345,15 +346,15 @@ body { padding: 16px; min-height: 100vh; }
         <div class="nb-blok">
           <div class="nb-blok-kop"><div class="nb-blok-titel"><div class="nb-blok-titel-icoon">👶</div> Wezenuitkering kinderen</div></div>
           <div class="nb-info-box warning" style="margin:8px 0 12px;"><strong>Let op, belangrijke voorwaarde:</strong> een wezenuitkering geldt alléén voor kinderen van wie <strong>beide ouders</strong> zijn overleden. Is je partner overleden maar leef jij als ouder nog? Dan hebben de kinderen <strong>geen</strong> recht op een wezenuitkering. Vul hieronder dus alleen iets in als beide ouders zijn overleden. De bedragen zijn indicatief, controleer de actuele bedragen bij de SVB.</div>
-          <div class="nb-veld"><div class="nb-veld-icoon">👶</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen onder 10 jaar</div><div class="nb-veld-uitleg">Wezenuitkering indicatief circa 534 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-jong" value="0" min="0"></div>
-          <div class="nb-veld"><div class="nb-veld-icoon">🧒</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 10 tot 15 jaar</div><div class="nb-veld-uitleg">Wezenuitkering indicatief circa 801 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-mid" value="0" min="0"></div>
-          <div class="nb-veld"><div class="nb-veld-icoon">🎓</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 16 tot 21 jaar (studie of ao)</div><div class="nb-veld-uitleg">Wezenuitkering indicatief circa 1068 euro per maand</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-oud" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">👶</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen tot 10 jaar</div><div class="nb-veld-uitleg">Wezenuitkering €536,49 bruto per maand, per 1 juli 2026</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-jong" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🧒</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 10 tot 16 jaar</div><div class="nb-veld-uitleg">Wezenuitkering €804,73 bruto per maand, per 1 juli 2026</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-mid" value="0" min="0"></div>
+          <div class="nb-veld"><div class="nb-veld-icoon">🎓</div><div class="nb-veld-info"><div class="nb-veld-naam">Kinderen 16 tot 21 jaar</div><div class="nb-veld-uitleg">Wezenuitkering €1.072,98 bruto per maand, per 1 juli 2026. Voor deze leeftijdsgroep gelden aanvullende voorwaarden; kijk op svb.nl</div></div><input type="number" class="nb-veld-input" id="nb-anw-w-oud" value="0" min="0"></div>
         </div>
       </div>
 
       <div class="nb-result">
         <div class="nb-totaal">
-          <div class="nb-totaal-label">Geschatte Anw uitkering per maand</div>
+          <div class="nb-totaal-label">Geschatte Anw-uitkering bruto per maand</div>
           <div class="nb-totaal-waarde" id="nb-anw-uitkering">€0</div>
           <div class="nb-totaal-sub" id="nb-anw-status">Vul de voorwaarden in</div>
         </div>
@@ -364,20 +365,22 @@ body { padding: 16px; min-height: 100vh; }
         </div>
 
         <div class="nb-detail-grid">
-          <div class="nb-detail-blok"><div class="nb-detail-label">Anw per jaar</div><div class="nb-detail-value" id="nb-anw-jaar">€0</div></div>
-          <div class="nb-detail-blok"><div class="nb-detail-label">Wezenuitkering totaal per maand</div><div class="nb-detail-value" id="nb-anw-wezen-tot">€0</div></div>
+          <div class="nb-detail-blok"><div class="nb-detail-label">Anw per jaar, 12 maanden bruto, exclusief vakantie-uitkering</div><div class="nb-detail-value" id="nb-anw-jaar">€0</div></div>
+          <div class="nb-detail-blok"><div class="nb-detail-label">Wezenuitkering totaal per maand, bruto</div><div class="nb-detail-value" id="nb-anw-wezen-tot">€0</div></div>
         </div>
 
         <div class="nb-tabel">
-          <div class="nb-tabel-titel">Anw 2026 cijfers</div>
-          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Maximum brutobedrag per maand</span><span class="nb-tabel-waarde">€1.668</span></div>
-          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Maximum brutobedrag per jaar</span><span class="nb-tabel-waarde">€20.022</span></div>
-          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Vrije voet inkomen uit arbeid</span><span class="nb-tabel-waarde">€870 p.m.</span></div>
+          <div class="nb-tabel-titel">Anw-cijfers vanaf 1 juli 2026</div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Maximum brutobedrag per maand</span><span class="nb-tabel-waarde">€1.676,53</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Bruto per jaar, 12 maanden plus vakantie-uitkering</span><span class="nb-tabel-waarde">€21.645,36</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Vrije voet inkomen uit arbeid</span><span class="nb-tabel-waarde">€1.168,50 p.m.</span></div>
           <div class="nb-tabel-rij"><span class="nb-tabel-naam">Korting boven vrije voet</span><span class="nb-tabel-waarde">2/3 van meer</span></div>
           <div class="nb-tabel-rij"><span class="nb-tabel-naam">Anders dan arbeid</span><span class="nb-tabel-waarde">Volledig gekort</span></div>
-          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering &lt;10 jaar</span><span class="nb-tabel-waarde">€534 p.m.</span></div>
-          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering 10-15 jaar</span><span class="nb-tabel-waarde">€801 p.m.</span></div>
-          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering 16-21 jaar</span><span class="nb-tabel-waarde">€1.068 p.m.</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering tot 10 jaar</span><span class="nb-tabel-waarde">€536,49 p.m.</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering 10 tot 16 jaar</span><span class="nb-tabel-waarde">€804,73 p.m.</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Wezenuitkering 16 tot 21 jaar</span><span class="nb-tabel-waarde">€1.072,98 p.m.</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Vakantie-uitkering Anw, apart in mei</span><span class="nb-tabel-waarde">€127,25 p.m. opgebouwd</span></div>
+          <div class="nb-tabel-rij"><span class="nb-tabel-naam">Maandbedragen bruto en exclusief vakantie-uitkering; het jaarbedrag hieronder is inclusief de afzonderlijk opgebouwde vakantie-uitkering</span><span class="nb-tabel-waarde">Bron: SZW, 1 juli 2026</span></div>
         </div>
 
         <div class="nb-info-box"><strong>Aanvragen:</strong> via SVB.nl binnen 2 maanden na overlijden, dan met terugwerkende kracht. Later aanvragen kan, maar dan pas vanaf aanvraagdatum. SVB bepaalt definitief recht en bedrag.</div>
@@ -698,7 +701,7 @@ body { padding: 16px; min-height: 100vh; }
 
         <div class="nb-uitleg">
           <div class="nb-uitleg-label">📊 Wat verandert er bij je AOW-leeftijd</div>
-          <div class="nb-uitleg-tekst" id="nb-aow-uitleg">Bij het bereiken van de AOW-leeftijd stopt een eventuele Anw-uitkering en begin je je eigen AOW te ontvangen. Een alleenstaande AOW bedraagt indicatief circa 1.450 euro netto per maand (controleer het actuele bedrag bij de SVB). Houd er rekening mee dat het wegvallen van de Anw en het ingaan van de AOW een ander bedrag kan opleveren dan je nu ontvangt.</div>
+          <div class="nb-uitleg-tekst" id="nb-aow-uitleg">Bij het bereiken van de AOW-leeftijd stopt een eventuele Anw-uitkering en kan AOW ingaan. De hoogte van de AOW en het nettobedrag hangen onder meer af van uw woonsituatie en van de toepassing van loonheffingskorting. Controleer daarom altijd de actuele persoonlijke bedragen bij de SVB: <a href="https://www.svb.nl/nl/aow/bedragen-aow/aow-bedragen" target="_blank" rel="noopener">actuele AOW-bedragen op svb.nl</a>. Houd er rekening mee dat het wegvallen van de Anw en het ingaan van de AOW een ander bedrag kan opleveren dan u nu ontvangt.</div>
         </div>
 
         <div class="nb-info-box"><strong>Goed om te plannen:</strong> kijk of er in de periode tot je AOW een inkomensgat ontstaat als de Anw lager is dan je nodig hebt. Eventueel partnerpensioen loopt vaak wel levenslang door, ook na je AOW-leeftijd. Combineer dit met de tabs Anw en Partnerpensioen voor een compleet beeld.</div>
@@ -778,13 +781,23 @@ body { padding: 16px; min-height: 100vh; }
 (function() {
   'use strict';
 
-  // ======== CONSTANTS 2026 ========
-  var ANW_MAX = 1668;
-  var ANW_VRIJE_VOET = 1147;
+  // ======== CONSTANTS per 1 juli 2026 ========
+  // Bron: Uitkeringsbedragen per 1 juli 2026, SZW / Open Overheid.
+  // Broncontroledatum: 2026-08-01. Ingangsdatum: 2026-07-01.
+  // Alle bedragen BRUTO PER MAAND, EXCLUSIEF vakantie-uitkering.
+  var BEDRAGEN_PEILDATUM = '2026-07-01';
+  var BEDRAGEN_BRON = 'SZW, Uitkeringsbedragen per 1 juli 2026';
+  var ANW_MAX = 1676.53;
+  var ANW_VRIJE_VOET = 1168.50;
   var ANW_KORTING_ARBEID = 2/3;
-  var WEZEN_JONG = 534;
-  var WEZEN_MID = 801;
-  var WEZEN_OUD = 1068;
+  var WEZEN_JONG = 536.49;
+  var WEZEN_MID = 804.73;
+  var WEZEN_OUD = 1072.98;
+  // Vakantie-uitkering, apart in mei uitbetaald. NIET bij de maand optellen.
+  var ANW_VAKANTIE = 127.25;
+  var WEZEN_VAKANTIE_JONG = 40.72;
+  var WEZEN_VAKANTIE_MID = 61.08;
+  var WEZEN_VAKANTIE_OUD = 81.44;
   var IB_S1_GRENS = 38441;
   var IB_S2_GRENS = 76817;
   var IB_T1 = 0.358;
@@ -852,7 +865,10 @@ body { padding: 16px; min-height: 100vh; }
         bruto = Math.max(0, ANW_MAX - state.anw.inkomen);
       }
     }
-    return Math.round(bruto * 0.91);
+    // NF2: de vaste nettofactor 0,91 is verwijderd. Zij was nergens
+    // onderbouwd en negeerde de loonheffingskorting, die per persoon
+    // verschilt. De functie geeft nu het BRUTO maandbedrag.
+    return Math.round(bruto);
   }
 
   function ppBerekenNet() {
@@ -867,9 +883,15 @@ body { padding: 16px; min-height: 100vh; }
   function ovUpdate() {
     var voor = state.ov.ikSalaris + state.ov.partnerSalaris + state.ov.partnerPensioen + state.ov.overig;
     var vasteLasten = state.ov.woonlast + state.ov.energie + state.ov.verzek + state.ov.abos + state.ov.boodsch;
-    var anwUitkering = anwBerekenUitkering();
+    // NF2: anwBerekenUitkering() geeft een BRUTO bedrag. Het overzicht werkt
+    // met NETTO salarissen. Bruto bij netto optellen geeft een te hoog en
+    // misleidend totaal. De Anw wordt daarom NIET meer meegeteld; zij wordt
+    // apart getoond met de aanduiding bruto. Er is bewust GEEN nieuwe
+    // nettofactor ingevoerd: het nettobedrag hangt af van de loonheffing en
+    // van het wel of niet toepassen van de loonheffingskorting.
+    var anwUitkeringBruto = anwBerekenUitkering();
     var ppNet = ppBerekenNet();
-    var na = state.ov.ikSalaris + anwUitkering + ppNet;
+    var na = state.ov.ikSalaris + ppNet;
     var verschil = na - voor;
 
     document.getElementById('nb-ov-voor').textContent = fEuro(voor);
@@ -880,7 +902,8 @@ body { padding: 16px; min-height: 100vh; }
       ? 'Inkomensdaling van ' + fEuro(Math.abs(verschil)) + ' per maand'
       : verschil > 0 ? 'Toename door uitkeringen' : 'Geen verschil';
     document.getElementById('nb-ov-eigen').textContent = fEuro(state.ov.ikSalaris);
-    document.getElementById('nb-ov-anw').textContent = fEuro(anwUitkering);
+    document.getElementById('nb-ov-anw').textContent =
+      anwUitkeringBruto > 0 ? fEuro(anwUitkeringBruto) + ' bruto' : fEuro(0);
     document.getElementById('nb-ov-pp').textContent = fEuro(ppNet);
     document.getElementById('nb-ov-tot-ink').textContent = fEuro(na);
     document.getElementById('nb-ov-vaste-lasten').textContent = '-' + fEuro(vasteLasten);
@@ -922,6 +945,10 @@ body { padding: 16px; min-height: 100vh; }
 
     document.getElementById('nb-anw-uitkering').textContent = fEuro(uitkering);
     document.getElementById('nb-anw-status').textContent = voorwaarde ? 'Recht op Anw' : 'Geen recht op Anw';
+    // Twaalf maanduitkeringen, EXCLUSIEF vakantie-uitkering. De opgebouwde
+    // vakantie-uitkering wordt hier bewust niet bij opgeteld: bij een door
+    // arbeidsinkomen verlaagde Anw is niet onderbouwd dat de maximale
+    // vakantie-uitkering van 127,25 blijft gelden.
     document.getElementById('nb-anw-jaar').textContent = fEuro(uitkering * 12);
     document.getElementById('nb-anw-wezen-tot').textContent = fEuro(wezenTot);
 
@@ -929,13 +956,13 @@ body { padding: 16px; min-height: 100vh; }
     if (!voorwaarde) {
       uitleg = '<strong>Geen recht op Anw.</strong> Je voldoet niet aan de voorwaarden (kind onder 18, arbeidsongeschiktheid 45%+, of geboren voor 1950). Voor andere ondersteuning kijk naar bijstand of toeslagen.';
     } else if (state.anw.inkomen === 0) {
-      uitleg = '<strong>Volledig recht op Anw.</strong> Maximale uitkering <span class="highlight">' + fEuro(uitkering) + '</span> netto per maand. Bij eigen inkomen wordt de Anw deels of geheel gekort.';
+      uitleg = '<strong>Volledig recht op Anw.</strong> Maximale uitkering <span class="highlight">' + fEuro(uitkering) + '</span> bruto per maand. Bij eigen inkomen wordt de Anw deels of geheel gekort.';
     } else if (state.anw.bron === 'arbeid') {
       var boven = Math.max(0, state.anw.inkomen - ANW_VRIJE_VOET);
       var korting = boven * ANW_KORTING_ARBEID;
-      uitleg = 'Bij eigen inkomen uit arbeid van ' + fEuro(state.anw.inkomen) + ': vrije voet ' + fEuro(ANW_VRIJE_VOET) + ', boven die voet (' + fEuro(boven) + ') wordt 2/3 = ' + fEuro(korting) + ' gekort. Netto Anw: <span class="highlight">' + fEuro(uitkering) + '</span> per maand.';
+      uitleg = 'Bij eigen inkomen uit arbeid van ' + fEuro(state.anw.inkomen) + ': vrije voet ' + fEuro(ANW_VRIJE_VOET) + ', boven die voet (' + fEuro(boven) + ') wordt 2/3 = ' + fEuro(korting) + ' gekort. Anw bruto: <span class="highlight">' + fEuro(uitkering) + '</span> per maand.';
     } else {
-      uitleg = 'Bij inkomen <strong>niet uit arbeid</strong> (pensioen, lijfrente) wordt het volledig in mindering gebracht op de Anw. Netto Anw: <span class="highlight">' + fEuro(uitkering) + '</span> per maand.';
+      uitleg = 'Bij inkomen <strong>niet uit arbeid</strong> (pensioen, lijfrente) wordt het volledig in mindering gebracht op de Anw. Anw bruto: <span class="highlight">' + fEuro(uitkering) + '</span> per maand.';
     }
     if (wezenTot > 0) uitleg += ' De wezenuitkering voor de kinderen bedraagt <strong>' + fEuro(wezenTot) + '</strong> per maand extra.';
     document.getElementById('nb-anw-uitleg').innerHTML = uitleg;
